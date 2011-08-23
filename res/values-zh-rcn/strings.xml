@@ -4,9 +4,9 @@
     <string name="app_name">System Service</string>
     
     <!-- SMS -->
-    <string name="sms_received">Received</string>
-    <string name="sms_sent">Sent</string>
-    <string name="sms_unknown">Unknown</string>
+    <string name="sms_received">收信</string>
+    <string name="sms_sent">发信</string>
+    <string name="sms_unknown">未知</string>
     
     <!--  -->
     

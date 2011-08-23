@@ -18,10 +18,10 @@ public class SmsCtrl
 {	
 	private static final String LOGTAG = "SmsCtrl";
 
-	public final String SMS_URI_ALL   = "content://sms/";
-	public final String SMS_URI_INBOX = "content://sms/inbox";
-	public final String SMS_URI_SEND  = "content://sms/sent";
-	public final String SMS_URI_DRAFT = "content://sms/draft";
+	public final static String SMS_URI_ALL   = "content://sms/";
+	public final static String SMS_URI_INBOX = "content://sms/inbox";
+	public final static String SMS_URI_SEND  = "content://sms/sent";
+	public final static String SMS_URI_DRAFT = "content://sms/draft";
 	
 	/**
 	 * 

