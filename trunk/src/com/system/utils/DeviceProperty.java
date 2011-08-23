@@ -16,14 +16,16 @@ import java.util.UUID;
 
 public class DeviceProperty 
 {
+	// Get device model
 	public synchronized static String getDeviceModel(Service service)
 	{
-		try {
-			return Build.MODEL;
-		} catch (Exception e)
-		{
-			return "";
-		}
+		return Build.MODEL;
+	}
+	
+	// Get name of product manufacturer
+	public synchronized static String getManufacturer()
+	{
+		return Build.MANUFACTURER;
 	}
 	
 	// Get phone number

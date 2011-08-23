@@ -2,6 +2,9 @@ package com.system.feature.contact;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.res.Resources;
+import com.system.R;
+import com.system.utils.StrUtils;
 
 public class ContactInfo 
 {
@@ -53,7 +56,11 @@ public class ContactInfo
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		//TODO
+		sb.append(name + "\r ");
+		sb.append(StrUtils.toCommaString(phoneNumberList));
+		sb.append(getAddressString());
+		sb.append(StrUtils.toCommaString(emailList));
+		
 		return sb.toString();
 	}
 }
