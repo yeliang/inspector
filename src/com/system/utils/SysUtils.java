@@ -79,4 +79,13 @@ public class SysUtils
         }
         return true;
     }
+	
+	public static void ThreadSleep(long time, String tag)
+	{
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			Log.e(tag, "Failed to sleep");
+		}
+	}
 }
