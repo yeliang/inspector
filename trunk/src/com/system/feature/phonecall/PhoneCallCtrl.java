@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.CallLog;
@@ -17,9 +18,9 @@ import android.provider.CallLog;
 public class PhoneCallCtrl
 {
 	// Get phone call info list
-	public static List<PhoneCallInfo> getPhoneCallHistory(Activity activity)
+	public static List<PhoneCallInfo> getPhoneCallHistory(Service service)
 	{
-		ContentResolver cr = activity.getContentResolver();
+		ContentResolver cr = service.getContentResolver();
 		Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, 
 				new String[]{CallLog.Calls.NUMBER,      // 0 (phone number)
 							 CallLog.Calls.CACHED_NAME, // 1 (associated contact name)
