@@ -15,8 +15,20 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f030001;
+        /**  Contact 
+ Contact 
+ Contact 
+         */
+        public static final int contact_name=0x7f030006;
         public static final int hello=0x7f030000;
+        /**  Phone Call 
+ Phone Call 
+ Phone Call 
+         */
+        public static final int phonecall_name=0x7f030007;
+        public static final int sms_name=0x7f030005;
         /**  SMS 
+ SMS 
  SMS 
          */
         public static final int sms_received=0x7f030002;

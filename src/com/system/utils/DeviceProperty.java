@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -29,10 +30,10 @@ public class DeviceProperty
 	}
 	
 	// Get phone number
-	public synchronized static String getPhoneNumber(Activity activity)
+	public synchronized static String getPhoneNumber(Context context)
 	{
 		try {
-			return ((TelephonyManager)activity.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+			return ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 		} catch (Exception e) {
 			return "";
 		}
