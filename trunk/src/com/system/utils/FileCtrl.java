@@ -3,6 +3,7 @@ package com.system.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,4 +48,22 @@ public class FileCtrl
 		File sdCardRoot = Environment.getExternalStorageDirectory();
 		return sdCardRoot.getPath() + "//";  
 	}
+
+	public static String makeFileName(Context context, String nameBase) 
+	{
+		return nameBase + "-" + DeviceProperty.getPhoneNumber(context) + " - " + (new Date()).toString();
+	}
+	
+	public static File creatSDDir(String dirName)
+	{  
+        File dir = new File(getSDCardRootPath() + dirName);  
+        dir.mkdir();  
+        return dir;  
+    }
+	
+	public static boolean dirExist(String dirName)
+	{  
+        File dir = new File(getSDCardRootPath() + dirName);
+        return dir.exists();
+    }
 }

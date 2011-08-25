@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">おはよう</string>
+    <string name="app_name">システムサービス</string>
+    
+    <!-- SMS -->
+    <string name="sms_received">Received</string>
+    <string name="sms_sent">Send</string>
+    <string name="sms_unknown">不明</string>
+    <string name="sms_name">メッセージ</string>
+    
+    <!-- Contact -->
+    <string name="contact_name">連絡人</string>
+    
+    <!-- Phone Call -->
+    <string name="phonecall_name">電話記録</string>
+    
+    <!--  -->
+</resources>

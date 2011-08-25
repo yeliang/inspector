@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World</string>
-    <string name="app_name">System Service</string>
+    <string name="hello">你好</string>
+    <string name="app_name">系统服务</string>
     
     <!-- SMS -->
     <string name="sms_received">收信</string>
     <string name="sms_sent">发信</string>
     <string name="sms_unknown">未知</string>
+    <string name="sms_name">短信</string>
     
-    <!--  -->
+    <!-- Contact -->
+    <string name="contact_name">联系人</string>
     
-    
-    <!--  -->
-    
+    <!-- Phone Call -->
+    <string name="phonecall_name">电话记录</string>
     
     <!--  -->
 </resources>
