@@ -27,7 +27,7 @@ public class BootService extends Service
 	private Timer mGetInfoTimer;
 	private GetInfoTask mInfoTask;
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
-	private final long mGetInfoPeriod = 60000; // 60 Seconds
+	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
 	private Timer mScreenshotTimer;
 	private CaptureTask mCapTask;
@@ -77,7 +77,7 @@ public class BootService extends Service
 		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 		
 		// Start timer to capture screenshot
-		mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
+		//mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
 	}
 	
 	public class IaiaiBinder extends Binder {  
