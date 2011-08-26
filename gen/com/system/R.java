@@ -21,6 +21,11 @@ public final class R {
          */
         public static final int contact_name=0x7f030006;
         public static final int hello=0x7f030000;
+        /**  Mail 
+ Mail 
+ Mail 
+         */
+        public static final int mail_from=0x7f030008;
         /**  Phone Call 
  Phone Call 
  Phone Call 

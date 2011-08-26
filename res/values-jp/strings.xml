@@ -15,5 +15,7 @@
     <!-- Phone Call -->
     <string name="phonecall_name">電話記録</string>
     
-    <!--  -->
+    <!-- Mail -->
+    <string name="mail_from">From</string>
+    
 </resources>

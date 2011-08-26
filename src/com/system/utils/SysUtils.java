@@ -13,6 +13,8 @@ public class SysUtils
 	public static String TAG_ERR = "*** ERROR ***";
 	public static String TAG_DEBUG = "*** DEBUG ***";
 	
+	public static String NEWLINE = "\r\n";
+	
 	// Pop up a simple message box for seconds
 	public static void messageBox(Context context, String msg)
 	{
