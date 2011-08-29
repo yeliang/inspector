@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:key="@string/pref_category_reg_key" android:title="@string/pref_category_reg_title">
+        <EditTextPreference android:title="@string/pref_username_title" android:key="@string/pref_username_key"></EditTextPreference>
+        <EditTextPreference android:title="@string/pref_serialnum_title" android:key="@string/pref_serialnum_key"></EditTextPreference>
+        <EditTextPreference android:title="@string/pref_mail_title" android:key="@string/pref_mail_key"></EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:key="@string/pref_category_feature_key" android:title="@string/pref_category_feature_title">
+        <ListPreference android:title="@string/pref_info_interval_title" android:key="@string/pref_info_interval_key" android:defaultValue="1" android:selectable="true" android:dialogTitle="@string/pref_info_interval_dlg_title" android:entryValues="@array/days_value" android:entries="@array/days_display"></ListPreference>
+    </PreferenceCategory>
+    
+</PreferenceScreen>

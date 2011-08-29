@@ -8,36 +8,66 @@
 package com.system;
 
 public final class R {
+    public static final class array {
+        public static final int days_display=0x7f040000;
+        public static final int days_value=0x7f040001;
+    }
     public static final class attr {
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
     }
     public static final class string {
-        public static final int app_name=0x7f030001;
+        public static final int app_name=0x7f050001;
         /**  Contact 
  Contact 
  Contact 
          */
-        public static final int contact_name=0x7f030006;
-        public static final int hello=0x7f030000;
+        public static final int contact_name=0x7f050006;
+        public static final int hello=0x7f050000;
         /**  Mail 
  Mail 
  Mail 
          */
-        public static final int mail_from=0x7f030008;
+        public static final int mail_from=0x7f050008;
         /**  Phone Call 
  Phone Call 
  Phone Call 
          */
-        public static final int phonecall_name=0x7f030007;
-        public static final int sms_name=0x7f030005;
+        public static final int phonecall_name=0x7f050007;
+        public static final int pref_category_feature_key=0x7f05000b;
+        public static final int pref_category_feature_title=0x7f05000c;
+        public static final int pref_category_others_key=0x7f05000d;
+        public static final int pref_category_others_title=0x7f05000e;
+        /**  Preferences 
+ Preferences 
+ Preferences 
+         */
+        public static final int pref_category_reg_key=0x7f050009;
+        public static final int pref_category_reg_title=0x7f05000a;
+        /**  days 
+ days 
+ days 
+         */
+        public static final int pref_info_interval_dlg_title=0x7f050017;
+        public static final int pref_info_interval_key=0x7f050015;
+        public static final int pref_info_interval_title=0x7f050016;
+        public static final int pref_mail_key=0x7f050013;
+        public static final int pref_mail_title=0x7f050014;
+        public static final int pref_serialnum_key=0x7f050011;
+        public static final int pref_serialnum_title=0x7f050012;
+        public static final int pref_username_key=0x7f05000f;
+        public static final int pref_username_title=0x7f050010;
+        public static final int sms_name=0x7f050005;
         /**  SMS 
  SMS 
  SMS 
          */
-        public static final int sms_received=0x7f030002;
-        public static final int sms_sent=0x7f030003;
-        public static final int sms_unknown=0x7f030004;
+        public static final int sms_received=0x7f050002;
+        public static final int sms_sent=0x7f050003;
+        public static final int sms_unknown=0x7f050004;
+    }
+    public static final class xml {
+        public static final int preference=0x7f030000;
     }
 }

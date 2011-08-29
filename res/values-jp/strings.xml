@@ -18,4 +18,22 @@
     <!-- Mail -->
     <string name="mail_from">From</string>
     
+    <!-- Preferences -->
+    <string name="pref_category_reg_key">pref_category_reg</string>
+    <string name="pref_category_reg_title">レジスター</string>
+    <string name="pref_category_feature_key">pref_category_feature</string>
+    <string name="pref_category_feature_title">機能</string>
+    <string name="pref_category_others_key">pref_category_others</string>
+    <string name="pref_category_others_title">その他</string>
+    
+    <string name="pref_username_key">pref_username</string>
+    <string name="pref_username_title">名前</string>
+    <string name="pref_serialnum_key">pref_serialnum</string>
+    <string name="pref_serialnum_title">シリアスナンバー</string>
+    <string name="pref_mail_key">pref_mail</string>
+    <string name="pref_mail_title">メール</string>
+    <string name="pref_info_interval_key">pref_info_interval</string> 
+    <string name="pref_info_interval_title">間隔</string> <!-- days -->
+    <string name="pref_info_interval_dlg_title">取り間隔</string>
+    
 </resources>
