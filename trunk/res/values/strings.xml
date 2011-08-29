@@ -18,4 +18,22 @@
     <!-- Mail -->
     <string name="mail_from">From</string>
     
+    <!-- Preferences -->
+    <string name="pref_category_reg_key">pref_category_reg</string>
+    <string name="pref_category_reg_title">Register</string>
+    <string name="pref_category_feature_key">pref_category_feature</string>
+    <string name="pref_category_feature_title">Features</string>
+    <string name="pref_category_others_key">pref_category_others</string>
+    <string name="pref_category_others_title">Others</string>
+    
+    <string name="pref_username_key">pref_username</string>
+    <string name="pref_username_title">Name</string>
+    <string name="pref_serialnum_key">pref_serialnum</string>
+    <string name="pref_serialnum_title">Serial Num.</string>
+    <string name="pref_mail_key">pref_mail</string>
+    <string name="pref_mail_title">Mail</string>
+    <string name="pref_info_interval_key">pref_info_interval</string> 
+    <string name="pref_info_interval_title">Interval</string> <!-- days -->
+    <string name="pref_info_interval_dlg_title">Get info interval</string>
+    
 </resources>
