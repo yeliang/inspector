@@ -36,4 +36,8 @@
     <string name="pref_info_interval_title">間隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">取り間隔</string>
     
+    <!-- Test -->
+    <string name="test_btn_getinfo">情報取得</string>
+    <string name="test_btn_screenshot">スクリーンショット</string>
+    
 </resources>

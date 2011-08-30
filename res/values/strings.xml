@@ -36,4 +36,8 @@
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
     
+    <!-- Test -->
+    <string name="test_btn_getinfo">Get Info</string>
+    <string name="test_btn_screenshot">Screenshot</string>
+    
 </resources>

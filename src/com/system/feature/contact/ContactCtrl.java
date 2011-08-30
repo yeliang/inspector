@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -13,9 +14,9 @@ public class ContactCtrl
 {
 	private static final String LOGTAG = "ContactCtrl";
 
-	public static List<ContactInfo> getContactList(Service service)
+	public static List<ContactInfo> getContactList(Context context)
 	{
-		Cursor cursor = service.getContentResolver().query(
+		Cursor cursor = context.getContentResolver().query(
 				ContactsContract.Contacts.CONTENT_URI, 
 				null, null, null, null);
 		
@@ -42,7 +43,7 @@ public class ContactCtrl
                  
             // Get all phone numbers by the contact ID
             if (hasPhone) { 
-                Cursor phones = service.getContentResolver().query( 
+                Cursor phones = context.getContentResolver().query( 
                         ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
                         null, 
                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID 
@@ -58,7 +59,7 @@ public class ContactCtrl
             } 
  
             // Get all emails by the contact ID
-            Cursor emails = service.getContentResolver().query( 
+            Cursor emails = context.getContentResolver().query( 
                     ContactsContract.CommonDataKinds.Email.CONTENT_URI, 
                     null, 
                     ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + contactId, null, null); 
@@ -72,7 +73,7 @@ public class ContactCtrl
             emails.close(); 
  
             // Get contact address
-            Cursor address = service.getContentResolver().query(
+            Cursor address = context.getContentResolver().query(
             				ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, 
                             null, 
                             ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = " + contactId, null, null); 

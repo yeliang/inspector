@@ -36,4 +36,8 @@
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
     
+    <!-- Test -->
+    <string name="test_btn_getinfo">获取信息</string>
+    <string name="test_btn_screenshot">截图</string>
+    
 </resources>
