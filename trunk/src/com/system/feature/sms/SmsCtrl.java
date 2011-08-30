@@ -9,6 +9,7 @@ import com.system.feature.contact.ContactInfo;
 
 import android.app.Service;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
@@ -29,13 +30,13 @@ public class SmsCtrl
 	 * @param type : the type of SMS. Could be SMS_URI_ALL, SMS_URI_INBOX, SMS_URI_SEND or SMS_URI_DRAFT
 	 * @return
 	 */
-	public static List<SmsInfo> getSmsList(Service service, String type)
+	public static List<SmsInfo> getSmsList(Context context, String type)
 	{
 		List<SmsInfo> infoList = new ArrayList<SmsInfo>();
 		String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};   
 		  
 		try{  
-			ContentResolver cr = service.getContentResolver(); 
+			ContentResolver cr = context.getContentResolver(); 
 			Cursor cursor = cr.query(Uri.parse(type),  
 			      projection,  
 			      null, null , "date desc");
