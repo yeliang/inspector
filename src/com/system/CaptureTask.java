@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import com.system.utils.*;
+import com.system.utils.mail.GMailSender;
 
 import android.app.Activity;
 import android.app.Service;

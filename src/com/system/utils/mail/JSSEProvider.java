@@ -1,4 +1,4 @@
-package com.system.utils;
+package com.system.utils.mail;
 
 import java.security.AccessController;
 import java.security.Provider;
