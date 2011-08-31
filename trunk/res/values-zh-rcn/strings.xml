@@ -17,6 +17,7 @@
     
     <!-- Mail -->
     <string name="mail_from">来自</string>
+    <string name="mail_body">你好，这是来自{0}的自动发信，附有联系人，电话，短信记录。</string>
     
     <!-- Preferences -->
     <string name="pref_category_reg_key">pref_category_reg</string>
