@@ -12,7 +12,7 @@ public class LicenseCtrl
 		// NOTICE: the key is only 4length
 		try {
 			String key4 = AesCryptor.encrypt(AesCryptor.defaultSeed, user).substring(0,4);
-			if (key4 == key) {
+			if (key4.compareToIgnoreCase(key) == 0) {
 				return true;
 			}
 			else {
