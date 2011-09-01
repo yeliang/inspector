@@ -72,11 +72,10 @@ public class BootService extends Service
 		Log.i(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
-		String user = GlobalPref.getUsername(this);
 		String key = GlobalPref.getSerialNum(this);
 		String[] mails = GlobalPref.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		if (mails.length > 0 && LicenseCtrl.isLicensed(this, user, key)) 
+		if (mails.length > 0 && LicenseCtrl.isLicensed(this, GlobalPref.getMail(this), key)) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 		

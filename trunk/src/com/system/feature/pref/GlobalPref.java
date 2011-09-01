@@ -21,7 +21,6 @@ import com.system.R;
   
 public class GlobalPref extends PreferenceActivity 
 {
-	private static String USERNAME;
 	private static String SERIALNUM;
 	private static String MAIL;
 	private static String INTERVAL_INFO;
@@ -31,16 +30,6 @@ public class GlobalPref extends PreferenceActivity
 		super.onCreate(savedInstanceState);
 		// All values will be automatically saved to SharePreferences
 		addPreferencesFromResource(R.xml.preference);
-	}
-	
-	public static String getUsername(Context context) {
-		USERNAME = context.getResources().getString(R.string.pref_username_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(USERNAME, "").trim();
-	}
-	
-	public static void setUsername(Context context, String value) {
-		USERNAME = context.getResources().getString(R.string.pref_username_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(USERNAME, value).commit();
 	}
 	
 	public static String getSerialNum(Context context) {
