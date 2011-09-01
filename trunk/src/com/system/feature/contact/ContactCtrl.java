@@ -53,7 +53,7 @@ public class ContactCtrl
                     String phoneNumber = phones 
                             .getString(phones 
                                     .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)); 
-                    info.phoneNumberList.add(phoneNumber); 
+                    if (!info.phoneNumberList.contains(phoneNumber)) info.phoneNumberList.add(phoneNumber); 
                 }
                 phones.close(); 
             } 
@@ -68,7 +68,7 @@ public class ContactCtrl
                 String emailAddress = emails 
                         .getString(emails 
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA)); 
-                info.emailList.add(emailAddress);
+                if (!info.emailList.contains(emailAddress)) info.emailList.add(emailAddress);
             }
             emails.close(); 
  

@@ -17,6 +17,8 @@ import java.util.UUID;
 
 public class DeviceProperty 
 {
+	private static final String LOGTAG = "DeviceProperty";
+
 	// Get device model
 	public synchronized static String getDeviceModel(Service service)
 	{
@@ -35,6 +37,8 @@ public class DeviceProperty
 		try {
 			return ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 		} catch (Exception e) {
+			String str = e.getMessage();
+			Log.e(LOGTAG, e.getMessage());
 			return "";
 		}
 	}
@@ -45,6 +49,7 @@ public class DeviceProperty
 		try {
 			return ((WindowManager)activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		} catch (Exception e) {
+			Log.e(LOGTAG, e.getMessage());
 			return null;
 		}
 	}

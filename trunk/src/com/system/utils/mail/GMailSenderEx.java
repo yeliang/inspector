@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMultipart;
  
 /**
  * Gmail sender with capability of adding attachments
+ * @see http://www.jondev.net/articles/Sending_Emails_without_User_Intervention_%28no_Intents%29_in_Android
  */
 public class GMailSenderEx extends javax.mail.Authenticator 
 { 

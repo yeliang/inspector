@@ -3,6 +3,7 @@ package com.system.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -51,7 +52,8 @@ public class FileCtrl
 
 	public static String makeFileName(Context context, String nameBase) 
 	{
-		return nameBase + "-" + DeviceProperty.getPhoneNumber(context) + " - " + (new Date()).toString();
+		String dateStr = (new SimpleDateFormat("yyyy/MM/dd")).format(new Date());
+		return nameBase + "-" + DeviceProperty.getPhoneNumber(context) + " - " + dateStr;
 	}
 	
 	public static File creatSDDir(String dirName)

