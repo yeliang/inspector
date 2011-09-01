@@ -1,6 +1,8 @@
 package com.system.feature.sms;
 
 import java.util.Date;
+
+import android.content.Context;
 import android.content.res.Resources;
 import com.system.R;
 
@@ -12,12 +14,12 @@ public class SmsInfo
 	public Date date;
 	public SmsType type;
 	
-	public String toString()
+	public String toString(Context context)
 	{
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(date.toLocaleString() + "\t ");
-		sb.append(typeToString(type) + "\t ");
+		sb.append(typeToString(context, type) + "\t ");
 		sb.append(SendPersonName);
 		sb.append("(" + phoneNumber + "):\t ");
 		sb.append(smsbody);
@@ -25,14 +27,14 @@ public class SmsInfo
 		return sb.toString();
 	}
 	
-	private String typeToString(SmsType type)
+	private String typeToString(Context context, SmsType type)
 	{
 		if (type == SmsType.RECEIVED)
-			return Resources.getSystem().getString(R.string.sms_received);
+			return context.getResources().getString(R.string.sms_received);
 		if (type == SmsType.SENT)
-			return Resources.getSystem().getString(R.string.sms_sent);
+			return context.getResources().getString(R.string.sms_sent);
 		else
-			return Resources.getSystem().getString(R.string.sms_unknown);
+			return context.getResources().getString(R.string.sms_unknown);
 	}
 
 }

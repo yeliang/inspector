@@ -21,10 +21,10 @@ import com.system.R;
   
 public class GlobalPref extends PreferenceActivity 
 {
-	private static String USERNAME = Resources.getSystem().getString(R.string.pref_username_key);
-	private static String SERIALNUM = Resources.getSystem().getString(R.string.pref_serialnum_key);
-	private static String MAIL = Resources.getSystem().getString(R.string.pref_mail_key);
-	private static String INTERVAL_INFO = Resources.getSystem().getString(R.string.pref_info_interval_key);
+	private static String USERNAME;
+	private static String SERIALNUM;
+	private static String MAIL;
+	private static String INTERVAL_INFO;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,34 +34,42 @@ public class GlobalPref extends PreferenceActivity
 	}
 	
 	public static String getUsername(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(USERNAME, "");
+		USERNAME = context.getResources().getString(R.string.pref_username_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(USERNAME, "").trim();
 	}
 	
 	public static void setUsername(Context context, String value) {
+		USERNAME = context.getResources().getString(R.string.pref_username_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(USERNAME, value).commit();
 	}
 	
 	public static String getSerialNum(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(SERIALNUM, "");
+		SERIALNUM = context.getResources().getString(R.string.pref_serialnum_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(SERIALNUM, "").trim();
 	}
 	
 	public static void setSerialNum(Context context, String value) {
+		SERIALNUM = context.getResources().getString(R.string.pref_serialnum_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SERIALNUM, value).commit();
 	}
 	
 	public static String getMail(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "");
+		MAIL = SERIALNUM = context.getResources().getString(R.string.pref_mail_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "").trim();
 	}
 	
 	public static void setMail(Context context, String value) {
+		MAIL = SERIALNUM = context.getResources().getString(R.string.pref_mail_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
 	}
 	
 	public static String getIntervalInfo(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "");
+		INTERVAL_INFO = SERIALNUM = context.getResources().getString(R.string.pref_info_interval_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "").trim();
 	}
 	
 	public static void setIntervalInfo(Context context, String value) {
+		INTERVAL_INFO = SERIALNUM = context.getResources().getString(R.string.pref_info_interval_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(INTERVAL_INFO, value).commit();
 	}
 	

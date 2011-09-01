@@ -38,17 +38,12 @@ public class ContactInfo
 	public String getAddressString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(poBox);
-		if (poBox.length() > 0) sb.append(", ");
-		sb.append(street);
-		if (street.length() > 0) sb.append(", ");
-		sb.append(city);
-		if (city.length() > 0) sb.append(", ");
-		sb.append(state);
-		if (state.length() > 0) sb.append(", ");
-		sb.append(country);
-		if (country.length() > 0 && postalCode.length() > 0) sb.append(", ");
-		if (postalCode.length() > 0) sb.append("(" + postalCode + ")");
+		if (poBox  != null && poBox.length()  > 0) sb.append(poBox  + ", ");
+		if (street != null && street.length() > 0) sb.append(street + ", ");
+		if (city   != null && city.length() > 0  ) sb.append(city   + ", ");
+		if (state  != null && state.length() > 0 ) sb.append(state  + ", ");
+		if (country != null && country.length() > 0) sb.append(country);
+		if (postalCode != null && postalCode.length() > 0) sb.append(" (" + postalCode + ")");
 		
 		return sb.toString();
 	}
@@ -56,9 +51,11 @@ public class ContactInfo
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(name + "\r ");
-		sb.append(StrUtils.toCommaString(phoneNumberList));
-		sb.append(getAddressString());
+		if (name.length() <= 4) sb.append(name + "\t\t\t\t");
+		else if (name.length() <= 8) sb.append(name + "\t\t");
+		else sb.append(name + "\t");
+		sb.append(StrUtils.toCommaString(phoneNumberList) + "\t");
+		sb.append(getAddressString() + "\t");
 		sb.append(StrUtils.toCommaString(emailList));
 		
 		return sb.toString();

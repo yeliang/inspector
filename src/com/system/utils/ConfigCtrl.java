@@ -14,7 +14,6 @@ import android.content.SharedPreferences.Editor;
 public class ConfigCtrl 
 {
 	private static final String PREFS_NAME = "com.system";
-	private static final String IS_LICENSED = "IsLicensed";
 	private static final String INTERVAL_TRY_SCREENSHOT_ = "TryScreenshotInterval";
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String LAST_GETINFO_TIME = "LastGetInfoTime";
@@ -30,19 +29,6 @@ public class ConfigCtrl
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
 		return config.getString(key, "false");
-	}
-	
-	public static boolean getIsLicensed(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getBoolean(IS_LICENSED, false);
-	}
-	
-	public static void setIsLicensed(Context context, boolean value)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putBoolean(IS_LICENSED, value);     
-		editor.commit();
 	}
 	
 	public static int getScreenshotInterval(Context context)

