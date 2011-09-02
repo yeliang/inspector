@@ -37,8 +37,7 @@ public class DeviceProperty
 		try {
 			return ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 		} catch (Exception e) {
-			String str = e.getMessage();
-			Log.e(LOGTAG, e.getMessage());
+			Log.e(LOGTAG, "Failed to get phone number");
 			return "";
 		}
 	}
@@ -155,14 +154,14 @@ public class DeviceProperty
 	 * @see http://baike.baidu.com/view/90099.htm (MEID definition)
 	 * @see http://baike.baidu.com/view/1725243.htm (MDN definition)
 	*/ 
-	public synchronized static String getDeviceId(Activity activity) 
+	public synchronized static String getDeviceId(Context context) 
 	{
 		String deviceId = "";
 		try {
-			TelephonyManager tManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			deviceId = tManager.getDeviceId();
 		} catch (Exception e){
-			Log.e(SysUtils.TAG_ERR, "Failed to get device ID");
+			Log.e(SysUtils.TAG_ERR, e.toString());
 		}
 		return deviceId;
 	}

@@ -53,20 +53,4 @@ public class PhoneCallCtrl
 		return list;
 	}
 	
-	// Get the description of phone call type
-	public static String getCallTypeDescription(int type)
-	{
-		switch (type) 
-		{
-			case CallLog.Calls.INCOMING_TYPE:
-				return "Received";
-			case CallLog.Calls.OUTGOING_TYPE:
-				return "Called";
-			case CallLog.Calls.MISSED_TYPE:
-				return "Missed";
-			default:
-				return "";
-		}
-	}
-	
 }
