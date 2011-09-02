@@ -17,6 +17,8 @@ import android.os.Environment;
 */
 public class FileCtrl 
 {
+	public static final String SUFFIX_TXT = ".txt";
+
 	/**
 	 * Save file to SD-CARD. If the file exists, overwrite it. 
 	 * @param fullname the fullname of the file, e.g. /tmp/contact_2011-01-01.txt
@@ -30,7 +32,6 @@ public class FileCtrl
 			file = new File(getSDCardRootPath() + fullname);
 			if (file.exists()) file.delete();
 			file.createNewFile();
-			//file.setWritable(true);
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(content.getBytes());
 			fos.close();
@@ -50,10 +51,11 @@ public class FileCtrl
 		return sdCardRoot.getPath() + "//";  
 	}
 
-	public static String makeFileName(Context context, String nameBase) 
+	public static String makeFileName(Context context, String nameBase, String suffix) 
 	{
-		String dateStr = (new SimpleDateFormat("yyyy/MM/dd")).format(new Date());
-		return nameBase + "-" + DeviceProperty.getPhoneNumber(context) + " - " + dateStr;
+		String dateStr = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		return nameBase + "-" + (phoneNum.length() > 0 ? (phoneNum + "-") : "") + dateStr + suffix;
 	}
 	
 	public static File creatSDDir(String dirName)

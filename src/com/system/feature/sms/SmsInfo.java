@@ -18,10 +18,10 @@ public class SmsInfo
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(date.toLocaleString() + "\t ");
-		sb.append(typeToString(context, type) + "\t ");
-		sb.append(SendPersonName);
-		sb.append("(" + phoneNumber + "):\t ");
+		sb.append(date.toLocaleString() + "\t");
+		sb.append(typeToString(context, type) + "\t");
+		if (SendPersonName != null && SendPersonName.length() > 0) sb.append(SendPersonName);
+		if (phoneNumber != null && phoneNumber.length() > 0) sb.append("(" + phoneNumber + "):\t");
 		sb.append(smsbody);
 		
 		return sb.toString();

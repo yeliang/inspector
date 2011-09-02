@@ -70,7 +70,7 @@ public class ConfigCtrl
 	public static void setLastGetInfoTime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(INTERVAL_TRY_GETINFO, datetime.toString());     
+		editor.putString(LAST_GETINFO_TIME, datetime.toString());     
 		editor.commit();
 	}
 	

@@ -13,7 +13,13 @@
     <string name="contact_name">連絡人</string>
     
     <!-- Phone Call -->
+    <string name="phonecall_hour">時間</string>
+    <string name="phonecall_minute">分</string>
+    <string name="phonecall_second">秒</string>
     <string name="phonecall_name">電話記録</string>
+    <string name="phonecall_incoming">Incoming</string>
+    <string name="phonecall_outgoing">Outgoing</string>
+    <string name="phonecall_missed">Missed</string>
     
     <!-- Mail -->
     <string name="mail_from">From</string>
