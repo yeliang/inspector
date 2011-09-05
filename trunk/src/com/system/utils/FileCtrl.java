@@ -126,6 +126,16 @@ public class FileCtrl
 					}
 				}
 			}
+			
+			// Try to remove the directory
+			if (dir.listFiles().length == 0) {
+				try {
+					dir.delete();
+				} catch (SecurityException e) {
+					Log.e(LOGTAG, e.toString());
+				}
+			}
 		}
+		
 	}
 }

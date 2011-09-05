@@ -25,8 +25,8 @@ public class PhoneCallInfo
 		sb.append(dateFormat.format(date) + "\t");
 		sb.append(getCallTypeDescription(context, type) + "\t");
 		sb.append(number + "\t");
-		if (contactName.length() <= 4) sb.append(contactName + "\t\t");
-		else if (contactName.length() <= 8) sb.append(contactName + "\t");
+		if (contactName == null) sb.append("      " + "\t\t");
+		else if (contactName.length() <= 8) sb.append(contactName + "\t\t");
 		else sb.append(contactName + "\t");
 		sb.append(getDurationDescription(context, duration));
 		return sb.toString();
