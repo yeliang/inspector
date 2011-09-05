@@ -18,11 +18,11 @@ public class ConfigCtrl
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String LAST_GETINFO_TIME = "LastGetInfoTime";
 	
-	public static void set(Context context, String key, String value)
+	public static boolean set(Context context, String key, String value)
 	{	
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putString(key, value);     
-		editor.commit();
+		return editor.commit();
 	}
 	
 	public static String get(Context context, String key)
@@ -37,11 +37,11 @@ public class ConfigCtrl
 		return config.getInt(INTERVAL_TRY_SCREENSHOT_, 60000);
 	}
 	
-	public static void setScreenshotInterval(Context context, int interval)
+	public static boolean setScreenshotInterval(Context context, int interval)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putInt(INTERVAL_TRY_SCREENSHOT_, interval);     
-		editor.commit();
+		return editor.commit();
 	}
 	
 	public static int getInfoInterval(Context context)
@@ -50,11 +50,11 @@ public class ConfigCtrl
 		return config.getInt(INTERVAL_TRY_GETINFO, 300000);
 	}
 	
-	public static void setInfoInterval(Context context, int interval)
+	public static boolean setInfoInterval(Context context, int interval)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putInt(INTERVAL_TRY_GETINFO, interval);     
-		editor.commit();
+		return editor.commit();
 	}
 	
 	public static Date getLastGetInfoTime(Context context)
@@ -67,11 +67,11 @@ public class ConfigCtrl
 			return null;
 	}
 	
-	public static void setLastGetInfoTime(Context context, Date datetime)
+	public static boolean setLastGetInfoTime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putString(LAST_GETINFO_TIME, datetime.toString());     
-		editor.commit();
+		return editor.commit();
 	}
 	
 }

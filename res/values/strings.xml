@@ -46,5 +46,7 @@
     <!-- Test -->
     <string name="test_btn_getinfo">Get Info</string>
     <string name="test_btn_screenshot">Screenshot</string>
+    <string name="test_btn_setting">Setting</string>
+    <string name="test_btn_hide">Hide Myself</string>
     
 </resources>
