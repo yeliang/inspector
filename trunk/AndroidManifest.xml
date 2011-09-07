@@ -16,8 +16,8 @@
 		</receiver>
 		-->
 
-		<!--接受短消息需要注册的receiver，其中的android:name是继承了BroadCastReceiver的类的位置13 android:priority="100" 
-			指定了接收器的级别，这里设置的值比系统的值要高，这意味着程序的接受14 短消息要早于系统接受短消息，这也就给我们提供了拦截短消息，
+		<!--接受短消息需要注册的receiver，其中的android:name是继承了BroadCastReceiver的类的位置 android:priority="100" 
+			指定了接收器的级别，这里设置的值比系统的值要高，这意味着程序的接受 短消息要早于系统接受短消息，这也就给我们提供了拦截短消息，
 			不让系统发出短消息提示的机会。 -->
 		<!--	
 		<receiver android:name=".SmsBroadCast">
@@ -35,6 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+		<activity android:name="com.system.feature.pref.GlobalPref"
+        	      android:label="@string/pref_title">
+		</activity>
         
 	</application>
 	
