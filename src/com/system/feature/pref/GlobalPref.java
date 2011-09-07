@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;  
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.content.res.TypedArray;  
 import android.net.Uri;  
@@ -17,6 +18,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;  
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
+
 import com.system.R;
   
 public class GlobalPref extends PreferenceActivity 
@@ -30,6 +33,18 @@ public class GlobalPref extends PreferenceActivity
 		super.onCreate(savedInstanceState);
 		// All values will be automatically saved to SharePreferences
 		addPreferencesFromResource(R.xml.preference);
+		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				if (key.equals(getResources().getString(R.string.pref_serialnum_key))) {
+					Boolean autoBack = sharedPreferences.getBoolean("autoBack",	false);
+				
+				}
+			}
+        	
+        });
 	}
 	
 	public static String getSerialNum(Context context) {

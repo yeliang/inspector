@@ -112,7 +112,7 @@ public class TestActivity extends Activity
         {
             public void onClick(View v)
             {
-            	Intent intent = new Intent().setClass(v.getContext(), GlobalPref.class);
+            	Intent intent = new Intent().setClass(getBaseContext(), GlobalPref.class);
                 startActivity(intent);
             }
         };

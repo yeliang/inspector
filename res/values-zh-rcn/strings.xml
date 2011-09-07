@@ -26,6 +26,7 @@
     <string name="mail_body">你好，这是来自{0}的自动发信，附有联系人，电话，短信记录。</string>
     
     <!-- Preferences -->
+    <string name="pref_title">设定</string>
     <string name="pref_category_reg_key">pref_category_reg</string>
     <string name="pref_category_reg_title">注册</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
@@ -33,8 +34,6 @@
     <string name="pref_category_others_key">pref_category_others</string>
     <string name="pref_category_others_title">其它</string>
     
-    <string name="pref_username_key">pref_username</string>
-    <string name="pref_username_title">用户名</string>
     <string name="pref_serialnum_key">pref_serialnum</string>
     <string name="pref_serialnum_title">注册码</string>
     <string name="pref_mail_key">pref_mail</string>
