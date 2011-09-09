@@ -1,4 +1,4 @@
-package com.system.feature.pref;  
+package com.system.activity;  
   
 import java.util.Date;
 
@@ -21,8 +21,10 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.system.R;
+import com.system.utils.LicenseCtrl;
+import com.system.utils.SysUtils;
   
-public class GlobalPref extends PreferenceActivity 
+public class GlobalPrefActivity extends PreferenceActivity 
 {
 	private static String SERIALNUM;
 	private static String MAIL;
@@ -38,13 +40,28 @@ public class GlobalPref extends PreferenceActivity
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals(getResources().getString(R.string.pref_serialnum_key))) {
-					Boolean autoBack = sharedPreferences.getBoolean("autoBack",	false);
-				
+				if (key.equals(getResources().getString(R.string.pref_mail_key))) {
+					verifySerialNum(sharedPreferences, getApplicationContext());
+				}
+				else if (key.equals(getResources().getString(R.string.pref_serialnum_key))) {
+					verifySerialNum(sharedPreferences, getApplicationContext());
+				}
+				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
+					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_info_interval_key), 1); //day
 				}
 			}
         	
         });
+	}
+	
+	private static void verifySerialNum(SharedPreferences sharedPreferences, Context context) {
+		String mail = sharedPreferences.getString(context.getResources().getString(R.string.pref_mail_key), "");
+		String serialNum = sharedPreferences.getString(context.getResources().getString(R.string.pref_serialnum_key), "");
+		if (LicenseCtrl.isLicensed(context.getApplicationContext(), mail, serialNum)) {
+			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
+		} else {
+			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_no, ""));
+		}
 	}
 	
 	public static String getSerialNum(Context context) {

