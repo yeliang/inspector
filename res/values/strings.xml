@@ -42,10 +42,14 @@
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
     
-    <!-- Test -->
-    <string name="test_btn_getinfo">Get Info</string>
-    <string name="test_btn_screenshot">Screenshot</string>
-    <string name="test_btn_setting">Setting</string>
-    <string name="test_btn_hide">Hide Myself</string>
+    <!-- InitActivity -->
+    <string name="init_btn_getinfo">Get Info</string>
+    <string name="init_btn_screenshot">Screenshot</string>
+    <string name="init_btn_setting">Setting</string>
+    <string name="init_btn_hide">Hide Myself</string>
+    
+    <!-- License -->
+    <string name="licensed_yes">Get licensed successfully</string>
+    <string name="licensed_no">Wrong mail address or serial number</string>
     
 </resources>

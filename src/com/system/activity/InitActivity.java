@@ -1,4 +1,4 @@
-package com.system.test;
+package com.system.activity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -17,15 +17,14 @@ import android.widget.Button;
 
 import com.system.GetInfoTask;
 import com.system.R;
-import com.system.feature.pref.GlobalPref;
 import com.system.utils.ConfigCtrl;
 import com.system.utils.DeviceProperty;
 import com.system.utils.FileCtrl;
 import com.system.utils.SysUtils;
 
-public class TestActivity extends Activity 
+public class InitActivity extends Activity 
 {
-    protected static final String LOGTAG = "TestActivity";
+    protected static final String LOGTAG = "InitActivity";
     
 	Button btn_getinfo;
     Button btn_screenshot;
@@ -39,7 +38,7 @@ public class TestActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test);
+        setContentView(R.layout.init);
         
         setListener(); 
         initUI();
@@ -55,6 +54,9 @@ public class TestActivity extends Activity
         btn_setting.setOnClickListener(listener_setting);
         btn_hide = (Button)findViewById(R.id.btn_hide);
         btn_hide.setOnClickListener(listener_hide);
+        
+        // Disable buttons
+        
     }
     
     private void setListener()
@@ -112,7 +114,7 @@ public class TestActivity extends Activity
         {
             public void onClick(View v)
             {
-            	Intent intent = new Intent().setClass(getBaseContext(), GlobalPref.class);
+            	Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
                 startActivity(intent);
             }
         };
