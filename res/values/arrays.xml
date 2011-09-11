@@ -24,4 +24,9 @@
     <item>21</item>
     <item>30</item> 
   </string-array> 
+  <string-array name="senderlist"> 
+    <item>inspector.sender.001@gmail.com</item> 
+    <item>inspector.sender.002@gmail.com</item>  
+    <item>inspector.sender.003@gmail.com</item> 
+  </string-array> 
 </resources>

