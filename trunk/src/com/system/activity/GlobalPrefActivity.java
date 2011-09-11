@@ -21,8 +21,9 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.system.R;
-import com.system.utils.LicenseCtrl;
 import com.system.utils.SysUtils;
+import com.system.utils.license.LicenseCtrl;
+import com.system.utils.license.LicenseType;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
@@ -57,7 +58,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static void verifySerialNum(SharedPreferences sharedPreferences, Context context) {
 		String mail = sharedPreferences.getString(context.getResources().getString(R.string.pref_mail_key), "");
 		String serialNum = sharedPreferences.getString(context.getResources().getString(R.string.pref_serialnum_key), "");
-		if (LicenseCtrl.isLicensed(context.getApplicationContext(), mail, serialNum)) {
+		LicenseType type = LicenseCtrl.isLicensed(context.getApplicationContext(), mail, serialNum);
+		if (type != LicenseType.NotLicensed) {
 			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
 		} else {
 			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_no, ""));

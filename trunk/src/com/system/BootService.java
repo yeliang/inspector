@@ -4,9 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.system.activity.GlobalPrefActivity;
-import com.system.utils.LicenseCtrl;
 import com.system.utils.StrUtils;
 import com.system.utils.SysUtils;
+import com.system.utils.license.LicenseCtrl;
+import com.system.utils.license.LicenseType;
 
 import android.app.Service;
 import android.content.Intent;
@@ -75,7 +76,8 @@ public class BootService extends Service
 		String key = GlobalPrefActivity.getSerialNum(this);
 		String[] mails = GlobalPrefActivity.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		if (mails.length > 0 && LicenseCtrl.isLicensed(this, GlobalPrefActivity.getMail(this), key)) 
+		LicenseType type = LicenseCtrl.isLicensed(this, GlobalPrefActivity.getMail(this), key);
+		if (mails.length > 0 && type != LicenseType.NotLicensed) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 		
