@@ -57,7 +57,30 @@ public class InitActivity extends Activity
         btn_hide.setOnClickListener(listener_hide);
         
         // Disable buttons
+        btn_getinfo.setEnabled(false);
+        btn_screenshot.setEnabled(false);
+        btn_hide.setEnabled(false);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) 
+    {
+        String isLicensed = data.getExtras().getString("isLicensed");
         
+        // Enable buttons
+        if (isLicensed == "full") {
+        	btn_getinfo.setEnabled(true);
+            btn_screenshot.setEnabled(true);
+            btn_hide.setEnabled(true);
+            btn_setting.setEnabled(false);
+        } else if (isLicensed == "onlysms") {
+        	btn_getinfo.setEnabled(true);
+            btn_screenshot.setEnabled(true);
+            btn_hide.setEnabled(true);
+            btn_setting.setEnabled(false);
+        } else {
+        	
+        }
     }
     
     private void setListener()
@@ -123,7 +146,7 @@ public class InitActivity extends Activity
             public void onClick(View v)
             {
             	Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
-                startActivity(intent);
+            	startActivityForResult(intent, R.layout.init);
             }
         };
         

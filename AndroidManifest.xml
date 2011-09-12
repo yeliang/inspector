@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         
-		<activity android:name="com.system.activity.GlobalPref"
+		<activity android:name="com.system.activity.GlobalPrefActivity"
         	      android:label="@string/pref_title"
         	      android:excludeFromRecents="true">
 		</activity>

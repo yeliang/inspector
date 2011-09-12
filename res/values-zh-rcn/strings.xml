@@ -51,5 +51,7 @@
     <!-- License -->
     <string name="licensed_yes">已授权</string>
     <string name="licensed_no">错误的邮件地址或序列号</string>
+    <string name="pls_input_serial_num">请输入序列号</string>
+    <string name="pls_input_mail">请输入邮箱</string>
     
 </resources>
