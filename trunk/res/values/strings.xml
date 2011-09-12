@@ -52,5 +52,7 @@
     <!-- License -->
     <string name="licensed_yes">Get licensed successfully</string>
     <string name="licensed_no">Wrong mail address or serial number</string>
+    <string name="pls_input_serial_num">Please input serial number</string>
+    <string name="pls_input_mail">Please input mail address</string>
     
 </resources>

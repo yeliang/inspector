@@ -30,13 +30,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String SERIALNUM;
 	private static String MAIL;
 	private static String INTERVAL_INFO;
+	private LicenseType isLicensed;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// All values will be automatically saved to SharePreferences
 		addPreferencesFromResource(R.xml.preference);
-		
+				
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
 			@Override
@@ -55,15 +56,42 @@ public class GlobalPrefActivity extends PreferenceActivity
         });
 	}
 	
-	private static void verifySerialNum(SharedPreferences sharedPreferences, Context context) {
+	@Override
+	public void onDestroy()
+	{
+		Intent data = this.getIntent();
+		if (this.isLicensed == LicenseType.FullLicensed) {
+			data.putExtra("isLicensed", "full");
+		} else if (this.isLicensed == LicenseType.OnlySmsLicensed) {
+			data.putExtra("isLicensed", "onlysms");
+		} else {
+			data.putExtra("isLicensed", "no");
+		}
+		setResult(RESULT_OK, data);
+		
+		super.onDestroy();
+	}
+		
+	private void verifySerialNum(SharedPreferences sharedPreferences, Context context) {
 		String mail = sharedPreferences.getString(context.getResources().getString(R.string.pref_mail_key), "");
 		String serialNum = sharedPreferences.getString(context.getResources().getString(R.string.pref_serialnum_key), "");
-		LicenseType type = LicenseCtrl.isLicensed(context.getApplicationContext(), mail, serialNum);
-		if (type != LicenseType.NotLicensed) {
-			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
+		if (serialNum.trim().length() == 0) {
+			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.pls_input_serial_num, ""));
+		} else if (mail.trim().length() == 0) {
+			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.pls_input_mail, ""));
 		} else {
-			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_no, ""));
-		}
+			LicenseType type = LicenseCtrl.isLicensed(context.getApplicationContext(), mail, serialNum);
+			if (type == LicenseType.FullLicensed) {
+				this.isLicensed = LicenseType.FullLicensed;
+				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
+			} else if (type == LicenseType.OnlySmsLicensed) {
+				this.isLicensed = LicenseType.OnlySmsLicensed;
+				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
+			} else {
+				this.isLicensed = LicenseType.NotLicensed;
+				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_no, ""));
+			}
+		}		
 	}
 	
 	public static String getSerialNum(Context context) {
