@@ -11,15 +11,16 @@ public class LicenseCtrl
 	
 	public static LicenseType isLicensed(Context context, String user, String key)
 	{
-		// NOTICE: the key is only 4length
+		// NOTICE: the key is only 6 digital
 		try {
-			String key4 = AesCryptor.encrypt(AesCryptor.defaultSeed, user).substring(0,4);
-			if (key4.compareToIgnoreCase(key) == 0) {
+			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, user);
+			String key6 = encryped.substring(0,6);
+			if (key6.compareToIgnoreCase(key) == 0) {
 				return LicenseType.FullLicensed;
 			}
 			else {
-				String smsKey4 = AesCryptor.encrypt(AesCryptor.smsSeed, user).substring(0,4);
-				if (smsKey4.compareToIgnoreCase(key) == 0) {
+				String smsKey6 = encryped.substring(6,12);
+				if (smsKey6.compareToIgnoreCase(key) == 0) {
 					return LicenseType.OnlySmsLicensed;
 				}
 				return LicenseType.NotLicensed;
