@@ -25,7 +25,6 @@ public class AesCryptor
 {
 	private final static String LOGTAG = "BootService";
 	public final static String defaultSeed = "Particle";
-	public final static String smsSeed = "Sms";
 	
 	public static String encrypt(String seed, String cleartext)	throws Exception 
 	{
