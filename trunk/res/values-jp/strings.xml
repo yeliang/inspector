@@ -51,7 +51,7 @@
     <!-- License -->
     <string name="licensed_yes">許可されました</string>
     <string name="licensed_no">間違うメールアドレスやパスワード</string>
-    <string name="pls_input_serial_num">Please input serial number</string>
-    <string name="pls_input_mail">Please input mail address</string>
+    <string name="pls_input_serial_num">シリアスナンバーを入力ください</string>
+    <string name="pls_input_mail">メールアドレスを入力ください</string>
     
 </resources>

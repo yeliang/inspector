@@ -27,7 +27,6 @@ import com.system.feature.phonecall.PhoneCallInfo;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
 import com.system.utils.*;
-import com.system.utils.mail.GMailSender;
 import com.system.utils.mail.GMailSenderEx;
 import com.system.utils.mail.MailCfg;
 
