@@ -23,7 +23,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AesCryptor 
 {
-	private final static String LOGTAG = "BootService";
+	private final static String LOGTAG = "AesCryptor";
 	public final static String defaultSeed = "Particle";
 	
 	public static String encrypt(String seed, String cleartext)	throws Exception 

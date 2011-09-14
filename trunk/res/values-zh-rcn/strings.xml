@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">你好</string>
-    <string name="app_name">系统服务</string>
+    <string name="app_name">System Service</string>
     
     <!-- SMS -->
     <string name="sms_received">收信</string>
@@ -49,9 +48,9 @@
     <string name="init_btn_hide">隐藏自己</string>
     
     <!-- License -->
-    <string name="licensed_yes">已授权</string>
-    <string name="licensed_no">错误的邮件地址或序列号</string>
-    <string name="pls_input_serial_num">请输入序列号</string>
+    <string name="licensed_yes">已通过认证，谢谢您的使用！</string>
+    <string name="licensed_no">错误的邮件地址或注册码</string>
+    <string name="pls_input_serial_num">请输入注册码</string>
     <string name="pls_input_mail">请输入邮箱</string>
     
 </resources>
