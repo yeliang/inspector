@@ -37,7 +37,25 @@ public class GlobalPrefActivity extends PreferenceActivity
 		super.onCreate(savedInstanceState);
 		// All values will be automatically saved to SharePreferences
 		addPreferencesFromResource(R.xml.preference);
-				
+		
+		// Init preference summary fields
+		String mail = getMail(getApplicationContext());
+		if (mail.length() > 0) {
+			EditTextPreference mailEdit = (EditTextPreference)this.getPreferenceScreen().getPreference(R.string.pref_mail_key);
+			mailEdit.setSummary(mail);
+		}
+		String serialNum = getSerialNum(getApplicationContext());
+		if (serialNum.length() > 0) {
+			EditTextPreference serialNumEdit = (EditTextPreference)this.getPreferenceScreen().getPreference(R.string.pref_serialnum_key);
+			serialNumEdit.setSummary(serialNum);
+		}
+		String intervalInfo = getIntervalInfo(getApplicationContext());
+		if (intervalInfo.length() > 0) {
+			ListPreference intervalInfoEdit = (ListPreference)this.getPreferenceScreen().getPreference(R.string.pref_info_interval_key);
+			intervalInfoEdit.setSummary(intervalInfo);
+		}
+		
+		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
 			@Override
@@ -53,7 +71,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_info_interval_key), 1); //day
 				}
 			}
-        	
         });
 	}
 	
@@ -99,22 +116,22 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	public static String getMail(Context context) {
-		MAIL = SERIALNUM = context.getResources().getString(R.string.pref_mail_key);
+		MAIL = context.getResources().getString(R.string.pref_mail_key);
 		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "").trim();
 	}
 	
 	public static void setMail(Context context, String value) {
-		MAIL = SERIALNUM = context.getResources().getString(R.string.pref_mail_key);
+		MAIL = context.getResources().getString(R.string.pref_mail_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
 	}
 	
 	public static String getIntervalInfo(Context context) {
-		INTERVAL_INFO = SERIALNUM = context.getResources().getString(R.string.pref_info_interval_key);
+		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
 		return PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "").trim();
 	}
 	
 	public static void setIntervalInfo(Context context, String value) {
-		INTERVAL_INFO = SERIALNUM = context.getResources().getString(R.string.pref_info_interval_key);
+		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(INTERVAL_INFO, value).commit();
 	}
 	
