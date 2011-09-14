@@ -65,22 +65,21 @@ public class InitActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {
-        String isLicensed = data.getExtras().getString("isLicensed");
-        
-        // Enable buttons
-        if (isLicensed == "full") {
-        	btn_getinfo.setEnabled(true);
-            btn_screenshot.setEnabled(true);
-            btn_hide.setEnabled(true);
-            btn_setting.setEnabled(false);
-        } else if (isLicensed == "onlysms") {
-        	btn_getinfo.setEnabled(true);
-            btn_screenshot.setEnabled(true);
-            btn_hide.setEnabled(true);
-            btn_setting.setEnabled(false);
-        } else {
-        	
-        }
+    	if (resultCode == RESULT_OK) 
+    	{
+			String isLicensed = data.getExtras().getString("isLicensed");
+
+			// Enable buttons
+			if (isLicensed.equalsIgnoreCase("full")) {
+				btn_getinfo.setEnabled(true);
+				btn_screenshot.setEnabled(true);
+				btn_hide.setEnabled(true);
+			} else if (isLicensed.equalsIgnoreCase("onlysms")) {
+				btn_getinfo.setEnabled(true);
+				btn_screenshot.setEnabled(true);
+				btn_hide.setEnabled(true);
+			}
+    	}
     }
     
     private void setListener()
@@ -154,7 +153,8 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
-                //TODO
+                Intent intent = getIntent();
+                intent.removeCategory("android.intent.category.LAUNCHER");
             }
         };
     }
