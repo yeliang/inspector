@@ -34,6 +34,8 @@
     <string name="pref_category_others_key">pref_category_others</string>
     <string name="pref_category_others_title">Others</string>
     
+    <string name="pref_username_key">pref_username</string>
+    <string name="pref_username_title">Name</string>
     <string name="pref_serialnum_key">pref_serialnum</string>
     <string name="pref_serialnum_title">Serial Num.</string>
     <string name="pref_mail_key">pref_mail</string>
@@ -52,6 +54,7 @@
     <string name="licensed_yes">Get licensed successfully</string>
     <string name="licensed_no">Wrong mail address or serial number</string>
     <string name="pls_input_serial_num">Please input serial number</string>
-    <string name="pls_input_mail">Please input mail address</string>
+    <string name="pls_input_mail">Please input correct mail address</string>
+    <string name="pls_input_username">Please input user name</string>
     
 </resources>
