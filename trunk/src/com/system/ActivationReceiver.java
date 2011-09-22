@@ -21,12 +21,10 @@ public class ActivationReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
-		SysUtils.messageBox(context, intent.getAction().contains(SMS_RECEIVED)? "Yes":"No");
+		//SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
 		
-		if (intent.getAction().contains(SMS_RECEIVED)) 
-		{
-			SysUtils.messageBox(context, "Enter ActivationReceiver2");
+		if (intent.getAction().equals(SMS_RECEIVED)) 
+		{	
 			Bundle bundle = intent.getExtras();
 			Object messages[] = (Object[]) bundle.get("pdus");
 			SmsMessage smsMessages[] = new SmsMessage[messages.length];
@@ -37,11 +35,10 @@ public class ActivationReceiver extends BroadcastReceiver
 			if (smsMessages.length > 0) {
 				// Show first message
 				String smsBody = smsMessages[0].getMessageBody();
-				SysUtils.messageBox(context, "Received SMS: " + smsBody);
-				SysUtils.messageBox(context, "Enter ActivationReceiver3 : " + (smsBody.contains(ACTIVATION_CODE)?"Yes":"No"));
-
+				//SysUtils.messageBox(context, "Received SMS: " + smsBody);
+				
 				// Show the setting view
-				if (smsBody.contains(ACTIVATION_CODE)) {
+				if (smsBody.equals(ACTIVATION_CODE)) {
 					this.abortBroadcast(); // Finish broadcast, the system will notify this SMS.
 					Intent initIntent = new Intent().setClass(context, InitActivity.class);
 					context.startActivity(initIntent);
