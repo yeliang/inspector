@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.system.GetInfoTask;
 import com.system.R;
@@ -31,6 +33,10 @@ public class InitActivity extends Activity
     Button btn_screenshot;
     Button btn_setting;
     Button btn_hide;
+    TextView hint_getinfo;
+    TextView hint_screenshot;
+    TextView hint_setting;
+    TextView hint_hide;
     OnClickListener listener_getinfo = null;
     OnClickListener listener_screenshot = null;
     OnClickListener listener_setting = null;
@@ -55,11 +61,21 @@ public class InitActivity extends Activity
         btn_setting.setOnClickListener(listener_setting);
         btn_hide = (Button)findViewById(R.id.btn_hide);
         btn_hide.setOnClickListener(listener_hide);
+        hint_getinfo = (TextView)findViewById(R.id.hint_getinfo);
+        hint_screenshot = (TextView)findViewById(R.id.hint_screenshot);
+        hint_setting = (TextView)findViewById(R.id.hint_setting);
+        hint_hide = (TextView)findViewById(R.id.hint_hide);
         
         // Disable buttons
         btn_getinfo.setEnabled(false);
         btn_screenshot.setEnabled(false);
         btn_hide.setEnabled(false);
+        hint_getinfo.setEnabled(false);
+        hint_screenshot.setEnabled(false);
+        hint_hide.setEnabled(false);
+        
+        btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
+        hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
     }
     
     @Override
@@ -74,10 +90,16 @@ public class InitActivity extends Activity
 				btn_getinfo.setEnabled(true);
 				btn_screenshot.setEnabled(true);
 				btn_hide.setEnabled(true);
+				hint_getinfo.setEnabled(true);
+				hint_screenshot.setEnabled(true);
+				hint_hide.setEnabled(true);
 			} else if (isLicensed.equalsIgnoreCase("onlysms")) {
 				btn_getinfo.setEnabled(true);
 				btn_screenshot.setEnabled(true);
 				btn_hide.setEnabled(true);
+				hint_getinfo.setEnabled(true);
+				hint_screenshot.setEnabled(true);
+				hint_hide.setEnabled(true);
 			}
     	}
     }
@@ -149,12 +171,12 @@ public class InitActivity extends Activity
             }
         };
         
+        // Exit the dialog
         listener_hide = new OnClickListener()
         {
             public void onClick(View v)
             {
-                Intent intent = getIntent();
-                intent.removeCategory("android.intent.category.LAUNCHER");
+                finish();
             }
         };
     }

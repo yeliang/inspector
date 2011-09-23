@@ -8,9 +8,6 @@
     <item>5天</item>
     <item>6天</item>
     <item>7天</item>
-    <item>14天</item>
-    <item>21天</item>
-    <item>30天</item> 
   </string-array>
   <string-array name="days_value"> 
     <item>1</item> 
@@ -20,8 +17,5 @@
     <item>5</item>
     <item>6</item>
     <item>7</item>
-    <item>14</item>
-    <item>21</item>
-    <item>30</item> 
   </string-array> 
 </resources>

