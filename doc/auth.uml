@@ -60,13 +60,13 @@
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="Left" type="integer">264</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">40</XPD:ATTR>
-<XPD:ATTR name="Width" type="integer">70</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">73</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">409</XPD:ATTR>
 <XPD:REF name="Model">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="YGBUiR41BU+kGE8Uxpo78wAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="BDf3VPEVikqQM8a3kxz6VgAA">
 <XPD:ATTR name="FontStyle" type="integer">4</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">client</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">client(phone)</XPD:ATTR>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="LabelView" guid="jp6XjCYnSE2mwqNQFpy0nwAA">
 <XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
@@ -107,14 +107,14 @@
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="LineStyle" type="LineStyleKind">lsRectilinear</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">299,108;329,108;329,128;305,128</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">300,108;330,108;330,128;306,128</XPD:ATTR>
 <XPD:REF name="Model">QySEeb/Sfk2mH+A0hRQi6AAA</XPD:REF>
 <XPD:REF name="Head">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:REF name="Tail">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="sZ343Q5bt0uG4FvTw8u2GwAA">
-<XPD:ATTR name="Alpha" type="real">1.50073475028202</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">114.280357017293</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">1 : Local Verification: User and Serial Number()</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">1.5707953267949</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">93</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">1 : Local key verification()</XPD:ATTR>
 <XPD:REF name="Model">QySEeb/Sfk2mH+A0hRQi6AAA</XPD:REF>
 <XPD:REF name="HostEdge">Nq+/hsp4NUGZYlKiCmNrjAAA</XPD:REF>
 </XPD:OBJ>
@@ -133,7 +133,7 @@
 <XPD:REF name="HostEdge">Nq+/hsp4NUGZYlKiCmNrjAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Activation" type="UMLActivationView" guid="JiL/jRVjzE+PQcqEuSpQZQAA">
-<XPD:ATTR name="Left" type="integer">292</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">293</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">128</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">14</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">73</XPD:ATTR>
@@ -143,14 +143,14 @@
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="LineStyle" type="LineStyleKind">lsRectilinear</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">305,198;664,198</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">306,198;664,198</XPD:ATTR>
 <XPD:REF name="Model">zdIrt6ySqkGY4pE4PzwH7QAA</XPD:REF>
 <XPD:REF name="Head">hRhIc1CibEuANGDFlrwZkwAA</XPD:REF>
 <XPD:REF name="Tail">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="Hq9b9oYawEapVUAlpoJfyQAA">
 <XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
 <XPD:ATTR name="Distance" type="real">10</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">2 : Send SMS with User and DeviceID info()</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">2 : Send SMS with key and DeviceID info()</XPD:ATTR>
 <XPD:REF name="Model">zdIrt6ySqkGY4pE4PzwH7QAA</XPD:REF>
 <XPD:REF name="HostEdge">nvPTT1BjbEaV3vawTAXPPQAA</XPD:REF>
 </XPD:OBJ>
@@ -184,9 +184,9 @@
 <XPD:REF name="Head">hRhIc1CibEuANGDFlrwZkwAA</XPD:REF>
 <XPD:REF name="Tail">hRhIc1CibEuANGDFlrwZkwAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="/a3ABdRXJEuZ1/0fPGDy9wAA">
-<XPD:ATTR name="Alpha" type="real">1.28273991337184</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">84.4807670419723</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">3 : Verify user and left license count()</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">1.31019296271007</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">93.1450481775601</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">3 : Key validation: cannot be used before()</XPD:ATTR>
 <XPD:REF name="Model">Sm2R7fYtjkeacWWmvdvzcgAA</XPD:REF>
 <XPD:REF name="HostEdge">dOPKltCy/kmb2SoaUrcQegAA</XPD:REF>
 </XPD:OBJ>
@@ -215,14 +215,14 @@
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="LineStyle" type="LineStyleKind">lsRectilinear</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">664,328;305,328</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">664,328;306,328</XPD:ATTR>
 <XPD:REF name="Model">qsu6x8l6lUO3e7f4XeujJQAA</XPD:REF>
 <XPD:REF name="Head">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:REF name="Tail">hRhIc1CibEuANGDFlrwZkwAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="lUvVTquC4kuusXn9QiSMwwAA">
 <XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
 <XPD:ATTR name="Distance" type="real">10</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">4 : Send SMS with auth code according to DeviceID()</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">4 : Send result flag: OK or NG()</XPD:ATTR>
 <XPD:REF name="Model">qsu6x8l6lUO3e7f4XeujJQAA</XPD:REF>
 <XPD:REF name="HostEdge">sRBP8kfU2UucLnt+fypKZQAA</XPD:REF>
 </XPD:OBJ>
@@ -241,7 +241,7 @@
 <XPD:REF name="HostEdge">sRBP8kfU2UucLnt+fypKZQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Activation" type="UMLActivationView" guid="1mZE2YXze0erCW/0OZIgGQAA">
-<XPD:ATTR name="Left" type="integer">292</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">293</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">328</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">14</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">29</XPD:ATTR>
@@ -251,14 +251,14 @@
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="LineStyle" type="LineStyleKind">lsRectilinear</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">299,380;329,380;329,400;305,400</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">300,380;330,380;330,400;306,400</XPD:ATTR>
 <XPD:REF name="Model">6YkaH09cUESzxraUAh5M8AAA</XPD:REF>
 <XPD:REF name="Head">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:REF name="Tail">wacVZ29Z7kuC2z1L/PCp2AAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="8sWEAVRixka2QO837qv8GQAA">
-<XPD:ATTR name="Alpha" type="real">0.881871082909907</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">44.0454310910905</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">5 : Verify auth code()</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">0.519145383477251</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">32.2490309931942</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">5 : Set flag()</XPD:ATTR>
 <XPD:REF name="Model">6YkaH09cUESzxraUAh5M8AAA</XPD:REF>
 <XPD:REF name="HostEdge">aacfw91xcEySF6EInIAQ6QAA</XPD:REF>
 </XPD:OBJ>
@@ -277,7 +277,7 @@
 <XPD:REF name="HostEdge">aacfw91xcEySF6EInIAQ6QAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Activation" type="UMLActivationView" guid="DhSjs7xcD06lXDoPyLwT8wAA">
-<XPD:ATTR name="Left" type="integer">292</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">293</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">400</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">14</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">29</XPD:ATTR>
@@ -287,7 +287,7 @@
 </XPD:OBJ>
 <XPD:ATTR name="#ParticipatingStimuli" type="integer">5</XPD:ATTR>
 <XPD:OBJ name="ParticipatingStimuli[0]" type="UMLStimulus" guid="QySEeb/Sfk2mH+A0hRQi6AAA">
-<XPD:ATTR name="Name" type="string">Local Verification: User and Serial Number</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Local key verification</XPD:ATTR>
 <XPD:REF name="Sender">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:REF name="Receiver">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:OBJ name="Action" type="UMLCallAction" guid="t3Bp05oRkEikwowXatQm9gAA">
@@ -301,7 +301,7 @@
 <XPD:REF name="Views[3]">ShpoZKOh5ECbCnl3ZgqwKQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="ParticipatingStimuli[1]" type="UMLStimulus" guid="zdIrt6ySqkGY4pE4PzwH7QAA">
-<XPD:ATTR name="Name" type="string">Send SMS with User and DeviceID info</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Send SMS with key and DeviceID info</XPD:ATTR>
 <XPD:REF name="Sender">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:REF name="Receiver">dDT7IDG+W0CIqpsleCa6GQAA</XPD:REF>
 <XPD:OBJ name="Action" type="UMLCallAction" guid="nIhcrB3lZ02PeFA354F/iQAA">
@@ -315,7 +315,7 @@
 <XPD:REF name="Views[3]">nTs1IVJS/kC12lT6D+ZzJQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="ParticipatingStimuli[2]" type="UMLStimulus" guid="Sm2R7fYtjkeacWWmvdvzcgAA">
-<XPD:ATTR name="Name" type="string">Verify user and left license count</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Key validation: cannot be used before</XPD:ATTR>
 <XPD:REF name="Sender">dDT7IDG+W0CIqpsleCa6GQAA</XPD:REF>
 <XPD:REF name="Receiver">dDT7IDG+W0CIqpsleCa6GQAA</XPD:REF>
 <XPD:OBJ name="Action" type="UMLCallAction" guid="ED87/B9ueECUYdOMb/ZwOwAA">
@@ -329,7 +329,7 @@
 <XPD:REF name="Views[3]">cr/8HWeoCkOxQp00cLydowAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="ParticipatingStimuli[3]" type="UMLStimulus" guid="qsu6x8l6lUO3e7f4XeujJQAA">
-<XPD:ATTR name="Name" type="string">Send SMS with auth code according to DeviceID</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Send result flag: OK or NG</XPD:ATTR>
 <XPD:REF name="Sender">dDT7IDG+W0CIqpsleCa6GQAA</XPD:REF>
 <XPD:REF name="Receiver">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:OBJ name="Action" type="UMLCallAction" guid="gVY0OLJqoEqeVSUhRg7vSwAA">
@@ -343,7 +343,7 @@
 <XPD:REF name="Views[3]">UK5rb107ZUuGgkeIM/OSYQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="ParticipatingStimuli[4]" type="UMLStimulus" guid="6YkaH09cUESzxraUAh5M8AAA">
-<XPD:ATTR name="Name" type="string">Verify auth code</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Set flag</XPD:ATTR>
 <XPD:REF name="Sender">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:REF name="Receiver">HXJ4JcY6eEOTWOzAtpplJAAA</XPD:REF>
 <XPD:OBJ name="Action" type="UMLCallAction" guid="1G8KuRdF60mwFw2VH5fXIQAA">
@@ -359,7 +359,7 @@
 </XPD:OBJ>
 <XPD:ATTR name="#ParticipatingInstances" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="ParticipatingInstances[0]" type="UMLObject" guid="HXJ4JcY6eEOTWOzAtpplJAAA">
-<XPD:ATTR name="Name" type="string">client</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">client(phone)</XPD:ATTR>
 <XPD:REF name="CollaborationInstanceSet">P9M32oHcREicYbLI5ieS6QAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">2</XPD:ATTR>
 <XPD:REF name="Views[0]">zMDmHAoHU0ejwSn/Iy2SQgAA</XPD:REF>
