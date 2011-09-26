@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Key Generator</string>
+    <string name="lbl_fulllicense">Full License: </string>
+    <string name="lbl_partlicense">Part License: </string>
+    <string name="generate">Generate</string>
+</resources>
