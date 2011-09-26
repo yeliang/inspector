@@ -24,17 +24,16 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.system.R;
+import com.system.utils.StrUtils;
 import com.system.utils.SysUtils;
 import com.system.utils.license.LicenseCtrl;
 import com.system.utils.license.LicenseType;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
-	private static String USERNAME;
-	private static String SERIALNUM;
 	private static String MAIL;
 	private static String INTERVAL_INFO;
-	private LicenseType isLicensed;
+	public static final String IS_VALID_MAIL_ADDRESS= "is_valid_mail_address";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,17 +51,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals(getResources().getString(R.string.pref_username_key))) {
-					verifySerialNum(sharedPreferences, getApplicationContext());
-				}
-				else if (key.equals(getResources().getString(R.string.pref_serialnum_key))) {
-					verifySerialNum(sharedPreferences, getApplicationContext());
-				}
-				else if (key.equals(getResources().getString(R.string.pref_mail_key))) {
+				if (key.equals(getResources().getString(R.string.pref_mail_key))) {
 					checkMailFormat(sharedPreferences, getApplicationContext());
 				}
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
-					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_info_interval_key), 1); //day
+					String interval = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
 				}
 				
 				// Update preference summary fields
@@ -71,37 +64,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		        }
 			}
         });
-	}
-	
-	private void verifySerialNum(SharedPreferences sharedPreferences, Context context) {
-		String username = sharedPreferences.getString(context.getResources().getString(R.string.pref_username_key), "").trim();
-		String serialNum = sharedPreferences.getString(context.getResources().getString(R.string.pref_serialnum_key), "").trim();
-		if (username.length() == 0 && serialNum.length() > 0) {
-			SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.pls_input_username, ""));
-		} else if (username.length() > 0 && serialNum.length() > 0) {
-			LicenseType type = LicenseCtrl.isLicensed(context.getApplicationContext(), username, serialNum);
-			if (type == LicenseType.FullLicensed) {
-				this.isLicensed = LicenseType.FullLicensed;
-				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
-			} else if (type == LicenseType.OnlySmsLicensed) {
-				this.isLicensed = LicenseType.OnlySmsLicensed;
-				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_yes, ""));
-			} else {
-				this.isLicensed = LicenseType.NotLicensed;
-				SysUtils.messageBox(context.getApplicationContext(), context.getResources().getString(R.string.licensed_no, ""));
-			}
-			
-			// Set result
-			Intent data = this.getIntent();
-			if (this.isLicensed == LicenseType.FullLicensed) {
-				data.putExtra("isLicensed", "full");
-			} else if (this.isLicensed == LicenseType.OnlySmsLicensed) {
-				data.putExtra("isLicensed", "onlysms");
-			} else {
-				data.putExtra("isLicensed", "no");
-			}
-			setResult(RESULT_OK, data);
-		}
 	}
 	
 	private void initSummary(Preference p) {
@@ -127,33 +89,27 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	private void checkMailFormat(SharedPreferences sharedPreferences, Context context) {
+		boolean valid = true;
 		String mail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "");
-		String regex = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+"; // regexp of mail address
-	    Pattern p = Pattern.compile(regex);
-	    Matcher matcher = p.matcher(mail);
-   	 	if (!matcher.matches()) {
-   	 		SysUtils.messageBox(context, context.getResources().getString(R.string.pls_input_mail, ""));
-   	 	}
-	}
-	
-	public static String getUsername(Context context) {
-		USERNAME = context.getResources().getString(R.string.pref_username_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(USERNAME, "").trim();
-	}
-	
-	public static void setUsername(Context context, String value) {
-		USERNAME = context.getResources().getString(R.string.pref_username_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(USERNAME, value).commit();
-	}
-	
-	public static String getSerialNum(Context context) {
-		SERIALNUM = context.getResources().getString(R.string.pref_serialnum_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(SERIALNUM, "").trim();
-	}
-	
-	public static void setSerialNum(Context context, String value) {
-		SERIALNUM = context.getResources().getString(R.string.pref_serialnum_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SERIALNUM, value).commit();
+		String[] mails = mail.split(",");
+	    Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
+	    
+	    for (String eachMail : mails) {
+	    	if (eachMail.trim().length() > 0) {
+	    		Matcher matcher = p.matcher(eachMail.trim());
+   	 			if (!matcher.matches()) {
+   	 				String msg = String.format(context.getResources().getString(R.string.pref_pls_input_mail), eachMail.trim());
+   	 				SysUtils.messageBox(context, msg);
+   	 				valid = false;
+   	 				break;
+   	 			}
+	    	}
+	    }
+   	 	
+		// Set result
+		Intent data = this.getIntent();
+		data.putExtra(IS_VALID_MAIL_ADDRESS, valid);
+		setResult(RESULT_OK, data);
 	}
 	
 	public static String getMail(Context context) {
@@ -166,14 +122,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
 	}
 	
-	public static String getIntervalInfo(Context context) {
+	public static int getIntervalInfo(Context context) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getInt(INTERVAL_INFO, 1);
 	}
 	
-	public static void setIntervalInfo(Context context, String value) {
+	public static void setIntervalInfo(Context context, int value) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(INTERVAL_INFO, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
 	}
 	
 }

