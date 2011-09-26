@@ -22,23 +22,18 @@
     
     <!-- Mail -->
     <string name="mail_from">From</string>
-    <string name="mail_body">Hi, this is an auto mail from {0} with contacts, SMS and phone call information.</string>
+    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
     
     <!-- Preferences -->
     <string name="pref_title">設定</string>
-    <string name="pref_category_reg_key">pref_category_reg</string>
-    <string name="pref_category_reg_title">レジスター</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">機能</string>
     <string name="pref_category_others_key">pref_category_others</string>
     <string name="pref_category_others_title">その他</string>
     
-    <string name="pref_username_key">pref_username</string>
-    <string name="pref_username_title">名前</string>
-    <string name="pref_serialnum_key">pref_serialnum</string>
-    <string name="pref_serialnum_title">シリアスナンバー</string>
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">メール</string>
+    <string name="pref_pls_input_mail">間違うメールアドレス：{0}</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">間隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">取り間隔</string>
@@ -52,12 +47,5 @@
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
     <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
     <string name="init_hint_hide">Exit current setting dialog</string>
-    
-    <!-- License -->
-    <string name="licensed_yes">認証済み。ご使用ありがとう。</string>
-    <string name="licensed_no">間違うユーザ名やパスワード</string>
-    <string name="pls_input_serial_num">シリアスナンバーをご入力ください</string>
-    <string name="pls_input_mail">メールアドレスをご入力ください</string>
-    <string name="pls_input_username">Please input user name</string>
     
 </resources>

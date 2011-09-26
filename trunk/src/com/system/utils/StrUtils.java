@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 public class StrUtils 
 {
+	public static final String REGEXP_MAIL = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+"; // regexp of mail address
+	
 	public static String toCommaString(List<String> list)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -22,8 +24,7 @@ public class StrUtils
 	public static String[] filterMails(String[] mails)
 	{
 		List<String> list = new ArrayList<String>();
-		String regex = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+"; // regexp of mail address
-	    Pattern p = Pattern.compile(regex);
+		Pattern p = Pattern.compile(REGEXP_MAIL);
 	    for (int i = 0; i < mails.length; i++)
 	    {
 	    	 Matcher matcher = p.matcher(mails[i]);
