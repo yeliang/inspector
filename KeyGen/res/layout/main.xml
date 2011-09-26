@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+	<TextView  
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content" 
+    	android:text="@string/lbl_fulllicense"
+    />
+    <TextView  
+    	android:id="@+id/txtFullLicense" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:textColor="#FF0000"
+    	android:textSize="24dp"
+    />
+    
+    <TextView  
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content" 
+    	android:text="@string/lbl_partlicense"
+    />
+    <TextView  
+    	android:id="@+id/txtSmsLicense" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:textColor="#FF0000"
+    	android:textSize="24dp"
+    />
+    
+    <Button android:id="@+id/btn_generate" android:text="@string/generate" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
+</LinearLayout>
