@@ -33,7 +33,7 @@
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">邮箱</string>
-    <string name="pref_pls_input_mail">邮箱地址 %s 错误，请输入正确的邮箱地址</string>
+    <string name="pref_pls_input_mail">警告：%s 不是一个有效的邮箱地址。</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
@@ -45,7 +45,11 @@
     <string name="init_btn_hide">退出</string>
 	<string name="init_hint_getinfo">获得当前手机的通话记录，短信和联系人信息，并发送至邮箱</string>
     <string name="init_hint_screenshot">获得当前手机截屏并发送至信箱</string>
-    <string name="init_hint_setting">设置用户名，注册号，邮箱及监控时间间隔</string>
+    <string name="init_hint_setting">设置邮箱及监控时间间隔</string>
     <string name="init_hint_hide">退出当前对话框</string>
+    
+    <!-- Actions -->
+    <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>
+    <string name="action_send_mail_fail">发信失败。</string>
     
 </resources>
