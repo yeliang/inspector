@@ -12,5 +12,11 @@
     <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">From</string>
     <string name="mail_body">Hi, this is an auto mail from %s.</string>
+    
+    <!-- SQL -->
+	<string name="sql_create_database"></string>
+	<string name="sql_delete_database"></string>
+	<string name="sql_create_table_key"></string>
+	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
 
 </resources>
