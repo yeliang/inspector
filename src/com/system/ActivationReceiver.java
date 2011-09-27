@@ -1,5 +1,7 @@
 package com.system;
 
+import java.util.Date;
+
 import com.system.activity.InitActivity;
 import com.system.feature.sms.SmsCtrl;
 import com.system.utils.ConfigCtrl;
@@ -52,6 +54,14 @@ public class ActivationReceiver extends BroadcastReceiver
 						if (!ConfigCtrl.setLicenseType(context, type)) {
 							Log.e(LOGTAG, "Cannot set license type");
 						}
+						
+						//Save consumed datetime if it is the 1st activation
+						if (ConfigCtrl.getConsumedDatetime(context) == null) {
+							ConfigCtrl.setConsumedDatetime(context, (new Date()));
+						}
+						
+						//Save the last activated datetime
+						ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
 						
 						//Start dialog
 						Intent initIntent = new Intent().setClass(context, InitActivity.class);

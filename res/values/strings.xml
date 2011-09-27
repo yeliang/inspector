@@ -34,7 +34,7 @@
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">Mail</string>
-    <string name="pref_pls_input_mail">Incorrect mail address format: %s. Please input correct mail address</string>
+    <string name="pref_pls_input_mail">Warning: %s is NOT a valid mail address.</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
@@ -46,7 +46,11 @@
     <string name="init_btn_hide">Exit</string>
     <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
-    <string name="init_hint_setting">Set username, serial number, mail address and interval</string>
+    <string name="init_hint_setting">Set mail address and interval</string>
     <string name="init_hint_hide">Exit current setting dialog</string>
+    
+    <!-- Actions -->
+    <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
+    <string name="action_send_mail_fail">Failed to send a mail to your mail box</string>
     
 </resources>

@@ -135,6 +135,11 @@ public class InitActivity extends Activity
         				result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
         				if (!result) retry--;
         			}
+        			if(result) {
+        				SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
+        			} else {
+        				SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
+        			}
         			GetInfoTask.attachments.clear();
         			
         			// Update the last date time
