@@ -49,6 +49,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
+			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				if (key.equals(getResources().getString(R.string.pref_mail_key))) {

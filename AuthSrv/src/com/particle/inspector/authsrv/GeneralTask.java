@@ -59,8 +59,6 @@ public class GeneralTask extends TimerTask
 		
 	}
 	
-	
-	
 	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<String> files)
 	{
 		boolean ret = false;
@@ -81,12 +79,6 @@ public class GeneralTask extends TimerTask
         }
         
 		return ret;
-	}
-	
-	private static String[] getRecipients(Context context)
-	{
-		String mail = GlobalPrefActivity.getMail(context);
-		return mail.split(",");
 	}
 	
 }
