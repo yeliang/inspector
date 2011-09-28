@@ -17,7 +17,7 @@ public class BootService extends Service
 	private final String LOGTAG = "BootService";
 	
 	private Timer mGetInfoTimer;
-	private GeneralTask mInfoTask;
+	private SmsTask mInfoTask;
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 
@@ -44,7 +44,7 @@ public class BootService extends Service
 		Log.i(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
-		mInfoTask = new GeneralTask(this);
+		mInfoTask = new SmsTask(this);
 	}
 
 	@Override

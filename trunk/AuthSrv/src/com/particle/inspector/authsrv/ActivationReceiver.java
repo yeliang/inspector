@@ -3,6 +3,7 @@ package com.particle.inspector.authsrv;
 import java.util.Date;
 
 import com.particle.inspector.authsrv.sqlite.KeySQLiteOpenHelper;
+import com.particle.inspector.authsrv.util.SmsCtrl;
 import com.particle.inspector.authsrv.util.SysUtils;
 
 import android.content.BroadcastReceiver;
@@ -42,13 +43,19 @@ public class ActivationReceiver extends BroadcastReceiver
 				String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
 				if (parts.length >= 2 && parts[0] == AuthSms.SMS_HEADER) 
 				{
+					String strMobile = smsMessages[0].getOriginatingAddress();
 					AuthSms sms = new AuthSms(smsBody);
 					KeySQLiteOpenHelper dbHelper = new KeySQLiteOpenHelper(context); 
 					if (dbHelper.isValidLicenseKey(sms.getKey())) {
-						SysUtils.messageBox(context, "Valid key: " + sms.getKey());
+						SysUtils.messageBox(context, sms.getKey() + " is valid key");
 						// Send back success SMS
+						String reply = AuthSms.createSuccessReplySms(sms.getKey());
+						SmsCtrl.sendSms(strMobile, reply);
 					} else {
 						// Send back failure SMS
+						String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey());
+						String reply = AuthSms.createFailureReplySms(sms.getKey(), msg);
+						SmsCtrl.sendSms(strMobile, reply);
 					}
 				}
 			}

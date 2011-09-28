@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/tableLayout1">
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <Button android:id="@+id/btn_db_test_createdb" android:layout_width="150dp" android:text="Create DB" android:layout_height="wrap_content"></Button>
+            <Button android:id="@+id/btn_db_test_deletedb" android:layout_width="150dp" android:text="Delete DB" android:layout_height="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        	<Button android:id="@+id/btn_db_test_createkeytable" android:layout_width="150dp" android:text="Create Key Table" android:layout_height="wrap_content"></Button>
+            <Button android:id="@+id/btn_db_test_dropkeytable" android:layout_width="150dp" android:text="Drop Key Table" android:layout_height="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        	<Button android:id="@+id/btn_db_test_insertkey" android:layout_width="150dp" android:text="Insert Key" android:layout_height="wrap_content"></Button>
+            <Button android:id="@+id/btn_db_test_deletekey" android:layout_width="150dp" android:text="Delete Key" android:layout_height="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow4" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        	<Button android:id="@+id/btn_db_test_insertkey" android:layout_width="150dp" android:text="Insert Key" android:layout_height="wrap_content"></Button>
+            <Button android:id="@+id/btn_db_test_deletekey" android:layout_width="150dp" android:text="Delete Key" android:layout_height="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow5" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        	<Button android:id="@+id/btn_db_test_isvalidkey" android:layout_width="150dp" android:text="Is Valid Key?" android:layout_height="wrap_content"></Button>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

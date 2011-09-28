@@ -4,6 +4,8 @@ public class AuthSms
 {
 	public final static String SMS_HEADER = "InspectorAuth";
 	public final static String SMS_SEPARATOR = ",";
+	public final static String SMS_SUCCESS = "OK";
+	public final static String SMS_FAILURE = "NG";
 	
 	private String header;
 	private String key;
@@ -29,6 +31,14 @@ public class AuthSms
 		if (parts.length >= 4) {
 			this.phoneNum = parts[3];
 		} 
+	}
+	
+	public static String createSuccessReplySms(String key) {
+		return SMS_HEADER + SMS_SEPARATOR + key + SMS_SEPARATOR + SMS_SUCCESS;
+	}
+	
+	public static String createFailureReplySms(String key, String errMsg) {
+		return SMS_HEADER + SMS_SEPARATOR + key + SMS_SEPARATOR + SMS_FAILURE + SMS_SEPARATOR + errMsg;
 	}
 	
 	// Getter and setter

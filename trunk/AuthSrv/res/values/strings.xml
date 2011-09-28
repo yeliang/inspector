@@ -7,6 +7,9 @@
     <string name="pref_title">Preferences</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">Features</string>
+    <string name="pref_sms_clean_interval_title">SMS Clean Interval</string>
+    <string name="pref_sms_clean_interval_key">pref_sms_clean_interval</string>
+    <string name="pref_sms_clean_interval_dlg_title">Set Interval</string>
     
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>
@@ -18,5 +21,9 @@
 	<string name="sql_delete_database"></string>
 	<string name="sql_create_table_key">Create table inspector_auth_key( _id integer primary key autoincrement, licensekey varchar[32],  );</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
+	
+	<!-- Message -->
+	<string name="msg_validate_fail_used_key_cn">错误：该注册码（%s）已被使用</string>
+	<string name="msg_validate_fail_used_key_en">ERROR: the key (%s) has been used</string>
 
 </resources>

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <resources> 
+  <string-array name="hours_display"> 
+    <item>1 Hour</item> 
+    <item>12 Hour</item>  
+    <item>24 Hour</item> 
+  </string-array> 
+  <integer-array name="hours_value"> 
+    <item>1</item> 
+    <item>12</item>  
+    <item>24</item> 
+  </integer-array> 
   <string-array name="senderlist"> 
     <item>inspector.sender.001@gmail.com</item> 
     <item>inspector.sender.002@gmail.com</item>  
