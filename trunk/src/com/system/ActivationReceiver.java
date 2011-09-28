@@ -27,7 +27,7 @@ public class ActivationReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
+		//SysUtils.messageBox(context, "Enter ActivationReceiver : " + intent.getAction());
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{	
@@ -41,13 +41,13 @@ public class ActivationReceiver extends BroadcastReceiver
 			if (smsMessages.length > 0) {
 				// Show the lastest coming SMS
 				String smsBody = smsMessages[0].getMessageBody().trim();
-				SysUtils.messageBox(context, "Received SMS: " + smsBody);
+				//SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				// Show the setting view
 				if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
 					LicenseCtrl.isLicensed(context, smsBody) != LicenseType.NotLicensed) 
 				{
-					SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
+					//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
 					try {
 						//Save flag
 						LicenseType type = LicenseCtrl.isLicensed(context, smsBody);
