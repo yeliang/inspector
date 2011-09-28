@@ -56,7 +56,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					checkMailFormat(sharedPreferences, getApplicationContext());
 				}
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
-					String interval = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
+					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_info_interval_key), 1); //day
 				}
 				
 				// Update preference summary fields

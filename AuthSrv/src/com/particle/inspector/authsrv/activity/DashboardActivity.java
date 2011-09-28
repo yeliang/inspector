@@ -20,8 +20,7 @@ public class DashboardActivity extends Activity
 {   
 	protected static final String LOGTAG = "Dashboard";
 	private Button btnSetting;
-	private int KEY_LENGTH = 12; // *** It should be even number and less than 32 ***
-	
+		
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

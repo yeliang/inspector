@@ -26,7 +26,7 @@ public class KeySQLiteOpenHelper extends SQLiteOpenHelper
     public final static String FIELD_BUY_DATE = "buydate";
     public final static String FIELD_CONSUME_DATE = "consumedate";
     public final static String FIELD_LAST_ACTIVATE_DATE = "lastactivatedate";
-        
+    
     public KeySQLiteOpenHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -124,6 +124,10 @@ public class KeySQLiteOpenHelper extends SQLiteOpenHelper
     	if (find(key) == null) {
     		return true;
     	} else return false;
+    }
+    
+    public String getDefaultValidateFailMsg(String key) {
+    	return String.format(context.getResources().getString(R.string.msg_validate_fail_used_key_cn), key);
     }
     
 }

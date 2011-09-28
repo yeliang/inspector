@@ -49,13 +49,13 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
+			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				/*
-				if (key.equals(getResources().getString(R.string.xxx))) {
-					checkMailFormat(sharedPreferences, getApplicationContext());
+				if (key.equals(getResources().getString(R.string.pref_sms_clean_interval_key))) {
+					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_sms_clean_interval_key), 24); //Hour
 				}
-				*/
+				
 				
 				// Update preference summary fields
 				for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
@@ -87,16 +87,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	/*
-	public static String getMail(Context context) {
-		MAIL = context.getResources().getString(R.string.pref_mail_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "").trim();
-	}
 	
-	public static void setMail(Context context, String value) {
-		MAIL = context.getResources().getString(R.string.pref_mail_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
-	}
-	*/
 	
 }

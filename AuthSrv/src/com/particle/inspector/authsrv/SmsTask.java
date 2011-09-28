@@ -35,15 +35,15 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
- * Implementation of the timer task for information collection.
+ * Timer task for SMS handling
  */
-public class GeneralTask extends TimerTask 
+public class SmsTask extends TimerTask 
 {
-	private final static String LOGTAG = "GeneralTask";
+	private final static String LOGTAG = "SmsTask";
 	
 	public Service service;
 	
-	public GeneralTask(Service service)
+	public SmsTask(Service service)
 	{
 		super();
 		this.service = service;
@@ -51,10 +51,7 @@ public class GeneralTask extends TimerTask
 	
 	public void run() 
 	{
-		Log.d(LOGTAG, "start to collect infomation");
-		
-		// If network connected, try to collect and send the information
-		if (!SysUtils.isNetworkConnected(service.getApplicationContext())) return;
+		Log.d(LOGTAG, "started");
 		
 		
 	}
