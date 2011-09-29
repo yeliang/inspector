@@ -1,4 +1,4 @@
-package com.particle.inspector.authsrv.activity;
+package com.particle.inspector.authsrv.test;
 
 import java.util.Date;
 import java.util.Random;
@@ -6,6 +6,8 @@ import java.util.Random;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.R.id;
 import com.particle.inspector.authsrv.R.layout;
+import com.particle.inspector.authsrv.sqlite.DbHelper;
+import com.particle.inspector.authsrv.sqlite.metadata.TKey;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,8 +27,10 @@ public class DbTestActivity extends Activity
 	private Button btnTest_DropKeyTable;
 	private Button btnTest_InsertKey;
 	private Button btnTest_DeleteKey;
+	private Button btnTest_CleanTableKey;
 	private Button btnTest_IsValidKey;
-		
+
+	@SuppressWarnings("unused")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +40,9 @@ public class DbTestActivity extends Activity
         btnTest_CreateDB.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		String dbPath = db.getDbPath();
         	}
         });
         
@@ -44,7 +50,8 @@ public class DbTestActivity extends Activity
         btnTest_DeleteDB.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.deleteDB();
         	}
         });
         
@@ -52,7 +59,9 @@ public class DbTestActivity extends Activity
         btnTest_CreateKeyTable.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		ret = db.createKeyTable();
         	}
         });
         
@@ -60,7 +69,9 @@ public class DbTestActivity extends Activity
         btnTest_DropKeyTable.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		ret = db.DropKeyTable();
         	}
         });
         
@@ -68,7 +79,10 @@ public class DbTestActivity extends Activity
         btnTest_InsertKey.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		TKey key =  new TKey("TheKey4Test", "TheDeviceID4Test", "ThePhoneNumber4Test", new Date(), new Date(), new Date());
+        		ret = db.insert(key);
         	}
         });
         
@@ -76,7 +90,19 @@ public class DbTestActivity extends Activity
         btnTest_DeleteKey.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		int count = db.deleteFromKey("TheKey4Test");
+        	}
+        });
+        
+        btnTest_CleanTableKey = (Button)findViewById(R.id.btn_db_test_cleantablekey);
+        btnTest_CleanTableKey.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v)
+        	{
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		int count = db.cleanTableKey();
         	}
         });
         
@@ -84,7 +110,9 @@ public class DbTestActivity extends Activity
         btnTest_IsValidKey.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		ret = db.isValidLicenseKey("TheKey4Test");
         	}
         });
     }

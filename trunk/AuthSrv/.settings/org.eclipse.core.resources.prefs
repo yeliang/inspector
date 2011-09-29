@@ -1,5 +1,5 @@
-#Wed Sep 28 16:01:49 CST 2011
+#Thu Sep 29 09:16:31 CST 2011
 eclipse.preferences.version=1
-encoding//src/com/particle/inspector/authsrv/sqlite/KeySQLiteOpenHelper.java=UTF-8
+encoding//src/com/particle/inspector/authsrv/sqlite/DbHelper.java=UTF-8
 encoding//src/com/particle/inspector/authsrv/util/SmsCtrl.java=UTF-8
 encoding//src/com/particle/inspector/authsrv/util/SysUtils.java=UTF-8
