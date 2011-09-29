@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class TKey 
 {
-	private long id;
+	private int id;
 	private String key; // The activation key
 	private String deviceID;
 	private String phoneNum;
@@ -18,7 +18,7 @@ public class TKey
 	private long reserve_long_1;
 	private Date reserve_datetime_1;
 
-	public TKey(long id, String key, String deviceID, String phoneNum, Date buyDate, Date consumeDate, Date lastActivateDate) {
+	public TKey(int id, String key, String deviceID, String phoneNum, Date buyDate, Date consumeDate, Date lastActivateDate) {
 		this.id = id;
 		this.key = key;
 		this.deviceID = deviceID;
@@ -27,12 +27,21 @@ public class TKey
 		this.consumeDate = consumeDate;
 		this.lastActivateDate = lastActivateDate;
 	}
+	
+	public TKey(String key, String deviceID, String phoneNum, Date buyDate, Date consumeDate, Date lastActivateDate) {
+		this.key = key;
+		this.deviceID = deviceID;
+		this.phoneNum = phoneNum;
+		this.buyDate = buyDate;
+		this.consumeDate = consumeDate;
+		this.lastActivateDate = lastActivateDate;
+	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

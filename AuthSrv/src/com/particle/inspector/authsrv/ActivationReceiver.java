@@ -2,7 +2,7 @@ package com.particle.inspector.authsrv;
 
 import java.util.Date;
 
-import com.particle.inspector.authsrv.sqlite.KeySQLiteOpenHelper;
+import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.authsrv.util.SmsCtrl;
 import com.particle.inspector.authsrv.util.SysUtils;
 
@@ -45,7 +45,7 @@ public class ActivationReceiver extends BroadcastReceiver
 				{
 					String strMobile = smsMessages[0].getOriginatingAddress();
 					AuthSms sms = new AuthSms(smsBody);
-					KeySQLiteOpenHelper dbHelper = new KeySQLiteOpenHelper(context); 
+					DbHelper dbHelper = new DbHelper(context); 
 					if (dbHelper.isValidLicenseKey(sms.getKey())) {
 						SysUtils.messageBox(context, sms.getKey() + " is valid key");
 						// Send back success SMS

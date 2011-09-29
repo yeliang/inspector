@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">密钥生成</string>
-    <string name="lbl_fulllicense">激活码（全功能）：</string>
-    <string name="lbl_partlicense">激活码（部分功能）：</string>
-    <string name="generate">生成密钥</string>
+    <string name="app_name">注册码</string>
+    <string name="lbl_fulllicense">注册码（全功能）：</string>
+    <string name="lbl_partlicense">注册码（部分功能）：</string>
+    <string name="generate">生成注册码</string>
 </resources>

@@ -19,11 +19,24 @@
     <!-- SQL -->
 	<string name="sql_create_database"></string>
 	<string name="sql_delete_database"></string>
-	<string name="sql_create_table_key">Create table inspector_auth_key( _id integer primary key autoincrement, licensekey varchar[32],  );</string>
+	<string name="sql_create_table_key">
+	CREATE TABLE inspector_auth_key(
+		_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+		licensekey varchar[32] NOT NULL, 
+		deviceid varchar[100], 
+		phonenum varchar[32], 
+		buydate TIMESTAMP default (datetime(\'now\', \'localtime\')) NOT NULL,
+		consumedate datetime,
+		lastactivatedate datetime
+		); 
+	</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
 	
 	<!-- Message -->
 	<string name="msg_validate_fail_used_key_cn">错误：该注册码（%s）已被使用</string>
 	<string name="msg_validate_fail_used_key_en">ERROR: the key (%s) has been used</string>
+	
+	<!-- Test -->
+	<string name="db_test_name">Test DB</string>
 
 </resources>
