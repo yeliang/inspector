@@ -48,20 +48,20 @@ public class ActivationReceiver extends BroadcastReceiver
 				{
 					String strMobile = smsMessages[0].getOriginatingAddress();
 					SysUtils.messageBox(context, "Phone number: " + strMobile);
-					AuthSms sms = new AuthSms(smsBody, SMS_TYPE.RECEIVE);
+					AuthSms sms = new AuthSms(smsBody, SMS_TYPE.CLIENT);
 					DbHelper dbHelper = new DbHelper(context); 
 					if (dbHelper.isValidLicenseKey(sms.getKey())) {
 						SysUtils.messageBox(context, sms.getKey() + " is valid key");
 						// Send back success SMS
 						AuthSms replySms = new AuthSms(sms.getKey(), SMS_RESULT.OK, null);
-						String reply = replySms.sendSms2Str();
+						String reply = replySms.serverSms2Str();
 						SmsCtrl.sendSms(strMobile, reply);
 					} else {
 						SysUtils.messageBox(context, sms.getKey() + " is not valid key");
 						// Send back failure SMS
 						String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey());
 						AuthSms replySms = new AuthSms(sms.getKey(), SMS_RESULT.NG, msg);
-						String reply = replySms.sendSms2Str();
+						String reply = replySms.serverSms2Str();
 						SmsCtrl.sendSms(strMobile, reply);
 					}
 				}

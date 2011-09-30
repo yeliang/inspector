@@ -53,4 +53,11 @@
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
     <string name="action_send_mail_fail">Failed to send a mail to your mail box</string>
     
+    <!-- Server -->
+	<string name="srv_address">15319967068</string>
+	
+	<!-- Message -->
+	<string name="msg_invalid_key">Invaid key. Probably has been used. Please contact the software maker for support.</string>
+	
+    
 </resources>
