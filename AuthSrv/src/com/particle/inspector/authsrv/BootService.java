@@ -3,6 +3,8 @@ package com.particle.inspector.authsrv;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.particle.inspector.authsrv.sms.SmsTask;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;

@@ -38,5 +38,6 @@
 	
 	<!-- Test -->
 	<string name="db_test_name">Test DB</string>
+	<string name="sms_test_name">Test SMS</string>
 
 </resources>
