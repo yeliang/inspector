@@ -1,4 +1,4 @@
-package com.particle.inspector.authsrv.sms;
+package com.system.feature.sms;
 
 /**
  * The received SMS (client -> server) format: InspectorAuth,[Key],[Lang],[Device ID],[Phone Number]
@@ -24,7 +24,7 @@ public class AuthSms
 	private String errMsg;
 	private LANG lang;
 	
-	// Constructor for client SMS 
+	// Constructor for received SMS 
 	public AuthSms(String key, String deviceID, String phoneNum, LANG lang) {
 		this.header = SMS_HEADER;
 		this.key = key;
@@ -33,7 +33,7 @@ public class AuthSms
 		this.lang = lang;
 	}
 	
-	// Constructor for server SMS 
+	// Constructor for send SMS 
 	public AuthSms(String key, SMS_RESULT result, String errMsg) {
 		this.header = SMS_HEADER;
 		this.key = key;

@@ -39,7 +39,7 @@ public class SmsTestActivity extends Activity
         	{
         		// Success reply
         		AuthSms replySms = new AuthSms("123456ABCDEF", SMS_RESULT.OK, null);
-				String reply = replySms.sendSms2Str();
+				String reply = replySms.serverSms2Str();
 				SmsCtrl.sendSms("18792991610", reply); // *** Cannot send SMS to self ***
         	}
         });

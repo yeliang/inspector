@@ -52,4 +52,7 @@
     <string name="action_send_mail_success">送信成功</string>
     <string name="action_send_mail_fail">送信失敗</string>
     
+    <!-- Message -->
+	<string name="msg_invalid_key">無効ライセンスキー。使ったキーかもしれない。製造者をご連絡ください。</string>
+    
 </resources>

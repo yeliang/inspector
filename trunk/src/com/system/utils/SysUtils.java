@@ -1,6 +1,8 @@
 package com.system.utils;
 
 import java.io.DataOutputStream;
+import java.util.Locale;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
@@ -89,5 +91,14 @@ public class SysUtils
 		} catch (InterruptedException e) {
 			Log.e(tag, "Failed to sleep");
 		}
+	}
+	
+	public static String getPhoneLang() {
+		String lang = Locale.getDefault().getLanguage();
+		if (lang.contains("zh")) {
+			return "CN";
+		} else if (lang.contains("jp")) {
+			return "JP";
+		} else return "EN";
 	}
 }
