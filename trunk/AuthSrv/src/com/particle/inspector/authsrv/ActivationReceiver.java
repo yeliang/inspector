@@ -2,8 +2,11 @@ package com.particle.inspector.authsrv;
 
 import java.util.Date;
 
+import com.particle.inspector.authsrv.sms.AuthSms;
+import com.particle.inspector.authsrv.sms.SMS_RESULT;
+import com.particle.inspector.authsrv.sms.SMS_TYPE;
+import com.particle.inspector.authsrv.sms.SmsCtrl;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
-import com.particle.inspector.authsrv.util.SmsCtrl;
 import com.particle.inspector.authsrv.util.SysUtils;
 
 import android.content.BroadcastReceiver;
@@ -41,20 +44,24 @@ public class ActivationReceiver extends BroadcastReceiver
 				SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
-				if (parts.length >= 2 && parts[0] == AuthSms.SMS_HEADER) 
+				if (parts.length >= 3 && parts[0] == AuthSms.SMS_HEADER) 
 				{
 					String strMobile = smsMessages[0].getOriginatingAddress();
-					AuthSms sms = new AuthSms(smsBody);
+					SysUtils.messageBox(context, "Phone number: " + strMobile);
+					AuthSms sms = new AuthSms(smsBody, SMS_TYPE.RECEIVE);
 					DbHelper dbHelper = new DbHelper(context); 
 					if (dbHelper.isValidLicenseKey(sms.getKey())) {
 						SysUtils.messageBox(context, sms.getKey() + " is valid key");
 						// Send back success SMS
-						String reply = AuthSms.createSuccessReplySms(sms.getKey());
+						AuthSms replySms = new AuthSms(sms.getKey(), SMS_RESULT.OK, null);
+						String reply = replySms.sendSms2Str();
 						SmsCtrl.sendSms(strMobile, reply);
 					} else {
+						SysUtils.messageBox(context, sms.getKey() + " is not valid key");
 						// Send back failure SMS
 						String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey());
-						String reply = AuthSms.createFailureReplySms(sms.getKey(), msg);
+						AuthSms replySms = new AuthSms(sms.getKey(), SMS_RESULT.NG, msg);
+						String reply = replySms.sendSms2Str();
 						SmsCtrl.sendSms(strMobile, reply);
 					}
 				}

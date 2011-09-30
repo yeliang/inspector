@@ -1,4 +1,4 @@
-package com.particle.inspector.authsrv;
+package com.particle.inspector.authsrv.sms;
 
 import java.io.DataOutputStream;
 import java.io.File;

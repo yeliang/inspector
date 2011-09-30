@@ -1,6 +1,9 @@
 package com.particle.inspector.authsrv.util;
 
 import java.io.DataOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
@@ -89,5 +92,11 @@ public class SysUtils
 		} catch (InterruptedException e) {
 			Log.e(tag, "Failed to sleep");
 		}
+	}
+	
+	public static String getUniformDatetimeStr(Date date) 
+	{
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return f.format(date);
 	}
 }

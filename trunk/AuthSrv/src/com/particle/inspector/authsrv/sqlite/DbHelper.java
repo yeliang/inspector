@@ -1,6 +1,7 @@
 package com.particle.inspector.authsrv.sqlite;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.particle.inspector.authsrv.R;
@@ -147,7 +148,7 @@ public class DbHelper
         		new String[] { String.valueOf(id) });  
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
-            	new Date(cursor.getString(4)), new Date(cursor.getString(5)), new Date(cursor.getString(6)));  
+            	cursor.getString(4), cursor.getString(5), cursor.getString(6));  
         }  
         return null;  
     }
@@ -164,11 +165,7 @@ public class DbHelper
         		String buyDate = cursor.getString(4);
         		String consumeDate = cursor.getString(5);
         		String lastActivateDate = cursor.getString(6);
-        		DateFormat f = DateFormat.getDateInstance();
-        		Date buy = f.parse(buyDate);
-        		Date consume = f.parse(consumeDate);
-        		Date lastActivate = f.parse(lastActivateDate);
-        		return new TKey(id, licenseKey, deviceID, phoneNum, buy, consume, lastActivate);
+        		return new TKey(id, licenseKey, deviceID, phoneNum, buyDate, consumeDate, lastActivateDate);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;

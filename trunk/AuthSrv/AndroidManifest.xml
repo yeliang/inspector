@@ -17,9 +17,21 @@
     </application>
     -->
     
+    <!-- 
     <application android:icon="@drawable/icon" android:label="@string/db_test_name">
         <activity android:name=".test.DbTestActivity"
                   android:label="@string/db_test_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+     -->
+     
+    <application android:icon="@drawable/icon" android:label="@string/sms_test_name">
+        <activity android:name=".test.SmsTestActivity"
+                  android:label="@string/sms_test_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

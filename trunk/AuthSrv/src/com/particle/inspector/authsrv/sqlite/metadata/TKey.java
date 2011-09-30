@@ -8,9 +8,9 @@ public class TKey
 	private String key; // The activation key
 	private String deviceID;
 	private String phoneNum;
-	private Date buyDate;
-	private Date consumeDate;
-	private Date lastActivateDate;
+	private String buyDate;
+	private String consumeDate;
+	private String lastActivateDate;
 	
 	// Reserve fields	
 	private String reserve_string_1;
@@ -18,23 +18,23 @@ public class TKey
 	private long reserve_long_1;
 	private Date reserve_datetime_1;
 
-	public TKey(int id, String key, String deviceID, String phoneNum, Date buyDate, Date consumeDate, Date lastActivateDate) {
-		this.id = id;
-		this.key = key;
-		this.deviceID = deviceID;
-		this.phoneNum = phoneNum;
-		this.buyDate = buyDate;
-		this.consumeDate = consumeDate;
-		this.lastActivateDate = lastActivateDate;
+	public TKey(int id, String key, String deviceID, String phoneNum, String buyDate, String consumeDate, String lastActivateDate) {
+		if (id >= 0) this.id = id;
+		if (key != null) this.key = key;
+		if (deviceID != null) this.deviceID = deviceID;
+		if (phoneNum != null) this.phoneNum = phoneNum;
+		if (buyDate != null) this.buyDate = buyDate;
+		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 	
-	public TKey(String key, String deviceID, String phoneNum, Date buyDate, Date consumeDate, Date lastActivateDate) {
-		this.key = key;
-		this.deviceID = deviceID;
-		this.phoneNum = phoneNum;
-		this.buyDate = buyDate;
-		this.consumeDate = consumeDate;
-		this.lastActivateDate = lastActivateDate;
+	public TKey(String key, String deviceID, String phoneNum, String buyDate, String consumeDate, String lastActivateDate) {
+		if (key != null) this.key = key;
+		if (deviceID != null) this.deviceID = deviceID;
+		if (phoneNum != null) this.phoneNum = phoneNum;
+		if (buyDate != null) this.buyDate = buyDate;
+		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 
 	public int getId() {
@@ -69,33 +69,33 @@ public class TKey
 		this.phoneNum = phoneNum;
 	}
 	
-	public Date getBuyDate() {
+	public String getBuyDate() {
 		return buyDate;
 	}
 
-	public void setBuyDate(Date buyDate) {
+	public void setBuyDate(String buyDate) {
 		this.buyDate = buyDate;
 	}
 	
-	public Date getConsumeDate() {
+	public String getConsumeDate() {
 		return consumeDate;
 	}
 
-	public void setConsumeDate(Date consumeDate) {
+	public void setConsumeDate(String consumeDate) {
 		this.consumeDate = consumeDate;
 	}
 
-	public Date getLastActivateDate() {
+	public String getLastActivateDate() {
 		return lastActivateDate;
 	}
 
-	public void setLastActivateDate(Date lastActivateDate) {
+	public void setLastActivateDate(String lastActivateDate) {
 		this.lastActivateDate = lastActivateDate;
 	}
 	
 	@Override
 	public String toString() {
-		return "KEY [id=" + id + 
+		return "Key [id=" + String.valueOf(id) + 
 				 ", key=" + key + 
 		    ", deviceid=" + deviceID +
             ", phonenum=" + phoneNum +
