@@ -44,7 +44,7 @@ public class ActivationReceiver extends BroadcastReceiver
 				SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
-				if (parts.length >= 3 && parts[0] == AuthSms.SMS_HEADER) 
+				if (parts.length >= 3 && parts[0].equalsIgnoreCase(AuthSms.SMS_HEADER)) 
 				{
 					String strMobile = smsMessages[0].getOriginatingAddress();
 					SysUtils.messageBox(context, "Phone number: " + strMobile);
