@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">注册服务</string>
+    <string name="setting">设置</string>
+    
+    <!-- Preferences -->
+    <string name="pref_title">设置</string>
+    <string name="pref_category_feature_key">pref_category_feature</string>
+    <string name="pref_category_feature_title">功能</string>
+    <string name="pref_sms_clean_interval_title">清理短信周期</string>
+    <string name="pref_sms_clean_interval_key">pref_sms_clean_interval</string>
+    <string name="pref_sms_clean_interval_dlg_title">设置周期</string>
+    
+    <!-- Mail -->
+    <string name="mail_sender_pwd">canadausa</string>
+    <string name="mail_from">来自</string>
+    <string name="mail_body">Hi, this is an auto mail from %s.</string>
+
+</resources>

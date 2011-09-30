@@ -8,6 +8,7 @@ import com.particle.inspector.authsrv.R.id;
 import com.particle.inspector.authsrv.R.layout;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,14 +25,15 @@ public class DashboardActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.dashboard);
         
         btnSetting = (Button)findViewById(R.id.btn_setting);
         
         btnSetting.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		
+        		Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
+            	startActivityForResult(intent, R.layout.dashboard);
         	}
         });
     }
