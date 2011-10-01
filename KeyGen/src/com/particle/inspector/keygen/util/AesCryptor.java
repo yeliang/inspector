@@ -1,4 +1,4 @@
-package com.particle.inspector.keygen;
+package com.particle.inspector.keygen.util;
 
 import java.io.*;
 import java.security.SecureRandom;

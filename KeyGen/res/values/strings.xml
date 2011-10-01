@@ -4,4 +4,8 @@
     <string name="lbl_fulllicense">Full License: </string>
     <string name="lbl_partlicense">Part License: </string>
     <string name="generate">Generate</string>
+    <string name="generate100">Generate 100 keys and mail</string>
+    <string name="send_ok">Mail sent successfully</string>
+    <string name="send_ng">ERROR: fail to generate keys and send mail</string>
+    <string name="send_networks_unavailable">ERROR: networks unavailable</string>
 </resources>
