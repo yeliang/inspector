@@ -68,8 +68,8 @@ public class KeyGen extends Activity
     			}
         		
         		StringBuilder sb = new StringBuilder();
-        		sb.append("Full Key" + "\t" + "Part Key" + SysUtils.NEWLINE);
-        		sb.append("------------------------------------------------");
+        		sb.append("No.\t\t" + "Full Key" + "\t\t\t" + "Part Key" + SysUtils.NEWLINE);
+        		sb.append("-----------------------------------------------------------" + SysUtils.NEWLINE);
         		
         		try {
         			for (int i = 0; i < KEYS_NUMBER; i++) {
@@ -79,7 +79,7 @@ public class KeyGen extends Activity
         				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
         				String full = clearText + longKey.substring(0, KEY_LENGTH/2);
         				String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
-        				sb.append(full + "\t" + part + SysUtils.NEWLINE);
+        				sb.append(String.format("%03d", i+1) + "\t\t" + full + "\t" + part + SysUtils.NEWLINE);
         			}
         			
         			// Send mail
