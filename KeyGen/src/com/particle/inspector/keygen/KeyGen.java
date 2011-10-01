@@ -10,7 +10,10 @@ import com.particle.inspector.keygen.util.GMailSenderEx;
 import com.particle.inspector.keygen.util.SysUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +31,16 @@ public class KeyGen extends Activity
 	private Button btnGenerate100;
 	private TextView fullLicense;
 	private TextView partLicense;
+	private Context context;
+	private String exceptionMsg;
 	
+	private final int DISABLE_GENERATE100_BTN = 0;
+	private final int ENABLE_GENERATE100_BTN  = 1;
+	private final int GENERATE100_OK          = 2;
+	private final int GENERATE100_NG          = 3;
+	private final int GENERATE100_EXCEPTION   = 4;
+	
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,39 +78,86 @@ public class KeyGen extends Activity
     				SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_networks_unavailable));
     				return;
     			}
+    			
+    			context = v.getContext();
         		
-        		StringBuilder sb = new StringBuilder();
-        		sb.append("No.\t\t" + "Full Key" + "\t\t\t" + "Part Key" + SysUtils.NEWLINE);
-        		sb.append("-----------------------------------------------------------" + SysUtils.NEWLINE);
-        		
-        		try {
-        			for (int i = 0; i < KEYS_NUMBER; i++) {
-        				long seed = Math.abs((new Random()).nextLong());
-        				String hex = Long.toHexString(seed);
-        				String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
-        				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
-        				String full = clearText + longKey.substring(0, KEY_LENGTH/2);
-        				String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
-        				sb.append(String.format("%03d", i+1) + "\t\t" + full + "\t" + part + SysUtils.NEWLINE);
-        			}
-        			
-        			// Send mail
-        			GMailSenderEx gmailSender = new GMailSenderEx("richardroky@gmail.com", "yel636636");
-                    gmailSender.setFrom("system@gmail.com");
-                    gmailSender.setTo(new String[] {"ylssww@126.com"});
-                    gmailSender.setSubject("100 spector keys (full and part) - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
-                    gmailSender.setBody(sb.toString());
-                    
-                    if (gmailSender.send()) {
-                    	SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_ok));
-                    } else {
-                    	SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_ng));
-                    }
-        		} catch (Exception e) {
-        			Log.e(LOGTAG, e.getMessage());
-        		}
+    			// Start a new thread to do the time-consuming job
+    			new Thread(new Runnable(){
+    				public void run() {
+    					mHandler.sendEmptyMessageDelayed(DISABLE_GENERATE100_BTN, 0);
+    	    			
+    	        		StringBuilder sb = new StringBuilder();
+    	        		sb.append("No.\t\t" + "Full Key" + "\t\t\t" + "Part Key" + SysUtils.NEWLINE);
+    	        		sb.append("-----------------------------------------------------------" + SysUtils.NEWLINE);
+    	        		
+    	        		try {
+    	        			for (int i = 0; i < KEYS_NUMBER; i++) {
+    	        				long seed = Math.abs((new Random()).nextLong());
+    	        				String hex = Long.toHexString(seed);
+    	        				String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
+    	        				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+    	        				String full = clearText + longKey.substring(0, KEY_LENGTH/2);
+    	        				String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
+    	        				sb.append(String.format("%03d", i+1) + "\t\t" + full + "\t" + part + SysUtils.NEWLINE);
+    	        			}
+    	        			
+    	        			// Send mail
+    	        			GMailSenderEx gmailSender = new GMailSenderEx("richardroky@gmail.com", "yel636636");
+    	                    gmailSender.setFrom("system@gmail.com");
+    	                    gmailSender.setTo(new String[] {"ylssww@126.com"});
+    	                    gmailSender.setSubject("100 spector keys (full and part) - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
+    	                    gmailSender.setBody(sb.toString());
+    	                    
+    	                    if (gmailSender.send()) {
+    	                    	mHandler.sendEmptyMessageDelayed(GENERATE100_OK, 0);
+    	                    } else {
+    	                    	mHandler.sendEmptyMessageDelayed(GENERATE100_NG, 0);
+    	                    }
+    	        		} catch (Exception e) {
+    	        			Log.e(LOGTAG, e.getMessage());
+    	        			exceptionMsg = e.getMessage();
+    	        			mHandler.sendEmptyMessageDelayed(GENERATE100_EXCEPTION, 0);
+    	        		} finally {
+    	        			mHandler.sendEmptyMessageDelayed(ENABLE_GENERATE100_BTN, 0);
+    	        		}
+    				}
+    			}).start();
+    			
+    			
         	}
         });
+        
     }
+    
+    // Update UI 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+               case DISABLE_GENERATE100_BTN: {
+            	   btnGenerate100.setEnabled(false);
+                   break;
+               }
+               case ENABLE_GENERATE100_BTN: {
+            	   btnGenerate100.setEnabled(true);
+            	   break;
+               }
+               case GENERATE100_OK: {
+            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ok));
+            	   break;
+               }
+               case GENERATE100_NG: {
+            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng));
+            	   break;
+               }
+               case GENERATE100_EXCEPTION: {
+            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng) + "\r\n" + exceptionMsg);
+            	   break;
+               }
+               default:
+                   break;
+            }
+         }
+     };
     
 }
