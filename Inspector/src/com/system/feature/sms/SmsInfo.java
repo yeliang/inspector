@@ -5,7 +5,7 @@ import java.util.Date;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.particle.inspector.common.util.sms.SMS_TYPE;
+import com.system.feature.sms.SMS_TYPE;
 
 import com.system.R;
 
@@ -32,9 +32,9 @@ public class SmsInfo
 	
 	private String typeToString(Context context, SMS_TYPE type)
 	{
-		if (type == SMS_TYPE.CLIENT)
+		if (type == SMS_TYPE.RECEIVED)
 			return context.getResources().getString(R.string.sms_received);
-		if (type == SMS_TYPE.SERVER)
+		if (type == SMS_TYPE.SENT)
 			return context.getResources().getString(R.string.sms_sent);
 		else
 			return context.getResources().getString(R.string.sms_unknown);

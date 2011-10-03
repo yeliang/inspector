@@ -41,25 +41,25 @@ public class BootService extends Service
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		Log.d(LOGTAG, "onBind"); 
+		Log.v(LOGTAG, "onBind"); 
 		return null;
 	}
 	
 	@Override
     public void onDestroy() {  
-        Log.i(LOGTAG, "onDestroy");  
+        Log.v(LOGTAG, "onDestroy");  
     }
 	
 	@Override  
     public boolean onUnbind(Intent intent) {  
-        Log.i(LOGTAG, "onUnbind");  
+        Log.v(LOGTAG, "onUnbind");  
         return super.onUnbind(intent);  
     }
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.i(LOGTAG, "created");
+		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(this);

@@ -7,14 +7,16 @@ import java.util.List;
 
 import com.system.feature.contact.ContactInfo;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.sms.SMS_TYPE;
+import com.system.feature.sms.SMS_TYPE;
 
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -47,38 +49,38 @@ public class SmsCtrl
 			      projection,  
 			      null, null , "date desc");
 			
-			 if (cursor.moveToFirst()) 
-			 {   
-		            int nameColumn = cursor.getColumnIndex("person");   
-		            int phoneNumberColumn = cursor.getColumnIndex("address");   
-		            int smsbodyColumn = cursor.getColumnIndex("body");   
-		            int dateColumn = cursor.getColumnIndex("date");   
-		            int typeColumn = cursor.getColumnIndex("type");   
+			if (cursor.moveToFirst()) 
+			{   
+				int nameColumn = cursor.getColumnIndex("person");   
+				int phoneNumberColumn = cursor.getColumnIndex("address");   
+				int smsbodyColumn = cursor.getColumnIndex("body");   
+				int dateColumn = cursor.getColumnIndex("date");   
+				int typeColumn = cursor.getColumnIndex("type");   
 		            
-		            do {   
-		            	SmsInfo info = new SmsInfo();
+				do {   
+					SmsInfo info = new SmsInfo();
 		            	
-		            	info.SendPersonName = cursor.getString(nameColumn);                
-		                info.phoneNumber = cursor.getString(phoneNumberColumn);   
-		                info.smsbody = cursor.getString(smsbodyColumn);
-		                info.date = new Date(Long.parseLong(cursor.getString(dateColumn)));  
-		                //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		                //date = dateFormat.format(info.date);   
-		                   
-		                int typeId = cursor.getInt(typeColumn);   
-		                if(typeId == 1){   
-		                    info.type = SMS_TYPE.CLIENT;   
-		                } else if(typeId == 2){   
-		                    info.type = SMS_TYPE.SERVER;   
-		                } else {   
-		                    info.type = SMS_TYPE.UNKNOWN;   
-		                }   
+					info.SendPersonName = cursor.getString(nameColumn);                
+					info.phoneNumber = cursor.getString(phoneNumberColumn);   
+					info.smsbody = cursor.getString(smsbodyColumn);
+	                info.date = new Date(Long.parseLong(cursor.getString(dateColumn)));  
+	                //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	                //date = dateFormat.format(info.date);   
+	                   
+	                int typeId = cursor.getInt(typeColumn);   
+	                if(typeId == 1){   
+	                	info.type = SMS_TYPE.RECEIVED;   
+	                } else if(typeId == 2){   
+	                	info.type = SMS_TYPE.SENT;   
+	                } else {   
+	                	info.type = SMS_TYPE.UNKNOWN;   
+	                }   
 		                
-		                infoList.add(info);
+	                infoList.add(info);
 		                    
-		            } while (cursor.moveToNext());   
+				} while (cursor.moveToNext());   
 		            
-		        }  
+			}  
 		}  
 		catch (SQLiteException ex)  
 		{  
@@ -168,6 +170,29 @@ public class SmsCtrl
 			Log.e(LOGTAG, ex.getMessage());
 			return false;
 		}
+	}
+	
+	public static String getSmsAddress(Intent intent)
+	{
+		Bundle bundle = intent.getExtras();
+		Object messages[] = (Object[]) bundle.get("pdus");
+		return SmsMessage.createFromPdu((byte[]) messages[0]).getDisplayOriginatingAddress();
+	}
+	
+	public static String getSmsBody(Intent intent)
+	{
+		String tempString = "";
+		Bundle bundle = intent.getExtras();
+		Object messages[] = (Object[]) bundle.get("pdus");
+		SmsMessage[] smsMessage = new SmsMessage[messages.length];
+		for (int n = 0; n < messages.length; n++)
+		{
+			smsMessage[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
+			// 短信有可能因为使用了回车而导致分为多条，所以要加起来接受
+			//tempString += smsMessage[n].getMessageBody().trim();
+			tempString += smsMessage[n].getDisplayMessageBody();
+		}
+		return tempString;
 	}
 	
 }
