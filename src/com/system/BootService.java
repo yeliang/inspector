@@ -4,11 +4,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.system.activity.GlobalPrefActivity;
-import com.system.utils.ConfigCtrl;
-import com.system.utils.StrUtils;
-import com.system.utils.SysUtils;
-import com.system.utils.license.LicenseCtrl;
-import com.system.utils.license.LicenseType;
+import com.system.config.ConfigCtrl;
+import com.particle.inspector.common.util.StrUtils;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LicenseCtrl;
+import com.particle.inspector.common.util.license.LicenseType;
 
 import android.app.Service;
 import android.content.Intent;
@@ -71,7 +71,7 @@ public class BootService extends Service
 	@Override
 	public void onStart(final Intent intent, final int startId) {
 		super.onStart(intent, startId);
-		Log.i(LOGTAG, "started");
+		Log.v(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
 		LicenseType type = ConfigCtrl.getLicenseType(getApplicationContext());
