@@ -2,8 +2,8 @@ package com.system.utils;
 
 import java.util.Date;
 
-import com.system.utils.license.LicenseCtrl;
-import com.system.utils.license.LicenseType;
+import com.particle.inspector.common.util.license.LicenseCtrl;
+import com.particle.inspector.common.util.license.LicenseType;
 
 import android.app.Activity;
 import android.content.Context;
