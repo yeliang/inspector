@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.Random;
 
 import com.particle.inspector.keygen.R;
-import com.particle.inspector.keygen.util.AesCryptor;
-import com.particle.inspector.keygen.util.GMailSenderEx;
-import com.particle.inspector.keygen.util.SysUtils;
+import com.particle.inspector.common.util.AesCryptor;
+import com.particle.inspector.common.util.mail.GMailSenderEx;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
 import android.content.Context;
