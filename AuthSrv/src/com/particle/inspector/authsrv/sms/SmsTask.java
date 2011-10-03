@@ -20,9 +20,10 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.particle.inspector.authsrv.activity.GlobalPrefActivity;
-import com.particle.inspector.authsrv.util.ConfigCtrl;
-import com.particle.inspector.authsrv.util.SysUtils;
-import com.particle.inspector.authsrv.util.mail.GMailSenderEx;
+import com.particle.inspector.authsrv.config.ConfigCtrl;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.mail.GMailSenderEx;
+
 
 import android.app.Activity;
 import android.app.Service;
@@ -53,7 +54,18 @@ public class SmsTask extends TimerTask
 	{
 		Log.d(LOGTAG, "started");
 		
-		
+		// TODO: Clean the received validation SMS ("<Header>,<KEY>,<LANG>,<DEVICEID>,<PHONENUM>,<PHONEMODEL>,<ANDROIDVERSION>") regularly
+		int intervalHours = GlobalPrefActivity.getIntervalInfo(service);
+		// Firstly we should make sure the time range (>24H)
+		Date lastDatetime = new Date(ConfigCtrl.getLastCleanSmsDatetime(service));
+				Calendar now = Calendar.getInstance();
+				now.add(Calendar.DATE, -1);
+				Date now_minus_1_day = now.getTime();
+				if (lastDatetime != null && now_minus_1_day.before(lastDatetime)) 
+				{
+					Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
+					return;
+				}
 	}
 	
 	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<String> files)

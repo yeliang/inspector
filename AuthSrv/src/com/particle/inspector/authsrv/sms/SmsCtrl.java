@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.particle.inspector.authsrv.util.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Service;
 import android.content.ContentResolver;

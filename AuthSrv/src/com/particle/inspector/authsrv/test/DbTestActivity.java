@@ -8,7 +8,7 @@ import com.particle.inspector.authsrv.R.id;
 import com.particle.inspector.authsrv.R.layout;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
-import com.particle.inspector.authsrv.util.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -83,6 +83,7 @@ public class DbTestActivity extends Activity
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
         		TKey key =  new TKey("TheKey4Test", "TheDeviceID4Test", "ThePhoneNumber4Test", 
+        				"HTC Desire", "Android 2.3.5",
         				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()));

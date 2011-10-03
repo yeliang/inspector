@@ -26,8 +26,8 @@ import android.util.Log;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.R.string;
 import com.particle.inspector.authsrv.R.xml;
-import com.particle.inspector.authsrv.util.StrUtils;
-import com.particle.inspector.authsrv.util.SysUtils;
+import com.particle.inspector.common.util.StrUtils;
+import com.particle.inspector.common.util.SysUtils;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
@@ -55,7 +55,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 				if (key.equals(getResources().getString(R.string.pref_sms_clean_interval_key))) {
 					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_sms_clean_interval_key), 24); //Hour
 				}
-				
 				
 				// Update preference summary fields
 				for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
@@ -87,6 +86,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
+	public static int getIntervalInfo(Context context) {
+		INTERVAL_INFO = context.getResources().getString(R.string.pref_sms_clean_interval_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getInt(INTERVAL_INFO, 24); // Hour
+	}
 	
+	public static void setIntervalInfo(Context context, int value) {
+		INTERVAL_INFO = context.getResources().getString(R.string.pref_sms_clean_interval_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
+	}
 	
 }
