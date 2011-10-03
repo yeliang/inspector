@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">System Service</string>
+    
+    <!-- SMS -->
+    <string name="sms_received">Received</string>
+    <string name="sms_sent">Sent</string>
+    <string name="sms_unknown">Unknown</string>
+    <string name="sms_name">SMS</string>
+    
+    <!-- Contact -->
+    <string name="contact_name">Contact</string>
+    
+    <!-- Phone Call -->
+    <string name="phonecall_hour">(h)</string>
+    <string name="phonecall_minute">(m)</string>
+    <string name="phonecall_second">(s)</string>
+    <string name="phonecall_name">PhoneCall</string>
+    <string name="phonecall_incoming">Incoming</string>
+    <string name="phonecall_outgoing">Outgoing</string>
+    <string name="phonecall_missed">Missed</string>
+    
+    <!-- Mail -->
+    <string name="mail_sender_pwd">canadausa</string>
+    <string name="mail_from">From</string>
+    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
+    
+    <!-- Preferences -->
+    <string name="pref_title">Preferences</string>
+    <string name="pref_category_feature_key">pref_category_feature</string>
+    <string name="pref_category_feature_title">Features</string>
+    <string name="pref_category_others_key">pref_category_others</string>
+    <string name="pref_category_others_title">Others</string>
+    
+    <string name="pref_mail_key">pref_mail</string>
+    <string name="pref_mail_title">Mail</string>
+    <string name="pref_pls_input_mail">Warning: %s is NOT a valid mail address.</string>
+    <string name="pref_info_interval_key">pref_info_interval</string> 
+    <string name="pref_info_interval_title">Interval</string> <!-- days -->
+    <string name="pref_info_interval_dlg_title">Get info interval</string>
+    
+    <!-- InitActivity -->
+    <string name="init_btn_getinfo">Get Info</string>
+    <string name="init_btn_screenshot">Screenshot</string>
+    <string name="init_btn_setting">Setting</string>
+    <string name="init_btn_hide">Exit</string>
+    <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
+    <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
+    <string name="init_hint_setting">Set mail address and interval</string>
+    <string name="init_hint_hide">Exit current setting dialog</string>
+    
+    <!-- Actions -->
+    <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
+    <string name="action_send_mail_fail">Failed to send a mail to your mail box</string>
+    
+    <!-- Server -->
+	<string name="srv_address">15319967068</string>
+	
+	<!-- Message -->
+	<string name="msg_invalid_key">Invaid key. Probably has been used. Please contact the software maker for support.</string>
+	
+    
+</resources>
