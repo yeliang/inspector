@@ -1,4 +1,4 @@
-package com.particle.inspector.authsrv.util.mail;
+package com.particle.inspector.authsrv.config;
 
 import java.util.Random;
 

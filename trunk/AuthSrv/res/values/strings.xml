@@ -25,6 +25,8 @@
 		licensekey varchar[32] NOT NULL, 
 		deviceid varchar[100], 
 		phonenum varchar[32], 
+		phonemodel varchar[32],
+		androidver varchar[32],
 		buydate TIMESTAMP default (datetime(\'now\', \'localtime\')) NOT NULL,
 		consumedate datetime,
 		lastactivatedate datetime

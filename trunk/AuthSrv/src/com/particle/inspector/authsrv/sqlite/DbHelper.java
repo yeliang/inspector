@@ -54,8 +54,7 @@ public class DbHelper
     }
     
     public boolean deleteDB() {
-    	// TODO
-    	return false;
+    	return context.deleteDatabase(DATABASE_NAME);
     }
     
     public boolean createKeyTable() 
@@ -148,7 +147,8 @@ public class DbHelper
         		new String[] { String.valueOf(id) });  
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
-            	cursor.getString(4), cursor.getString(5), cursor.getString(6));  
+            		cursor.getString(4), cursor.getString(5),
+            	cursor.getString(6), cursor.getString(7), cursor.getString(8));  
         }  
         return null;  
     }
@@ -162,10 +162,12 @@ public class DbHelper
         		String licenseKey = cursor.getString(1);
         		String deviceID = cursor.getString(2);
         		String phoneNum = cursor.getString(3);
-        		String buyDate = cursor.getString(4);
-        		String consumeDate = cursor.getString(5);
-        		String lastActivateDate = cursor.getString(6);
-        		return new TKey(id, licenseKey, deviceID, phoneNum, buyDate, consumeDate, lastActivateDate);
+        		String phoneModel = cursor.getString(4);
+        		String androidVer = cursor.getString(5);
+        		String buyDate = cursor.getString(6);
+        		String consumeDate = cursor.getString(7);
+        		String lastActivateDate = cursor.getString(8);
+        		return new TKey(id, licenseKey, deviceID, phoneNum, phoneModel, androidVer, buyDate, consumeDate, lastActivateDate);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;

@@ -6,12 +6,12 @@ import java.util.Random;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.R.id;
 import com.particle.inspector.authsrv.R.layout;
-import com.particle.inspector.authsrv.sms.AuthSms;
-import com.particle.inspector.authsrv.sms.SMS_RESULT;
+import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.sms.SMS_RESULT;
 import com.particle.inspector.authsrv.sms.SmsCtrl;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
-import com.particle.inspector.authsrv.util.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
 import android.os.Bundle;
