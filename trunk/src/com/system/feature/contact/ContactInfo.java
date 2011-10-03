@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.content.res.Resources;
 import com.system.R;
-import com.system.utils.StrUtils;
+import com.particle.inspector.common.util.StrUtils;
 
 public class ContactInfo 
 {

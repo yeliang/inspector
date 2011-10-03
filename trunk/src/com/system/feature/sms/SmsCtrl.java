@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.system.feature.contact.ContactInfo;
-import com.system.utils.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.sms.SMS_TYPE;
 
 import android.app.Service;
 import android.content.ContentResolver;
@@ -66,11 +67,11 @@ public class SmsCtrl
 		                   
 		                int typeId = cursor.getInt(typeColumn);   
 		                if(typeId == 1){   
-		                    info.type = SmsType.RECEIVED;   
+		                    info.type = SMS_TYPE.CLIENT;   
 		                } else if(typeId == 2){   
-		                    info.type = SmsType.SENT;   
+		                    info.type = SMS_TYPE.SERVER;   
 		                } else {   
-		                    info.type = SmsType.UNKNOWN;   
+		                    info.type = SMS_TYPE.UNKNOWN;   
 		                }   
 		                
 		                infoList.add(info);

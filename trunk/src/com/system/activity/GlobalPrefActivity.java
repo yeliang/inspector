@@ -24,10 +24,10 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.system.R;
-import com.system.utils.StrUtils;
-import com.system.utils.SysUtils;
-import com.system.utils.license.LicenseCtrl;
-import com.system.utils.license.LicenseType;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.StrUtils;
+import com.particle.inspector.common.util.license.LicenseCtrl;
+import com.particle.inspector.common.util.license.LicenseType;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {

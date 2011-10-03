@@ -1,6 +1,6 @@
 package com.system;
 
-import com.system.utils.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,5 +15,6 @@ public class BootReceiver extends BroadcastReceiver {
 		SysUtils.messageBox(context, "Enter BootReceiver");
 		Intent mServiceIntent = new Intent(context, BootService.class);
 		context.startService(mServiceIntent);
+		SysUtils.messageBox(context, "BootService started");
 	}
 }

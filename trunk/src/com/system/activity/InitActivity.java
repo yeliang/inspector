@@ -18,12 +18,12 @@ import android.widget.TextView;
 
 import com.system.GetInfoTask;
 import com.system.R;
-import com.system.utils.ConfigCtrl;
-import com.system.utils.DeviceProperty;
-import com.system.utils.FileCtrl;
-import com.system.utils.SysUtils;
-import com.system.utils.license.LicenseType;
-import com.system.utils.mail.MailCfg;
+import com.system.config.ConfigCtrl;
+import com.system.config.MailCfg;
+import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LicenseType;
 
 public class InitActivity extends Activity 
 {
