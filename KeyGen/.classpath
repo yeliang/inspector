@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="/inspector/lib/activation.jar"/>
 	<classpathentry kind="lib" path="/inspector/lib/additionnal.jar"/>
 	<classpathentry kind="lib" path="/inspector/lib/mail.jar"/>
+	<classpathentry kind="lib" path="/CommonUtils/bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
