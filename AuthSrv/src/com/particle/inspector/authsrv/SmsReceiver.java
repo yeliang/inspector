@@ -40,8 +40,15 @@ public class SmsReceiver extends BroadcastReceiver
 				String smsAddress = SmsCtrl.getSmsAddress(intent);
 				SysUtils.messageBox(context, "Phone number: " + smsAddress);
 				AuthSms sms = new AuthSms(smsBody, AUTH_SMS_TYPE.CLIENT);
-				DbHelper dbHelper = new DbHelper(context); 
-				if (dbHelper.isValidLicenseKey(sms.getKey())) {
+				
+				DbHelper dbHelper = new DbHelper(context);
+				boolean ret = dbHelper.createOrOpenDatabase();
+				if (!ret) {
+					Log.e(LOGTAG, "Failed to create or open database");
+					return;
+				}
+				
+				if (dbHelper.isValidLicenseKey(sms.getKey(), sms.getDeviceID())) {
 					SysUtils.messageBox(context, sms.getKey() + " is valid key");
 					// Send back success SMS
 					AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.OK, null);

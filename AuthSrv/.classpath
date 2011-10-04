@@ -3,9 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="/CommonUtils/bin"/>
+	<classpathentry kind="src" path="CommonUtils_src"/>
 	<classpathentry kind="lib" path="/CommonUtils/lib/activation.jar"/>
-	<classpathentry kind="lib" path="/CommonUtils/lib/additionnal.jar"/>
 	<classpathentry kind="lib" path="/CommonUtils/lib/mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
