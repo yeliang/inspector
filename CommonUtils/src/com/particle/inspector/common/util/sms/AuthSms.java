@@ -2,8 +2,8 @@ package com.particle.inspector.common.util.sms;
 
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
-import com.particle.inspector.common.util.sms.SMS_RESULT;
-import com.particle.inspector.common.util.sms.SMS_TYPE;
+import com.particle.inspector.common.util.sms.AUTH_SMS_RESULT;
+import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 
 /**
  * The received SMS (client -> server) format: [Header],[Key],[Lang],[Device ID],[Phone Number],[Phone Model],[Android Version]
@@ -27,32 +27,32 @@ public class AuthSms
 	private String phoneNum;
 	private String phoneModel;
 	private String androidVer;
-	private SMS_RESULT result;
+	private AUTH_SMS_RESULT result;
 	private String errMsg;
 	private LANG lang;
 	
 	// Constructor for client SMS 
 	public AuthSms(String key, String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang) {
 		this.header = SMS_HEADER;
-		this.key = key;
-		this.deviceID = deviceID;
-		this.phoneNum = phoneNum;
-		this.phoneModel = phoneModel;
-		this.androidVer = androidVer;
-		this.lang = lang;
+		if (key != null) this.key = key; else this.key = "";
+		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
+		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
+		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
+		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
+		if (lang != null) this.lang = lang; else this.lang = LANG.UNKNOWN;
 	}
 	
 	// Constructor for server SMS 
-	public AuthSms(String key, SMS_RESULT result, String errMsg) {
+	public AuthSms(String key, AUTH_SMS_RESULT result, String errMsg) {
 		this.header = SMS_HEADER;
-		this.key = key;
-		this.result = result;
-		this.errMsg = errMsg;
+		if (key != null) this.key = key; else this.key = "";
+		if (result != null) this.result = result; else this.result = AUTH_SMS_RESULT.NG;
+		if (errMsg != null) this.errMsg = errMsg; else this.errMsg = "";
 	}
 	
-	public AuthSms(String sms, SMS_TYPE type) {
+	public AuthSms(String sms, AUTH_SMS_TYPE type) {
 		String[] parts = sms.split(SMS_SEPARATOR);
-		if (type == SMS_TYPE.CLIENT) {
+		if (type == AUTH_SMS_TYPE.CLIENT) {
 			if (parts.length >= 3) {
 				this.header = parts[0].trim();
 				this.key = parts[1].trim();
@@ -70,7 +70,7 @@ public class AuthSms
 			if (parts.length >= 7) {
 				this.androidVer = parts[6].trim();
 			}
-		} else if (type == SMS_TYPE.SERVER) {
+		} else if (type == AUTH_SMS_TYPE.SERVER) {
 			if (parts.length >= 3) {
 				this.header = parts[0].trim();
 				this.key = parts[1].trim();
@@ -91,8 +91,8 @@ public class AuthSms
 	
 	public String serverSms2Str() {
 		String ret = SMS_HEADER + SMS_SEPARATOR + this.key + SMS_SEPARATOR + 
-				(this.result == SMS_RESULT.OK ? SMS_SUCCESS : SMS_FAILURE);
-		if (this.result == SMS_RESULT.NG) {
+				(this.result == AUTH_SMS_RESULT.OK ? SMS_SUCCESS : SMS_FAILURE);
+		if (this.result == AUTH_SMS_RESULT.NG) {
 			ret += SMS_SEPARATOR + this.errMsg;
 		}
 		return ret;
@@ -111,8 +111,8 @@ public class AuthSms
 	public void setPhoneModel(String phoneModel) { this.phoneModel = phoneModel; }
 	public String getAndroidVer() { return androidVer; }
 	public void setAndroidVer(String androidVer) { this.androidVer = androidVer; }
-	public SMS_RESULT getResult() { return result; }
-	public void setResult(SMS_RESULT result) { this.result = result; }
+	public AUTH_SMS_RESULT getResult() { return result; }
+	public void setResult(AUTH_SMS_RESULT result) { this.result = result; }
 	public String getErrMsg() { return errMsg; }
 	public void setErrMsg(String errMsg) { this.errMsg = errMsg; }
 	public LANG getLang() { return lang; }

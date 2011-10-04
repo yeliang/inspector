@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
+import com.particle.inspector.common.util.LANG;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -183,8 +184,13 @@ public class DbHelper
     	} else return false;
     }
     
-    public String getDefaultValidateFailMsg(String key) {
-    	return String.format(context.getResources().getString(R.string.msg_validate_fail_used_key_cn), key);
+    public String getDefaultValidateFailMsg(String key, LANG lang) {
+    	if (lang == LANG.CN)
+    		return String.format(context.getResources().getString(R.string.msg_validate_fail_used_key_cn), key);
+    	else if (lang == LANG.JP)
+    		return String.format(context.getResources().getString(R.string.msg_validate_fail_used_key_jp), key);
+    	else 
+    		return String.format(context.getResources().getString(R.string.msg_validate_fail_used_key_en), key);
     }
     
     public String getDbPath() { return db.getPath(); }
