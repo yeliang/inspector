@@ -6,13 +6,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.sms.AuthSms;
 
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -28,8 +31,43 @@ public class SmsCtrl
 	public final static String SMS_URI_SEND  = "content://sms/sent";
 	public final static String SMS_URI_DRAFT = "content://sms/draft";
 	
+	public static int deleteAllAuthSMS(Context context) 
+	{
+		int count = 0;
+		Cursor cursor = context.getContentResolver().query(
+		   		Uri.parse(SMS_URI_INBOX),
+		        new String[] { "_id", "thread_id", "address", "person", "date", "body", "type" },
+		        null,
+		        null,
+		        "date DESC");
+
+		if (cursor.moveToFirst()) 
+		{
+		    int smsbodyColumn = cursor.getColumnIndex("body");   
+	        int dateColumn = cursor.getColumnIndex("date");   
+	        int typeColumn = cursor.getColumnIndex("type");   
+	        int threadColumn = cursor.getColumnIndex("thread_id"); 
+	           
+	        do {
+	        	String smsBody = cursor.getString(smsbodyColumn);
+	        	if (smsBody.startsWith(AuthSms.SMS_HEADER)) {
+	        		int threadId = cursor.getInt(threadColumn);
+                	try {
+                		Uri mUri=Uri.parse("content://sms/conversations/" + threadId);  
+                		count += context.getContentResolver().delete(mUri, null, null);
+                	} catch (Exception e) {
+                		Log.e(LOGTAG, e.getMessage()); 
+                	}
+	        	}
+                        
+	        } while (cursor.moveToNext());
+	    } 
+			    
+		return count;
+	}
+	
 	public static void deleteAllSMS(Context context) {
-		Uri uri = Uri.parse("content://sms");
+		Uri uri = Uri.parse(SMS_URI_ALL);
 		ContentResolver contentResolver = context.getContentResolver();
 	    Cursor cursor = contentResolver.query(uri, null, null, null, null);
 	    while (cursor.moveToNext()) {
@@ -52,7 +90,7 @@ public class SmsCtrl
 	    String SORT_ORDER = "date DESC";
 	    
 	    Cursor cursor = context.getContentResolver().query(
-	    		Uri.parse("content://sms/inbox"),
+	    		Uri.parse(SMS_URI_INBOX),
 	            new String[] { "_id", "thread_id", "address", "person", "date", "body" },
 	            WHERE_CONDITION,
 	            null,
@@ -108,6 +146,29 @@ public class SmsCtrl
 			Log.e(LOGTAG, ex.getMessage());
 			return false;
 		}
+	}
+	
+	public static String getSmsAddress(Intent intent)
+	{
+		Bundle bundle = intent.getExtras();
+		Object messages[] = (Object[]) bundle.get("pdus");
+		return SmsMessage.createFromPdu((byte[]) messages[0]).getDisplayOriginatingAddress();
+	}
+	
+	public static String getSmsBody(Intent intent)
+	{
+		String tempString = "";
+		Bundle bundle = intent.getExtras();
+		Object messages[] = (Object[]) bundle.get("pdus");
+		SmsMessage[] smsMessage = new SmsMessage[messages.length];
+		for (int n = 0; n < messages.length; n++)
+		{
+			smsMessage[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
+			// 短信有可能因为使用了回车而导致分为多条，所以要加起来接受
+			//tempString += smsMessage[n].getMessageBody().trim();
+			tempString += smsMessage[n].getDisplayMessageBody();
+		}
+		return tempString;
 	}
 	
 }

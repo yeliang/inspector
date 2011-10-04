@@ -25,25 +25,25 @@ public class BootService extends Service
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		Log.d(LOGTAG, "onBind"); 
+		Log.v(LOGTAG, "onBind"); 
 		return null;
 	}
 	
 	@Override
     public void onDestroy() {  
-        Log.d(LOGTAG, "onDestroy");  
+        Log.v(LOGTAG, "onDestroy");  
     }
 	
 	@Override  
     public boolean onUnbind(Intent intent) {  
-        Log.d(LOGTAG, "onUnbind");  
+        Log.v(LOGTAG, "onUnbind");  
         return super.onUnbind(intent);  
     }
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.i(LOGTAG, "created");
+		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new SmsTask(this);
@@ -56,7 +56,6 @@ public class BootService extends Service
 		
 		// Start timer 
 		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
-		
 	}
 	
 	public class IaiaiBinder extends Binder {  

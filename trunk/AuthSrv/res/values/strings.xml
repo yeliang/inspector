@@ -37,6 +37,7 @@
 	<!-- Message -->
 	<string name="msg_validate_fail_used_key_cn">错误：该注册码（%s）已被使用</string>
 	<string name="msg_validate_fail_used_key_en">ERROR: the key (%s) has been used</string>
+	<string name="msg_validate_fail_used_key_jp">ERROR: the key (%s) has been used</string>
 	
 	<!-- Test -->
 	<string name="db_test_name">Test DB</string>

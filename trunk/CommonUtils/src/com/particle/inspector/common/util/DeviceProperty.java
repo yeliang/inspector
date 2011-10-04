@@ -26,12 +26,12 @@ public class DeviceProperty
 		return Build.MODEL;
 	}
 	
-	public synchronized static String getPhoneLang() 
+	public synchronized static LANG getPhoneLang() 
 	{
 		String lang = Locale.getDefault().getLanguage();
-		if (lang.contains("zh")) return "CN";
-		else if (lang.contains("jp")) return "JP";
-		else return "EN";
+		if (lang.contains("zh")) return LANG.CN;
+		else if (lang.contains("jp")) return LANG.JP;
+		else return LANG.EN;
 	}
 	
 	// Get name of product manufacturer
