@@ -6,5 +6,6 @@
 	<classpathentry kind="src" path="CommonUtils_src"/>
 	<classpathentry kind="lib" path="/CommonUtils/lib/mail.jar"/>
 	<classpathentry kind="lib" path="/CommonUtils/lib/activation.jar"/>
+	<classpathentry kind="lib" path="/CommonUtils/lib/additionnal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
