@@ -91,7 +91,7 @@ public class GMailSenderEx extends javax.mail.Authenticator
       for (int i = 0; i < _to.length; i++) { 
         addressTo[i] = new InternetAddress(_to[i]); 
       } 
-        msg.setRecipients(MimeMessage.RecipientType.TO, addressTo); 
+      msg.setRecipients(MimeMessage.RecipientType.TO, addressTo); 
  
       msg.setSubject(_subject); 
       msg.setSentDate(new Date()); 
