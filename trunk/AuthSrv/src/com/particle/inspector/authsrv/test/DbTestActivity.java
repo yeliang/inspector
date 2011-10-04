@@ -83,7 +83,7 @@ public class DbTestActivity extends Activity
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
         		TKey key =  new TKey("TheKey4Test", "TheDeviceID4Test", "ThePhoneNumber4Test", 
-        				"HTC Desire", "Android 2.3.5",
+        				"HTC Desire", "2.3",
         				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()));
@@ -117,7 +117,7 @@ public class DbTestActivity extends Activity
         	{
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
-        		ret = db.isValidLicenseKey("TheKey4Test");
+        		ret = db.isValidLicenseKey("TheKey4Test", "TheDeviceID4Test");
         	}
         });
     }

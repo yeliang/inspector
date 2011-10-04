@@ -9,16 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
 import com.system.activity.GlobalPrefActivity;
 import com.system.config.ConfigCtrl;
 import com.system.config.MailCfg;

@@ -100,8 +100,8 @@ public class DbHelper
     {
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,buydate,consumedate,lastactivatedate) values(?,?,?,?,?,?)",  
-            	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), 
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,buydate,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
+            	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getBuyDate(), key.getConsumeDate(), key.getLastActivateDate() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
@@ -178,8 +178,9 @@ public class DbHelper
         }
     }
     
-    public boolean isValidLicenseKey(String key) {
-    	if (find(key) == null) {
+    public boolean isValidLicenseKey(String key, String deviceID) {
+    	TKey foundKey = find(key);
+    	if (foundKey == null || foundKey.getDeviceID().equalsIgnoreCase(deviceID)) {
     		return true;
     	} else return false;
     }
