@@ -9,7 +9,7 @@
     <item>6 days</item>
     <item>7 days</item>
   </string-array>
-  <integer-array name="days_value"> 
+  <string-array name="days_value"> 
     <item>1</item> 
     <item>2</item> 
     <item>3</item>
@@ -17,7 +17,7 @@
     <item>5</item>
     <item>6</item>
     <item>7</item>
-  </integer-array> 
+  </string-array> 
   <string-array name="senderlist"> 
     <item>inspector.sender.001@gmail.com</item> 
     <item>inspector.sender.002@gmail.com</item>  
