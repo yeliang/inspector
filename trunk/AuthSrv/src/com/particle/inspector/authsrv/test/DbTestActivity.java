@@ -6,8 +6,11 @@ import java.util.Random;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.R.id;
 import com.particle.inspector.authsrv.R.layout;
+import com.particle.inspector.authsrv.config.ConfigCtrl;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
+import com.particle.inspector.authsrv.sqlite.KEY_VALIDATION_RESULT;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
+import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
@@ -30,6 +33,7 @@ public class DbTestActivity extends Activity
 	private Button btnTest_DeleteKey;
 	private Button btnTest_CleanTableKey;
 	private Button btnTest_IsValidKey;
+	private Button btnTest_UpdateEx;
 
 	@SuppressWarnings("unused")
     @Override
@@ -117,9 +121,25 @@ public class DbTestActivity extends Activity
         	{
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
-        		ret = db.isValidLicenseKey("TheKey4Test", "TheDeviceID4Test");
+        		KEY_VALIDATION_RESULT valid = db.isValidLicenseKey("TheKey4Test", "TheDeviceID4Test");
         	}
         });
+        
+        btnTest_UpdateEx = (Button)findViewById(R.id.btn_db_test_updateex);
+        btnTest_UpdateEx.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v)
+        	{
+        		DbHelper db = new DbHelper(v.getContext());
+        		boolean ret = db.createOrOpenDatabase();
+        		
+				TKey key = new TKey("TheKey4Test", "TheDeviceID4Test", "11122223333",
+						null, "2.1", 
+						null, null, DatetimeUtil.format.format(new Date()));
+				db.updateEx(key);
+        	}
+        });
+        
+        
     }
     
 }

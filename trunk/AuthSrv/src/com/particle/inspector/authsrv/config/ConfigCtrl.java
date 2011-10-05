@@ -1,7 +1,8 @@
 package com.particle.inspector.authsrv.config;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.particle.inspector.common.util.DatetimeUtil;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,9 +16,6 @@ public class ConfigCtrl
 {
 	private static final String PREFS_NAME = "com.particle.inspector.authsrv";
 	private static final String LAST_CLEANSMS_DATETIME = "LastCleanSmsDatetime";
-	
-	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private static SimpleDateFormat f = new SimpleDateFormat(DATETIME_FORMAT);
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -45,7 +43,7 @@ public class ConfigCtrl
 	public static boolean setLastCleanSmsDatetime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(LAST_CLEANSMS_DATETIME, f.format(datetime));
+		editor.putString(LAST_CLEANSMS_DATETIME, datetime == null ? "" : DatetimeUtil.format.format(datetime));
 		return editor.commit();
 	}
 	

@@ -1,12 +1,11 @@
 package com.system.config;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LicenseType;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -24,9 +23,7 @@ public class ConfigCtrl
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_ACTIVATED_DATETIME = "LastActivatedDatetime"; // The last activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime";
-	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	
-	private static SimpleDateFormat f = new SimpleDateFormat(DATETIME_FORMAT);
+	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -94,7 +91,7 @@ public class ConfigCtrl
 	public static boolean setLastGetInfoTime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(LAST_GETINFO_DATETIME, f.format(datetime));     
+		editor.putString(LAST_GETINFO_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	
@@ -111,7 +108,7 @@ public class ConfigCtrl
 	public static boolean setConsumedDatetime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(CONSUMED_DATETIME, f.format(datetime));     
+		editor.putString(CONSUMED_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	
@@ -128,7 +125,25 @@ public class ConfigCtrl
 	public static boolean setLastActivatedDatetime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(LAST_ACTIVATED_DATETIME, f.format(datetime));     
+		editor.putString(LAST_ACTIVATED_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
+	
+	public static String getAuthSmsSentDatetime(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(AUTH_SMS_SENT_DATETIME, "");
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
+	}
+	
+	public static boolean setAuthSmsSentDatetime(Context context, Date datetime)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putString(AUTH_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
+		return editor.commit();
+	}
+	
 }
