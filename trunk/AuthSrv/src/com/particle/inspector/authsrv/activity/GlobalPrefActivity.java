@@ -33,7 +33,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 {
 	private static String MAIL;
 	private static String INTERVAL_INFO;
-	public static final String IS_VALID_MAIL_ADDRESS= "is_valid_mail_address";
+	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				if (key.equals(getResources().getString(R.string.pref_sms_clean_interval_key))) {
-					int interval = sharedPreferences.getInt(getResources().getString(R.string.pref_sms_clean_interval_key), 24); //Hour
+					String interval = sharedPreferences.getString(getResources().getString(R.string.pref_sms_clean_interval_key), "24"); //Hour
+					int intervalHours = Integer.parseInt(interval);
 				}
 				
 				// Update preference summary fields
@@ -88,7 +89,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	public static int getIntervalInfo(Context context) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_sms_clean_interval_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getInt(INTERVAL_INFO, 24); // Hour
+		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "24")); // Hour
 	}
 	
 	public static void setIntervalInfo(Context context, int value) {

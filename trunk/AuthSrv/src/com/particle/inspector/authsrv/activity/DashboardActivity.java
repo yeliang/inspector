@@ -32,8 +32,8 @@ public class DashboardActivity extends Activity
         btnSetting.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
-            	startActivityForResult(intent, R.layout.dashboard);
+        		Intent intent = new Intent().setClass(getApplicationContext(), GlobalPrefActivity.class);
+            	startActivity(intent);
         	}
         });
     }
