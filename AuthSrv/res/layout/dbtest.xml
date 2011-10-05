@@ -21,5 +21,8 @@
         	<Button android:id="@+id/btn_db_test_cleantablekey" android:layout_width="150dp" android:text="Clean Table Key" android:layout_height="wrap_content"></Button>
         	<Button android:id="@+id/btn_db_test_isvalidkey" android:layout_width="150dp" android:text="Is Valid Key?" android:layout_height="wrap_content"></Button>
         </TableRow>
+        <TableRow android:id="@+id/tableRow5" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        	<Button android:id="@+id/btn_db_test_updateex" android:layout_width="150dp" android:text="Update Ex" android:layout_height="wrap_content"></Button>
+        </TableRow>
     </TableLayout>
 </LinearLayout>

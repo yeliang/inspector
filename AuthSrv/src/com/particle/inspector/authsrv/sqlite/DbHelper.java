@@ -132,12 +132,25 @@ public class DbHelper
         return db.delete(DEFAULT_KEY_TABLE_NAME, null, null);
     }
     
+    // Update by _id
     public void update(TKey key)
     {
         db.beginTransaction();
-        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set key=?,deviceid=?,phonenum=?,buydate=?,consumedate=?,lastactivatedate=? where _id=?",  
-                new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(),
+        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,buydate=?,consumedate=?,lastactivatedate=? where _id=?",  
+                new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getBuyDate(), key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
+        db.setTransactionSuccessful();  
+        db.endTransaction();
+        db.close(); 
+    }
+    
+    // Update by license key
+    public void updateEx(TKey key)
+    {
+        db.beginTransaction();
+        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=?,lastactivatedate=? where licensekey=?",  
+                new Object[] { key.getPhoneNum(), key.getAndroidVer(),
+        			 key.getLastActivateDate(), key.getKey() });
         db.setTransactionSuccessful();  
         db.endTransaction();
         db.close(); 
@@ -178,11 +191,14 @@ public class DbHelper
         }
     }
     
-    public boolean isValidLicenseKey(String key, String deviceID) {
+    // If the license key exists but the device is the same one, set exists to true
+    public KEY_VALIDATION_RESULT isValidLicenseKey(String key, String deviceID) {
     	TKey foundKey = find(key);
-    	if (foundKey == null || foundKey.getDeviceID().equalsIgnoreCase(deviceID)) {
-    		return true;
-    	} else return false;
+    	if (foundKey == null) {
+    		return KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST;
+    	} else if (foundKey.getDeviceID().equalsIgnoreCase(deviceID)) {
+    		return KEY_VALIDATION_RESULT.VALID_BUT_EXIST;
+    	} else return KEY_VALIDATION_RESULT.INVALID;
     }
     
     public String getDefaultValidateFailMsg(String key, LANG lang) {
