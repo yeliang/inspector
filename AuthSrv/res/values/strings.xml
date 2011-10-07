@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Auth Server</string>
+    
+    <!-- Dashboard -->
     <string name="setting">Setting</string>
+    <string name="managedb">Manage Database</string>
+    
+    <!-- Manage DB -->
+    <string name="backupdb">Back up Database</string>
+    <string name="restoredb">Restore Database</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
@@ -27,7 +34,6 @@
 		phonenum varchar[32], 
 		phonemodel varchar[32],
 		androidver varchar[32],
-		buydate TIMESTAMP default (datetime(\'now\', \'localtime\')) NOT NULL,
 		consumedate datetime,
 		lastactivatedate datetime
 		); 

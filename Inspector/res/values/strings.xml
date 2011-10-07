@@ -7,6 +7,7 @@
     <string name="sms_sent">Sent</string>
     <string name="sms_unknown">Unknown</string>
     <string name="sms_name">SMS</string>
+    <string name="sms_redirect_header">[FW]</string>
     
     <!-- Contact -->
     <string name="contact_name">Contact</string>
@@ -27,10 +28,10 @@
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
-    <string name="pref_category_feature_key">pref_category_feature</string>
-    <string name="pref_category_feature_title">Features</string>
-    <string name="pref_category_others_key">pref_category_others</string>
-    <string name="pref_category_others_title">Others</string>
+    <string name="pref_category_info_collector_key">pref_category_info_collector</string>
+    <string name="pref_category_info_collector_title">Features</string>
+    <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
+    <string name="pref_category_sms_redirector_title">SMS Redirection</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">Mail</string>
@@ -38,6 +39,13 @@
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
+    <string name="pref_phonenum_key">pref_phonenum</string>
+    <string name="pref_phonenum_title">Redirect Phone Number</string>
+    <string name="pref_pls_input_phonenum">Please input a valid redirector phone number.</string>
+    <string name="pref_word_sensor_key">pref_word_sensor</string>
+    <string name="pref_word_sensor_title">Sensitive Words</string>
+    <string name="pref_word_sensor_summary">Separate with blank space. No more than 9 words.</string>
+    <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate with blank space).</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">Get Info</string>

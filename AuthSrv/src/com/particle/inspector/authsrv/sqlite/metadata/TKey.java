@@ -10,37 +10,28 @@ public class TKey
 	private String phoneNum;
 	private String phoneModel; // Phone model
 	private String androidVer; // The Android version of the phone
-	private String buyDate;
 	private String consumeDate;
 	private String lastActivateDate;
 	
-	// Reserve fields	
-	private String reserve_string_1;
-	private String reserve_string_2;
-	private long reserve_long_1;
-	private Date reserve_datetime_1;
-
 	public TKey(int id, String key, String deviceID, String phoneNum, String phoneModel, String androidVer,
-			String buyDate, String consumeDate, String lastActivateDate) {
+			String consumeDate, String lastActivateDate) {
 		if (id >= 0) this.id = id;
 		if (key != null) this.key = key;
 		if (deviceID != null) this.deviceID = deviceID;
 		if (phoneNum != null) this.phoneNum = phoneNum;
 		if (phoneModel != null) this.phoneModel = phoneModel;
 		if (androidVer != null) this.androidVer = androidVer;
-		if (buyDate != null) this.buyDate = buyDate;
 		if (consumeDate != null) this.consumeDate = consumeDate;
 		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 	
 	public TKey(String key, String deviceID, String phoneNum, String phoneModel, String androidVer,
-			String buyDate, String consumeDate, String lastActivateDate) {
+			String consumeDate, String lastActivateDate) {
 		if (key != null) this.key = key;
 		if (deviceID != null) this.deviceID = deviceID;
 		if (phoneNum != null) this.phoneNum = phoneNum;
 		if (phoneModel != null) this.phoneModel = phoneModel;
 		if (androidVer != null) this.androidVer = androidVer;
-		if (buyDate != null) this.buyDate = buyDate;
 		if (consumeDate != null) this.consumeDate = consumeDate;
 		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
@@ -58,8 +49,6 @@ public class TKey
 	public void setPhoneModel(String phoneModel) { this.phoneModel = phoneModel; }	
 	public String getAndroidVer() { return androidVer; }
 	public void setAndroidVer(String androidVer) { this.androidVer = androidVer; }	
-	public String getBuyDate() { return buyDate; }
-	public void setBuyDate(String buyDate) { this.buyDate = buyDate; }	
 	public String getConsumeDate() { return consumeDate; }
 	public void setConsumeDate(String consumeDate) { this.consumeDate = consumeDate; }
 	public String getLastActivateDate() { return lastActivateDate; }
@@ -73,8 +62,7 @@ public class TKey
             ", phonenum=" + phoneNum +
             ", phonemodel=" + phoneModel +
             ", androidver=" + androidVer +
-			 ", buydate=" + buyDate +
-         ", consumedate=" + consumeDate +
+			", consumedate=" + consumeDate +
     ", lastactivatedate=" + lastActivateDate +
 			 "]";
 	}

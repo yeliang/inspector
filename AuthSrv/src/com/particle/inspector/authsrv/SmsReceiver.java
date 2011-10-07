@@ -65,14 +65,13 @@ public class SmsReceiver extends BroadcastReceiver
 							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), sms.getPhoneNum(),
 								sms.getPhoneModel(), sms.getAndroidVer(), 
 								DatetimeUtil.format.format(new Date()), 
-								DatetimeUtil.format.format(new Date()), 
 								DatetimeUtil.format.format(new Date()));
 							dbHelper.insert(key);
 						} else if (valid == KEY_VALIDATION_RESULT.VALID_BUT_EXIST) {
 							// Insert to database
 							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), sms.getPhoneNum(),
 								sms.getPhoneModel(), sms.getAndroidVer(), 
-								null, null, DatetimeUtil.format.format(new Date()));
+								null, DatetimeUtil.format.format(new Date()));
 							dbHelper.updateEx(key);
 						}
 					}

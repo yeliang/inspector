@@ -33,7 +33,10 @@ public class GlobalPrefActivity extends PreferenceActivity
 {
 	private static String MAIL;
 	private static String INTERVAL_INFO;
+	private static String REDIRECT_PHONE_NUM;
+	private static String SENSITIVE_WORDS;
 	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
+	public static final String SENSITIVE_WORD_BREAKER = " ";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,10 @@ public class GlobalPrefActivity extends PreferenceActivity
 		for(int i = 0; i < this.getPreferenceScreen().getPreferenceCount(); i++){
             initSummary(this.getPreferenceScreen().getPreference(i));
         }
+		
+		// Show special summary
+		String summary = getResources().getString(R.string.pref_word_sensor_summary);
+		this.getPreferenceScreen().getPreference(3).setSummary(summary);
 		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -58,6 +65,18 @@ public class GlobalPrefActivity extends PreferenceActivity
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
 					String intervalStr = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
 					int interval = Integer.parseInt(intervalStr);
+				}
+				else if (key.equals(getResources().getString(R.string.pref_phonenum_key))) {
+					String phoneNum = sharedPreferences.getString(getResources().getString(R.string.pref_phonenum_key), "").trim();
+					if (phoneNum.length() == 0) {
+						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
+					}
+				}
+				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
+					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
+					if (words.length() == 0) {
+						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_sensitive_words));
+					}
 				}
 				
 				// Update preference summary fields
@@ -132,6 +151,26 @@ public class GlobalPrefActivity extends PreferenceActivity
 	public static void setIntervalInfo(Context context, int value) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
+	}
+	
+	public static String getRedirectPhoneNum(Context context) {
+		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(REDIRECT_PHONE_NUM, "").trim();
+	}
+	
+	public static void setRedirectPhoneNum(Context context, String value) {
+		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(REDIRECT_PHONE_NUM, value).commit();
+	}
+	
+	public static String getSensitiveWords(Context context) {
+		SENSITIVE_WORDS = context.getResources().getString(R.string.pref_word_sensor_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENSITIVE_WORDS, "").trim();
+	}
+	
+	public static void setSensitiveWords(Context context, String value) {
+		SENSITIVE_WORDS = context.getResources().getString(R.string.pref_word_sensor_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENSITIVE_WORDS, value).commit();
 	}
 	
 }
