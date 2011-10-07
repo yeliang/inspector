@@ -14,6 +14,11 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".activity.ManageDatabaseActivity"
+        	      android:label="@string/managedb_title"
+        	      android:excludeFromRecents="true">
+		</activity>
+        
         <service android:name="com.particle.inspector.authsrv.BootService" android:enabled="true" android:excludeFromRecents="true" />
 		<receiver android:name="com.particle.inspector.authsrv.BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 			<intent-filter>

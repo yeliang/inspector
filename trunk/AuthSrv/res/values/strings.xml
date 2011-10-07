@@ -7,6 +7,8 @@
     <string name="managedb">Manage Database</string>
     
     <!-- Manage DB -->
+    <string name="managedb_title">Manage Database</string>
+    <string name="initdb">Initialize Database</string>
     <string name="backupdb">Back up Database</string>
     <string name="restoredb">Restore Database</string>
     

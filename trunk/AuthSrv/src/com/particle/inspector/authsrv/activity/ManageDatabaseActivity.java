@@ -34,6 +34,7 @@ public class ManageDatabaseActivity extends Activity
 	private static final String LOGTAG = "ManageDatabaseActivity";
 	private static final String DEFAULT_BACKUP_DIR = "DB_BACKUP";
 	
+	private Button initDBButton;
 	private Button exportDbToSdButton;
 	private Button importDbFromSdButton;
 	
@@ -42,6 +43,22 @@ public class ManageDatabaseActivity extends Activity
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.managedb);
+      
+      initDBButton = (Button) findViewById(R.id.initdbbutton);
+      initDBButton.setOnClickListener(new OnClickListener() {
+          public void onClick(final View v) {
+        	  DbHelper db = new DbHelper(v.getContext());
+        	  if (!db.isOpen()) {
+        		  db.createOrOpenDatabase();
+        		  if (!db.keyTableExist()) {
+        			  db.createKeyTable();
+        		  }
+        		  SysUtils.messageBox(v.getContext(), "Initialization Succeed!");
+        		  initDBButton.setEnabled(false);
+        	  }
+          }
+      });
+      if (DbHelper.dbExist()) { initDBButton.setEnabled(false); }
 
       exportDbToSdButton = (Button) findViewById(R.id.exportdbtosdbutton);
       exportDbToSdButton.setOnClickListener(new OnClickListener() {
@@ -67,6 +84,7 @@ public class ManageDatabaseActivity extends Activity
             }).show();
          }
       });
+      if (initDBButton.isEnabled()) { exportDbToSdButton.setEnabled(false); }
 
       importDbFromSdButton = (Button) findViewById(R.id.importdbfromsdbutton);
       importDbFromSdButton.setOnClickListener(new OnClickListener() {
@@ -91,6 +109,7 @@ public class ManageDatabaseActivity extends Activity
             }).show();
          }
       });
+      if (initDBButton.isEnabled()) { importDbFromSdButton.setEnabled(false); }
       
    }
 
@@ -121,9 +140,9 @@ public class ManageDatabaseActivity extends Activity
             exportDir.mkdirs();
          }
          
-         // The backup db file format: inspector.db_yyyy-MM-dd_HH:mm:ss
+         // The backup db file format: [yyyy-MM-dd_HH-mm-ss]inspector.db
          String now = DatetimeUtil.format2.format(new Date());
-         File file = new File(exportDir, dbFile.getName() + "_" + now);
+         File file = new File(exportDir, "[" + now + "]" + dbFile.getName());
 
          try {
             file.createNewFile();
