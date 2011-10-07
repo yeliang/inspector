@@ -50,9 +50,15 @@ public class DbHelper
     {
         this.context = context;
     }
+    
+    public static boolean dbExist() {
+    	File dbFile = new File(Environment.getDataDirectory() + DEFAULT_DATABASE_PATH);
+        if (dbFile.exists()) return true;
+        else return false;
+    }
      
     public boolean createOrOpenDatabase() {
-    	if (!db.isOpen()) {
+    	if (db == null || !db.isOpen()) {
     		db = context.openOrCreateDatabase(DEFAULT_DATABASE_NAME, SQLiteDatabase.CREATE_IF_NECESSARY, null);
     	}
     	
@@ -230,6 +236,35 @@ public class DbHelper
     }
     
     public String getDbPath() { return db.getPath(); }
+    
+    public boolean isOpen() {
+    	if (db == null || !db.isOpen()) return false;
+    	else return true;
+    }
+    
+    public boolean TableExist(String tableName) 
+    {
+    	boolean result = false;
+        if(tableName == null){
+              return false;
+        }
+        Cursor cursor = null;
+        try {
+        	String sql = "select count(*) as c from Sqlite_master  where type ='table' and name ='" + tableName.trim() + "' ";
+            cursor = db.rawQuery(sql, null);
+            if(cursor.moveToNext()){
+            	int count = cursor.getInt(0);
+                if(count>0){
+                	result = true;
+                }
+            }
+        } catch (Exception e) {
+        
+        }                
+        return result;
+    }
+    
+    public boolean keyTableExist() { return TableExist(DEFAULT_KEY_TABLE_NAME); }
     
     public boolean backupDatabase(Context context, String fileName) 
     {
