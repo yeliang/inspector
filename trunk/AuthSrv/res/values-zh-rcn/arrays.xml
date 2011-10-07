@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<resources> 
+  <string-array name="hours_display"> 
+    <item>1 小时</item> 
+    <item>12 小时</item>  
+    <item>24 小时</item> 
+  </string-array> 
+  <string-array name="hours_value"> 
+    <item>1</item> 
+    <item>12</item>  
+    <item>24</item> 
+  </string-array> 
+  <string-array name="senderlist"> 
+    <item>inspector.sender.001@gmail.com</item> 
+    <item>inspector.sender.002@gmail.com</item>  
+    <item>inspector.sender.003@gmail.com</item> 
+  </string-array> 
+</resources>

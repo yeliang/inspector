@@ -5,5 +5,12 @@
     android:layout_height="fill_parent"
     >
     
-    <Button android:id="@+id/btn_setting" android:text="@string/setting" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
+    <Button android:id="@+id/btn_setting" android:text="@string/setting" 
+    	android:layout_height="wrap_content" android:layout_width="200dp" 
+    	android:layout_marginTop="20dp" android:layout_gravity="center_horizontal" />
+    
+    <Button android:id="@+id/btn_managedb" android:text="@string/managedb" 
+    	android:layout_height="wrap_content" android:layout_width="200dp" 
+    	android:layout_marginTop="20dp" android:layout_gravity="center_horizontal" />
+    	
 </LinearLayout>

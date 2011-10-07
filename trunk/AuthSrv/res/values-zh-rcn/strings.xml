@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">注册服务</string>
+    
+    <!-- Dashboard -->
     <string name="setting">设置</string>
+    <string name="managedb">数据库管理</string>
+    
+    <!-- Manage DB -->
+    <string name="backupdb">备份数据库</string>
+    <string name="restoredb">恢复数据库</string>
     
     <!-- Preferences -->
     <string name="pref_title">设置</string>

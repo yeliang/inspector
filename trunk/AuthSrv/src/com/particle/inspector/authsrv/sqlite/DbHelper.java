@@ -1,5 +1,9 @@
 package com.particle.inspector.authsrv.sqlite;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +19,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -28,15 +33,16 @@ public class DbHelper
 	private SQLiteDatabase db;
 	private String dbPath;
 	
-    private final static String DATABASE_NAME = "inspector.db";
+    public final static String DEFAULT_DATABASE_NAME = "inspector.db";
     private final static int DATABASE_VERSION = 1;
+    
+    public final static String DEFAULT_DATABASE_PATH = "/data/com.particle.inspector.authsrv/databases/inspector.db";
     
     private final static String DEFAULT_KEY_TABLE_NAME = "inspector_auth_key";
     public final static String KEY_FIELD_ID = "_id"; 
     public final static String KEY_FIELD_KEY = "licensekey";
     public final static String KEY_FIELD_DEVICE_ID = "deviceid";
     public final static String KEY_FIELD_PHONE_NUMBER = "phonenum";
-    public final static String KEY_FIELD_BUY_DATE = "buydate";
     public final static String KEY_FIELD_CONSUME_DATE = "consumedate";
     public final static String KEY_FIELD_LAST_ACTIVATE_DATE = "lastactivatedate";
 	
@@ -46,17 +52,31 @@ public class DbHelper
     }
      
     public boolean createOrOpenDatabase() {
-    	db = context.openOrCreateDatabase(DATABASE_NAME, SQLiteDatabase.CREATE_IF_NECESSARY, null);
+    	if (!db.isOpen()) {
+    		db = context.openOrCreateDatabase(DEFAULT_DATABASE_NAME, SQLiteDatabase.CREATE_IF_NECESSARY, null);
+    	}
+    	
     	if (db.isOpen()) {
     		dbPath = db.getPath();
     		return true;
-    	}
-    	else return false;
+    	} else return false;
     }
     
     public boolean deleteDB() {
-    	return context.deleteDatabase(DATABASE_NAME);
+    	return context.deleteDatabase(DEFAULT_DATABASE_NAME);
     }
+    
+    public void resetDbConnection() {
+        Log.i(LOGTAG, "resetting database connection (close and re-open).");
+        cleanup();
+        db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+     }
+
+     public void cleanup() {
+        if ((db != null) && db.isOpen()) {
+           db.close();
+        }
+     }
     
     public boolean createKeyTable() 
     {
@@ -100,9 +120,9 @@ public class DbHelper
     {
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,buydate,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getBuyDate(), key.getConsumeDate(), key.getLastActivateDate() });
+        			key.getConsumeDate(), key.getLastActivateDate() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	db.close();
@@ -136,9 +156,9 @@ public class DbHelper
     public void update(TKey key)
     {
         db.beginTransaction();
-        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,buydate=?,consumedate=?,lastactivatedate=? where _id=?",  
+        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
                 new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getBuyDate(), key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
+        			key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
         db.setTransactionSuccessful();  
         db.endTransaction();
         db.close(); 
@@ -162,7 +182,7 @@ public class DbHelper
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
             		cursor.getString(4), cursor.getString(5),
-            	cursor.getString(6), cursor.getString(7), cursor.getString(8));  
+            	    cursor.getString(6), cursor.getString(7));  
         }  
         return null;  
     }
@@ -178,10 +198,9 @@ public class DbHelper
         		String phoneNum = cursor.getString(3);
         		String phoneModel = cursor.getString(4);
         		String androidVer = cursor.getString(5);
-        		String buyDate = cursor.getString(6);
-        		String consumeDate = cursor.getString(7);
-        		String lastActivateDate = cursor.getString(8);
-        		return new TKey(id, licenseKey, deviceID, phoneNum, phoneModel, androidVer, buyDate, consumeDate, lastActivateDate);
+        		String consumeDate = cursor.getString(6);
+        		String lastActivateDate = cursor.getString(7);
+        		return new TKey(id, licenseKey, deviceID, phoneNum, phoneModel, androidVer, consumeDate, lastActivateDate);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;
@@ -211,5 +230,35 @@ public class DbHelper
     }
     
     public String getDbPath() { return db.getPath(); }
+    
+    public boolean backupDatabase(Context context, String fileName) 
+    {
+    	boolean ret = false;
+    	try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = getDbPath();
+                String backupDBPath = fileName;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+                ret = true;
+            }
+        } catch (Exception e) {
+        	Log.e(LOGTAG, "");
+        } finally {
+        	return ret;
+        }
+    	
+    }
     
 }

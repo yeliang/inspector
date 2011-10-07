@@ -21,6 +21,7 @@ public class DashboardActivity extends Activity
 {   
 	protected static final String LOGTAG = "Dashboard";
 	private Button btnSetting;
+	private Button btnManageDB;
 		
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,19 @@ public class DashboardActivity extends Activity
         setContentView(R.layout.dashboard);
         
         btnSetting = (Button)findViewById(R.id.btn_setting);
-        
         btnSetting.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
         		Intent intent = new Intent().setClass(getApplicationContext(), GlobalPrefActivity.class);
+            	startActivity(intent);
+        	}
+        });
+        
+        btnManageDB = (Button)findViewById(R.id.btn_managedb);
+        btnManageDB.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v)
+        	{
+        		Intent intent = new Intent().setClass(getApplicationContext(), ManageDatabaseActivity.class);
             	startActivity(intent);
         	}
         });

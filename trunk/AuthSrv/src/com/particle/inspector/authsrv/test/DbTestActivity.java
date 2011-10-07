@@ -89,7 +89,6 @@ public class DbTestActivity extends Activity
         		TKey key =  new TKey("TheKey4Test", "TheDeviceID4Test", "ThePhoneNumber4Test", 
         				"HTC Desire", "2.3",
         				SysUtils.getUniformDatetimeStr(new Date()), 
-        				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()));
         		ret = db.insert(key);
         	}
@@ -134,7 +133,7 @@ public class DbTestActivity extends Activity
         		
 				TKey key = new TKey("TheKey4Test", "TheDeviceID4Test", "11122223333",
 						null, "2.1", 
-						null, null, DatetimeUtil.format.format(new Date()));
+						null, DatetimeUtil.format.format(new Date()));
 				db.updateEx(key);
         	}
         });
