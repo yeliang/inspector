@@ -1,13 +1,13 @@
-package com.system.feature.sms;
+package system.service.feature.sms;
 
 import java.util.Date;
 
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.system.feature.sms.SMS_TYPE;
+import system.service.feature.sms.SMS_TYPE;
 
-import com.system.R;
+import system.service.R;
 
 public class SmsInfo
 {

@@ -1,4 +1,4 @@
-package com.system.utils;
+package system.service.utils;
 
 import java.io.DataOutputStream;
 import java.util.Locale;

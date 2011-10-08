@@ -1,4 +1,4 @@
-package com.system.activity;  
+package system.service.activity;  
   
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -23,7 +23,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
-import com.system.R;
+import system.service.R;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;

@@ -1,9 +1,9 @@
-package com.system.feature.contact;
+package system.service.feature.contact;
 
 import java.util.ArrayList;
 import java.util.List;
 import android.content.res.Resources;
-import com.system.R;
+import system.service.R;
 import com.particle.inspector.common.util.StrUtils;
 
 public class ContactInfo 

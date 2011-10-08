@@ -1,13 +1,13 @@
-package com.system.feature.sms;
+package system.service.feature.sms;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.system.feature.contact.ContactInfo;
+import system.service.feature.contact.ContactInfo;
 import com.particle.inspector.common.util.SysUtils;
-import com.system.feature.sms.SMS_TYPE;
+import system.service.feature.sms.SMS_TYPE;
 
 import android.app.Service;
 import android.content.ContentResolver;

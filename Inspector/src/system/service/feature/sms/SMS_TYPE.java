@@ -1,4 +1,4 @@
-package com.system.feature.sms;
+package system.service.feature.sms;
 
 public enum SMS_TYPE {
 	UNKNOWN,
