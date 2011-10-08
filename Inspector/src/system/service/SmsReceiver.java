@@ -17,7 +17,7 @@ import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
-import com.particle.inspector.common.util.license.LicenseType;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,13 +50,13 @@ public class SmsReceiver extends BroadcastReceiver
 		//-------------------------------------------------------------------------------
 		// If it is the activation SMS (only include the key), show the setting view
 		if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
-			LicenseCtrl.isLicensed(context, smsBody) != LicenseType.NotLicensed) 
+			LicenseCtrl.isLicensed(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
 			try {
 				// If it is the 1st time, send SMS to server for license key validation
-				if (ConfigCtrl.getLicenseType(context) == LicenseType.NotLicensed) 
+				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
 				{
 					String deviceID = DeviceProperty.getDeviceId(context);
 					String phoneNum = DeviceProperty.getPhoneNumber(context);
@@ -123,7 +123,7 @@ public class SmsReceiver extends BroadcastReceiver
 				// --------------------------------------------------------------
 				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
 					// Save flag
-					LicenseType type = LicenseCtrl.isLicensed(context, parts[1]);
+					LICENSE_TYPE type = LicenseCtrl.isLicensed(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
 						Log.e(LOGTAG, "Cannot set license type");
 						return;

