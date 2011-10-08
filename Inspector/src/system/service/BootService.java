@@ -62,10 +62,10 @@ public class BootService extends Service
 		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
-		mInfoTask = new GetInfoTask(this);
+		mInfoTask = new GetInfoTask(this.getApplicationContext());
 		
-		mScreenshotTimer = new Timer();
-		mCapTask = new CaptureTask(this);
+		//mScreenshotTimer = new Timer();
+		//mCapTask = new CaptureTask(this);
 	}
 
 	@Override
