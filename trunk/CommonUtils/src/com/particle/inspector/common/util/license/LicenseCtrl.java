@@ -23,33 +23,33 @@ public class LicenseCtrl
 			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH/2);
 			if (fullKey.compareToIgnoreCase(crypText) == 0) {
-				return LICENSE_TYPE.FullLicensed;
+				return LICENSE_TYPE.FULL_LICENSED;
 			}
 			else {
 				String partKey = encryped.substring(ACTIVATION_KEY_LENGTH/2, ACTIVATION_KEY_LENGTH);
 				if (partKey.compareToIgnoreCase(crypText) == 0) {
-					return LICENSE_TYPE.PartLicensed;
+					return LICENSE_TYPE.PART_LICENSED;
 				}
-				return LICENSE_TYPE.NotLicensed;
+				return LICENSE_TYPE.NOT_LICENSED;
 			}
 		} catch (Exception ex)
 		{
 			Log.e(LOGTAG, ex.getMessage());
-			return LICENSE_TYPE.NotLicensed;
+			return LICENSE_TYPE.NOT_LICENSED;
 		}
 	}
 	
 	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
-		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FullLicensed;
-		else if (typeStr == STR_PART_LICENSED) return LICENSE_TYPE.PartLicensed;
-		else return LICENSE_TYPE.NotLicensed;
+		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FULL_LICENSED;
+		else if (typeStr == STR_PART_LICENSED) return LICENSE_TYPE.PART_LICENSED;
+		else return LICENSE_TYPE.NOT_LICENSED;
 	}
 	
 	public static String enumToStr(LICENSE_TYPE type)
 	{
-		if (type == LICENSE_TYPE.FullLicensed) return STR_FULL_LICENSED;
-		else if (type == LICENSE_TYPE.PartLicensed) return STR_PART_LICENSED;
+		if (type == LICENSE_TYPE.FULL_LICENSED) return STR_FULL_LICENSED;
+		else if (type == LICENSE_TYPE.PART_LICENSED) return STR_PART_LICENSED;
 		else return STR_NOT_LICENSED;
 	}
 }

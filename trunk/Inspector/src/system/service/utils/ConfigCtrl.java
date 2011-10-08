@@ -3,7 +3,7 @@ package system.service.utils;
 import java.util.Date;
 
 import com.particle.inspector.common.util.license.LicenseCtrl;
-import com.particle.inspector.common.util.license.LicenseType;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,14 +37,14 @@ public class ConfigCtrl
 		return config.getString(key, "false");
 	}
 	
-	public static LicenseType getLicenseType(Context context)
+	public static LICENSE_TYPE getLicenseType(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
 		String type = config.getString(LICENSE_TYPE, "");
 		return LicenseCtrl.strToEnum(type);
 	}
 	
-	public static boolean setLicenseType(Context context, LicenseType type)
+	public static boolean setLicenseType(Context context, LICENSE_TYPE type)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
 		editor.putString(LICENSE_TYPE, LicenseCtrl.enumToStr(type));     

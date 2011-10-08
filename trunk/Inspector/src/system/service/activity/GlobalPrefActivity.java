@@ -27,7 +27,7 @@ import system.service.R;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
-import com.particle.inspector.common.util.license.LicenseType;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
