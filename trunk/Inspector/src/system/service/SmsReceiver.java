@@ -1,19 +1,19 @@
-package com.system;
+package system.service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.system.activity.GlobalPrefActivity;
-import com.system.activity.InitActivity;
-import com.system.config.ConfigCtrl;
+import system.service.activity.GlobalPrefActivity;
+import system.service.activity.InitActivity;
+import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
-import com.system.feature.sms.SmsCtrl;
+import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;

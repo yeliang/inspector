@@ -1,10 +1,10 @@
-package com.system;
+package system.service;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.system.activity.GlobalPrefActivity;
-import com.system.config.ConfigCtrl;
+import system.service.activity.GlobalPrefActivity;
+import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;

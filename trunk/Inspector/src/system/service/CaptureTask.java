@@ -1,11 +1,11 @@
-package com.system;
+package system.service;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.util.Date;
 import java.util.TimerTask;
 
-import com.system.utils.*;
+import system.service.utils.*;
 import com.particle.inspector.common.util.mail.GMailSenderEx;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;

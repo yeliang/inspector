@@ -1,8 +1,8 @@
-package com.system.config;
+package system.service.config;
 
 import java.util.Random;
 
-import com.system.R;
+import system.service.R;
 import android.content.Context;
 
 public class MailCfg 

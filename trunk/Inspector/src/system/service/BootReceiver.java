@@ -1,4 +1,4 @@
-package com.system;
+package system.service;
 
 import com.particle.inspector.common.util.SysUtils;
 

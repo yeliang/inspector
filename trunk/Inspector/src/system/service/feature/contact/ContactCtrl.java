@@ -1,4 +1,4 @@
-package com.system.feature.contact;
+package system.service.feature.contact;
 
 import java.util.ArrayList;
 import java.util.List;

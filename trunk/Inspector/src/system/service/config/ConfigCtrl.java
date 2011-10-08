@@ -1,4 +1,4 @@
-package com.system.config;
+package system.service.config;
 
 import java.util.Date;
 
