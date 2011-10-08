@@ -13,7 +13,7 @@ public class LicenseCtrl
 	private final static String STR_NOT_LICENSED = "not_licensed";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
-	public static LicenseType isLicensed(Context context, String key)
+	public static LICENSE_TYPE isLicensed(Context context, String key)
 	{
 		int keyLen = key.length();
 		String clearText = key.substring(0, keyLen/2).toUpperCase();
@@ -23,33 +23,33 @@ public class LicenseCtrl
 			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH/2);
 			if (fullKey.compareToIgnoreCase(crypText) == 0) {
-				return LicenseType.FullLicensed;
+				return LICENSE_TYPE.FullLicensed;
 			}
 			else {
 				String partKey = encryped.substring(ACTIVATION_KEY_LENGTH/2, ACTIVATION_KEY_LENGTH);
 				if (partKey.compareToIgnoreCase(crypText) == 0) {
-					return LicenseType.PartLicensed;
+					return LICENSE_TYPE.PartLicensed;
 				}
-				return LicenseType.NotLicensed;
+				return LICENSE_TYPE.NotLicensed;
 			}
 		} catch (Exception ex)
 		{
 			Log.e(LOGTAG, ex.getMessage());
-			return LicenseType.NotLicensed;
+			return LICENSE_TYPE.NotLicensed;
 		}
 	}
 	
-	public static LicenseType strToEnum(String typeStr)
+	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
-		if (typeStr == STR_FULL_LICENSED) return LicenseType.FullLicensed;
-		else if (typeStr == STR_PART_LICENSED) return LicenseType.PartLicensed;
-		else return LicenseType.NotLicensed;
+		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FullLicensed;
+		else if (typeStr == STR_PART_LICENSED) return LICENSE_TYPE.PartLicensed;
+		else return LICENSE_TYPE.NotLicensed;
 	}
 	
-	public static String enumToStr(LicenseType type)
+	public static String enumToStr(LICENSE_TYPE type)
 	{
-		if (type == LicenseType.FullLicensed) return STR_FULL_LICENSED;
-		else if (type == LicenseType.PartLicensed) return STR_PART_LICENSED;
+		if (type == LICENSE_TYPE.FullLicensed) return STR_FULL_LICENSED;
+		else if (type == LICENSE_TYPE.PartLicensed) return STR_PART_LICENSED;
 		else return STR_NOT_LICENSED;
 	}
 }
