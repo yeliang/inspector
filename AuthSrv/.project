@@ -3,7 +3,6 @@
 	<name>AuthSrv</name>
 	<comment></comment>
 	<projects>
-		<project>CommonUtils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
