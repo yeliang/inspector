@@ -34,12 +34,11 @@ public class SmsReceiver extends BroadcastReceiver
 	private static final String LOGTAG = "ActivationReceiver";
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	
-	
-	
 	@SuppressWarnings("unused")
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		if (!intent.getAction().equals(SMS_RECEIVED)) return;
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
