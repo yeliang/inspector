@@ -42,6 +42,7 @@ public class BootService extends Service
 
 	@Override
 	public void onCreate() {
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
 		Log.v(LOGTAG, "created");
 		
@@ -51,6 +52,7 @@ public class BootService extends Service
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
 		Log.v(LOGTAG, "started");
 		
