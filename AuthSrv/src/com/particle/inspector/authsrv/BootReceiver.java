@@ -1,4 +1,4 @@
-package system.service;
+package com.particle.inspector.authsrv;
 
 import com.particle.inspector.common.util.SysUtils;
 
@@ -12,9 +12,7 @@ import android.content.Intent;
 public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent bootintent) {
-		//SysUtils.messageBox(context, "Enter BootReceiver");
 		Intent mServiceIntent = new Intent(context, BootService.class);
 		context.startService(mServiceIntent);
-		//SysUtils.messageBox(context, "BootService started");
 	}
 }
