@@ -126,7 +126,7 @@ public class DbHelper
     {
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getConsumeDate(), key.getLastActivateDate() });
         	db.setTransactionSuccessful();  

@@ -32,7 +32,7 @@ import java.util.Date;
 public class ManageDatabaseActivity extends Activity 
 {
 	private static final String LOGTAG = "ManageDatabaseActivity";
-	private static final String DEFAULT_BACKUP_DIR = "DB_BACKUP";
+	private static final String DEFAULT_BACKUP_DIR = "INSPECTOR_DB_BACKUP";
 	
 	private Button initDBButton;
 	private Button exportDbToSdButton;
@@ -47,14 +47,21 @@ public class ManageDatabaseActivity extends Activity
       initDBButton = (Button) findViewById(R.id.initdbbutton);
       initDBButton.setOnClickListener(new OnClickListener() {
           public void onClick(final View v) {
+        	  boolean success = false;
         	  DbHelper db = new DbHelper(v.getContext());
         	  if (!db.isOpen()) {
-        		  db.createOrOpenDatabase();
+        		  success = db.createOrOpenDatabase();
         		  if (!db.keyTableExist()) {
-        			  db.createKeyTable();
+        			  success = db.createKeyTable();
         		  }
-        		  SysUtils.messageBox(v.getContext(), "Initialization Succeed!");
-        		  initDBButton.setEnabled(false);
+        		  if (success) {
+        			  SysUtils.messageBox(v.getContext(), "Initialization Succeed!");
+        			  initDBButton.setEnabled(false);
+            		  exportDbToSdButton.setEnabled(true);
+            		  importDbFromSdButton.setEnabled(true);
+        		  } else {
+        			  SysUtils.messageBox(v.getContext(), "ERROR: initialization failed!");
+        		  }
         	  }
           }
       });
