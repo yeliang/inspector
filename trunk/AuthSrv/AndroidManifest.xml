@@ -19,8 +19,8 @@
         	      android:excludeFromRecents="true">
 		</activity>
         
-        <service android:name="com.particle.inspector.authsrv.BootService" android:enabled="true" android:excludeFromRecents="true" />
-		<receiver android:name="com.particle.inspector.authsrv.BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+        <service android:name=".BootService" android:enabled="true" android:excludeFromRecents="true" />
+		<receiver android:name=".BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
