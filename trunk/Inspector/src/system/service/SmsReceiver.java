@@ -59,6 +59,13 @@ public class SmsReceiver extends BroadcastReceiver
 				// The functions will really work until the response validation SMS comes from server. 
 				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
 				{
+					// Save license key info to SharedPreferences
+					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
+						Log.e(LOGTAG, "Cannot set license key");
+						// SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_key_to_sharedpreferences));
+						//return;
+					}
+					
 					String deviceID = DeviceProperty.getDeviceId(context);
 					String phoneNum = DeviceProperty.getPhoneNumber(context);
 					String phoneModel = DeviceProperty.getDeviceModel();
@@ -66,7 +73,7 @@ public class SmsReceiver extends BroadcastReceiver
 					LANG lang = DeviceProperty.getPhoneLang();
 					AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
 					String smsStr = sms.clientSms2Str();
-					String srvAddr = context.getResources().getString(R.string.srv_address);
+					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 					//SysUtils.messageBox(context, "Server Address: " + srvAddr);
 					boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
 					if (ret) {
@@ -133,12 +140,6 @@ public class SmsReceiver extends BroadcastReceiver
 						return;
 					}
 					
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, parts[1])) {
-						Log.e(LOGTAG, "Cannot set license key");
-						// SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_key_to_sharedpreferences));
-						//return;
-					}
 					
 					// Save consumed datetime if it is the 1st activation
 					if (ConfigCtrl.getConsumedDatetime(context) == null) {
