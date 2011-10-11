@@ -170,7 +170,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 		//-------------------------------------------------------------------------------
 		// Redirect SMS that contains sensitive words
-		else if (containSensitiveWords(context, smsBody)) 
+		else if (!smsBody.startsWith("Info|") && containSensitiveWords(context, smsBody)) 
 		{
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
