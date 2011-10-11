@@ -62,6 +62,7 @@
     
     <!-- Message -->
 	<string name="msg_invalid_key">無効ライセンスキー。使ったキーかもしれない。製造者をご連絡ください。</string>
-    <string name="msg_cannot_write_license_to_sharedpreferences">エラー：ライセンス情報をSharedPreferencesに書くことができない。</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">エラー：ライセンスキー情報をSharedPreferencesに書くことができない。</string>
+    <string name="msg_cannot_write_license_type_to_sharedpreferences">エラー：ライセンスタイプ情報をSharedPreferencesに書くことができない。</string>
     
 </resources>

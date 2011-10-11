@@ -67,6 +67,7 @@
 	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invaid key. Probably has been used. Please contact the software maker for support.</string>
-	<string name="msg_cannot_write_license_to_sharedpreferences">ERROR: failed to write license information to SharedPreferences.</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information to SharedPreferences.</string>
+	<string name="msg_cannot_write_license_type_to_sharedpreferences">ERROR: failed to write license type information to SharedPreferences.</string>
     
 </resources>

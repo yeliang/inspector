@@ -63,7 +63,8 @@ public class SmsReceiver extends BroadcastReceiver
 					if (sentRet) {
 						if (valid == KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST) {
 							// Insert to database
-							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), sms.getPhoneNum(),
+							String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
+							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), phoneNum,
 								sms.getPhoneModel(), sms.getAndroidVer(), 
 								DatetimeUtil.format.format(new Date()), 
 								DatetimeUtil.format.format(new Date()));
