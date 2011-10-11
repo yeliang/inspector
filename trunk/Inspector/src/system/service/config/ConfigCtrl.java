@@ -16,7 +16,8 @@ import android.content.SharedPreferences.Editor;
 */
 public class ConfigCtrl 
 {
-	private static final String PREFS_NAME = "com.system";
+	private static final String PREFS_NAME = "system.service";
+	private static final String LICENSE_KEY = "LicenseKey";
 	private static final String LICENSE_TYPE = "LicenseType";
 	private static final String INTERVAL_TRY_SCREENSHOT_ = "TryScreenshotInterval";
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
@@ -35,7 +36,24 @@ public class ConfigCtrl
 	public static String get(Context context, String key)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getString(key, "false");
+		return config.getString(key, "");
+	}
+	
+	public static String getLicenseKey(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(LICENSE_KEY, "").trim();
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
+	}
+	
+	public static boolean setLicenseKey(Context context, String key)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
+		editor.putString(LICENSE_KEY, key);     
+		return editor.commit();
 	}
 	
 	public static LICENSE_TYPE getLicenseType(Context context)
@@ -81,7 +99,7 @@ public class ConfigCtrl
 	public static String getLastGetInfoTime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(LAST_GETINFO_DATETIME, "");
+		String str = config.getString(LAST_GETINFO_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else
@@ -98,7 +116,7 @@ public class ConfigCtrl
 	public static String getConsumedDatetime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(CONSUMED_DATETIME, "");
+		String str = config.getString(CONSUMED_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else
@@ -115,7 +133,7 @@ public class ConfigCtrl
 	public static String getLastActivatedDatetime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(LAST_ACTIVATED_DATETIME, "");
+		String str = config.getString(LAST_ACTIVATED_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else
@@ -132,7 +150,7 @@ public class ConfigCtrl
 	public static String getAuthSmsSentDatetime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(AUTH_SMS_SENT_DATETIME, "");
+		String str = config.getString(AUTH_SMS_SENT_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else

@@ -125,12 +125,19 @@ public class SmsReceiver extends BroadcastReceiver
 					
 				// --------------------------------------------------------------
 				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
-					// Save flag
+					// Save license type info to SharedPreferences
 					LICENSE_TYPE type = LicenseCtrl.isLicensed(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
 						Log.e(LOGTAG, "Cannot set license type");
-						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_to_sharedpreferences));
+						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
 						return;
+					}
+					
+					// Save license key info to SharedPreferences
+					if (!ConfigCtrl.setLicenseKey(context, parts[1])) {
+						Log.e(LOGTAG, "Cannot set license key");
+						// SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_key_to_sharedpreferences));
+						//return;
 					}
 					
 					// Save consumed datetime if it is the 1st activation
@@ -139,12 +146,15 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 					
 					// Start dialog
+					/*
 					Intent initIntent = new Intent().setClass(context, InitActivity.class);
 					initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 					initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 					context.startActivity(initIntent);
+					*/
 					
 					// Remove the activation SMS
+					// Since we have done abortBroadcast(), the response SMS from server will not enter the SMS inbox.
 					//SmsCtrl.deleteTheLastSMS(context);
 					
 				} else if (parts[2].equalsIgnoreCase(AuthSms.SMS_FAILURE)) {

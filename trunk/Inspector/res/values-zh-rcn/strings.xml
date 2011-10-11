@@ -63,6 +63,7 @@
     
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
-	<string name="msg_cannot_write_license_to_sharedpreferences">错误：注册信息不能写入SharedPreferences。</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">错误：注册码不能写入SharedPreferences。</string>
+	<string name="msg_cannot_write_license_type_to_sharedpreferences">错误：注册类型不能写入SharedPreferences。</string>
     
 </resources>
