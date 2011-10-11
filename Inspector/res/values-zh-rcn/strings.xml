@@ -60,6 +60,7 @@
     <!-- Actions -->
     <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>
     <string name="action_send_mail_fail">发信失败。</string>
+    <string name="action_network_disconnected">网络未连接。</string>
     
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
