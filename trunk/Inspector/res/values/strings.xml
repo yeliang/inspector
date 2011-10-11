@@ -61,12 +61,13 @@
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
     <string name="action_send_mail_fail">Failed to send a mail to your mail box</string>
+    <string name="action_network_disconnected">Network disconnected.</string>
     
     <!-- Server -->
 	<string name="srv_address">15319967068</string>
 	
 	<!-- Message -->
-	<string name="msg_invalid_key">Invaid key. Probably has been used. Please contact the software maker for support.</string>
+	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>
 	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information to SharedPreferences.</string>
 	<string name="msg_cannot_write_license_type_to_sharedpreferences">ERROR: failed to write license type information to SharedPreferences.</string>
     
