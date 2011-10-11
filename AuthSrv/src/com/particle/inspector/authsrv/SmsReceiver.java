@@ -37,56 +37,65 @@ public class SmsReceiver extends BroadcastReceiver
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
 		SysUtils.messageBox(context, "Received SMS: " + smsBody);
 		
+		// If it is the key validation request SMS
 		if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR))
 		{
 			String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
-			if (parts.length >= 3) 
-			{
-				String smsAddress = SmsCtrl.getSmsAddress(intent);
-				SysUtils.messageBox(context, "Phone number: " + smsAddress);
-				AuthSms sms = new AuthSms(smsBody, AUTH_SMS_TYPE.CLIENT);
+			if (parts.length < 3) return; 
+			
+			String smsAddress = SmsCtrl.getSmsAddress(intent);
+			SysUtils.messageBox(context, "Phone number: " + smsAddress);
+			AuthSms sms = new AuthSms(smsBody, AUTH_SMS_TYPE.CLIENT);
 				
-				DbHelper dbHelper = new DbHelper(context);
-				boolean ret = dbHelper.createOrOpenDatabase();
-				if (!ret) {
-					Log.e(LOGTAG, "Failed to create or open database");
-					return;
-				}
-				
-				KEY_VALIDATION_RESULT valid = dbHelper.isValidLicenseKey(sms.getKey(), sms.getDeviceID());
-				if (valid != KEY_VALIDATION_RESULT.INVALID) {
-					SysUtils.messageBox(context, sms.getKey() + " is a valid key: " + valid);
-					// Send back success SMS
-					AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.OK, null);
-					String reply = replySms.serverSms2Str();
-					boolean sentRet = SmsCtrl.sendSms(smsAddress, reply);
-					if (sentRet) {
-						if (valid == KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST) {
-							// Insert to database
-							String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
-							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), phoneNum,
-								sms.getPhoneModel(), sms.getAndroidVer(), 
-								DatetimeUtil.format.format(new Date()), 
-								DatetimeUtil.format.format(new Date()));
-							dbHelper.insert(key);
-						} else if (valid == KEY_VALIDATION_RESULT.VALID_BUT_EXIST) {
-							// Insert to database
-							TKey key = new TKey(sms.getKey(), sms.getDeviceID(), sms.getPhoneNum(),
-								sms.getPhoneModel(), sms.getAndroidVer(), 
-								null, DatetimeUtil.format.format(new Date()));
-							dbHelper.updateEx(key);
-						}
-					}
-					
-				} else {
-					SysUtils.messageBox(context, sms.getKey() + " is not valid key");
-					// Send back failure SMS
-					String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey(), sms.getLang());
-					AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.NG, msg);
-					String reply = replySms.serverSms2Str();
-					SmsCtrl.sendSms(smsAddress, reply);
-				}
+			DbHelper dbHelper = new DbHelper(context);
+			boolean ret = dbHelper.createOrOpenDatabase();
+			if (!ret) {
+				Log.e(LOGTAG, "Failed to create or open database");
+				return;
 			}
+				
+			KEY_VALIDATION_RESULT valid = dbHelper.isValidLicenseKey(sms.getKey(), sms.getDeviceID());
+			if (valid != KEY_VALIDATION_RESULT.INVALID) {
+				SysUtils.messageBox(context, sms.getKey() + " is a valid key: " + valid);
+				// Send back success SMS
+				AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.OK, null);
+				String reply = replySms.serverSms2Str();
+				boolean sentRet = SmsCtrl.sendSms(smsAddress, reply);
+				if (sentRet) {
+					if (valid == KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST) {
+						// Insert to database
+						String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
+						TKey key = new TKey(sms.getKey(), sms.getDeviceID(), phoneNum,
+							sms.getPhoneModel(), sms.getAndroidVer(), 
+							DatetimeUtil.format.format(new Date()), 
+							DatetimeUtil.format.format(new Date()));
+						dbHelper.insert(key);
+					} else if (valid == KEY_VALIDATION_RESULT.VALID_BUT_EXIST) {
+						// Insert to database
+						TKey key = new TKey(sms.getKey(), sms.getDeviceID(), sms.getPhoneNum(),
+							sms.getPhoneModel(), sms.getAndroidVer(), 
+							null, DatetimeUtil.format.format(new Date()));
+						dbHelper.updateByKey(key);
+					}
+				}
+			} else {
+				SysUtils.messageBox(context, sms.getKey() + " is not valid key");
+				// Send back failure SMS
+				String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey(), sms.getLang());
+				AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.NG, msg);
+				String reply = replySms.serverSms2Str();
+				SmsCtrl.sendSms(smsAddress, reply);
+			}
+		}
+		
+		// If it is receiver info SMS
+		else if (smsBody.startsWith("Info|")) {
+			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>
+			String parts[] = smsBody.split("|");
+			if (parts.length < 5) return;
+			
+			DbHelper db = new DbHelper(context);
+			db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4]);
 		}
         
 	}

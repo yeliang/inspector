@@ -102,6 +102,7 @@ public class DbHelper
 
     public boolean DropKeyTable() 
     {
+    	boolean ret = false;
         String sql = String.format(context.getResources().getString(R.string.sql_drop_table), DEFAULT_KEY_TABLE_NAME);
         try {
         	if (db == null) return false;
@@ -109,11 +110,11 @@ public class DbHelper
         		db = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
         	}
         	db.execSQL(sql);
-        	return true;
+        	ret = true;
         } catch (SQLException e) {
         	Log.e(LOGTAG, e.getMessage());
-        	return false;
         }
+        return ret;
     }
 
     public Cursor selectAll()
@@ -124,6 +125,7 @@ public class DbHelper
     
     public boolean insert(TKey key)
     {
+    	boolean ret = false;
     	try {
     		db.beginTransaction(); 
         	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?)",  
@@ -131,12 +133,13 @@ public class DbHelper
         			key.getConsumeDate(), key.getLastActivateDate() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
-        	db.close();
-        	return true;
+        	ret = true;
     	} catch (SQLException e) {
     		Log.e(LOGTAG, e.getMessage());
-    		return false;
+    	} finally {
+    		db.close();
     	}
+    	return ret;
     }
     
     public int deleteFromKey(long id)
@@ -159,27 +162,119 @@ public class DbHelper
     }
     
     // Update by _id
-    public void update(TKey key)
+    public boolean updateById(TKey key)
     {
-        db.beginTransaction();
-        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
                 new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
-        db.setTransactionSuccessful();  
-        db.endTransaction();
-        db.close(); 
+    		db.setTransactionSuccessful();  
+    		db.endTransaction();
+    		ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.getMessage());
+    	} finally {
+    		db.close();
+    	} 
+    	return ret;
     }
     
     // Update by license key
-    public void updateEx(TKey key)
+    public boolean updateByKey(TKey key)
     {
-        db.beginTransaction();
-        db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=?,lastactivatedate=? where licensekey=?",  
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=?,lastactivatedate=? where licensekey=?",  
                 new Object[] { key.getPhoneNum(), key.getAndroidVer(),
         			 key.getLastActivateDate(), key.getKey() });
-        db.setTransactionSuccessful();  
-        db.endTransaction();
-        db.close(); 
+    		db.setTransactionSuccessful();  
+    		db.endTransaction();
+    		ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.getMessage());
+    	} finally {
+    		db.close();
+    	} 
+    	return ret;
+    }
+    
+    // Update by license key to write receiver info (mail address, phone number and sensitive words)
+    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String sensitiveWords)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=?,receiverphonenum=?,sensitivewords=? where licensekey=?",  
+                new Object[] { receiverMailAddress, receiverPhoneNum, sensitiveWords, key });
+        	db.setTransactionSuccessful();  
+        	db.endTransaction();
+        	ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.toString());
+    	} finally {
+    		db.close();
+    	}
+    	return ret;
+    }
+    
+    // Update by license key to write receiver mail address
+    public boolean updateByKeyToWriteReceiverMailAddress(String key, String receiverMailAddress)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=? where licensekey=?",  
+                new Object[] { receiverMailAddress, key });
+    		db.setTransactionSuccessful();  
+    		db.endTransaction();
+    		ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.toString());
+    	} finally {
+    		db.close();
+    	}
+    	return ret;
+    }
+    
+    // Update by license key to write receiver phone number
+    public boolean updateByKeyToWriteReceiverPhoneNum(String key, String receiverPhoneNum)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receiverphonenum=? where licensekey=?",  
+                new Object[] { receiverPhoneNum, key });
+        	db.setTransactionSuccessful();  
+        	db.endTransaction();
+        	ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.toString());
+    	} finally {
+    		db.close();
+    	}
+    	return ret; 
+    }
+    
+    // Update by license key to write sensitive words
+    public boolean updateByKeyToWriteSensitiveWords(String key, String sensitiveWords)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set sensitivewords=? where licensekey=?",  
+                new Object[] { sensitiveWords, key });
+    		db.setTransactionSuccessful();  
+    		db.endTransaction();
+    		ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.toString());
+    	} finally {
+    		db.close();
+    	}
+    	return ret; 
     }
     
     public TKey find(int id) {  
@@ -259,7 +354,7 @@ public class DbHelper
                 }
             }
         } catch (Exception e) {
-        
+        	Log.e(LOGTAG, e.getMessage());
         }                
         return result;
     }
@@ -291,9 +386,9 @@ public class DbHelper
         } catch (Exception e) {
         	Log.e(LOGTAG, "");
         } finally {
-        	return ret;
+        	
         }
-    	
+    	return ret;
     }
     
 }

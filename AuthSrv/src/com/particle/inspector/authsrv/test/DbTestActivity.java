@@ -134,7 +134,7 @@ public class DbTestActivity extends Activity
 				TKey key = new TKey("TheKey4Test", "TheDeviceID4Test", "11122223333",
 						null, "2.1", 
 						null, DatetimeUtil.format.format(new Date()));
-				db.updateEx(key);
+				db.updateByKey(key);
         	}
         });
         

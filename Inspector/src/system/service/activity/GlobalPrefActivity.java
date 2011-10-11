@@ -36,6 +36,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
 	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
+	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info";
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	
@@ -63,6 +64,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				if (key.equals(getResources().getString(R.string.pref_mail_key))) {
 					checkMailFormat(sharedPreferences, getApplicationContext());
+					setReceiverInfoChgFlag(true);
 				}
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
 					String intervalStr = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
@@ -73,6 +75,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (phoneNum.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
 					}
+					setReceiverInfoChgFlag(true);
 				}
 				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
 					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
@@ -82,6 +85,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 						String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
 						SysUtils.messageBox(getApplicationContext(), msg);
 					}
+					if (words.length() > 0) setReceiverInfoChgFlag(true);
 				}
 				
 				// Update preference summary fields
@@ -90,6 +94,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 		        }
 			}
         });
+	}
+	
+	private void setReceiverInfoChgFlag(boolean value) {
+		Intent data = this.getIntent();
+		data.putExtra(HAS_CHG_RECEIVER_INFO, value);
+		setResult(RESULT_OK, data);
 	}
 	
 	private void initSummary(Preference p) {
