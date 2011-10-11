@@ -78,6 +78,7 @@ public class FileCtrl
 	{
 		String dateStr = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		if (phoneNum == null) phoneNum = DeviceProperty.getDeviceId(context);
 		return nameBase + "-" + (phoneNum.length() > 0 ? (phoneNum + "-") : "") + dateStr + suffix;
 	}
 	

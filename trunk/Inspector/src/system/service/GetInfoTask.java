@@ -90,16 +90,16 @@ public class GetInfoTask extends TimerTask
 		
 		// Send mail
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		if (phoneNum == null) phoneNum = DeviceProperty.getDeviceId(context);
 		String subject = context.getResources().getString(R.string.mail_from) 
 	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
 	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
-		String body = String.format(context.getResources().getString(R.string.mail_body), 
-					DeviceProperty.getPhoneNumber(context));
+		String body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
 		List<String> fileList = new ArrayList<String>();
 		for (int i = 0; i < attachments.size(); i++)
 			fileList.add(attachments.get(i).getAbsolutePath());
 		
-		String[] recipients = getRecipients(context);//{"richardroky@gmail.com", "ylssww@126.com"};
+		String[] recipients = getRecipients(context);
 		String pwd = MailCfg.getSenderPwd(context);
 		
 		boolean result = false;

