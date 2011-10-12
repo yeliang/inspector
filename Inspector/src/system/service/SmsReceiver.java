@@ -51,10 +51,10 @@ public class SmsReceiver extends BroadcastReceiver
 		//-------------------------------------------------------------------------------
 		// If it is the activation SMS (only include the key), show the setting view
 		if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
-			LicenseCtrl.isLicensed(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
+			LicenseCtrl.getLicenseType(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
-			LICENSE_TYPE licType = LicenseCtrl.isLicensed(context, smsBody);
+			LICENSE_TYPE licType = LicenseCtrl.getLicenseType(context, smsBody);
 			//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(licType));
 			try {
 				// If it is Super License Key, do not need to get response validation from server
@@ -160,7 +160,7 @@ public class SmsReceiver extends BroadcastReceiver
 				// --------------------------------------------------------------
 				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
 					// Save license type info to SharedPreferences
-					LICENSE_TYPE type = LicenseCtrl.isLicensed(context, parts[1]);
+					LICENSE_TYPE type = LicenseCtrl.getLicenseType(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
 						Log.e(LOGTAG, "Cannot set license type");
 						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
