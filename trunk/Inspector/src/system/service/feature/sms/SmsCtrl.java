@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -209,6 +210,12 @@ public class SmsCtrl
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
 		String strContent = "Info|" + key + "|" + rcvMail + "|" + rcvPhoneNum + "|" + sensWords + "|" + gpsWord;
 		sendSms(strMobile, strContent);
+	}
+
+	public static String buildGpsLocationSms(Context context, Location location) 
+	{
+		return String.format(context.getResources().getString(R.string.gps_sms), 
+				location.getLongitude() + "," + location.getLatitude());
 	}
 	
 }

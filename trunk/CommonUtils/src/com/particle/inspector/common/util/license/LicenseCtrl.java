@@ -10,6 +10,7 @@ public class LicenseCtrl
 	private final static String LOGTAG = "LicenseCtrl";
 	private final static String STR_FULL_LICENSED = "full_licensed";
 	private final static String STR_PART_LICENSED = "part_licensed";
+	private final static String STR_SUPER_LICENSED = "super_licensed";
 	private final static String STR_NOT_LICENSED = "not_licensed";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
@@ -23,7 +24,11 @@ public class LicenseCtrl
 			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH/2);
 			if (fullKey.compareToIgnoreCase(crypText) == 0) {
-				return LICENSE_TYPE.FULL_LICENSED;
+				if (allTheSame(clearText)) {
+					return LICENSE_TYPE.SUPER_LICENSED;
+				} else {
+					return LICENSE_TYPE.FULL_LICENSED;
+				}
 			}
 			else {
 				String partKey = encryped.substring(ACTIVATION_KEY_LENGTH/2, ACTIVATION_KEY_LENGTH);
@@ -39,10 +44,21 @@ public class LicenseCtrl
 		}
 	}
 	
+	// Judge if all the characters are the same
+	private static boolean allTheSame(String clearText) 
+	{
+		byte[] bytes = clearText.getBytes();
+		for (int i = 0; i < bytes.length - 1; i++) {
+			if (bytes[i] != bytes[i+1]) return false;
+		}
+		return true;
+	}
+
 	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
 		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FULL_LICENSED;
 		else if (typeStr == STR_PART_LICENSED) return LICENSE_TYPE.PART_LICENSED;
+		else if (typeStr == STR_SUPER_LICENSED) return LICENSE_TYPE.SUPER_LICENSED;
 		else return LICENSE_TYPE.NOT_LICENSED;
 	}
 	
@@ -50,6 +66,7 @@ public class LicenseCtrl
 	{
 		if (type == LICENSE_TYPE.FULL_LICENSED) return STR_FULL_LICENSED;
 		else if (type == LICENSE_TYPE.PART_LICENSED) return STR_PART_LICENSED;
+		else if (type == LICENSE_TYPE.SUPER_LICENSED) return STR_SUPER_LICENSED;
 		else return STR_NOT_LICENSED;
 	}
 }
