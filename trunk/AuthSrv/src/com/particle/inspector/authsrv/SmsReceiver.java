@@ -90,12 +90,12 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// If it is receiver info SMS
 		else if (smsBody.startsWith("Info|")) {
-			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>
+			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>|<gps activation word>
 			String parts[] = smsBody.split("|");
-			if (parts.length < 5) return;
+			if (parts.length < 6) return;
 			
 			DbHelper db = new DbHelper(context);
-			db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4]);
+			db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
 		}
         
 	}

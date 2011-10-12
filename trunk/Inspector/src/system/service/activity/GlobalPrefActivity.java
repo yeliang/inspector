@@ -35,10 +35,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String INTERVAL_INFO;
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
+	private static String GPS_WORD;
 	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
 	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info";
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
+	public static final int GPS_WORD_MAX_LEN = 24;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,15 @@ public class GlobalPrefActivity extends PreferenceActivity
 						SysUtils.messageBox(getApplicationContext(), msg);
 					}
 					if (words.length() > 0) setReceiverInfoChgFlag(true);
+				}
+				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
+					String word = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "").trim();
+					if (word.length() == 0) {
+						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_gps_activate_word));
+					} else if (word.length() > GPS_WORD_MAX_LEN) {
+						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_gps_activate_word_max_len));
+					}
+					if (word.length() > 0) setReceiverInfoChgFlag(true);
 				}
 				
 				// Update preference summary fields
@@ -186,6 +197,16 @@ public class GlobalPrefActivity extends PreferenceActivity
 	public static void setSensitiveWords(Context context, String value) {
 		SENSITIVE_WORDS = context.getResources().getString(R.string.pref_word_sensor_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENSITIVE_WORDS, value).commit();
+	}
+	
+	public static String getGpsWord(Context context) {
+		GPS_WORD = context.getResources().getString(R.string.pref_activate_word_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(GPS_WORD, "").trim();
+	}
+	
+	public static void setGpsWord(Context context, String value) {
+		GPS_WORD = context.getResources().getString(R.string.pref_activate_word_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GPS_WORD, value).commit();
 	}
 	
 }
