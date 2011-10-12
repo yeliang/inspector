@@ -9,4 +9,7 @@
     	<EditTextPreference android:title="@string/pref_phonenum_title" android:key="@string/pref_phonenum_key"></EditTextPreference>
         <EditTextPreference android:title="@string/pref_word_sensor_title" android:key="@string/pref_word_sensor_key"></EditTextPreference>
     </PreferenceCategory>
+    <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">
+    	<EditTextPreference android:title="@string/pref_activate_word_title" android:key="@string/pref_activate_word_key"></EditTextPreference>
+    </PreferenceCategory>
 </PreferenceScreen>

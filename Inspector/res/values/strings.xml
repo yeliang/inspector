@@ -29,9 +29,11 @@
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
-    <string name="pref_category_info_collector_title">Features</string>
+    <string name="pref_category_info_collector_title">Collect Information</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
     <string name="pref_category_sms_redirector_title">SMS Redirection</string>
+    <string name="pref_category_gps_key">pref_category_gps</string>
+    <string name="pref_category_gps_title">Get GPS Location</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">Mail</string>
@@ -47,6 +49,11 @@
     <string name="pref_word_sensor_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the suplus words will be ignored. Please re-edit your sensitive words.</string>
+    <string name="pref_activate_word_key">pref_activate_word</string>
+    <string name="pref_activate_word_title">Activation Word</string>
+    <string name="pref_activate_word_summary">Send a SMS containing the word can get back GPS location.</string>
+    <string name="pref_pls_input_gps_activate_word">Please input ONE word for getting GPS location.</string>
+    <string name="pref_gps_activate_word_max_len">12 eastern characters (Chinese or Japanese) or 24 letters/numbers are permitted.</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">Get Info</string>
