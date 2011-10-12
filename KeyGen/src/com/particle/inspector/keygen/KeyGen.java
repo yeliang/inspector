@@ -28,9 +28,11 @@ public class KeyGen extends Activity
 	
 	protected static final String LOGTAG = KeyGen.class.toString();
 	private Button btnGenerate;
+	private Button btnGenerateSuper;
 	private Button btnGenerate100;
 	private TextView fullLicense;
 	private TextView partLicense;
+	private TextView superLicense;
 	private Context context;
 	private String exceptionMsg;
 	
@@ -47,9 +49,11 @@ public class KeyGen extends Activity
         setContentView(R.layout.main);
         
         btnGenerate = (Button)findViewById(R.id.btn_generate);
+        btnGenerateSuper = (Button)findViewById(R.id.btn_generatesuper);
         btnGenerate100 = (Button)findViewById(R.id.btn_generate100);
         fullLicense = (TextView)findViewById(R.id.txtFullLicense);
-        partLicense = (TextView)findViewById(R.id.txtSmsLicense);
+        partLicense = (TextView)findViewById(R.id.txtPartLicense);
+        superLicense = (TextView)findViewById(R.id.txtSuperLicense);
         
         btnGenerate.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
@@ -64,6 +68,24 @@ public class KeyGen extends Activity
         			
         			fullLicense.setText(full);
         			partLicense.setText(part);
+        		} catch (Exception e) {
+        			Log.e(LOGTAG, e.getMessage());
+        		}
+        	}
+        });
+        
+        btnGenerateSuper.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v)
+        	{
+        		String[] clearTexts = {"000000", "111111", "222222", "333333", "444444", "555555", "666666", "777777",
+        							   "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF"};
+        		try {
+        			long seed = Math.abs((new Random()).nextLong());
+        			int index = (int)(seed%(clearTexts.length));
+        			String clearText = clearTexts[index].toUpperCase(); 
+        			String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+        			String superKey = clearText + longKey.substring(0, KEY_LENGTH/2);
+        			superLicense.setText(superKey);
         		} catch (Exception e) {
         			Log.e(LOGTAG, e.getMessage());
         		}

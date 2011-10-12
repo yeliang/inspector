@@ -31,13 +31,16 @@
 	<string name="sql_create_table_key">
 	CREATE TABLE inspector_auth_key(
 		_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-		licensekey varchar[32] NOT NULL, 
-		deviceid varchar[100], 
-		phonenum varchar[32], 
-		phonemodel varchar[32],
-		androidver varchar[32],
+		licensekey varchar[16] NOT NULL, 
+		deviceid varchar[32], 
+		phonenum varchar[16], 
+		phonemodel varchar[16],
+		androidver varchar[8],
 		consumedate datetime,
-		lastactivatedate datetime
+		lastactivatedate datetime,
+		receivermailaddress varchar[128],
+		receiverphonenum varchar[16],
+		sensitivewords varchar[128]
 		); 
 	</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>

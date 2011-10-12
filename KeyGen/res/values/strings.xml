@@ -3,7 +3,9 @@
     <string name="app_name">Key Generator</string>
     <string name="lbl_fulllicense">Full License: </string>
     <string name="lbl_partlicense">Part License: </string>
+    <string name="lbl_superlicense">Super License: </string>
     <string name="generate">Generate</string>
+    <string name="generatesuper">Generate Super</string>
     <string name="generate100">Generate 100 keys and mail</string>
     <string name="send_ok">Mail sent successfully</string>
     <string name="send_ng">ERROR: fail to generate keys and send mail</string>
