@@ -24,7 +24,20 @@
     	android:text="@string/lbl_partlicense"
     />
     <TextView  
-    	android:id="@+id/txtSmsLicense" 
+    	android:id="@+id/txtPartLicense" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:textColor="#FF0000"
+    	android:textSize="24dp"
+    />
+    
+    <TextView  
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content" 
+    	android:text="@string/lbl_superlicense"
+    />
+    <TextView  
+    	android:id="@+id/txtSuperLicense" 
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"
     	android:textColor="#FF0000"
@@ -32,5 +45,6 @@
     />
     
     <Button android:id="@+id/btn_generate" android:text="@string/generate" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
+    <Button android:id="@+id/btn_generatesuper" android:text="@string/generatesuper" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
     <Button android:id="@+id/btn_generate100" android:text="@string/generate100" android:layout_height="wrap_content" android:layout_width="220dp"></Button>
 </LinearLayout>
