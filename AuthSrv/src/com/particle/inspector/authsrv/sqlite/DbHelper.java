@@ -11,6 +11,8 @@ import java.util.Date;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
 import com.particle.inspector.common.util.LANG;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
+import com.particle.inspector.common.util.license.LicenseCtrl;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -128,8 +130,8 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?)",  
-            	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
+            	new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getConsumeDate(), key.getLastActivateDate() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
@@ -167,9 +169,29 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
-                new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
+                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
+    		db.setTransactionSuccessful();  
+    		db.endTransaction();
+    		ret = true;
+    	} catch (SQLException ex) {
+    		Log.e(LOGTAG, ex.getMessage());
+    	} finally {
+    		db.close();
+    	} 
+    	return ret;
+    }
+    
+    // Update by device ID
+    public boolean updateByDevice(TKey key)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction();
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,phonenum=?,androidver=?,lastactivatedate=? where deviceid=?",  
+                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getPhoneNum(), key.getAndroidVer(),
+        			 key.getLastActivateDate(), key.getDeviceID() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -277,31 +299,32 @@ public class DbHelper
     	return ret; 
     }
     
-    public TKey find(int id) {  
+    public TKey findId(int id) {  
         Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where _id=?",  
         		new String[] { String.valueOf(id) });  
         if (cursor.moveToNext()) {  
-            return new TKey(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
-            		cursor.getString(4), cursor.getString(5),
-            	    cursor.getString(6), cursor.getString(7));  
+            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)), 
+            		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
+            		cursor.getString(6), cursor.getString(7), cursor.getString(8));  
         }  
         return null;  
     }
     
-    public TKey find(String key) {  
+    public TKey findKey(String key) {  
         Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where licensekey=?",  
         		new String[] { key });  
         if (cursor.moveToNext()) {
         	try {
         		int id = cursor.getInt(0);
         		String licenseKey = cursor.getString(1);
-        		String deviceID = cursor.getString(2);
-        		String phoneNum = cursor.getString(3);
-        		String phoneModel = cursor.getString(4);
-        		String androidVer = cursor.getString(5);
-        		String consumeDate = cursor.getString(6);
-        		String lastActivateDate = cursor.getString(7);
-        		return new TKey(id, licenseKey, deviceID, phoneNum, phoneModel, androidVer, consumeDate, lastActivateDate);
+        		LICENSE_TYPE type = LicenseCtrl.strToEnum(cursor.getString(2));
+        		String deviceID = cursor.getString(3);
+        		String phoneNum = cursor.getString(4);
+        		String phoneModel = cursor.getString(5);
+        		String androidVer = cursor.getString(6);
+        		String consumeDate = cursor.getString(7);
+        		String lastActivateDate = cursor.getString(8);
+        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate, lastActivateDate);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;
@@ -311,9 +334,20 @@ public class DbHelper
         }
     }
     
+    public TKey findDevice(String deviceId) {  
+        Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where deviceid=?",  
+        		new String[] { deviceId });  
+        if (cursor.moveToNext()) {  
+            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
+            		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
+            		cursor.getString(6), cursor.getString(7), cursor.getString(8));  
+        }  
+        return null;  
+    }
+    
     // If the license key exists but the device is the same one, set exists to true
     public KEY_VALIDATION_RESULT isValidLicenseKey(String key, String deviceID) {
-    	TKey foundKey = find(key);
+    	TKey foundKey = findKey(key);
     	if (foundKey == null) {
     		return KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST;
     	} else if (foundKey.getDeviceID().equalsIgnoreCase(deviceID)) {

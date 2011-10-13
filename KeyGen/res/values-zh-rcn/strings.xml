@@ -5,8 +5,9 @@
     <string name="lbl_partlicense">注册码（部分功能）：</string>
     <string name="lbl_superlicense">超级注册码（不限量部署）：</string>
     <string name="generate">生成注册码</string>
-    <string name="generatesuper">生成超级账号</string>
-    <string name="generate100">批量生成并发至邮箱</string>
+    <string name="generate100full">批量生成全功能注册码并发至邮箱</string>
+    <string name="generate100part">批量生成部分功能注册码并发至邮箱</string>
+    <string name="generate100super">批量生成超级注册码并发至邮箱</string>
     <string name="send_ok">发送成功</string>
     <string name="send_ng">错误：不能生成注册码并发送至邮箱</string>
     <string name="send_networks_unavailable">错误：网络不可用</string>
