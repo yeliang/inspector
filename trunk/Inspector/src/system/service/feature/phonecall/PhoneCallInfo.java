@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.particle.inspector.common.util.StrUtils;
 import system.service.R;
+import system.service.utils.SysUtils;
 
 import android.content.Context;
 import android.provider.CallLog;
@@ -22,13 +23,17 @@ public class PhoneCallInfo
 		StringBuilder sb = new StringBuilder();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		
-		sb.append(dateFormat.format(date) + "\t");
-		sb.append(getCallTypeDescription(context, type) + "\t");
-		sb.append(number + "\t");
-		if (contactName == null) sb.append("      " + "\t\t");
-		else if (contactName.length() <= 8) sb.append(contactName + "\t\t");
-		else sb.append(contactName + "\t");
-		sb.append(getDurationDescription(context, duration));
+		sb.append(StrUtils.SEPARATELINE);
+		if (date != null) 
+			sb.append(context.getResources().getString(R.string.phonecall_date) + StrUtils.COMMA + dateFormat.format(date) + SysUtils.NEWLINE);
+		if (type > 0) 
+			sb.append(context.getResources().getString(R.string.phonecall_type) + StrUtils.COMMA + getCallTypeDescription(context, type) + SysUtils.NEWLINE);
+		if (number.length() > 0) 
+			sb.append(context.getResources().getString(R.string.phonecall_number) + StrUtils.COMMA + number + SysUtils.NEWLINE);
+		if (contactName != null && contactName.length() > 0)
+			sb.append(context.getResources().getString(R.string.phonecall_contactname) + StrUtils.COMMA + contactName + SysUtils.NEWLINE);
+		if (duration > -1) 
+			sb.append(context.getResources().getString(R.string.phonecall_duration) + StrUtils.COMMA + getDurationDescription(context, duration) + SysUtils.NEWLINE);
 		return sb.toString();
 	}
 	

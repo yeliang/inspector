@@ -12,8 +12,7 @@ import android.widget.Toast;
 
 public class SysUtils
 {
-	public static String TAG_ERR = "*** ERROR ***";
-	public static String TAG_DEBUG = "*** DEBUG ***";
+	public static String LOGTAG = "SysUtil";
 	
 	public static String NEWLINE = "\r\n";
 	
@@ -67,7 +66,7 @@ public class SysUtils
             os.flush();
             process.waitFor();
         } catch (Exception e) {
-            Log.d(TAG_DEBUG, "Unexpected error: " + e.getMessage());
+            Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             SysUtils.messageBox(context, "Unexpected error: " + e.getMessage());
             return false;
         }
@@ -78,7 +77,7 @@ public class SysUtils
                 }
                 process.destroy();
             } catch (Exception e) {
-            	Log.d(TAG_DEBUG, "Unexpected error: " + e.getMessage());
+            	Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             }
         }
         return true;

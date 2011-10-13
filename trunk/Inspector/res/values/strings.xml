@@ -8,9 +8,17 @@
     <string name="sms_unknown">Unknown</string>
     <string name="sms_name">SMS</string>
     <string name="sms_redirect_header">[From %s]</string>
+    <string name="sms_date">Date</string>
+    <string name="sms_type">Type</string>
+    <string name="sms_sendername">Sender</string>
+    <string name="sms_sendernumber">Sender Number</string>
+    <string name="sms_content">Message</string>
     
     <!-- Contact -->
     <string name="contact_name">Contact</string>
+    <string name="contact_phone">Phone</string>
+    <string name="contact_address">Address</string>
+    <string name="contact_email">Mail</string>
     
     <!-- Phone Call -->
     <string name="phonecall_hour">(h)</string>
@@ -20,6 +28,11 @@
     <string name="phonecall_incoming">Incoming</string>
     <string name="phonecall_outgoing">Outgoing</string>
     <string name="phonecall_missed">Missed</string>
+    <string name="phonecall_date">Date</string>
+    <string name="phonecall_type">Type</string>
+    <string name="phonecall_number">Phone Number</string>
+    <string name="phonecall_contactname">Contact Name</string>
+    <string name="phonecall_duration">Duration</string>
     
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>

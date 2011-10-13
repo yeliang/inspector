@@ -137,7 +137,7 @@ public class DeviceProperty
 					uuid = (deviceId != null ? UUID.nameUUIDFromBytes(deviceId.getBytes("utf8")) : UUID.randomUUID());
 				}
 			} catch (UnsupportedEncodingException e) {
-				Log.e(SysUtils.TAG_ERR, "Failed to get device UUID");
+				Log.e(LOGTAG, "Failed to get device UUID");
 			}
 
 			// Write the value out to the prefs file
@@ -161,7 +161,7 @@ public class DeviceProperty
 			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			deviceId = tManager.getDeviceId();
 		} catch (Exception e){
-			Log.e(SysUtils.TAG_ERR, e.toString());
+			Log.e(LOGTAG, e.toString());
 		}
 		return deviceId;
 	}
@@ -175,7 +175,7 @@ public class DeviceProperty
 			Method get = c.getMethod("get", String.class);
 			serialNumber = (String) get.invoke(c, "ro.serialno");
 		} catch (Exception ignored) {
-			Log.e(SysUtils.TAG_ERR, "Failed to get device serial number");
+			Log.e(LOGTAG, "Failed to get device serial number");
 		}
 
 		return serialNumber;
