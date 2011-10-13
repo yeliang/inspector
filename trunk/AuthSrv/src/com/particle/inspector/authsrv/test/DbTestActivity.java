@@ -12,6 +12,7 @@ import com.particle.inspector.authsrv.sqlite.KEY_VALIDATION_RESULT;
 import com.particle.inspector.authsrv.sqlite.metadata.TKey;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -86,7 +87,7 @@ public class DbTestActivity extends Activity
         	{
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
-        		TKey key =  new TKey("TheKey4Test", "TheDeviceID4Test", "ThePhoneNumber4Test", 
+        		TKey key =  new TKey("TheKey4Test", LICENSE_TYPE.FULL_LICENSED, "TheDeviceID4Test", "ThePhoneNumber4Test", 
         				"HTC Desire", "2.3",
         				SysUtils.getUniformDatetimeStr(new Date()), 
         				SysUtils.getUniformDatetimeStr(new Date()));
@@ -131,7 +132,7 @@ public class DbTestActivity extends Activity
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
         		
-				TKey key = new TKey("TheKey4Test", "TheDeviceID4Test", "11122223333",
+				TKey key = new TKey("TheKey4Test", LICENSE_TYPE.FULL_LICENSED, "TheDeviceID4Test", "11122223333",
 						null, "2.1", 
 						null, DatetimeUtil.format.format(new Date()));
 				db.updateByKey(key);

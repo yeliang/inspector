@@ -31,7 +31,8 @@
 	<string name="sql_create_table_key">
 	CREATE TABLE inspector_auth_key(
 		_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-		licensekey varchar[16] NOT NULL, 
+		licensekey varchar[16] NOT NULL,
+		keytype varchar[8],  
 		deviceid varchar[32], 
 		phonenum varchar[16], 
 		phonemodel varchar[16],

@@ -5,8 +5,9 @@
     <string name="lbl_partlicense">Part License: </string>
     <string name="lbl_superlicense">Super License: </string>
     <string name="generate">Generate</string>
-    <string name="generatesuper">Generate Super</string>
-    <string name="generate100">Generate 100 keys and mail</string>
+    <string name="generate100full">Generate 100 full keys and mail</string>
+    <string name="generate100part">Generate 100 part keys and mail</string>
+    <string name="generate100super">Generate 100 super keys and mail</string>
     <string name="send_ok">Mail sent successfully</string>
     <string name="send_ng">ERROR: fail to generate keys and send mail</string>
     <string name="send_networks_unavailable">ERROR: networks unavailable</string>

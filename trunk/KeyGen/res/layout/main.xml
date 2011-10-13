@@ -45,6 +45,7 @@
     />
     
     <Button android:id="@+id/btn_generate" android:text="@string/generate" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
-    <Button android:id="@+id/btn_generatesuper" android:text="@string/generatesuper" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
-    <Button android:id="@+id/btn_generate100" android:text="@string/generate100" android:layout_height="wrap_content" android:layout_width="220dp"></Button>
+    <Button android:id="@+id/btn_generate100full" android:text="@string/generate100full" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
+    <Button android:id="@+id/btn_generate100part" android:text="@string/generate100part" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
+    <Button android:id="@+id/btn_generate100super" android:text="@string/generate100super" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
 </LinearLayout>

@@ -2,10 +2,14 @@ package com.particle.inspector.authsrv.sqlite.metadata;
 
 import java.util.Date;
 
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
+import com.particle.inspector.common.util.license.LicenseCtrl;
+
 public class TKey 
 {
 	private int id;
 	private String key; // The activation key
+	private LICENSE_TYPE keyType;
 	private String deviceID;
 	private String phoneNum;
 	private String phoneModel; // Phone model
@@ -13,10 +17,11 @@ public class TKey
 	private String consumeDate;
 	private String lastActivateDate;
 	
-	public TKey(int id, String key, String deviceID, String phoneNum, String phoneModel, String androidVer,
+	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer,
 			String consumeDate, String lastActivateDate) {
 		if (id >= 0) this.id = id;
 		if (key != null) this.key = key;
+		if (keyType != null) this.keyType = keyType;
 		if (deviceID != null) this.deviceID = deviceID;
 		if (phoneNum != null) this.phoneNum = phoneNum;
 		if (phoneModel != null) this.phoneModel = phoneModel;
@@ -25,9 +30,10 @@ public class TKey
 		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 	
-	public TKey(String key, String deviceID, String phoneNum, String phoneModel, String androidVer,
+	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer,
 			String consumeDate, String lastActivateDate) {
 		if (key != null) this.key = key;
+		if (keyType != null) this.keyType = keyType;
 		if (deviceID != null) this.deviceID = deviceID;
 		if (phoneNum != null) this.phoneNum = phoneNum;
 		if (phoneModel != null) this.phoneModel = phoneModel;
@@ -41,6 +47,8 @@ public class TKey
 	public void setId(int id) {	this.id = id; }
 	public String getKey() { return key; }
 	public void setKey(String key) { this.key = key; }	
+	public LICENSE_TYPE getKeyType() { return keyType; }
+	public void setKeyType(LICENSE_TYPE keyType) { this.keyType = keyType; }	
 	public String getDeviceID() { return deviceID; }
 	public void setDeviceID(String deviceID) { this.deviceID = deviceID; }
 	public String getPhoneNum() { return phoneNum; }
@@ -57,7 +65,8 @@ public class TKey
 	@Override
 	public String toString() {
 		return "Key [id=" + String.valueOf(id) + 
-				 ", key=" + key + 
+				 ", key=" + key +
+			 ", keyType=" + LicenseCtrl.enumToStr(keyType) + 
 		    ", deviceid=" + deviceID +
             ", phonenum=" + phoneNum +
             ", phonemodel=" + phoneModel +

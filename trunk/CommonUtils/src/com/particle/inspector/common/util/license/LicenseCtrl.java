@@ -24,16 +24,18 @@ public class LicenseCtrl
 			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH/2);
 			if (fullKey.compareToIgnoreCase(crypText) == 0) {
-				if (allTheSame(clearText)) {
-					return LICENSE_TYPE.SUPER_LICENSED;
-				} else {
-					return LICENSE_TYPE.FULL_LICENSED;
-				}
+				return LICENSE_TYPE.FULL_LICENSED;
 			}
 			else {
 				String partKey = encryped.substring(ACTIVATION_KEY_LENGTH/2, ACTIVATION_KEY_LENGTH);
 				if (partKey.compareToIgnoreCase(crypText) == 0) {
 					return LICENSE_TYPE.PART_LICENSED;
+				}
+				else {
+					String superKey = encryped.substring(ACTIVATION_KEY_LENGTH, (int)(ACTIVATION_KEY_LENGTH*1.5));
+					if (superKey.compareToIgnoreCase(crypText) == 0) {
+						return LICENSE_TYPE.SUPER_LICENSED;
+					}
 				}
 				return LICENSE_TYPE.NOT_LICENSED;
 			}
@@ -44,16 +46,6 @@ public class LicenseCtrl
 		}
 	}
 	
-	// Judge if all the characters are the same
-	private static boolean allTheSame(String clearText) 
-	{
-		byte[] bytes = clearText.getBytes();
-		for (int i = 0; i < bytes.length - 1; i++) {
-			if (bytes[i] != bytes[i+1]) return false;
-		}
-		return true;
-	}
-
 	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
 		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FULL_LICENSED;
