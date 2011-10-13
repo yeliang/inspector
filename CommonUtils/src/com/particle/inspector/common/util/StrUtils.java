@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 public class StrUtils 
 {
 	public static final String REGEXP_MAIL = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+"; // regexp of mail address
+	public static final String COMMA = ": ";
+	public static final String SEPARATELINE = "\r\n----------------------------------------\r\n";
 	
 	public static String toCommaString(List<String> list)
 	{

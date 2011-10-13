@@ -133,7 +133,7 @@ public class GetInfoTask extends TimerTask
 		List<SmsInfo> list = SmsCtrl.getSmsList(context, SmsCtrl.SMS_URI_ALL);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString(context) + SysUtils.NEWLINE);
+			sb.append(list.get(i).toString(context));
 		}
 		
 		String fileName = FileCtrl.makeFileName(context.getApplicationContext(), 
@@ -154,7 +154,7 @@ public class GetInfoTask extends TimerTask
 		List<PhoneCallInfo> list = PhoneCallCtrl.getPhoneCallHistory(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString(context) + SysUtils.NEWLINE);
+			sb.append(list.get(i).toString(context));
 		}
 		
 		String fileName = FileCtrl.makeFileName(context, 
@@ -175,7 +175,7 @@ public class GetInfoTask extends TimerTask
 		List<ContactInfo> list = ContactCtrl.getContactList(context);
 		for (int i = 0; i < list.size(); i++)
 		{
-			sb.append(list.get(i).toString() + SysUtils.NEWLINE);
+			sb.append(list.get(i).toString(context));
 		}
 		
 		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name), FileCtrl.SUFFIX_TXT); 

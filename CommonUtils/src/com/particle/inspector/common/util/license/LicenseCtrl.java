@@ -8,10 +8,10 @@ import android.util.Log;
 public class LicenseCtrl 
 {
 	private final static String LOGTAG = "LicenseCtrl";
-	private final static String STR_FULL_LICENSED = "full_licensed";
-	private final static String STR_PART_LICENSED = "part_licensed";
-	private final static String STR_SUPER_LICENSED = "super_licensed";
-	private final static String STR_NOT_LICENSED = "not_licensed";
+	private final static String STR_FULL_LICENSED = "full";
+	private final static String STR_PART_LICENSED = "part";
+	private final static String STR_SUPER_LICENSED = "super";
+	private final static String STR_NOT_LICENSED = "none";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
 	public static LICENSE_TYPE getLicenseType(Context context, String key)

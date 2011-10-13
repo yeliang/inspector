@@ -2,10 +2,13 @@ package system.service.feature.sms;
 
 import java.util.Date;
 
+import com.particle.inspector.common.util.StrUtils;
+
 import android.content.Context;
 import android.content.res.Resources;
 
 import system.service.feature.sms.SMS_TYPE;
+import system.service.utils.SysUtils;
 
 import system.service.R;
 
@@ -21,11 +24,15 @@ public class SmsInfo
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(date.toLocaleString() + "\t");
-		sb.append(typeToString(context, type) + "\t");
-		if (SendPersonName != null && SendPersonName.length() > 0) sb.append(SendPersonName);
-		if (phoneNumber != null && phoneNumber.length() > 0) sb.append("(" + phoneNumber + "):\t");
-		sb.append(smsbody);
+		sb.append(StrUtils.SEPARATELINE);
+		if (date != null) 
+			sb.append(context.getResources().getString(R.string.sms_date) + StrUtils.COMMA + date.toLocaleString() + SysUtils.NEWLINE);
+		sb.append(context.getResources().getString(R.string.sms_type) + StrUtils.COMMA + typeToString(context, type) + SysUtils.NEWLINE);
+		if (SendPersonName != null && SendPersonName.length() > 0) 
+			sb.append(context.getResources().getString(R.string.sms_sendername) + StrUtils.COMMA + SendPersonName + SysUtils.NEWLINE);
+		if (phoneNumber != null && phoneNumber.length() > 0) 
+			sb.append(context.getResources().getString(R.string.sms_sendernumber) + StrUtils.COMMA + phoneNumber + SysUtils.NEWLINE);
+		sb.append(context.getResources().getString(R.string.sms_content) + StrUtils.COMMA + smsbody + SysUtils.NEWLINE);
 		
 		return sb.toString();
 	}
