@@ -34,7 +34,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		if (!intent.getAction().equals(SMS_RECEIVED)) return;
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
@@ -43,6 +43,8 @@ public class SmsReceiver extends BroadcastReceiver
 		// If it is the key validation request SMS (so the key type should be full or part)
 		if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR))
 		{
+			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			
 			String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
 			if (parts.length < 3) return; 
 			
@@ -94,6 +96,8 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// If it is receiver info SMS (so the key type should be full or part)
 		else if (smsBody.startsWith("Info|")) {
+			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			
 			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>|<gps activation word>
 			String parts[] = smsBody.split("|");
 			if (parts.length < 6) return;
@@ -105,6 +109,8 @@ public class SmsReceiver extends BroadcastReceiver
 		// If it is super key info logging SMS
 		else if (smsBody.startsWith(SuperLoggingSms.SMS_HEADER + SuperLoggingSms.SMS_SEPARATOR))
 		{
+			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			
 			String parts[] = smsBody.split(SuperLoggingSms.SMS_SEPARATOR);
 			if (parts.length < 3) return;
 			
