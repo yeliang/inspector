@@ -31,7 +31,6 @@ public class GpsUtil
         try {
         	return locationManager.getLastKnownLocation(provider);
         } catch (Exception ex) {
-        	
         	Log.e(LOGTAG, ex.getMessage());
         	return null;
         }

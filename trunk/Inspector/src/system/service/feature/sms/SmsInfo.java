@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import system.service.feature.sms.SMS_TYPE;
-import system.service.utils.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import system.service.R;
 
