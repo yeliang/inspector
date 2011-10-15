@@ -55,7 +55,7 @@ public class AuthSms
 		if (type == AUTH_SMS_TYPE.CLIENT) {
 			if (parts.length >= 3) {
 				this.header = parts[0].trim();
-				this.key = parts[1].trim();
+				this.key = parts[1].toUpperCase().trim();
 				this.lang = LangUtil.str2enum(parts[2]);
 			}
 			if (parts.length >= 4) {
