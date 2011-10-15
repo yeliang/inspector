@@ -112,11 +112,10 @@ public class InitActivity extends Activity
    	 		}
 	    }
 	    
-    	//if (resultCode == RESULT_OK) 
+    	if (resultCode == RESULT_OK) 
     	{
     		// Send the receiver info SMS to server to update record in database
-			//boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
-			boolean hasChangedReceiverInfo = GlobalPrefActivity.RECEIVER_INFO_CHANGED;
+			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
 			boolean hasBeenLicensed = (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED);
 			if (hasChangedReceiverInfo && hasBeenLicensed) {
 				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
@@ -216,9 +215,9 @@ public class InitActivity extends Activity
             public void onClick(View v)
             {
             	Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
-            	//Bundle bundle = new Bundle();
-            	//bundle.putBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO, false);
-            	//intent.putExtras(bundle);
+            	Bundle bundle = new Bundle();
+            	bundle.putBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO, false);
+            	intent.putExtras(bundle);
             	startActivityForResult(intent, R.layout.init);
             }
         };
