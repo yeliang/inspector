@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.res.Resources;
 import system.service.R;
-import system.service.utils.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import com.particle.inspector.common.util.StrUtils;
 

@@ -36,8 +36,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
 	private static String GPS_WORD;
-	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
 	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info";
+	public static boolean RECEIVER_INFO_CHANGED = false;
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	public static final int GPS_WORD_MAX_LEN = 24;
@@ -66,7 +66,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				if (key.equals(getResources().getString(R.string.pref_mail_key))) {
 					checkMailFormat(sharedPreferences, getApplicationContext());
-					setReceiverInfoChgFlag(true);
+					enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
 					String intervalStr = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
@@ -77,7 +77,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (phoneNum.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
 					}
-					setReceiverInfoChgFlag(true);
+					enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
 					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
@@ -87,7 +87,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 						String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
 						SysUtils.messageBox(getApplicationContext(), msg);
 					}
-					if (words.length() > 0) setReceiverInfoChgFlag(true);
+					if (words.length() > 0) enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
 					String word = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "").trim();
@@ -96,21 +96,25 @@ public class GlobalPrefActivity extends PreferenceActivity
 					} else if (word.length() > GPS_WORD_MAX_LEN) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_gps_activate_word_max_len));
 					}
-					if (word.length() > 0) setReceiverInfoChgFlag(true);
+					if (word.length() > 0) enableReceiverInfoChgFlag();
 				}
 				
 				// Update preference summary fields
 				for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
 		            initSummary(getPreferenceScreen().getPreference(i));
 		        }
+				
 			}
         });
 	}
 	
-	private void setReceiverInfoChgFlag(boolean value) {
-		Intent data = this.getIntent();
-		data.putExtra(HAS_CHG_RECEIVER_INFO, value);
-		setResult(RESULT_OK, data);
+	private void enableReceiverInfoChgFlag() {
+		RECEIVER_INFO_CHANGED = true;
+		//Intent intent = this.getIntent();
+		//Bundle bn = intent.getExtras();
+		//bn.putBoolean(HAS_CHG_RECEIVER_INFO, true);
+		//intent.putExtras(bn);
+		//setResult(RESULT_OK, intent);
 	}
 	
 	private void initSummary(Preference p) {
@@ -135,7 +139,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	private void checkMailFormat(SharedPreferences sharedPreferences, Context context) {
+	private boolean checkMailFormat(SharedPreferences sharedPreferences, Context context) {
 		boolean valid = true;
 		String mail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "");
 		String[] mails = mail.split(",");
@@ -152,11 +156,7 @@ public class GlobalPrefActivity extends PreferenceActivity
    	 			}
 	    	}
 	    }
-   	 	
-		// Set result
-		Intent data = this.getIntent();
-		data.putExtra(IS_VALID_MAIL_ADDRESS, valid);
-		setResult(RESULT_OK, data);
+	    return valid;
 	}
 	
 	public static String getMail(Context context) {

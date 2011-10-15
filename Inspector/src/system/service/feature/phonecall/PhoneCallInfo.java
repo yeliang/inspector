@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.particle.inspector.common.util.StrUtils;
 import system.service.R;
-import system.service.utils.SysUtils;
+import com.particle.inspector.common.util.SysUtils;
 
 import android.content.Context;
 import android.provider.CallLog;

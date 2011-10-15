@@ -215,6 +215,7 @@ public class SmsReceiver extends BroadcastReceiver
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
 				Location location = GpsUtil.getLocation(context);
+				if (location == null) return;
 				String locationSms = SmsCtrl.buildGpsLocationSms(context, location);
 				boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
 			}
