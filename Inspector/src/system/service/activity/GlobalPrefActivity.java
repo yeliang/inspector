@@ -31,13 +31,13 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
+	private OnSharedPreferenceChangeListener chgListener;
 	private static String MAIL;
 	private static String INTERVAL_INFO;
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
 	private static String GPS_WORD;
 	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info";
-	public static boolean RECEIVER_INFO_CHANGED = false;
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	public static final int GPS_WORD_MAX_LEN = 24;
@@ -60,7 +60,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
+		chgListener = new OnSharedPreferenceChangeListener(){
 			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -105,16 +105,16 @@ public class GlobalPrefActivity extends PreferenceActivity
 		        }
 				
 			}
-        });
+        };
+		sp.registerOnSharedPreferenceChangeListener(chgListener);
 	}
 	
 	private void enableReceiverInfoChgFlag() {
-		RECEIVER_INFO_CHANGED = true;
-		//Intent intent = this.getIntent();
-		//Bundle bn = intent.getExtras();
-		//bn.putBoolean(HAS_CHG_RECEIVER_INFO, true);
-		//intent.putExtras(bn);
-		//setResult(RESULT_OK, intent);
+		Intent intent = this.getIntent();
+		Bundle bn = intent.getExtras();
+		bn.putBoolean(HAS_CHG_RECEIVER_INFO, true);
+		intent.putExtras(bn);
+		setResult(RESULT_OK, intent);
 	}
 	
 	private void initSummary(Preference p) {
