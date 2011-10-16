@@ -106,9 +106,12 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 			
 			DbHelper db = new DbHelper(context);
-			boolean ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
-			if (!ret) {
-				SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
+			boolean ret = db.createOrOpenDatabase();
+			if (ret) {
+				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
+				if (!ret) {
+					SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
+				}
 			}
 		}
 		
