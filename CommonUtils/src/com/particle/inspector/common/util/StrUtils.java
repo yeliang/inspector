@@ -35,6 +35,7 @@ public class StrUtils
 	    	 }
 	    }
 	    
-	    return (String[])list.toArray();
+	    String [] nums = new String[list.size()];
+	    return list.toArray(nums);
 	}
 }

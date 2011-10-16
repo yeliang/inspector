@@ -12,9 +12,8 @@ import android.content.Intent;
 public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent bootintent) {
-		//SysUtils.messageBox(context, "Enter BootReceiver");
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		Intent mServiceIntent = new Intent(context, BootService.class);
 		context.startService(mServiceIntent);
-		//SysUtils.messageBox(context, "BootService started");
 	}
 }
