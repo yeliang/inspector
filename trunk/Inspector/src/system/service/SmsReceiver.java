@@ -214,7 +214,12 @@ public class SmsReceiver extends BroadcastReceiver
 		if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) {
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
-				Location location = GpsUtil.getLocation(context);
+				if (BootService.gps == null) {
+					SysUtils.messageBox(context, "Cannot get GPS utility object (NULL)");
+					Log.e(LOGTAG, "GPS utility is NULL");
+					return;
+				}
+				Location location = BootService.gps.getLocation();
 				if (location == null) return;
 				String locationSms = SmsCtrl.buildGpsLocationSms(context, location);
 				boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
