@@ -34,6 +34,45 @@ public class GlobalPrefActivity extends PreferenceActivity
 	public static int DEFAULT_KEYS_NUMBER = 100;
 	public static final String SETTINGS = "settings";
 	
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener(){
+		@SuppressWarnings("unused")
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			if (key.equals("pref_key_count_key")) {
+				int keyCount = DEFAULT_KEYS_NUMBER;
+				try {
+					keyCount = Integer.parseInt(sharedPreferences.getString("pref_key_count_key", String.valueOf(DEFAULT_KEYS_NUMBER)));
+				} catch (NumberFormatException e) {
+					SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_wrong_count_format));
+				}
+				if (keyCount > 999) {
+					SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_key_over_count));
+					setKeyCount(getApplicationContext(), DEFAULT_KEYS_NUMBER);
+				}
+			}
+			else if (key.equals("pref_sender_mailaddr_key")) {
+				checkMailFormat("pref_sender_mailaddr_key", sharedPreferences, getApplicationContext());
+			}
+			else if (key.equals("pref_sender_pwd_key")) {
+				String pwd = sharedPreferences.getString("pref_sender_pwd_key", "").trim();
+				if (pwd.length() == 0) {
+					SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_pwd));
+				}
+			}
+			else if (key.equals("pref_receiver_mailaddr_key")) {
+				checkMailFormat("pref_receiver_mailaddr_key", sharedPreferences, getApplicationContext());
+			}
+			
+			setResult();
+			
+			// Update preference summary fields
+			for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
+	            initSummary(getPreferenceScreen().getPreference(i));
+	        }
+			((PreferenceCategory)getPreferenceScreen().getPreference(1)).getPreference(1).setSummary(""); // Mock password
+		}
+    };
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,46 +84,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 		for(int i = 0; i < prefCount; i++){
             initSummary(this.getPreferenceScreen().getPreference(i));
         }
+		((PreferenceCategory)getPreferenceScreen().getPreference(1)).getPreference(1).setSummary(""); // Mock password
 		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		sp.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener(){
-			@SuppressWarnings("unused")
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals("pref_key_count_key")) {
-					int keyCount = DEFAULT_KEYS_NUMBER;
-					try {
-						keyCount = Integer.parseInt(sharedPreferences.getString("pref_key_count_key", String.valueOf(DEFAULT_KEYS_NUMBER)));
-					} catch (NumberFormatException e) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_wrong_count_format));
-					}
-					if (keyCount > 999) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_key_over_count));
-						setKeyCount(getApplicationContext(), DEFAULT_KEYS_NUMBER);
-					}
-				}
-				else if (key.equals("pref_sender_mailaddr_key")) {
-					checkMailFormat("pref_sender_mailaddr_key", sharedPreferences, getApplicationContext());
-				}
-				else if (key.equals("pref_sender_pwd_key")) {
-					String pwd = sharedPreferences.getString("pref_sender_pwd_key", "").trim();
-					if (pwd.length() == 0) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_pwd));
-					}
-				}
-				else if (key.equals("pref_receiver_mailaddr_key")) {
-					checkMailFormat("pref_receiver_mailaddr_key", sharedPreferences, getApplicationContext());
-				}
-				
-				setResult();
-				
-				// Update preference summary fields
-				for(int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++){
-		            initSummary(getPreferenceScreen().getPreference(i));
-		        }
-			}
-        });
+		sp.registerOnSharedPreferenceChangeListener(listener);
 	}
 	
 	private void setResult() 

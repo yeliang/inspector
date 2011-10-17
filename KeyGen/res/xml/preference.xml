@@ -6,7 +6,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:key="pref_category_sender_key" android:title="@string/pref_category_sender_title">
     	<EditTextPreference android:title="@string/pref_sender_mailaddr_title" android:key="pref_sender_mailaddr_key" />
-    	<EditTextPreference android:title="@string/pref_sender_pwd_title" android:key="pref_sender_pwd_key" />
+    	<EditTextPreference android:title="@string/pref_sender_pwd_title" android:key="pref_sender_pwd_key" android:inputType="textPassword"/>
     </PreferenceCategory>
     <PreferenceCategory android:key="pref_category_receiver_key" android:title="@string/pref_category_receiver_title">
     	<EditTextPreference android:title="@string/pref_receiver_mailaddr_title" android:key="pref_receiver_mailaddr_key" />

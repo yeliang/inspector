@@ -12,6 +12,7 @@ import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,9 +57,11 @@ public class KeyGen extends Activity
 	private final int GENERATE100_EXCEPTION   = 8;
 	
 	private String strMobile;
-	private EditText editor = new EditText(context);
+	private EditText editor;
 	
 	private ProgressDialog progressDialog;
+
+	private TextView textField;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,21 +82,7 @@ public class KeyGen extends Activity
         btnGenerate.setOnClickListener(new OnClickListener() {
         	public void onClick(View v)
         	{
-        		try {
-        			long seed = Math.abs((new Random()).nextLong());
-        			String hex = Long.toHexString(seed);
-        			String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
-        			String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
-        			String full = clearText + longKey.substring(0, KEY_LENGTH/2);
-        			String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
-        			String cuper = clearText + longKey.substring(KEY_LENGTH, (int)(KEY_LENGTH*1.5));
-        			
-        			fullLicense.setText(full);
-        			partLicense.setText(part);
-        			superLicense.setText(cuper);
-        		} catch (Exception e) {
-        			Log.e(LOGTAG, e.getMessage());
-        		}
+        		clickGenerateBtn();
         	}
         });
         
@@ -311,6 +300,8 @@ public class KeyGen extends Activity
         	}
         });
         
+        // Execute one click on Generate button on initialization
+        clickGenerateBtn();
     }
     
     @Override
@@ -352,18 +343,22 @@ public class KeyGen extends Activity
             btnGenerate100part.setEnabled(false);
             btnGenerate100super.setEnabled(false);
         }
+        
 	}
     
-    private boolean sendSms(TextView textField) 
+    private void sendSms(TextView textField) 
     {
 		if (textField.getText().toString().length() == 0) {
 			SysUtils.messageBox(context, getResources().getString(R.string.pls_gen_key_firstly));
-			return false;
+			return;
 		}
+		
+		this.textField = textField;
 		
 		// Pop up dialog for inputing target mobile number 
 		strMobile = "";
-		new  AlertDialog.Builder(context)
+		editor = new EditText(context);
+		Builder dlg = new AlertDialog.Builder(KeyGen.this)
 				.setTitle(getResources().getString(R.string.input_title))  
 				.setIcon(android.R.drawable.ic_dialog_info)  
 				.setView(editor)  
@@ -371,14 +366,24 @@ public class KeyGen extends Activity
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialoginterface, int i){
 							strMobile = editor.getText().toString();
+							if (strMobile.length() == 0) return;
+							boolean ret = SmsCtrl.sendSms(strMobile, KeyGen.this.textField.getText().toString());
+							if (ret) {
+								SysUtils.messageBox(context, getResources().getString(R.string.send_ok));
+							} else {
+								SysUtils.messageBox(context, getResources().getString(R.string.send_ng));
+							}
 						}
 					}
 				)  
-				.setNegativeButton(getResources().getString(R.string.input_cancel),  null )  
-				.show();
-		
-		if (strMobile.length() == 0) return false;
-		return SmsCtrl.sendSms(strMobile, textField.getText().toString());
+				.setNegativeButton(getResources().getString(R.string.input_cancel), 
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialoginterface, int i){
+						
+						}
+					}
+				); 
+		dlg.show();
     }
 
 	// Update UI 
@@ -417,12 +422,12 @@ public class KeyGen extends Activity
                }
                case GENERATE100_NG: {
             	   progressDialog.dismiss();
-            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng));
+            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng_ex));
             	   break;
                }
                case GENERATE100_EXCEPTION: {
             	   progressDialog.dismiss();
-            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng) + "\r\n" + exceptionMsg);
+            	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng_ex) + "\r\n" + exceptionMsg);
             	   break;
                }
                default:
@@ -430,5 +435,23 @@ public class KeyGen extends Activity
             }
          }
      };
+     
+     private void clickGenerateBtn() {
+    	 try {
+ 			long seed = Math.abs((new Random()).nextLong());
+ 			String hex = Long.toHexString(seed);
+ 			String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
+ 			String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+ 			String full = clearText + longKey.substring(0, KEY_LENGTH/2);
+ 			String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
+ 			String cuper = clearText + longKey.substring(KEY_LENGTH, (int)(KEY_LENGTH*1.5));
+ 			
+ 			fullLicense.setText(full);
+ 			partLicense.setText(part);
+ 			superLicense.setText(cuper);
+ 		} catch (Exception e) {
+ 			Log.e(LOGTAG, e.getMessage());
+ 		}
+     }
     
 }

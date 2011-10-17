@@ -10,14 +10,15 @@
     <string name="generate100part">Generate 100 part keys and mail</string>
     <string name="generate100super">Generate 100 super keys and mail</string>
     <string name="setting">Setting</string>
-    <string name="send_ok">Mail sent successfully</string>
-    <string name="send_ng">ERROR: fail to generate keys and send mail</string>
+    <string name="send_ok">Sent successfully</string>
+    <string name="send_ng">Sent failed</string>
+    <string name="send_ng_ex">ERROR: fail to generate keys and send mail</string>
     <string name="send_networks_unavailable">ERROR: networks unavailable</string>
     <string name="pref_title">Preferences</string>
     <string name="pref_category_fuction_title">Function</string>
     <string name="pref_key_count_title">Key Count</string>
     <string name="pref_category_sender_title">Sender</string>
-    <string name="pref_sender_mailaddr_title">Mail Address</string>
+    <string name="pref_sender_mailaddr_title">Mail Address(GMail ONLY)</string>
     <string name="pref_sender_pwd_title">Password</string>
     <string name="pref_category_receiver_title">Receiver</string>
     <string name="pref_receiver_mailaddr_title">Mail Address</string>
@@ -25,7 +26,7 @@
     <string name="pref_key_over_count">Key count should be no more than 999.</string>
     <string name="pref_wrong_count_format">ERROR: wrong format of number.</string>
     <string name="pref_pls_input_pwd">Please input password.</string>
-    <string name="input_title">Please input</string>
+    <string name="input_title">Please input mobile number</string>
     <string name="input_ok">OK</string>
     <string name="input_cancel">Cancel</string>
     <string name="pls_gen_key_firstly">Please generate key firstly</string>
