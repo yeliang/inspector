@@ -69,7 +69,7 @@ public class GetInfoTask extends TimerTask
 		// Firstly we should make sure the time range ( > days that user set)
 		Date lastDatetime = null;
 		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
-		if (lastDatetimeStr.length() > 0) {
+		if (lastDatetimeStr != null && lastDatetimeStr.length() > 0) {
 			try {
 				lastDatetime = DatetimeUtil.format.parse(lastDatetimeStr);
 			} catch (Exception ex) {}
