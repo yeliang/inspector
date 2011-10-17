@@ -5,6 +5,7 @@
     <string name="lbl_partlicense">注册码（部分功能）：</string>
     <string name="lbl_superlicense">超级注册码（不限量部署）：</string>
     <string name="generate">生成注册码</string>
+    <string name="sendsms">发送短信</string>
     <string name="generate100full">批量生成全功能注册码并发至邮箱</string>
     <string name="generate100part">批量生成部分功能注册码并发至邮箱</string>
     <string name="generate100super">批量生成超级注册码并发至邮箱</string>
@@ -24,4 +25,8 @@
     <string name="pref_key_over_count">警告：批量生成个数不得大于999。</string>
     <string name="pref_wrong_count_format">警告：输入的数量格式不正确。</string>
     <string name="pref_pls_input_pwd">请填写密码。</string>
+    <string name="input_title">请输入</string>
+    <string name="input_ok">确定</string>
+    <string name="input_cancel">取消</string>
+    <string name="pls_gen_key_firstly">请先生成注册码</string>
 </resources>
