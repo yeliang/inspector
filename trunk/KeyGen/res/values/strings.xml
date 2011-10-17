@@ -29,4 +29,6 @@
     <string name="input_ok">OK</string>
     <string name="input_cancel">Cancel</string>
     <string name="pls_gen_key_firstly">Please generate key firstly</string>
+    <string name="processing">Processing...</string>
+    <string name="waiting">Please waiting...</string>
 </resources>

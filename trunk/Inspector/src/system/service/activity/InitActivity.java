@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ public class InitActivity extends Activity
 {
     protected static final String LOGTAG = "InitActivity";
     
+    private final static int DEFAULT_RETRY_COUNT = 9;
+    
 	Button btn_getinfo;
     Button btn_screenshot;
     Button btn_setting;
@@ -51,6 +54,8 @@ public class InitActivity extends Activity
     OnClickListener listener_hide = null;
     
     private Context context;
+    
+    private ProgressDialog progressDialog;
     
     private final int DISABLE_GETINFO_BTN = 0;
     private final int ENABLE_GETINFO_BTN  = 1;
@@ -129,6 +134,9 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
+            	progressDialog = ProgressDialog.show(InitActivity.this, getResources().getString(R.string.init_processing), 
+            			getResources().getString(R.string.init_waiting), true, false);
+            	
             	// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){
     				public void run() {
@@ -149,6 +157,9 @@ public class InitActivity extends Activity
         		
     					// If network connected, try to collect and send the information
     					if (!SysUtils.isNetworkConnected(context)) {
+    						// Clean the files in SD-CARD
+        					FileCtrl.cleanFolder();
+        					
     						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     						return;
@@ -172,7 +183,7 @@ public class InitActivity extends Activity
     					String pwd = MailCfg.getSenderPwd(context);
         		
     					boolean result = false;
-    					int retry = 3;
+    					int retry = DEFAULT_RETRY_COUNT;
     					while(!result && retry > 0)
     					{
     						String sender = MailCfg.getSender(context);
@@ -246,14 +257,17 @@ public class InitActivity extends Activity
               	   break;
                }
                case NETWORK_DISCONNECTED: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(context, getResources().getString(R.string.action_network_disconnected));
             	   break;
                }
                case SEND_MAIL_SUCCESS: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_success));
             	   break;
                }
                case SEND_MAIL_FAIL: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
             	   break;
                }

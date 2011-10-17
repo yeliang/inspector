@@ -85,7 +85,7 @@ public class SysUtils
         return true;
     }
 	
-	public static void ThreadSleep(long time, String tag)
+	public static void threadSleep(long time, String tag)
 	{
 		try {
 			Thread.sleep(time);
