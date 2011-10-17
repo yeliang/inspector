@@ -48,9 +48,9 @@ public class LicenseCtrl
 	
 	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
-		if (typeStr == STR_FULL_LICENSED) return LICENSE_TYPE.FULL_LICENSED;
-		else if (typeStr == STR_PART_LICENSED) return LICENSE_TYPE.PART_LICENSED;
-		else if (typeStr == STR_SUPER_LICENSED) return LICENSE_TYPE.SUPER_LICENSED;
+		if (typeStr.equals(STR_FULL_LICENSED)) return LICENSE_TYPE.FULL_LICENSED;
+		else if (typeStr.equals(STR_PART_LICENSED)) return LICENSE_TYPE.PART_LICENSED;
+		else if (typeStr.equals(STR_SUPER_LICENSED)) return LICENSE_TYPE.SUPER_LICENSED;
 		else return LICENSE_TYPE.NOT_LICENSED;
 	}
 	

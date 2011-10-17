@@ -64,21 +64,15 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
 		
-		//SysUtils.messageBox(getApplicationContext(), "BootService onCreate() entered");
-		
 		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(getApplicationContext());
 		
-		//SysUtils.messageBox(getApplicationContext(), "GetInfoTask created");
-		
 		//mScreenshotTimer = new Timer();
 		//mCapTask = new CaptureTask(this);
 		
 		gps = new GpsUtil(getApplicationContext());
-		
-		//SysUtils.messageBox(getApplicationContext(), "BootService onCreate() exit");
 	}
 
 	@Override
