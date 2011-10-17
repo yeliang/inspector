@@ -5,6 +5,7 @@
     <string name="lbl_partlicense">Part License: </string>
     <string name="lbl_superlicense">Super License: </string>
     <string name="generate">Generate</string>
+    <string name="sendsms">Send SMS</string>
     <string name="generate100full">Generate 100 full keys and mail</string>
     <string name="generate100part">Generate 100 part keys and mail</string>
     <string name="generate100super">Generate 100 super keys and mail</string>
@@ -24,4 +25,8 @@
     <string name="pref_key_over_count">Key count should be no more than 999.</string>
     <string name="pref_wrong_count_format">ERROR: wrong format of number.</string>
     <string name="pref_pls_input_pwd">Please input password.</string>
+    <string name="input_title">Please input</string>
+    <string name="input_ok">OK</string>
+    <string name="input_cancel">Cancel</string>
+    <string name="pls_gen_key_firstly">Please generate key firstly</string>
 </resources>
