@@ -1,5 +1,7 @@
 package com.particle.inspector.common.util.gps;
 
+import com.particle.inspector.common.util.SysUtils;
+
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -11,8 +13,9 @@ import android.util.Log;
 public class GpsUtil 
 {
 	private static final String LOGTAG = "GpsUtil";
-	private static final int DEFAULT_INTERVAL = 180000; // 180000ms = 3min
+	private static final int DEFAULT_INTERVAL = 60000; // 60000ms = 1min
 	private static final float DEFAULT_DISTANCE = 100; // meter
+	private static final int DEFAULT_TRY_COUNT = 100;
 	
 	private LocationManager locationManager;
 	
@@ -67,9 +70,17 @@ public class GpsUtil
 		
         try {
         	//return this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        	return locationManager.getLastKnownLocation(bestProvider);
-        	//if (loc == null)
-        	//	return locationManager.getLastKnownLocation(provider);
+        	Location loc = null;
+        	int tryCount = 0;
+        	while (loc == null && tryCount < DEFAULT_TRY_COUNT) {
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
+        		SysUtils.threadSleep(200, LOGTAG);
+        		loc = locationManager.getLastKnownLocation(bestProvider);
+        		tryCount++;
+        	}
+        	return loc;
+        	
+        	//return locationManager.getLastKnownLocation(provider);
         	
         } catch (Exception ex) {
         	Log.e(LOGTAG, ex.getMessage());

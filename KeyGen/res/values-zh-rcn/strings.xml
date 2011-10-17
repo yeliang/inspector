@@ -29,4 +29,6 @@
     <string name="input_ok">确定</string>
     <string name="input_cancel">取消</string>
     <string name="pls_gen_key_firstly">请先生成注册码</string>
+    <string name="processing">处理中</string>
+    <string name="waiting">请等一会儿</string>
 </resources>

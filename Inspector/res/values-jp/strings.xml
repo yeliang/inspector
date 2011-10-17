@@ -76,6 +76,8 @@
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
     <string name="init_hint_setting">Set mail address, interval, mobile phone number and sensitive words.</string>
     <string name="init_hint_hide">Exit current setting dialog. This dialog can be triggered only by sending a SMS (the content is the key) to this mobile phone.</string>
+  	<string name="init_processing">処理中</string>
+    <string name="init_waiting">お待ちください</string>
   
     <!-- Actions -->
     <string name="action_send_mail_success">送信成功</string>

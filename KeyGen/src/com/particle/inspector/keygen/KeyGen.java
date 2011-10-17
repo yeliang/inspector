@@ -12,6 +12,7 @@ import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,6 +57,8 @@ public class KeyGen extends Activity
 	
 	private String strMobile;
 	private EditText editor = new EditText(context);
+	
+	private ProgressDialog progressDialog;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,9 @@ public class KeyGen extends Activity
     				return;
     			}
     			
+    			progressDialog = ProgressDialog.show(KeyGen.this, getResources().getString(R.string.processing), 
+            			getResources().getString(R.string.waiting), true, false); 
+    			
     			context = v.getContext();
         		
     			// Start a new thread to do the time-consuming job
@@ -186,6 +192,9 @@ public class KeyGen extends Activity
     				return;
     			}
     			
+    			progressDialog = ProgressDialog.show(KeyGen.this, getResources().getString(R.string.processing), 
+            			getResources().getString(R.string.waiting), true, false); 
+    			
     			context = v.getContext();
         		
     			// Start a new thread to do the time-consuming job
@@ -246,6 +255,9 @@ public class KeyGen extends Activity
     				SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_networks_unavailable));
     				return;
     			}
+    			
+    			progressDialog = ProgressDialog.show(KeyGen.this, getResources().getString(R.string.processing), 
+            			getResources().getString(R.string.waiting), true, false); 
     			
     			context = v.getContext();
         		
@@ -399,14 +411,17 @@ public class KeyGen extends Activity
             	   break;
                }
                case GENERATE100_OK: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(context, getResources().getString(R.string.send_ok));
             	   break;
                }
                case GENERATE100_NG: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng));
             	   break;
                }
                case GENERATE100_EXCEPTION: {
+            	   progressDialog.dismiss();
             	   SysUtils.messageBox(context, getResources().getString(R.string.send_ng) + "\r\n" + exceptionMsg);
             	   break;
                }

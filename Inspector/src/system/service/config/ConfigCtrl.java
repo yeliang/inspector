@@ -23,7 +23,7 @@ public class ConfigCtrl
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_ACTIVATED_DATETIME = "LastActivatedDatetime"; // The last activation datetime
-	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime";
+	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	
 	public static boolean set(Context context, String key, String value)
