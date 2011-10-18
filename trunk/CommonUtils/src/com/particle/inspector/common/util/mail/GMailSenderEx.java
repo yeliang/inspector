@@ -24,6 +24,7 @@ import javax.mail.internet.MimeMultipart;
  */
 public class GMailSenderEx extends javax.mail.Authenticator 
 { 
+  public static final String DEFAULT_SENDER = "androidinspector@gmail.com";
   private String _user; 
   private String _pass; 
  
