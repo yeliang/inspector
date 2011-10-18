@@ -67,6 +67,8 @@
     <string name="pref_activate_word_summary">发送包含有该词或短句的短信到目标手机可获知其GPS位置。接收手机号同接收短信转发手机号。</string>
     <string name="pref_pls_input_gps_activate_word">请输入一个特殊词或短句作为GPS激活词（比如：你在哪儿）。</string>
     <string name="pref_gps_activate_word_max_len">最大长度不能超过12个汉字或24个英数字符。</string>
+    <string name="pref_show_sms">显示短信</string>
+    <string name="pref_show_sms_summary">是否显示包含GPS激活词的短信</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">立即获取信息</string>

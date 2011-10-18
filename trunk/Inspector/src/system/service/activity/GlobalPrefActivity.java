@@ -209,4 +209,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GPS_WORD, value).commit();
 	}
 	
+	public static boolean getDisplayGpsSMS(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_gps_show_sms", true);
+	}
+	
+	public static void setDisplayGpsWord(Context context, boolean value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_gps_show_sms", value).commit();
+	}
+	
 }

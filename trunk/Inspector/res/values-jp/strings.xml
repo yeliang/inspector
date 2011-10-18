@@ -62,10 +62,12 @@
     <string name="pref_pls_input_sensitive_words">敏感言葉をご入力ください（ブランクスペース区切）</string>
     <string name="pref_sensitive_words_count_reach_max">最大%d個敏感言葉入力可。その以外は無視。再度編集ください。</string>
     <string name="pref_activate_word_key">pref_activate_word</string>
-    <string name="pref_activate_word_title">活発言葉</string>
+    <string name="pref_activate_word_title">GPS言葉</string>
     <string name="pref_activate_word_summary">この言葉を含めるSMSを送信してGPS位置取得できる。</string>
     <string name="pref_pls_input_gps_activate_word">一つの言葉を入力ください。</string>
     <string name="pref_gps_activate_word_max_len">最長12個漢字や24英数字設定可。</string>
+    <string name="pref_show_sms">SMSを見せる</string>
+    <string name="pref_show_sms_summary">GPS言葉を含めるSMSを見せる</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">情報取得</string>

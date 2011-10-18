@@ -212,6 +212,10 @@ public class SmsReceiver extends BroadcastReceiver
 		// Send GPS position if being triggered by GPS activation word
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
 		if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) {
+			if (!GlobalPrefActivity.getDisplayGpsSMS(context)) {
+				abortBroadcast();
+			}
+			
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
 				if (BootService.gps == null) {

