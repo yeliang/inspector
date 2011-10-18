@@ -148,7 +148,7 @@ public class KeyGen extends Activity
     	        			
     	        			// Send mail
     	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom("system@gmail.com");
+    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " full keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());
@@ -212,7 +212,7 @@ public class KeyGen extends Activity
     	        			
     	        			// Send mail
     	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom("system@gmail.com");
+    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " part keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());
@@ -276,7 +276,7 @@ public class KeyGen extends Activity
     	        			
     	        			// Send mail
     	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom("system@gmail.com");
+    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " super keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());
