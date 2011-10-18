@@ -13,7 +13,7 @@ import android.util.Log;
 public class GpsUtil 
 {
 	private static final String LOGTAG = "GpsUtil";
-	private static final int DEFAULT_INTERVAL = 60000; // 60000ms = 1min
+	private static final int DEFAULT_INTERVAL = 2000; // ms
 	private static final float DEFAULT_DISTANCE = 100; // meter
 	private static final int DEFAULT_TRY_COUNT = 100;
 	
