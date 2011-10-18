@@ -106,10 +106,6 @@ public class GetInfoTask extends TimerTask
 	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
 	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
 		String body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
-		List<String> fileList = new ArrayList<String>();
-		for (int i = 0; i < attachments.size(); i++)
-			fileList.add(attachments.get(i).getAbsolutePath());
-		
 		String[] recipients = getRecipients(context);
 		String pwd = MailCfg.getSenderPwd(context);
 		
@@ -118,7 +114,7 @@ public class GetInfoTask extends TimerTask
 		while(!result && retry > 0)
 		{
 			String sender = MailCfg.getSender(context);
-			result = sendMail(subject, body, sender, pwd, recipients, fileList);
+			result = sendMail(subject, body, sender, pwd, recipients, attachments);
 			if (!result) retry--;
 		}
 		attachments.clear();
@@ -195,7 +191,7 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 	
-	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<String> files)
+	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<File> files)
 	{
 		boolean ret = false;
 
@@ -207,7 +203,7 @@ public class GetInfoTask extends TimerTask
             gmailSender.setBody(body);
             
             for(int i = 0; i < files.size(); i++)
-            	gmailSender.addAttachment(files.get(i));//e.g. "/sdcard/filelocation"
+            	gmailSender.addAttachment(files.get(i));
             
             ret = gmailSender.send();
         } catch (Exception e) {   

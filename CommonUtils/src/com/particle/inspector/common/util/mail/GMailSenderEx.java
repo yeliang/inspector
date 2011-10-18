@@ -1,5 +1,6 @@
 package com.particle.inspector.common.util.mail;
 
+import java.io.File;
 import java.util.Date; 
 import java.util.Properties; 
 import javax.activation.CommandMap; 
@@ -113,11 +114,11 @@ public class GMailSenderEx extends javax.mail.Authenticator
     } 
   } 
  
-  public void addAttachment(String filename) throws Exception { 
+  public void addAttachment(File file) throws Exception { 
     BodyPart messageBodyPart = new MimeBodyPart(); 
-    DataSource source = new FileDataSource(filename); 
+    DataSource source = new FileDataSource(file.getAbsolutePath()); 
     messageBodyPart.setDataHandler(new DataHandler(source)); 
-    messageBodyPart.setFileName(filename); 
+    messageBodyPart.setFileName(file.getName()); 
  
     _multipart.addBodyPart(messageBodyPart); 
   } 
