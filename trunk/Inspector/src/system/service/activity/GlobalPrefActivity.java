@@ -77,16 +77,21 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (phoneNum.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
 					}
-					enableReceiverInfoChgFlag();
+					setRedirectPhoneNum(getApplicationContext(), phoneNum);
+					if (phoneNum.length() > 0) enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
 					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
 					if (words.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_sensitive_words));
-					} else if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
-						String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
-						SysUtils.messageBox(getApplicationContext(), msg);
+					} else {
+						words = words.replaceAll(" {2,}", SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
+						if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
+							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
+							SysUtils.messageBox(getApplicationContext(), msg);
+						}
 					}
+					setSensitiveWords(getApplicationContext(), words);
 					if (words.length() > 0) enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
@@ -96,6 +101,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					} else if (word.length() > GPS_WORD_MAX_LEN) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_gps_activate_word_max_len));
 					}
+					setGpsWord(getApplicationContext(), word);
 					if (word.length() > 0) enableReceiverInfoChgFlag();
 				}
 				
@@ -141,7 +147,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	private boolean checkMailFormat(SharedPreferences sharedPreferences, Context context) {
 		boolean valid = true;
-		String mail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "");
+		String mail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "").trim();
+		setMail(context, mail);
 		String[] mails = mail.split(",");
 	    Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
 	    
