@@ -40,7 +40,7 @@
     <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
     
     <!-- GPS -->
-    <string name="gps_sms">The mobile phone position(longitude, latitude): %s</string>
+    <string name="gps_sms">Current position(latitude, longitude):%s, see it on maps.google.com</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>

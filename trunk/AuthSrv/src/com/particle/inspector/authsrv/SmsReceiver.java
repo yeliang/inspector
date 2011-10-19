@@ -95,11 +95,11 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
 		// If it is receiver info SMS (so the key type should be full or part)
-		else if (smsBody.startsWith("Info|")) {
+		else if (smsBody.startsWith("Info,")) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			// The sms format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>|<gps activation word>
-			String parts[] = smsBody.split("|");
+			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>,<receiver sensitive words>,<gps activation word>
+			String parts[] = smsBody.split(",");
 			if (parts.length < 6) {
 				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
 				return;
