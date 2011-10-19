@@ -47,6 +47,8 @@
     <string name="pref_category_info_collector_title">情报收集</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
     <string name="pref_category_sms_redirector_title">短信转发</string>
+    <string name="pref_category_gps_key">pref_category_gps</string>
+    <string name="pref_category_gps_title">获取GPS位置</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">邮箱</string>
