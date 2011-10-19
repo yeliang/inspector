@@ -13,9 +13,9 @@ import android.util.Log;
 public class GpsUtil 
 {
 	private static final String LOGTAG = "GpsUtil";
-	private static final int DEFAULT_INTERVAL = 2000; // ms
+	private static final int DEFAULT_INTERVAL = 1000; // ms
 	private static final float DEFAULT_DISTANCE = 100; // meter
-	private static final int DEFAULT_TRY_COUNT = 100;
+	private static final int DEFAULT_TRY_COUNT = 1000;
 	
 	private LocationManager locationManager;
 	
@@ -44,7 +44,7 @@ public class GpsUtil
 		
 	public GpsUtil(Context context) {
 		locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL*300, DEFAULT_DISTANCE*10, locationListener);
 	}
 
 	public static boolean isGpsAvailabe(Context context) 
@@ -56,32 +56,37 @@ public class GpsUtil
     {
 		if (locationManager == null) return null;
 		
-        //Criteria criteria = new Criteria();
-        //criteria.setAccuracy(Criteria.ACCURACY_FINE); // High accuracy
-        //criteria.setAltitudeRequired(false);
-        //criteria.setBearingRequired(false);
-        //criteria.setCostAllowed(true);
-        //criteria.setPowerRequirement(Criteria.POWER_LOW); // Low power
-		//locationManager.setTestProviderEnabled("gps", true);
-        //String provider = locationManager.getBestProvider(criteria, true);
-        
 		Criteria criteria = new Criteria();
-		String bestProvider = locationManager.getBestProvider(criteria, false);
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setAltitudeRequired(false);
+		criteria.setBearingRequired(false);
+		criteria.setCostAllowed(true);
+		//criteria.setPowerRequirement(Criteria.POWER_LOW); // Low power
+		boolean getGPS = false;
+		try {
+			locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+			getGPS = true;
+		} catch (Exception ex) {}
+		String bestProvider = "";
+        if (getGPS) 
+        	bestProvider = locationManager.getBestProvider(criteria, true);
+        else 
+        	bestProvider = locationManager.getBestProvider(criteria, false);
 		
         try {
-        	//return this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         	Location loc = null;
         	int tryCount = 0;
         	while (loc == null && tryCount < DEFAULT_TRY_COUNT) {
         		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
-        		SysUtils.threadSleep(200, LOGTAG);
+        		SysUtils.threadSleep(100, LOGTAG);
         		loc = locationManager.getLastKnownLocation(bestProvider);
         		tryCount++;
         	}
-        	return loc;
-        	
-        	//return locationManager.getLastKnownLocation(provider);
-        	
+        	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL*300, DEFAULT_DISTANCE*10, locationListener);
+        	try {
+    			if (getGPS) locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
+    		} catch (Exception ex) {}
+        	return loc;        	
         } catch (Exception ex) {
         	Log.e(LOGTAG, ex.getMessage());
         	return null;

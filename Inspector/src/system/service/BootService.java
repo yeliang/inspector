@@ -71,8 +71,6 @@ public class BootService extends Service
 		
 		//mScreenshotTimer = new Timer();
 		//mCapTask = new CaptureTask(this);
-		
-		gps = new GpsUtil(getApplicationContext());
 	}
 
 	@Override
@@ -88,6 +86,8 @@ public class BootService extends Service
 		if (mails.length > 0 && type != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+			
+			gps = new GpsUtil(getApplicationContext());
 		
 			//Start timer to capture screenshot
 			/*
