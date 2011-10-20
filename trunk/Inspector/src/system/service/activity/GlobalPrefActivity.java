@@ -37,7 +37,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
 	private static String GPS_WORD;
-	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info";
+	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info"; // mail, phone number, GPS word
+	public static final String HAS_CHG_SENSITIVE_WORDS = "has_changed_sensitive_words"; // sensitive words
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	public static final int GPS_WORD_MAX_LEN = 24;
@@ -73,15 +74,17 @@ public class GlobalPrefActivity extends PreferenceActivity
 					int interval = Integer.parseInt(intervalStr);
 				}
 				else if (key.equals(getResources().getString(R.string.pref_phonenum_key))) {
-					String phoneNum = sharedPreferences.getString(getResources().getString(R.string.pref_phonenum_key), "").trim();
+					String oriPhoneNum = sharedPreferences.getString(getResources().getString(R.string.pref_phonenum_key), "");
+					String phoneNum = oriPhoneNum.trim();
 					if (phoneNum.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
 					}
-					setRedirectPhoneNum(getApplicationContext(), phoneNum);
+					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
 					if (phoneNum.length() > 0) enableReceiverInfoChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
-					String words = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "").trim();
+					String oriWords = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "");
+					String words = oriWords.trim();
 					if (words.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_sensitive_words));
 					} else {
@@ -91,17 +94,18 @@ public class GlobalPrefActivity extends PreferenceActivity
 							SysUtils.messageBox(getApplicationContext(), msg);
 						}
 					}
-					setSensitiveWords(getApplicationContext(), words);
-					if (words.length() > 0) enableReceiverInfoChgFlag();
+					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
+					if (words.length() > 0) enableSensitiveWordsChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
-					String word = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "").trim();
+					String oriWord = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "");
+					String word = oriWord.trim();
 					if (word.length() == 0) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_gps_activate_word));
 					} else if (word.length() > GPS_WORD_MAX_LEN) {
 						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_gps_activate_word_max_len));
 					}
-					setGpsWord(getApplicationContext(), word);
+					//if (!word.equals(oriWord)) setGpsWord(getApplicationContext(), word);
 					if (word.length() > 0) enableReceiverInfoChgFlag();
 				}
 				
@@ -119,6 +123,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 		Intent intent = this.getIntent();
 		Bundle bn = intent.getExtras();
 		bn.putBoolean(HAS_CHG_RECEIVER_INFO, true);
+		intent.putExtras(bn);
+		setResult(RESULT_OK, intent);
+	}
+	
+	private void enableSensitiveWordsChgFlag() {
+		Intent intent = this.getIntent();
+		Bundle bn = intent.getExtras();
+		bn.putBoolean(HAS_CHG_SENSITIVE_WORDS, true);
 		intent.putExtras(bn);
 		setResult(RESULT_OK, intent);
 	}
@@ -147,8 +159,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	private boolean checkMailFormat(SharedPreferences sharedPreferences, Context context) {
 		boolean valid = true;
-		String mail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "").trim();
-		setMail(context, mail);
+		String oriMail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "");
+		String mail = oriMail.trim();
+		//if (!mail.equals(oriMail)) setMail(context, mail);
 		String[] mails = mail.split(",");
 	    Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
 	    
