@@ -94,11 +94,18 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			// If it is not a super key
 			try {
-				// If it is the 1st time, send SMS to server for license key validation
+				// If it is the 1st time or it has not been validated by server, 
+				// send SMS to server for license key validation, 
 				// but still show the setting view for inputing mail address and etc.
 				// The functions will really work until the response validation SMS comes from server. 
 				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
 				{
+					// Make sure the 2G/3G mobile networks available for sending/receiving validation SMS
+					if (!DeviceProperty.isMobileConnected(context)) {
+						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
+						return;
+					}
+					
 					// Save license key info to SharedPreferences
 					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
 						Log.e(LOGTAG, "Cannot set license key");
@@ -114,7 +121,10 @@ public class SmsReceiver extends BroadcastReceiver
 					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 					boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
 					if (ret) {
+						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_success));
 						ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
+					} else {
+						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_fail));
 					}
 				}
 				

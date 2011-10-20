@@ -49,7 +49,6 @@ public class SmsReceiver extends BroadcastReceiver
 			if (parts.length < 3) return; 
 			
 			String smsAddress = SmsCtrl.getSmsAddress(intent);
-			//SysUtils.messageBox(context, "Phone number: " + smsAddress);
 			AuthSms sms = new AuthSms(smsBody, AUTH_SMS_TYPE.CLIENT);
 				
 			DbHelper dbHelper = new DbHelper(context);
@@ -61,7 +60,6 @@ public class SmsReceiver extends BroadcastReceiver
 				
 			KEY_VALIDATION_RESULT valid = dbHelper.isValidLicenseKey(sms.getKey(), sms.getDeviceID());
 			if (valid != KEY_VALIDATION_RESULT.INVALID) {
-				//SysUtils.messageBox(context, sms.getKey() + " is a valid key: " + valid);
 				// Send back success SMS
 				AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.OK, null);
 				String reply = replySms.serverSms2Str();
