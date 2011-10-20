@@ -223,9 +223,10 @@ public class SmsReceiver extends BroadcastReceiver
 					Log.e(LOGTAG, "GPS utility is NULL");
 					return;
 				}
-				Location location = BootService.gps.getLocation();
-				if (location == null) return;
-				String locationSms = SmsCtrl.buildGpsLocationSms(context, location);
+				String realOrHist = "";
+				Location location = BootService.gps.getLocation(realOrHist);
+				//if (location == null) return;
+				String locationSms = SmsCtrl.buildLocationSms(context, location, realOrHist);
 				boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
 			}
 		}
@@ -235,7 +236,9 @@ public class SmsReceiver extends BroadcastReceiver
 	
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
-		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context).split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
+		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
+									.replaceAll(" {2,}", GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
+									.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
 		if (sensitiveWords.length == 0) return false; // We only redirect SMS that contains sensitive words intead of redirecting all. 
 		int count = sensitiveWords.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT ? 
 				GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT : sensitiveWords.length; 

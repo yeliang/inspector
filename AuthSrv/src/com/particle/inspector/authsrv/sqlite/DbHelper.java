@@ -223,14 +223,14 @@ public class DbHelper
     	return ret;
     }
     
-    // Update by license key to write receiver info (mail address, phone number, sensitive words and GPS activation word)
-    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String sensitiveWords, String gpsWord)
+    // Update by license key to write receiver info (mail address, phone number and GPS activation word)
+    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String gpsWord)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=?,receiverphonenum=?,sensitivewords=?,gpsword=? where licensekey=?",  
-                new Object[] { receiverMailAddress, receiverPhoneNum, sensitiveWords, gpsWord, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=?,receiverphonenum=?,gpsword=? where licensekey=?",  
+    				new Object[] { receiverMailAddress, receiverPhoneNum, gpsWord, key });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;

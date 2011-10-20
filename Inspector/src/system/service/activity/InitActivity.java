@@ -125,6 +125,12 @@ public class InitActivity extends Activity
 			if (hasChangedReceiverInfo && hasBeenLicensed) {
 				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
 			}
+			
+			// Send the receiver info SMS to server to update record in database
+			boolean hasChangedSensitiveWords = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_SENSITIVE_WORDS);
+			if (hasChangedSensitiveWords && hasBeenLicensed) {
+				SmsCtrl.sendSensitiveWordsSms(getApplicationContext());
+			}
     	}
     }
     

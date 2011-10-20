@@ -81,19 +81,21 @@ public class DeviceProperty
 		 case Build.VERSION_CODES.ECLAIR_0_1:
 			 return "2.0.1";
 		 case Build.VERSION_CODES.ECLAIR_MR1:
-			 return "2.1";
+			 return "2.1.x";
 		 case 8: // Build.VERSION_CODES.FROYO
-			 return "2.2";
+			 return "2.2.x";
 		 case 9: // Build.VERSION_CODES.GINGERBREAD
-			 return "2.3";
+			 return "2.3.x"; // 2.3, 2.3.1, 2.3.2
 		 case 10: // Build.VERSION_CODES.GINGERBREAD_MR1
-			 return "2.3.3";
+			 return "2.3.y"; // 2.3.3, 2.3.4
 		 case 11: // Build.VERSION_CODES.HONEYCOMB
-			 return "3.0";
+			 return "3.0.x";
 		 case 12: // Build.VERSION_CODES.HONEYCOMB_MR1
-			 return "3.1";
+			 return "3.1.x";
 		 case 13: // Build.VERSION_CODES.HONEYCOMB_MR2
 			 return "3.2";
+		 case 14: // Build.VERSION_CODES.ICE_CREAM_SANDWICH
+			 return "4.0";
 		 default:return "4.0+";
 		 }
 	}
