@@ -11,6 +11,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Build;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
@@ -190,6 +193,18 @@ public class DeviceProperty
 		}
 
 		return serialNumber;
+	}
+	
+	// Is connected with mobile networks (2G/3G)
+	public static boolean isMobileConnected(Context context) {
+		try {
+			ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetInfo = manager.getActiveNetworkInfo();
+			if (activeNetInfo == null) return false;
+			return activeNetInfo.isConnected();
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
 }

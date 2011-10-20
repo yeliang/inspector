@@ -94,5 +94,8 @@
 	<string name="msg_invalid_key">無効ライセンスキー。使ったキーかもしれない。製造者をご連絡ください。</string>
 	<string name="msg_cannot_write_license_key_to_sharedpreferences">エラー：ライセンスキー情報をSharedPreferencesに書くことができない。</string>
     <string name="msg_cannot_write_license_type_to_sharedpreferences">エラー：ライセンスタイプ情報をSharedPreferencesに書くことができない。</string>
+    <string name="msg_mobile_net_unvailable">Make sure your mobile connected and not in flying mode.</string>
+    <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
+    <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
     
 </resources>
