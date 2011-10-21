@@ -53,6 +53,7 @@ public class SmsReceiver extends BroadcastReceiver
 			LicenseCtrl.calLicenseType(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			smsBody = smsBody.toUpperCase();
 			LICENSE_TYPE licType = LicenseCtrl.calLicenseType(context, smsBody);
 			
 			// Save consumed datetime if it is the 1st activation
@@ -91,6 +92,11 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			// If it is not a super key
 			try {
+				// Save license key info to SharedPreferences
+				if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
+					Log.e(LOGTAG, "Cannot set license key");
+				}
+				
 				// If it has not been validated by server, send SMS to server for license key validation, 
 				// but still show the setting view for inputing mail address and etc.
 				// The functions will really work until the response validation SMS comes from server. 
@@ -100,11 +106,6 @@ public class SmsReceiver extends BroadcastReceiver
 					if (!DeviceProperty.isMobileConnected(context)) {
 						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
 						return;
-					}
-					
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
-						Log.e(LOGTAG, "Cannot set license key");
 					}
 					
 					String deviceID = DeviceProperty.getDeviceId(context);
@@ -144,12 +145,12 @@ public class SmsReceiver extends BroadcastReceiver
 		else if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) 
 		{
 			// If it is not from server (phone number is different), return
-			if (!SmsCtrl.getSmsAddress(intent).equalsIgnoreCase(context.getResources().getString(R.string.srv_address))) {
-				return;
-			}
+			//if (!SmsCtrl.getSmsAddress(intent).equalsIgnoreCase(context.getResources().getString(R.string.srv_address))) {
+			//	return;
+			//}
 			
 			String[] parts = smsBody.split(AuthSms.SMS_SEPARATOR);
-			if (parts.length >= 3) {
+			if (parts.length >= 4) {
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
 				// The time between sending Auth SMS and receiving Auth SMS cannot be more than 10 minites.
@@ -175,7 +176,10 @@ public class SmsReceiver extends BroadcastReceiver
 				*/
 					
 				// --------------------------------------------------------------
-				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
+				if (parts[3].equals(AuthSms.SMS_SUCCESS)) {
+					// Save self phone number
+					ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
+					
 					// Save license type info to SharedPreferences
 					LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
@@ -188,7 +192,7 @@ public class SmsReceiver extends BroadcastReceiver
 					if (ConfigCtrl.getConsumedDatetime(context) == null) {
 						ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					}
-				} else if (parts[2].equalsIgnoreCase(AuthSms.SMS_FAILURE)) {
+				} else if (parts[3].equalsIgnoreCase(AuthSms.SMS_FAILURE)) {
 					if (parts.length >= 4) {
 						SysUtils.messageBox(context, parts[3]);
 					} else {
