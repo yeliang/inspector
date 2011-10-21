@@ -95,10 +95,11 @@
     
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
-	<string name="msg_cannot_write_license_key_to_sharedpreferences">错误：注册码不能写入SharedPreferences。</string>
-	<string name="msg_cannot_write_license_type_to_sharedpreferences">错误：注册类型不能写入SharedPreferences。</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">错误：注册码不能写入。</string>
+	<string name="msg_cannot_write_license_type_to_sharedpreferences">错误：注册类型不能写入。请再次尝试或联系客服。</string>
     <string name="msg_mobile_net_unvailable">请保证您的手机有信号且不是飞行模式。</string>
     <string name="msg_auth_sms_sent_success">已向服务器发送注册验证短信。</string>
     <string name="msg_auth_sms_sent_fail">错误：向服务器发送注册验证短信失败。请退出再次尝试或联系客服。</string>
+    <string name="msg_has_sent_trial_expire_sms">安卓眼提醒您：在%s上的试用期已过，如需继续使用请联系客服购买。</string>
     
 </resources>
