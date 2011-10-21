@@ -97,10 +97,11 @@
 	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>
-	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information to SharedPreferences.</string>
-	<string name="msg_cannot_write_license_type_to_sharedpreferences">ERROR: failed to write license type information to SharedPreferences.</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information.</string>
+	<string name="msg_cannot_write_license_type_to_sharedpreferences">ERROR: failed to write license type information. Please try again or contact supporter.</string>
     <string name="msg_mobile_net_unvailable">Make sure your mobile connected and not in flying mode.</string>
     <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
+    <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter to buy a key.</string>
     
 </resources>

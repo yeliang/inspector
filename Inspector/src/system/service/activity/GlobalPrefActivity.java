@@ -230,7 +230,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	public static boolean getDisplayGpsSMS(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_gps_show_sms", true);
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_gps_show_sms", false);
 	}
 	
 	public static void setDisplayGpsWord(Context context, boolean value) {

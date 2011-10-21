@@ -4,12 +4,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 /**
  * Implementation of configurations I/O by SharedPreferences.
@@ -27,6 +29,7 @@ public class ConfigCtrl
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
+	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
 	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
 	
 	public static boolean set(Context context, String key, String value)
@@ -184,6 +187,19 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
+	public static boolean getHasSentExpireSms(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(HAS_SENT_EXPIRE_SMS, false);
+	}
+	
+	public static boolean setHasSentExpireSms(Context context, boolean value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(HAS_SENT_EXPIRE_SMS, value);     
+		return editor.commit();
+	}
+	
 	// See if now is still in trial
 	public static boolean stillInTrial(Context context) 
 	{
@@ -205,6 +221,19 @@ public class ConfigCtrl
 			}
 		}
 		return ret;
+	}
+	
+	public static String getSelfName(Context context) 
+	{
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		if (phoneNum == null) {
+			if (ConfigCtrl.getSelfPhoneNum(context) != null) {
+				phoneNum = ConfigCtrl.getSelfPhoneNum(context);
+			} else {
+				phoneNum = DeviceProperty.getDeviceId(context);
+			}
+		}
+		return phoneNum;
 	}
 	
 }
