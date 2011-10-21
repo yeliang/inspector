@@ -1,5 +1,6 @@
 package system.service.config;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import com.particle.inspector.common.util.DatetimeUtil;
@@ -25,6 +26,7 @@ public class ConfigCtrl
 	private static final String LAST_ACTIVATED_DATETIME = "LastActivatedDatetime"; // The last activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
+	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -162,6 +164,29 @@ public class ConfigCtrl
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putString(AUTH_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
+	}
+	
+	// See if now is still in trial
+	public static boolean stillInTrial(Context context) 
+	{
+		boolean ret = false;
+		String consumeDatetimeStr = getConsumedDatetime(context);
+		if (consumeDatetimeStr != null && consumeDatetimeStr.length() > 0) {
+			Date consumeDatetime = null;
+			try {
+				consumeDatetime = DatetimeUtil.format.parse(consumeDatetimeStr);
+			} catch (Exception ex) {}
+			
+			if (consumeDatetime != null)
+			{	
+				Calendar now = Calendar.getInstance();
+				now.add(Calendar.DATE, -1*DEFAULT_TRIAL_DAYS);
+				if (now.getTime().before(consumeDatetime)) {
+					ret = true;
+				}
+			}
+		}
+		return ret;
 	}
 	
 }

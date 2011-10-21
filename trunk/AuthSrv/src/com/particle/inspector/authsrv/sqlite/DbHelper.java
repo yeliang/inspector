@@ -224,13 +224,13 @@ public class DbHelper
     }
     
     // Update by license key to write receiver info (mail address, phone number and GPS activation word)
-    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String gpsWord)
+    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String gpsWord, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=?,receiverphonenum=?,gpsword=? where licensekey=?",  
-    				new Object[] { receiverMailAddress, receiverPhoneNum, gpsWord, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=?,gpsword=? where licensekey=?",  
+    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, gpsWord, key });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -243,13 +243,13 @@ public class DbHelper
     }
     
     // Update by license key to write receiver mail address
-    public boolean updateByKeyToWriteReceiverMailAddress(String key, String receiverMailAddress)
+    public boolean updateByKeyToWriteReceiverMailAddress(String key, String receiverMailAddress, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receivermailaddress=? where licensekey=?",  
-                new Object[] { receiverMailAddress, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=? where licensekey=?",  
+                new Object[] { phoneNum, receiverMailAddress, key });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -262,13 +262,13 @@ public class DbHelper
     }
     
     // Update by license key to write receiver phone number
-    public boolean updateByKeyToWriteReceiverPhoneNum(String key, String receiverPhoneNum)
+    public boolean updateByKeyToWriteReceiverPhoneNum(String key, String receiverPhoneNum, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set receiverphonenum=? where licensekey=?",  
-                new Object[] { receiverPhoneNum, key });
+        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receiverphonenum=? where licensekey=?",  
+                new Object[] { phoneNum, receiverPhoneNum, key });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -281,13 +281,13 @@ public class DbHelper
     }
     
     // Update by license key to write sensitive words
-    public boolean updateByKeyToWriteSensitiveWords(String key, String sensitiveWords)
+    public boolean updateByKeyToWriteSensitiveWords(String key, String sensitiveWords, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set sensitivewords=? where licensekey=?",  
-                new Object[] { sensitiveWords, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,sensitivewords=? where licensekey=?",  
+                new Object[] { phoneNum, sensitiveWords, key });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
