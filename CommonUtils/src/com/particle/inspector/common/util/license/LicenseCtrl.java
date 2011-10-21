@@ -14,7 +14,7 @@ public class LicenseCtrl
 	private final static String STR_NOT_LICENSED = "none";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
-	public static LICENSE_TYPE getLicenseType(Context context, String key)
+	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
 		int keyLen = key.length();
 		String clearText = key.substring(0, keyLen/2).toUpperCase();

@@ -83,7 +83,7 @@ public class BootService extends Service
 		LICENSE_TYPE type = ConfigCtrl.getLicenseType(getApplicationContext());
 		String[] mails = GlobalPrefActivity.getMail(this).split(",");
 		mails = StrUtils.filterMails(mails);
-		if (mails.length > 0 && type != LICENSE_TYPE.NOT_LICENSED) 
+		if ((type != LICENSE_TYPE.NOT_LICENSED || ConfigCtrl.stillInTrial(getApplicationContext())) && mails.length > 0) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			

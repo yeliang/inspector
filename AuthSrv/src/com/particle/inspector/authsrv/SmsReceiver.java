@@ -65,7 +65,7 @@ public class SmsReceiver extends BroadcastReceiver
 				String reply = replySms.serverSms2Str();
 				boolean sentRet = SmsCtrl.sendSms(smsAddress, reply);
 				if (sentRet) {
-					LICENSE_TYPE keyType = LicenseCtrl.getLicenseType(context, sms.getKey());
+					LICENSE_TYPE keyType = LicenseCtrl.calLicenseType(context, sms.getKey());
 					if (valid == KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST) {
 						// Insert to database
 						String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
@@ -106,7 +106,8 @@ public class SmsReceiver extends BroadcastReceiver
 			DbHelper db = new DbHelper(context);
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
-				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4]);
+				String phoneNum = SmsCtrl.getSmsAddress(intent);
+				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], phoneNum);
 				if (!ret) {
 					SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
 				}
@@ -127,7 +128,8 @@ public class SmsReceiver extends BroadcastReceiver
 			DbHelper db = new DbHelper(context);
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
-				ret = db.updateByKeyToWriteSensitiveWords(parts[1], parts[2]);
+				String phoneNum = SmsCtrl.getSmsAddress(intent);
+				ret = db.updateByKeyToWriteSensitiveWords(parts[1], parts[2], phoneNum);
 				if (!ret) {
 					SysUtils.messageBox(context, "Failed to update sensitive words: " + smsBody);
 				}
@@ -151,7 +153,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			SuperLoggingSms sms = new SuperLoggingSms(smsBody);
 			String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
-			LICENSE_TYPE keyType = LicenseCtrl.getLicenseType(context, sms.getKey());
+			LICENSE_TYPE keyType = LicenseCtrl.calLicenseType(context, sms.getKey());
 			TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), phoneNum,
 				sms.getPhoneModel(), sms.getAndroidVer(), 
 				DatetimeUtil.format.format(new Date()), 

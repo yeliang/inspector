@@ -21,11 +21,9 @@ public class PhoneCallInfo
 	public String toString(Context context)
 	{
 		StringBuilder sb = new StringBuilder();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		
 		sb.append(StrUtils.SEPARATELINE);
 		if (date != null) 
-			sb.append(context.getResources().getString(R.string.phonecall_date) + StrUtils.COMMA + dateFormat.format(date) + SysUtils.NEWLINE);
+			sb.append(context.getResources().getString(R.string.phonecall_date) + StrUtils.COMMA + date.toLocaleString() + SysUtils.NEWLINE);
 		if (type > 0) 
 			sb.append(context.getResources().getString(R.string.phonecall_type) + StrUtils.COMMA + getCallTypeDescription(context, type) + SysUtils.NEWLINE);
 		if (number.length() > 0) 
