@@ -10,9 +10,9 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
  * Lang = CN|EN|JP
  * e.g. Auth,8B122A1DD9,CN,13B789A23CE9125,13980065966,HTC Desire,2.3
  * 
- * The send SMS (server -> client) format: [Header],[Key],[Result],[Error Message]
- * e.g. Auth,8B122A1DD9,OK
- * 		Auth,8B122A1DD9,NG,This key has already been used.
+ * The send SMS (server -> client) format: [Header],[Key],[Client Phone Number],[Result],[Error Message]
+ * e.g. Auth,8B122A1DD9,13911004563,OK
+ * 		Auth,8B122A1DD9,13911004563,NG,This key has already been used.
 */
 public class AuthSms 
 {
@@ -43,9 +43,10 @@ public class AuthSms
 	}
 	
 	// Constructor for server SMS 
-	public AuthSms(String key, AUTH_SMS_RESULT result, String errMsg) {
+	public AuthSms(String key, String clientPhoneNum, AUTH_SMS_RESULT result, String errMsg) {
 		this.header = SMS_HEADER;
 		if (key != null) this.key = key; else this.key = "";
+		if (clientPhoneNum != null) this.phoneNum = clientPhoneNum; else this.phoneNum = "";
 		if (result != null) this.result = result; else this.result = AUTH_SMS_RESULT.NG;
 		if (errMsg != null) this.errMsg = errMsg; else this.errMsg = "";
 	}
@@ -71,13 +72,14 @@ public class AuthSms
 				this.androidVer = parts[6].trim();
 			}
 		} else if (type == AUTH_SMS_TYPE.SERVER) {
-			if (parts.length >= 3) {
+			if (parts.length >= 4) {
 				this.header = parts[0].trim();
 				this.key = parts[1].trim();
-				this.lang = LangUtil.str2enum(parts[2]);
+				this.phoneNum = parts[2].trim();
+				this.lang = LangUtil.str2enum(parts[3]);
 			}
-			if (parts.length >= 4) {
-				this.errMsg = parts[3].trim();
+			if (parts.length >= 5) {
+				this.errMsg = parts[4].trim();
 			}
 		}
 	}
@@ -91,6 +93,7 @@ public class AuthSms
 	
 	public String serverSms2Str() {
 		String ret = SMS_HEADER + SMS_SEPARATOR + this.key + SMS_SEPARATOR + 
+				(this.phoneNum == null ? "" : this.phoneNum) + SMS_SEPARATOR +
 				(this.result == AUTH_SMS_RESULT.OK ? SMS_SUCCESS : SMS_FAILURE);
 		if (this.result == AUTH_SMS_RESULT.NG) {
 			ret += SMS_SEPARATOR + this.errMsg;

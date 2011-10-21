@@ -26,6 +26,7 @@ public class ConfigCtrl
 	private static final String LAST_ACTIVATED_DATETIME = "LastActivatedDatetime"; // The last activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
+	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
 	
 	public static boolean set(Context context, String key, String value)
@@ -54,7 +55,7 @@ public class ConfigCtrl
 	public static boolean setLicenseKey(Context context, String key)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(LICENSE_KEY, key);     
+		editor.putString(LICENSE_KEY, key.toUpperCase());     
 		return editor.commit();
 	}
 	
@@ -163,6 +164,23 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putString(AUTH_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
+		return editor.commit();
+	}
+	
+	public static String getSelfPhoneNum(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(SELF_PHONE_NUMBER, "").trim();
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
+	}
+	
+	public static boolean setSelfPhoneNum(Context context, String selfPhoneNum) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putString(SELF_PHONE_NUMBER, selfPhoneNum == null ? "": selfPhoneNum);     
 		return editor.commit();
 	}
 	

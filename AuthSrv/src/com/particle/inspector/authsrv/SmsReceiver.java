@@ -59,9 +59,10 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 				
 			KEY_VALIDATION_RESULT valid = dbHelper.isValidLicenseKey(sms.getKey(), sms.getDeviceID());
+			String clientPhoneNum = SmsCtrl.getSmsAddress(intent);
 			if (valid != KEY_VALIDATION_RESULT.INVALID) {
 				// Send back success SMS
-				AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.OK, null);
+				AuthSms replySms = new AuthSms(sms.getKey(), clientPhoneNum, AUTH_SMS_RESULT.OK, null);
 				String reply = replySms.serverSms2Str();
 				boolean sentRet = SmsCtrl.sendSms(smsAddress, reply);
 				if (sentRet) {
@@ -83,10 +84,9 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 				}
 			} else {
-				SysUtils.messageBox(context, sms.getKey() + " is not valid key");
 				// Send back failure SMS
 				String msg = dbHelper.getDefaultValidateFailMsg(sms.getKey(), sms.getLang());
-				AuthSms replySms = new AuthSms(sms.getKey(), AUTH_SMS_RESULT.NG, msg);
+				AuthSms replySms = new AuthSms(sms.getKey(), clientPhoneNum, AUTH_SMS_RESULT.NG, msg);
 				String reply = replySms.serverSms2Str();
 				SmsCtrl.sendSms(smsAddress, reply);
 			}
