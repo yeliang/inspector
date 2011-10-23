@@ -1,7 +1,5 @@
 package com.particle.inspector.common.util.license;
 
-import system.service.BootReceiver;
-
 import com.particle.inspector.common.util.AesCryptor;
 
 import android.content.Context;
@@ -17,9 +15,11 @@ public class LicenseCtrl
 	private final static String STR_NOT_LICENSED = "none";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
+	public static String TRIAL_KEY = "111111111111";
+	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
-		if (key == BootReceiver.TRIAL_KEY) return LICENSE_TYPE.TRIAL_LICENSED;
+		if (key == TRIAL_KEY) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		int keyLen = key.length();
 		String clearText = key.substring(0, keyLen/2).toUpperCase();
