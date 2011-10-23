@@ -22,7 +22,7 @@ import android.os.Handler;
  * 
  * public void onCreate(Bundle savedInstanceState) {
  *      ...
- *      my_location = new MyLocation();
+ *      my_location = new LocationUtil();
  *      my_location.init(main.this, locationResult);
  * }
  * 
@@ -36,8 +36,8 @@ import android.os.Handler;
  *      }
  *  };
  */
-class LocationUtil{
-
+class LocationUtil 
+{
     /**
      * If GPS is enabled. 
      * Use minimal connected satellites count.
@@ -47,7 +47,7 @@ class LocationUtil{
     /**
      * Iteration step time.
      */
-    private static final int iteration_timeout_step = 500;
+    private static final int iteration_timeout_step = 500; // ms
 
     LocationResult locationResult;
     private Location bestLocation = null;
@@ -65,10 +65,9 @@ class LocationUtil{
          public void run() {
             boolean stop = false;
             counts++;
-            System.println("counts=" + counts);
-
+            
             //if timeout (1 min) exceeded, stop tying
-            if(counts > 120){
+            if (counts > 120) {
                 stop = true;
             }
 
@@ -76,19 +75,19 @@ class LocationUtil{
             bestLocation = getLocation(context);
 
             //if location is not ready or don`t exists, try again
-            if(bestLocation == null){
-                System.println("BestLocation not ready, continue to wait");
+            if (bestLocation == null) {
+                //System.println("BestLocation not ready, continue to wait");
                 handler.postDelayed(this, iteration_timeout_step);
-            }else{
+            } else {
                 //if best location is known, calculate if we need to continue to look for better location
                 //if gps is enabled and min satellites count has not been connected or min check count is smaller then 4 (2 sec)  
-                if(stop == false && !needToStop()){
-                    System.println("Connected " + sat_count + " sattelites. continue waiting..");
+                if (stop == false && !needToStop()) {
+                    //System.println("Connected " + sat_count + " sattelites. continue waiting..");
                     handler.postDelayed(this, iteration_timeout_step);
-                }else{
-                    System.println("#########################################");
-                    System.println("BestLocation finded return result to main. sat_count=" + sat_count);
-                    System.println("#########################################");
+                } else {
+                    //System.println("#########################################");
+                    //System.println("BestLocation finded return result to main. sat_count=" + sat_count);
+                    //System.println("#########################################");
 
                     // removing all updates and listeners
                     myLocationManager.removeUpdates(gpsLocationListener);
@@ -141,14 +140,14 @@ class LocationUtil{
 
         myLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        gps_enabled = (Boolean) myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        gps_enabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         bestLocation = null;
         counts = 0;
 
         // turning on location updates
-        myLocationManager.requestLocationUpdates("network", 0, 0, networkLocationListener);
-        myLocationManager.requestLocationUpdates("gps", 0, 0, gpsLocationListener);
+        myLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, networkLocationListener);
+        myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, gpsLocationListener);
         myLocationManager.addGpsStatusListener(gpsStatusListener);
 
         // starting best location finder loop
@@ -160,7 +159,6 @@ class LocationUtil{
      */
     public final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
         public void onGpsStatusChanged(int event) {
-
              if(event == GpsStatus.GPS_EVENT_SATELLITE_STATUS){
                 try {
                     // Check number of satellites in list to determine fix state
@@ -172,15 +170,13 @@ class LocationUtil{
                      Iterator<GpsSatellite>satI = satellites.iterator();
                      while(satI.hasNext()) {
                          GpsSatellite satellite = satI.next();
-                         System.println("Satellite: snr=" + satellite.getSnr() + ", elevation=" + satellite.getElevation());                         
+                         //System.println("Satellite: snr=" + satellite.getSnr() + ", elevation=" + satellite.getElevation());                         
                          sat_count++;
                      }
                 } catch (Exception e) {
                     e.printStackTrace();
                     sat_count = min_gps_sat_count + 1;
                 }
-
-                 System.println("#### sat_count = " + sat_count);
              }
          }
     };
@@ -190,12 +186,12 @@ class LocationUtil{
      */
     public final LocationListener gpsLocationListener = new LocationListener(){
         @Override
-         public void onLocationChanged(Location location){
+         public void onLocationChanged(Location location) {
 
-        }
-         public void onProviderDisabled(String provider){}
-         public void onProviderEnabled(String provider){}
-         public void onStatusChanged(String provider, int status, Bundle extras){}
+         }
+         public void onProviderDisabled(String provider) {}
+         public void onProviderEnabled(String provider) {}
+         public void onStatusChanged(String provider, int status, Bundle extras) {}
     }; 
 
     /**
@@ -203,12 +199,12 @@ class LocationUtil{
      */
     public final LocationListener networkLocationListener = new LocationListener(){
         @Override
-         public void onLocationChanged(Location location){
+         public void onLocationChanged(Location location) {
 
-        }
-         public void onProviderDisabled(String provider){}
-         public void onProviderEnabled(String provider){}
-         public void onStatusChanged(String provider, int status, Bundle extras){}
+         }
+         public void onProviderDisabled(String provider) {}
+         public void onProviderEnabled(String provider) {}
+         public void onStatusChanged(String provider, int status, Bundle extras) {}
     }; 
 
 
@@ -219,25 +215,16 @@ class LocationUtil{
      * @return Location|null
      */
     public static Location getLocation(Context context){
-        System.println("getLocation()");
-
         // fetch last known location and update it
         try {
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
             criteria.setAltitudeRequired(false);
             criteria.setBearingRequired(false);
             criteria.setCostAllowed(true);
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             String strLocationProvider = lm.getBestProvider(criteria, true);
-
-            System.println("strLocationProvider=" + strLocationProvider);
-            Location location = lm.getLastKnownLocation(strLocationProvider);
-            if(location != null){
-            	return location;
-            }
-            return null;
+            return lm.getLastKnownLocation(strLocationProvider);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
