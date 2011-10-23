@@ -20,7 +20,7 @@ public class BootService extends Service
 	
 	private Timer mGetInfoTimer;
 	private SmsTask mInfoTask;
-	private final long mGetInfoDelay  = 10000; // 10 Seconds
+	private final long mGetInfoDelay  = 30000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 
 	@Override
@@ -44,7 +44,6 @@ public class BootService extends Service
 	public void onCreate() {
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
-		Log.v(LOGTAG, "created");
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new SmsTask(this.getApplicationContext());
@@ -54,10 +53,10 @@ public class BootService extends Service
 	public void onStart(final Intent intent, final int startId) {
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
-		Log.v(LOGTAG, "started");
 		
 		// Start timer 
-		mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+		// TODO this feature has not been tested yet
+		//mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 	}
 	
 	public class IaiaiBinder extends Binder {  

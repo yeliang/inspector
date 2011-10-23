@@ -200,8 +200,7 @@ public class DeviceProperty
 		try {
 			ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetInfo = manager.getActiveNetworkInfo();
-			if (activeNetInfo == null) return false;
-			return activeNetInfo.isConnected();
+			return ((activeNetInfo != null) && activeNetInfo.isConnected());
 		} catch (Exception ex) {
 			return false;
 		}

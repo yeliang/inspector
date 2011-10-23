@@ -177,7 +177,7 @@ public class InitActivity extends Activity
     					}
         	
     					// Send mail
-    					String phoneNum = GetInfoTask.getSelfName(context);
+    					String phoneNum = ConfigCtrl.getSelfName(context);
     					String subject = getResources().getString(R.string.mail_from) 
         	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
     					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);

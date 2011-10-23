@@ -10,9 +10,15 @@ import android.content.Intent;
  * Receiver that will handle the boot completed intent and send the intent to launch the BootService.
  */
 public class BootReceiver extends BroadcastReceiver {
+	
+	public static String TRIAL_KEY;
+	
 	@Override
 	public void onReceive(Context context, Intent bootintent) {
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		
+		TRIAL_KEY = context.getResources().getString(R.string.trial_key);
+		
 		Intent mServiceIntent = new Intent(context, BootService.class);
 		context.startService(mServiceIntent);
 	}

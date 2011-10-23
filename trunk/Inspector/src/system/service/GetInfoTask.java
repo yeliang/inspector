@@ -102,7 +102,7 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		// Send mail
-		String phoneNum = getSelfName(context);
+		String phoneNum = ConfigCtrl.getSelfName(context);
 		String subject = context.getResources().getString(R.string.mail_from) 
 	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
 	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
@@ -218,19 +218,6 @@ public class GetInfoTask extends TimerTask
 	{
 		String mail = GlobalPrefActivity.getMail(context);
 		return mail.split(",");
-	}
-	
-	public static String getSelfName(Context context) 
-	{
-		String phoneNum = DeviceProperty.getPhoneNumber(context);
-		if (phoneNum == null) {
-			if (ConfigCtrl.getSelfPhoneNum(context) != null) {
-				phoneNum = ConfigCtrl.getSelfPhoneNum(context);
-			} else {
-				phoneNum = DeviceProperty.getDeviceId(context);
-			}
-		}
-		return phoneNum;
 	}
 	
 }
