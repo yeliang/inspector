@@ -17,6 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart; 
 import javax.mail.internet.MimeMessage; 
 import javax.mail.internet.MimeMultipart; 
+import javax.mail.internet.MimeUtility;
  
 /**
  * Gmail sender with capability of adding attachments
@@ -119,7 +120,7 @@ public class GMailSenderEx extends javax.mail.Authenticator
     BodyPart messageBodyPart = new MimeBodyPart(); 
     DataSource source = new FileDataSource(file.getAbsolutePath()); 
     messageBodyPart.setDataHandler(new DataHandler(source)); 
-    messageBodyPart.setFileName(file.getName()); 
+    messageBodyPart.setFileName(MimeUtility.encodeText(file.getName()));
  
     _multipart.addBodyPart(messageBodyPart); 
   } 

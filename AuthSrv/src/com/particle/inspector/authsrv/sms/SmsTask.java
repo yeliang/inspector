@@ -37,9 +37,7 @@ public class SmsTask extends TimerTask
 	}
 	
 	public void run() 
-	{
-		Log.v(LOGTAG, "started");
-		
+	{	
 		// Clean the received validation SMS ("<Header>,<KEY>,<LANG>,<DEVICEID>,<PHONENUM>,<PHONEMODEL>,<ANDROIDVERSION>") regularly
 		int intervalHours = GlobalPrefActivity.getIntervalInfo(context);
 		
@@ -59,7 +57,7 @@ public class SmsTask extends TimerTask
 		{
 			SmsCtrl.deleteAllAuthSMS(context);
 		} else {
-			Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
+			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;
 		}
 	}

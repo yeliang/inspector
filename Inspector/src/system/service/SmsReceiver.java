@@ -61,8 +61,22 @@ public class SmsReceiver extends BroadcastReceiver
 				ConfigCtrl.setConsumedDatetime(context, (new Date()));
 			}
 			
+			// If it is a trial key
+			if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+				// If it is out of trial, return 
+				if (!ConfigCtrl.stillInTrial(context)) {
+					SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
+					return;
+				}
+				
+				// Trial key can only be used when not licensed before 
+				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
+				}
+			}
+			
 			// If it is Super License Key, do not need to get response validation from server
-			if (licType == LICENSE_TYPE.SUPER_LICENSED) {
+			else if (licType == LICENSE_TYPE.SUPER_LICENSED) {
 				// Save license key info to SharedPreferences
 				if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
 					Log.e(LOGTAG, "Cannot set license key");
@@ -74,9 +88,6 @@ public class SmsReceiver extends BroadcastReceiver
 					return;
 				}
 				
-				// Save the last activated datetime
-				ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
-				
 				// Send a SMS to server for logging info
 				String deviceID = DeviceProperty.getDeviceId(context);
 				String phoneNum = DeviceProperty.getPhoneNumber(context);
@@ -87,14 +98,19 @@ public class SmsReceiver extends BroadcastReceiver
 				String smsStr = sms.toString();
 				String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 				boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
-				return;
 			}
 			
-			// If it is not a super key
-			try {
+			// If it is a full key or part key
+			else {
 				// Save license key info to SharedPreferences
 				if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
 					Log.e(LOGTAG, "Cannot set license key");
+				}
+				
+				if (!ConfigCtrl.setLicenseType(context, licType)) {
+					Log.e(LOGTAG, "Cannot set license type");
+					SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
+					return;
 				}
 				
 				// If it has not been validated by server, send SMS to server for license key validation, 
@@ -124,20 +140,19 @@ public class SmsReceiver extends BroadcastReceiver
 						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_fail));
 					}
 				}
-				
-				// Save the last activated datetime
-				ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
-				
-				// Start dialog
-				Intent initIntent = new Intent().setClass(context, InitActivity.class);
-				initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-				context.startActivity(initIntent);
 			}
-			catch (Exception ex) {
-				SysUtils.messageBox(context, ex.getMessage());
-				Log.e(LOGTAG, ex.getMessage());
-			}
+			
+			// Save the last activated datetime
+			ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
+			
+			// Send SMS to server to update last activated datetime
+			//TODO
+			
+			// Start dialog
+			Intent initIntent = new Intent().setClass(context, InitActivity.class);
+			initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+			initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+			context.startActivity(initIntent);
 		}
 		
 		//-------------------------------------------------------------------------------

