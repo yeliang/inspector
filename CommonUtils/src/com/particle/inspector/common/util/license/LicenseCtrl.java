@@ -19,7 +19,7 @@ public class LicenseCtrl
 	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
-		if (key == TRIAL_KEY) return LICENSE_TYPE.TRIAL_LICENSED;
+		if (key.equals(TRIAL_KEY)) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		int keyLen = key.length();
 		String clearText = key.substring(0, keyLen/2).toUpperCase();

@@ -8,13 +8,11 @@ import java.util.List;
 import system.service.R;
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
-import system.service.feature.contact.ContactInfo;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.gps.GpsUtil;
 
+import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SMS_TYPE;
 
-import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -229,12 +227,13 @@ public class SmsCtrl
 			return String.format(context.getResources().getString(R.string.location_sms_fail));
 		}
 		
-		if (realOrHist.equals(GpsUtil.REALPOSITION)) {
+		if (realOrHist.equals(LocationUtil.REALPOSITION)) {
 			return String.format(context.getResources().getString(R.string.location_sms_real), 
 				location.getLatitude() + "," + location.getLongitude());
 		} else {
 			return String.format(context.getResources().getString(R.string.location_sms_hist), 
-				location.getLatitude() + "," + location.getLongitude());
+				(new Date(location.getTime())).toLocaleString() + ", " 
+				+ location.getLatitude() + "," + location.getLongitude());
 		}
 	}
 	

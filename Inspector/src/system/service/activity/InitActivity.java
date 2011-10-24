@@ -117,7 +117,9 @@ public class InitActivity extends Activity
    	 		}
 	    }
 	    
-    	if (resultCode == RESULT_OK) 
+    	if (resultCode == RESULT_OK && 
+    		ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED && 
+    		ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.TRIAL_LICENSED) 
     	{
     		// Send the receiver info SMS to server to update record in database
 			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
@@ -140,6 +142,14 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
+            	// If neither in trail and nor licensed, return
+            	LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
+    			if ((type == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context)) ||
+    				type == LICENSE_TYPE.NOT_LICENSED) {
+    				SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
+    				return;
+    			}
+            	
             	progressDialog = ProgressDialog.show(InitActivity.this, getResources().getString(R.string.init_processing), 
             			getResources().getString(R.string.init_waiting), true, false);
             	
@@ -179,7 +189,8 @@ public class InitActivity extends Activity
     					// Send mail
     					String phoneNum = ConfigCtrl.getSelfName(context);
     					String subject = getResources().getString(R.string.mail_from) 
-        	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());
+        	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
+        	          		 + getResources().getString(R.string.mail_description);
     					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);
     					String[] recipients = GlobalPrefActivity.getMail(context).split(",");
     					if (recipients.length == 0) {
