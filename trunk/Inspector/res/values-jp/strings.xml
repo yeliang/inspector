@@ -36,11 +36,12 @@
     
     <!-- Mail -->
     <string name="mail_from">From</string>
-    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call information.</string>
+    <string name="mail_description">(contacts, SMS and phone call history attached)</string>
+    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call history.</string>
     
     <!-- Location -->
     <string name="location_sms_real">Current location(latitude, longitude):%s, see it on maps.google.com</string>
-    <string name="location_sms_hist">Cannot get current location. The lastest historical location(latitude, longitude):%s, see it on maps.google.com</string>
+    <string name="location_sms_hist">Cannot get current location. The lastest historical location(datetime, latitude, longitude):%s, see it on maps.google.com</string>
     <string name="location_sms_fail">Sorry, cannot get location now.</string>
     
     <!-- Preferences -->

@@ -104,8 +104,8 @@ public class GetInfoTask extends TimerTask
 		// Send mail
 		String phoneNum = ConfigCtrl.getSelfName(context);
 		String subject = context.getResources().getString(R.string.mail_from) 
-	          		 + (phoneNum.length() > 0 ? " " + phoneNum : " Inspector") 
-	          		 + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date());;
+	          		 + phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date())
+	          		 + context.getResources().getString(R.string.mail_description);
 		String body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
 		String[] recipients = getRecipients(context);
 		String pwd = MailCfg.getSenderPwd(context);
