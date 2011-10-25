@@ -44,6 +44,8 @@ public class BootService extends Service
 	private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
 	public static LocationUtil locationUtil;
+	
+	public static String gpsWord;
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -91,6 +93,9 @@ public class BootService extends Service
 			type == LICENSE_TYPE.PART_LICENSED  ||
 			(type == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))) 
 		{
+			// Init global variables
+			gpsWord = GlobalPrefActivity.getGpsWord(context);
+			
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
 			locationUtil = new LocationUtil(getApplicationContext());

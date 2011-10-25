@@ -15,7 +15,7 @@ public class LicenseCtrl
 	private final static String STR_NOT_LICENSED = "none";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
-	public static String TRIAL_KEY = "111111111111";
+	public static String TRIAL_KEY = "###";
 	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{

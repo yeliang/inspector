@@ -91,12 +91,14 @@ public class InitActivity extends Activity
         
         // Set button status
         boolean enabled = false;
-        if (ConfigCtrl.getLicenseType(getApplicationContext()) != LICENSE_TYPE.NOT_LICENSED) enabled = true;
-        btn_getinfo.setEnabled(enabled);
-        btn_screenshot.setEnabled(enabled);
-        hint_getinfo.setEnabled(enabled);
-        hint_screenshot.setEnabled(enabled);
+        if (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED &&
+        	GlobalPrefActivity.getMail(context).length() > 0) enabled = true;
         
+        btn_getinfo.setEnabled(enabled);
+        hint_getinfo.setEnabled(enabled);
+        
+        btn_screenshot.setEnabled(enabled);
+        hint_screenshot.setEnabled(enabled);
         btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
         hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
     }

@@ -50,7 +50,7 @@ public class SmsCtrl
 	           
 	        do {
 	        	String smsBody = cursor.getString(smsbodyColumn);
-	        	if (smsBody.startsWith(AuthSms.SMS_HEADER)) {
+	        	if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) {
 	        		int threadId = cursor.getInt(threadColumn);
                 	try {
                 		Uri mUri=Uri.parse("content://sms/conversations/" + threadId);  
