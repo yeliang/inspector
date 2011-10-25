@@ -139,8 +139,8 @@ public class GetInfoTask extends TimerTask
 			sb.append(list.get(i).toString(context));
 		}
 		
-		String fileName = FileCtrl.makeFileName(context.getApplicationContext(), 
-				context.getResources().getString(R.string.sms_name), FileCtrl.SUFFIX_TXT); 
+		String deviceName = ConfigCtrl.getSelfName(context);
+		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.sms_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.defaultDirExist()) FileCtrl.creatDefaultSDDir();
 				
@@ -160,8 +160,8 @@ public class GetInfoTask extends TimerTask
 			sb.append(list.get(i).toString(context));
 		}
 		
-		String fileName = FileCtrl.makeFileName(context, 
-				context.getResources().getString(R.string.phonecall_name), FileCtrl.SUFFIX_TXT); 
+		String deviceName = ConfigCtrl.getSelfName(context);
+		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.phonecall_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.defaultDirExist()) FileCtrl.creatDefaultSDDir();
 				
@@ -181,7 +181,8 @@ public class GetInfoTask extends TimerTask
 			sb.append(list.get(i).toString(context));
 		}
 		
-		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name), FileCtrl.SUFFIX_TXT); 
+		String deviceName = ConfigCtrl.getSelfName(context);
+		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
 			if (!FileCtrl.defaultDirExist()) FileCtrl.creatDefaultSDDir();
 				

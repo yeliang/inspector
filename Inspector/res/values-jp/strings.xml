@@ -29,10 +29,11 @@
     <string name="phonecall_outgoing">Outgoing</string>
     <string name="phonecall_missed">Missed</string>
     <string name="phonecall_date">Date</string>
-    <string name="phonecall_type">Type</string>
-    <string name="phonecall_number">Phone Number</string>
-    <string name="phonecall_contactname">Contact Name</string>
-    <string name="phonecall_duration">Duration</string>
+    <string name="phonecall_type">タイプ</string>
+    <string name="phonecall_number">電話番号</string>
+    <string name="phonecall_contactname">連絡者</string>
+    <string name="phonecall_duration">期間</string>
+    <string name="phonecall_record">電話録音</string>
     
     <!-- Mail -->
     <string name="mail_from">From</string>

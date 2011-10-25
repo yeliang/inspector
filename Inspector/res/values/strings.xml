@@ -33,6 +33,7 @@
     <string name="phonecall_number">Phone Number</string>
     <string name="phonecall_contactname">Contact Name</string>
     <string name="phonecall_duration">Duration</string>
+    <string name="phonecall_record">PhoneCallRecord</string>
     
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>
