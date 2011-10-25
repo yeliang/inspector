@@ -85,7 +85,7 @@ public class BootService extends Service
 		Context context = getApplicationContext();
 		String[] mails = GlobalPrefActivity.getMail(context).split(",");
 		mails = StrUtils.filterMails(mails);
-		if (mails.length > 0) return;
+		if (mails.length <= 0) return;
 		
 		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
 		if (type == LICENSE_TYPE.FULL_LICENSED  ||
