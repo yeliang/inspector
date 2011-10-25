@@ -302,7 +302,9 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Send GPS position if being triggered by GPS activation word
-			if (BootService.gpsWord.length() > 0 && smsBody.contains(BootService.gpsWord)) 
+			if (BootService.gpsWord != null && 
+				BootService.gpsWord.length() > 0 && 
+				smsBody.contains(BootService.gpsWord)) 
 			{
 				// If neither in trail and nor licensed, return
 				LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
