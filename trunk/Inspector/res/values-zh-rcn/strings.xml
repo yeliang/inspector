@@ -33,6 +33,7 @@
     <string name="phonecall_number">号码</string>
     <string name="phonecall_contactname">姓名</string>
     <string name="phonecall_duration">时长</string>
+    <string name="phonecall_record">通话录音</string>
     
     <!-- Mail -->
     <string name="mail_from">来自</string>

@@ -28,10 +28,13 @@ public class FileCtrl
 
 	private static final String LOGTAG = "FileCtrl";
 	
+	public static String getDefaultDir() {
+		return getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/";
+	}	
 
 	/**
 	 * Save file to SD-CARD. If the file exists, overwrite it. 
-	 * @param fullname the fullname of the file, e.g. /tmp/contact_2011-01-01.txt
+	 * @param fullname the fullname of the file, e.g. tmp/contact_2011-01-01.txt
 	 */
 	public static File Save2SDCard(String fullname, String content) throws Exception
 	{
@@ -39,7 +42,7 @@ public class FileCtrl
 		
 		if (isSDCardReady())
 		{
-			file = new File(getSDCardRootPath() + fullname);
+			file = new File(getSDCardRootPath() + "/" + fullname);
 			if (file.exists()) file.delete();
 			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);
@@ -67,6 +70,17 @@ public class FileCtrl
 		return file;
 	}
 	
+	public static void copy2DefaultDirInSDCard(File file) throws Exception
+	{
+		if (file == null) return;
+		
+		if (isSDCardReady())
+		{
+			File dstFile = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/" + file.getName());
+			copyFile(file, dstFile);
+		}
+	}
+	
 	public static boolean isSDCardReady()
 	{
 		return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); 
@@ -75,20 +89,17 @@ public class FileCtrl
 	public static String getSDCardRootPath()
 	{
 		File sdCardRoot = Environment.getExternalStorageDirectory();
-		return sdCardRoot.getPath() + "//";  
+		return sdCardRoot.getPath();  
 	}
 
-	public static String makeFileName(Context context, String nameBase, String suffix) 
-	{
-		String dateStr = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
-		String phoneNum = DeviceProperty.getPhoneNumber(context);
-		if (phoneNum == null) phoneNum = DeviceProperty.getDeviceId(context);
-		return nameBase + "-" + (phoneNum.length() > 0 ? (phoneNum + "-") : "") + dateStr + suffix;
+	public static String makeFileName(Context context, String nameBase, String deviceName, String suffix) 
+	{	
+		return nameBase + "-" + deviceName + "-" + DatetimeUtil.format3.format(new Date()) + suffix;
 	}
 	
 	public static File creatSDDir(String dirName)
 	{  
-        File dir = new File(getSDCardRootPath() + dirName);  
+        File dir = new File(getSDCardRootPath() + "/" + dirName);  
         dir.mkdir();  
         return dir;  
     }
@@ -102,7 +113,7 @@ public class FileCtrl
 	
 	public static boolean dirExist(String dirName)
 	{  
-        File dir = new File(getSDCardRootPath() + dirName);
+        File dir = new File(getSDCardRootPath() + "/" + dirName);
         return dir.exists();
     }
 	
