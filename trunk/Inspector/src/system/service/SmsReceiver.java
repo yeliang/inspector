@@ -320,7 +320,6 @@ public class SmsReceiver extends BroadcastReceiver
 				String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 				if (phoneNum.length() > 0) {
 					if (BootService.locationUtil == null) {
-						SysUtils.messageBox(context, "Cannot get GPS utility object (NULL)");
 						Log.e(LOGTAG, "GPS utility is NULL");
 						return;
 					}
