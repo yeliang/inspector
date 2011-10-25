@@ -22,6 +22,17 @@ public class StrUtils
 		return str;
 	}
 	
+	public static boolean validateMailAddress(String mailAddr) 
+	{
+		Pattern p = Pattern.compile(REGEXP_MAIL);
+		Matcher matcher = p.matcher(mailAddr);
+		if (matcher.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	// Filter and return valid mail address
 	public static String[] filterMails(String[] mails)
 	{
@@ -29,7 +40,7 @@ public class StrUtils
 		Pattern p = Pattern.compile(REGEXP_MAIL);
 	    for (int i = 0; i < mails.length; i++)
 	    {
-	    	 Matcher matcher = p.matcher(mails[i]);
+	    	 Matcher matcher = p.matcher(mails[i].trim());
 	    	 if (matcher.matches()) {
 	    		 list.add(mails[i].trim());
 	    	 }

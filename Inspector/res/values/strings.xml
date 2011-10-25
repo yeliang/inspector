@@ -91,7 +91,7 @@
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
-    <string name="action_send_mail_fail">Failed to send a mail to your mail box</string>
+    <string name="action_send_mail_fail">Failed to send mail. Please check your mail setting.</string>
     <string name="action_network_disconnected">Network disconnected.</string>
     
     <!-- Server -->

@@ -7,6 +7,7 @@ import java.util.Date;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -98,5 +99,16 @@ public class SysUtils
 	{
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return f.format(date);
+	}
+	
+	public static boolean enableWifi(Context context, boolean state) {
+		try {
+        	WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        	wifiManager.setWifiEnabled(state);
+        	return true;
+        }
+        catch (Exception ex) {
+        	return false;
+        }
 	}
 }
