@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.particle.inspector.keygen.R;
 import com.particle.inspector.common.util.AesCryptor;
+import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.mail.GMailSenderEx;
 import com.particle.inspector.common.util.SysUtils;
@@ -111,7 +112,7 @@ public class KeyGen extends Activity
         	public void onClick(View v)
         	{
         		// Networks must be available
-    			if (!SysUtils.isNetworkConnected(v.getContext())) {
+    			if (!NetworkUtil.isNetworkConnected(v.getContext())) {
     				SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_networks_unavailable));
     				return;
     			}
@@ -176,7 +177,7 @@ public class KeyGen extends Activity
         	public void onClick(View v)
         	{
         		// Networks must be available
-    			if (!SysUtils.isNetworkConnected(v.getContext())) {
+    			if (!NetworkUtil.isNetworkConnected(v.getContext())) {
     				SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_networks_unavailable));
     				return;
     			}
@@ -240,7 +241,7 @@ public class KeyGen extends Activity
         	public void onClick(View v)
         	{
         		// Networks must be available
-    			if (!SysUtils.isNetworkConnected(v.getContext())) {
+    			if (!NetworkUtil.isNetworkConnected(v.getContext())) {
     				SysUtils.messageBox(v.getContext(), getResources().getString(R.string.send_networks_unavailable));
     				return;
     			}

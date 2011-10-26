@@ -67,7 +67,7 @@ class CaptureTask extends TimerTask
             //getScreen();
         }
         catch (Exception e) {
-            Log.d(SysUtils.TAG_DEBUG, "Unexpected error: " + e.getMessage());
+            Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             return;
         }
         finally {

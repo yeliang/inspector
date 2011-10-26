@@ -89,8 +89,8 @@ public class DbTestActivity extends Activity
         		boolean ret = db.createOrOpenDatabase();
         		TKey key =  new TKey("TheKey4Test", LICENSE_TYPE.FULL_LICENSED, "TheDeviceID4Test", "ThePhoneNumber4Test", 
         				"HTC Desire", "2.3",
-        				SysUtils.getUniformDatetimeStr(new Date()), 
-        				SysUtils.getUniformDatetimeStr(new Date()));
+        				DatetimeUtil.format.format(new Date()), 
+        				DatetimeUtil.format.format(new Date()));
         		ret = db.insert(key);
         	}
         });

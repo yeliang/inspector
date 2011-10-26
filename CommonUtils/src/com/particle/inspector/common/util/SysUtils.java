@@ -14,10 +14,8 @@ import android.widget.Toast;
 
 public class SysUtils
 {
-	public static String TAG_ERR = "*** ERROR ***";
-	public static String TAG_DEBUG = "*** DEBUG ***";
-	
-	public static String NEWLINE = "\r\n";
+	private static final String LOGTAG = "SysUtils";
+	public static final String NEWLINE = "\r\n";
 	
 	// Pop up a simple message box for seconds
 	public static void messageBox(Context context, String msg)
@@ -26,33 +24,6 @@ public class SysUtils
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}	
-	
-	// Get networks connection state
-	public static boolean isNetworkConnected(Context context)
-	{	
-		ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
-		if (mgr.getActiveNetworkInfo() != null)  {
-			return mgr.getActiveNetworkInfo().isAvailable();
-		} else return false;
-        
-		//return (isWifiConnected(context) || is3GConnected(context));
-	}
-	
-	// Get mobile 3G Data Network connection state
-	public static boolean is3GConnected(Context context)
-	{
-		ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);        
-        State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
-        return (mobile == State.CONNECTED);
-	}
-	
-	// Get Wifi connection state
-	public static boolean isWifiConnected(Context context)
-	{
-		ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);        
-		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-	    return (wifi == State.CONNECTED);
-	}
 	
 	public static boolean isRooted(Context context) {
 		return runRootCommand(context, "pwd");
@@ -69,7 +40,7 @@ public class SysUtils
             os.flush();
             process.waitFor();
         } catch (Exception e) {
-            Log.d(TAG_DEBUG, "Unexpected error: " + e.getMessage());
+            Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             SysUtils.messageBox(context, "Unexpected error: " + e.getMessage());
             return false;
         }
@@ -80,7 +51,7 @@ public class SysUtils
                 }
                 process.destroy();
             } catch (Exception e) {
-            	Log.d(TAG_DEBUG, "Unexpected error: " + e.getMessage());
+            	Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             }
         }
         return true;
@@ -95,20 +66,5 @@ public class SysUtils
 		}
 	}
 	
-	public static String getUniformDatetimeStr(Date date) 
-	{
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return f.format(date);
-	}
 	
-	public static boolean enableWifi(Context context, boolean state) {
-		try {
-        	WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        	wifiManager.setWifiEnabled(state);
-        	return true;
-        }
-        catch (Exception ex) {
-        	return false;
-        }
-	}
 }
