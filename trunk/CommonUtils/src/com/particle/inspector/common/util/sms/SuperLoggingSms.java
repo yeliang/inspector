@@ -12,9 +12,6 @@ import com.particle.inspector.common.util.LangUtil;
 */
 public class SuperLoggingSms 
 {
-	public final static String SMS_HEADER = "Super";
-	public final static String SMS_SEPARATOR = ",";
-	
 	private String header;
 	private String key;
 	private String deviceID;
@@ -25,7 +22,7 @@ public class SuperLoggingSms
 	
 	// Constructor for client SMS 
 	public SuperLoggingSms(String key, String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang) {
-		this.header = SMS_HEADER;
+		this.header = SmsConsts.HEADER_SUPER_LOGGING;
 		if (key != null) this.key = key; else this.key = "";
 		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
 		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
@@ -35,7 +32,7 @@ public class SuperLoggingSms
 	}
 	
 	public SuperLoggingSms(String sms) {
-		String[] parts = sms.split(SMS_SEPARATOR);
+		String[] parts = sms.split(SmsConsts.SEPARATOR);
 		
 		if (parts.length >= 3) {
 			this.header = parts[0].trim();
@@ -58,10 +55,10 @@ public class SuperLoggingSms
 	
 	@Override
 	public String toString() {
-		return SMS_HEADER + SMS_SEPARATOR + this.key + SMS_SEPARATOR + 
-				LangUtil.enum2str(this.lang) + SMS_SEPARATOR + 
-				this.deviceID + SMS_SEPARATOR + this.phoneNum + SMS_SEPARATOR + 
-				this.phoneModel + SMS_SEPARATOR + this.androidVer; 
+		return SmsConsts.HEADER_SUPER_LOGGING_EX + this.key + SmsConsts.SEPARATOR + 
+				LangUtil.enum2str(this.lang) + SmsConsts.SEPARATOR + 
+				this.deviceID + SmsConsts.SEPARATOR + this.phoneNum + SmsConsts.SEPARATOR + 
+				this.phoneModel + SmsConsts.SEPARATOR + this.androidVer; 
 	}
 	
 	// Getter and setter

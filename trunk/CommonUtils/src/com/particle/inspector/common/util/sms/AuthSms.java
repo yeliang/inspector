@@ -16,11 +16,6 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 */
 public class AuthSms 
 {
-	public final static String SMS_HEADER = "Auth";
-	public final static String SMS_SEPARATOR = ",";
-	public final static String SMS_SUCCESS = "OK";
-	public final static String SMS_FAILURE = "NG";
-	
 	private String header;
 	private String key;
 	private String deviceID;
@@ -33,7 +28,7 @@ public class AuthSms
 	
 	// Constructor for client SMS 
 	public AuthSms(String key, String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang) {
-		this.header = SMS_HEADER;
+		this.header = SmsConsts.HEADER_AUTH;
 		if (key != null) this.key = key; else this.key = "";
 		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
 		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
@@ -44,7 +39,7 @@ public class AuthSms
 	
 	// Constructor for server SMS 
 	public AuthSms(String key, String clientPhoneNum, AUTH_SMS_RESULT result, String errMsg) {
-		this.header = SMS_HEADER;
+		this.header = SmsConsts.HEADER_AUTH;
 		if (key != null) this.key = key; else this.key = "";
 		if (clientPhoneNum != null) this.phoneNum = clientPhoneNum; else this.phoneNum = "";
 		if (result != null) this.result = result; else this.result = AUTH_SMS_RESULT.NG;
@@ -52,7 +47,7 @@ public class AuthSms
 	}
 	
 	public AuthSms(String sms, AUTH_SMS_TYPE type) {
-		String[] parts = sms.split(SMS_SEPARATOR);
+		String[] parts = sms.split(SmsConsts.SEPARATOR);
 		if (type == AUTH_SMS_TYPE.CLIENT) {
 			if (parts.length >= 3) {
 				this.header = parts[0].trim();
@@ -85,18 +80,18 @@ public class AuthSms
 	}
 	
 	public String clientSms2Str() {
-		return SMS_HEADER + SMS_SEPARATOR + this.key + SMS_SEPARATOR + 
-				LangUtil.enum2str(this.lang) + SMS_SEPARATOR + 
-				this.deviceID + SMS_SEPARATOR + this.phoneNum + SMS_SEPARATOR + 
-				this.phoneModel + SMS_SEPARATOR + this.androidVer; 
+		return SmsConsts.HEADER_AUTH_EX + this.key + SmsConsts.SEPARATOR + 
+				LangUtil.enum2str(this.lang) + SmsConsts.SEPARATOR + 
+				this.deviceID + SmsConsts.SEPARATOR + this.phoneNum + SmsConsts.SEPARATOR + 
+				this.phoneModel + SmsConsts.SEPARATOR + this.androidVer; 
 	}
 	
 	public String serverSms2Str() {
-		String ret = SMS_HEADER + SMS_SEPARATOR + this.key + SMS_SEPARATOR + 
-				(this.phoneNum == null ? "" : this.phoneNum) + SMS_SEPARATOR +
-				(this.result == AUTH_SMS_RESULT.OK ? SMS_SUCCESS : SMS_FAILURE);
+		String ret = SmsConsts.HEADER_AUTH_EX + this.key + SmsConsts.SEPARATOR + 
+				(this.phoneNum == null ? "" : this.phoneNum) + SmsConsts.SEPARATOR +
+				(this.result == AUTH_SMS_RESULT.OK ? SmsConsts.SUCCESS : SmsConsts.FAILURE);
 		if (this.result == AUTH_SMS_RESULT.NG) {
-			ret += SMS_SEPARATOR + this.errMsg;
+			ret += SmsConsts.SEPARATOR + this.errMsg;
 		}
 		return ret;
 	}

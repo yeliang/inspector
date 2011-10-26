@@ -7,6 +7,7 @@ import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.AUTH_SMS_RESULT;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
+import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.SuperLoggingSms;
 import com.particle.inspector.authsrv.config.ConfigCtrl;
 import com.particle.inspector.authsrv.sms.SmsCtrl;
@@ -40,7 +41,7 @@ public class SmsReceiver extends BroadcastReceiver
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
 		
 		// If it is the key validation request SMS (so the key type should be full or part)
-		if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR))
+		if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX))
 		{
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
@@ -92,11 +93,11 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
 		// If it is receiver info SMS (so the key type should be full or part)
-		else if (smsBody.startsWith("Info,")) {
+		else if (smsBody.startsWith(SmsConsts.HEADER_INFO_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>,<gps activation word>
-			String parts[] = smsBody.split(",");
+			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 5) {
 				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
 				return;
@@ -114,11 +115,11 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
 		// If it is sensitive words SMS (so the key type should be full or part)
-		else if (smsBody.startsWith("SensWds,")) {
+		else if (smsBody.startsWith(SmsConsts.HEADER_SENSI_WORDS_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			// The sms format: <header>,<license key>,<receiver sensitive words>
-			String parts[] = smsBody.split(",");
+			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 3) {
 				SysUtils.messageBox(context, "Invalid SensWds SMS: " + smsBody);
 				return;
@@ -136,11 +137,11 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
 		// If it is super key info logging SMS
-		else if (smsBody.startsWith(SuperLoggingSms.SMS_HEADER + SuperLoggingSms.SMS_SEPARATOR))
+		else if (smsBody.startsWith(SmsConsts.HEADER_SUPER_LOGGING_EX))
 		{
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			String parts[] = smsBody.split(SuperLoggingSms.SMS_SEPARATOR);
+			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 3) return;
 			
 			DbHelper dbHelper = new DbHelper(context);
