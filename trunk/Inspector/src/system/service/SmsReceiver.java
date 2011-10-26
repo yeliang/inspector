@@ -80,7 +80,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		String action = intent.getAction();
 		// ==================================================================================

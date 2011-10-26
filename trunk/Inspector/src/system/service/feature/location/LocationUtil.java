@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.SysUtils;
 
 import android.content.Context;
@@ -20,7 +21,7 @@ public class LocationUtil
 	private static final String LOGTAG = "GpsUtil";
 	private static final int DEFAULT_INTERVAL = 60000; // ms
 	private static final float DEFAULT_DISTANCE = 0; // meter
-	private static final int DEFAULT_TRY_COUNT = 100;
+	private static final int DEFAULT_TRY_COUNT = 10;
 	private static final int SLEEP_TIME = 1000; // ms
 	
 	private Context context;
@@ -71,11 +72,6 @@ public class LocationUtil
 			locationManager.removeUpdates(locationListener);
 		}
 	}
-
-	public static boolean isGpsAvailabe(Context context) 
-	{
-        return ((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
 	
 	private void updateLocation(String provider) 
 	{
@@ -120,6 +116,19 @@ public class LocationUtil
     {
 		if (locationManager == null) return null;
 		
+		// If GPS is not enabled, try to enable it
+		int tryCount = 0;
+		boolean tryToEnableGPS = false;
+		while (!GpsUtil.isGpsEnabled(context) && tryCount < DEFAULT_TRY_COUNT) {
+			GpsUtil.enableGPS(context);
+			tryToEnableGPS = true;
+			SysUtils.threadSleep(3000, LOGTAG);
+		}
+		if (tryToEnableGPS) {
+			SysUtils.threadSleep(10000, LOGTAG);
+		}
+		
+		// Start to get location
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setAltitudeRequired(false);
@@ -146,7 +155,7 @@ public class LocationUtil
 		// If provider is available
         try {
         	Location loc = null;
-        	int tryCount = 0;
+        	tryCount = 0;
         	while (loc == null && tryCount < DEFAULT_TRY_COUNT) {
         		tryCount++;
         		loc = locationManager.getLastKnownLocation(provider);
@@ -156,6 +165,10 @@ public class LocationUtil
         	// Return location
         	if (loc != null) {
         		realOrHistorical = REALPOSITION;
+        		// If GPS previously forced to be enabled, try to disable it
+        		if (tryToEnableGPS) {
+        			GpsUtil.disableGPS(context);
+        		}
         		return loc;
         	} else {
         		if (this.locationQueue.size() == 0) {
