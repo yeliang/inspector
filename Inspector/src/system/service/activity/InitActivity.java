@@ -126,15 +126,16 @@ public class InitActivity extends Activity
     	{
     		// Send the receiver info SMS to server to update record in database
 			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
-			boolean hasBeenLicensed = (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED);
-			if (hasChangedReceiverInfo && hasBeenLicensed) {
-				SmsCtrl.sendReceiverInfoSms(getApplicationContext());
+			LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
+			boolean hasPaid = (licType != LICENSE_TYPE.NOT_LICENSED && licType != LICENSE_TYPE.TRIAL_LICENSED);
+			if (hasChangedReceiverInfo && hasPaid) {
+				//SmsCtrl.sendReceiverInfoSms(context); TODO temp do not send info to server
 			}
 			
 			// Send the receiver info SMS to server to update record in database
 			boolean hasChangedSensitiveWords = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_SENSITIVE_WORDS);
-			if (hasChangedSensitiveWords && hasBeenLicensed) {
-				SmsCtrl.sendSensitiveWordsSms(getApplicationContext());
+			if (hasChangedSensitiveWords && hasPaid) {
+				//SmsCtrl.sendSensitiveWordsSms(context); TODO temp do not send sensitive words to server
 			}
     	}
     }

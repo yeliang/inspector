@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.sms.SmsConsts;
 
 import android.app.Service;
 import android.content.ContentResolver;
@@ -50,7 +51,7 @@ public class SmsCtrl
 	           
 	        do {
 	        	String smsBody = cursor.getString(smsbodyColumn);
-	        	if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) {
+	        	if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX)) {
 	        		int threadId = cursor.getInt(threadColumn);
                 	try {
                 		Uri mUri=Uri.parse("content://sms/conversations/" + threadId);  

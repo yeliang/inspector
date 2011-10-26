@@ -105,5 +105,5 @@
     <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
     <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter to buy a key.</string>
-    
+    <string name="msg_cannot_unregister">Cannot unregister apk in %s. Please try again or contact supporter.</string>
 </resources>
