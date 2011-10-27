@@ -223,14 +223,14 @@ public class DbHelper
     	return ret;
     }
     
-    // Update by license key to write receiver info (mail address, phone number and GPS activation word)
-    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String gpsWord, String phoneNum)
+    // Update by license key to write receiver info (mail address, phone number)
+    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=?,gpsword=? where licensekey=?",  
-    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, gpsWord, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=? where licensekey=?",  
+    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, key });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -272,25 +272,6 @@ public class DbHelper
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
-    	} catch (SQLException ex) {
-    		Log.e(LOGTAG, ex.toString());
-    	} finally {
-    		db.close();
-    	}
-    	return ret; 
-    }
-    
-    // Update by license key to write sensitive words
-    public boolean updateByKeyToWriteSensitiveWords(String key, String sensitiveWords, String phoneNum)
-    {
-    	boolean ret = false;
-    	try {
-    		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,sensitivewords=? where licensekey=?",  
-                new Object[] { phoneNum, sensitiveWords, key });
-    		db.setTransactionSuccessful();  
-    		db.endTransaction();
-    		ret = true;
     	} catch (SQLException ex) {
     		Log.e(LOGTAG, ex.toString());
     	} finally {

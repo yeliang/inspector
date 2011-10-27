@@ -244,12 +244,12 @@ public class SmsReceiver extends BroadcastReceiver
 				//	return;
 				//}
 
-				String[] parts = smsBody.split(AuthSms.SMS_SEPARATOR);
+				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
 				if (parts.length >= 4) {
 					abortBroadcast(); // Finish broadcast, the system will notify this SMS
 
 					// --------------------------------------------------------------
-					if (parts[3].equals(AuthSms.SMS_SUCCESS)) {
+					if (parts[3].equals(SmsConsts.SUCCESS)) {
 						// Save self phone number
 						ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
 
@@ -265,7 +265,7 @@ public class SmsReceiver extends BroadcastReceiver
 						if (ConfigCtrl.getConsumedDatetime(context) == null) {
 							ConfigCtrl.setConsumedDatetime(context, (new Date()));
 						}
-					} else if (parts[3].equalsIgnoreCase(AuthSms.SMS_FAILURE)) {
+					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
 						if (parts.length >= 4) {
 							SysUtils.messageBox(context, parts[3]);
 						} else {

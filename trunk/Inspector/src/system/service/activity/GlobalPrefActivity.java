@@ -38,7 +38,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private static String SENSITIVE_WORDS;
 	private static String GPS_WORD;
 	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info"; // mail, phone number, GPS word
-	public static final String HAS_CHG_SENSITIVE_WORDS = "has_changed_sensitive_words"; // sensitive words
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	public static final int GPS_WORD_MAX_LEN = 24;
@@ -95,7 +94,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 						}
 					}
 					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
-					if (words.length() > 0) enableSensitiveWordsChgFlag();
 				}
 				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
 					String oriWord = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "");
@@ -123,14 +121,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		Intent intent = this.getIntent();
 		Bundle bn = intent.getExtras();
 		bn.putBoolean(HAS_CHG_RECEIVER_INFO, true);
-		intent.putExtras(bn);
-		setResult(RESULT_OK, intent);
-	}
-	
-	private void enableSensitiveWordsChgFlag() {
-		Intent intent = this.getIntent();
-		Bundle bn = intent.getExtras();
-		bn.putBoolean(HAS_CHG_SENSITIVE_WORDS, true);
 		intent.putExtras(bn);
 		setResult(RESULT_OK, intent);
 	}

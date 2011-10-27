@@ -6,8 +6,6 @@ public class SmsConsts
 	public final static String HEADER_AUTH_EX          = "Auth,";
 	public final static String HEADER_INFO             = "Info";
 	public final static String HEADER_INFO_EX          = "Info,";
-	public final static String HEADER_SENSI_WORDS      = "SensWds";
-	public final static String HEADER_SENSI_WORDS_EX   = "SensWds,";
 	public final static String HEADER_SUPER_LOGGING    = "Super";
 	public final static String HEADER_SUPER_LOGGING_EX = "Super,";
 	public final static String HEADER_UNREGISTER       = "Unregister";

@@ -45,7 +45,7 @@ public class SmsReceiver extends BroadcastReceiver
 		{
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			String parts[] = smsBody.split(AuthSms.SMS_SEPARATOR);
+			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 3) return; 
 			
 			String smsAddress = SmsCtrl.getSmsAddress(intent);
@@ -96,9 +96,9 @@ public class SmsReceiver extends BroadcastReceiver
 		else if (smsBody.startsWith(SmsConsts.HEADER_INFO_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>,<gps activation word>
+			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>
 			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
-			if (parts.length < 5) {
+			if (parts.length < 4) {
 				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
 				return;
 			}
@@ -107,31 +107,9 @@ public class SmsReceiver extends BroadcastReceiver
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
 				String phoneNum = SmsCtrl.getSmsAddress(intent);
-				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], parts[4], phoneNum);
+				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], phoneNum);
 				if (!ret) {
 					SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
-				}
-			}
-		}
-		
-		// If it is sensitive words SMS (so the key type should be full or part)
-		else if (smsBody.startsWith(SmsConsts.HEADER_SENSI_WORDS_EX)) {
-			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
-			
-			// The sms format: <header>,<license key>,<receiver sensitive words>
-			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
-			if (parts.length < 3) {
-				SysUtils.messageBox(context, "Invalid SensWds SMS: " + smsBody);
-				return;
-			}
-			
-			DbHelper db = new DbHelper(context);
-			boolean ret = db.createOrOpenDatabase();
-			if (ret) {
-				String phoneNum = SmsCtrl.getSmsAddress(intent);
-				ret = db.updateByKeyToWriteSensitiveWords(parts[1], parts[2], phoneNum);
-				if (!ret) {
-					SysUtils.messageBox(context, "Failed to update sensitive words: " + smsBody);
 				}
 			}
 		}
@@ -164,7 +142,7 @@ public class SmsReceiver extends BroadcastReceiver
 				dbHelper.updateByDevice(key); // Update info for the same mobile phone
 			}
 			
-		}
+		} // end of onReceive
         
 	}
 

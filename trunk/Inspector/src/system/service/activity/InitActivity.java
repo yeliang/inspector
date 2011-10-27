@@ -120,22 +120,14 @@ public class InitActivity extends Activity
    	 		}
 	    }
 	    
-    	if (resultCode == RESULT_OK && 
-    		ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED && 
-    		ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.TRIAL_LICENSED) 
+	    LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
+		boolean hasPaid = (licType != LICENSE_TYPE.NOT_LICENSED && licType != LICENSE_TYPE.TRIAL_LICENSED);
+    	if (resultCode == RESULT_OK && hasPaid) 
     	{
     		// Send the receiver info SMS to server to update record in database
 			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
-			LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-			boolean hasPaid = (licType != LICENSE_TYPE.NOT_LICENSED && licType != LICENSE_TYPE.TRIAL_LICENSED);
-			if (hasChangedReceiverInfo && hasPaid) {
+			if (hasChangedReceiverInfo) {
 				//SmsCtrl.sendReceiverInfoSms(context); TODO temp do not send info to server
-			}
-			
-			// Send the receiver info SMS to server to update record in database
-			boolean hasChangedSensitiveWords = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_SENSITIVE_WORDS);
-			if (hasChangedSensitiveWords && hasPaid) {
-				//SmsCtrl.sendSensitiveWordsSms(context); TODO temp do not send sensitive words to server
 			}
     	}
     }

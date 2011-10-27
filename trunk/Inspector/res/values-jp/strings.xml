@@ -47,10 +47,12 @@
     
     <!-- Preferences -->
     <string name="pref_title">設定</string>
+    <string name="pref_category_receiver_key">pref_category_receiver</string>
+    <string name="pref_category_receiver_title">监视者</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
     <string name="pref_category_info_collector_title">機能</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
-    <string name="pref_category_sms_redirector_title">SMS Redirection</string>
+    <string name="pref_category_sms_redirector_title">SMS転送</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">メール</string>
@@ -90,7 +92,7 @@
     <!-- Actions -->
     <string name="action_send_mail_success">送信成功</string>
     <string name="action_send_mail_fail">送信失敗</string>
-    <string name="action_network_disconnected">Network disconnected.</string>
+    <string name="action_network_disconnected">ネットワーク接続なし</string>
     
     <!-- Message -->
 	<string name="msg_invalid_key">無効ライセンスキー。使ったキーかもしれない。製造者をご連絡ください。</string>
