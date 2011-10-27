@@ -48,12 +48,14 @@
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
+    <string name="pref_category_receiver_key">pref_category_receiver</string>
+    <string name="pref_category_receiver_title">Receiver Info</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
     <string name="pref_category_info_collector_title">Collect Information</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
     <string name="pref_category_sms_redirector_title">SMS Redirection</string>
     <string name="pref_category_gps_key">pref_category_gps</string>
-    <string name="pref_category_gps_title">Get GPS Location</string>
+    <string name="pref_category_gps_title">Get Location</string>
     
     <string name="pref_mail_key">pref_mail</string>
     <string name="pref_mail_title">Mail</string>

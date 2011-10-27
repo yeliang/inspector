@@ -40,9 +40,7 @@
 		consumedate varchar[24],
 		lastactivatedate varchar[24],
 		receivermailaddress varchar[128],
-		receiverphonenum varchar[16],
-		sensitivewords varchar[128],
-		gpsword varchar[24]
+		receiverphonenum varchar[16]
 		); 
 	</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
