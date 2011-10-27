@@ -38,15 +38,20 @@ public class IndicationHandler
 				
 				// Necessary to force reboot to make key effective?
 				// TODO
-			} else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
+			}
+			// Unregister indication
+			else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
 				LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
 				// Only can deactivate FULL/PART/SUPER license key
 				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) return;
 				
+				// Send unregister SMS to server
 				boolean ret = SmsCtrl.sendUnregisterSms(context);
 				if (!ret) {
 					// If not success, should send SMS to tell the receiver that it fails
 					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.msg_cannot_unregister));
+				} else {
+					ConfigCtrl.setUnregistererPhoneNum(context, incomingPhoneNum);
 				}
 			}
 		}
@@ -57,7 +62,7 @@ public class IndicationHandler
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.length() > 0 && StrUtils.validateMailAddress(indication)) {
-				GlobalPrefActivity.setMail(context, indication);
+				GlobalPrefActivity.setReceiverMail(context, indication);
 			} else {
 				// Send SMS to warn the user
 				//TODO
@@ -92,7 +97,7 @@ public class IndicationHandler
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.length() > 0) {
-				GlobalPrefActivity.setRedirectPhoneNum(context, indication);
+				GlobalPrefActivity.setReceiverPhoneNum(context, indication);
 			}
 		}
 		

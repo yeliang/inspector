@@ -144,14 +144,14 @@ public class DbHelper
     	return ret;
     }
     
-    public int deleteFromKey(long id)
+    public int deleteById(long id)
     {
         String where = KEY_FIELD_ID + "=?";
         String[] whereValue = {Long.toString(id)};
         return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
     }
     
-    public int deleteFromKey(String key)
+    public int deleteByKey(String key)
     {
         String where = KEY_FIELD_KEY + "=?";
         String[] whereValue = {key};
@@ -161,6 +161,13 @@ public class DbHelper
     public int cleanTableKey()
     {
         return db.delete(DEFAULT_KEY_TABLE_NAME, null, null);
+    }
+    
+    // unregister
+    public boolean unregister(String key, String deviceId)
+    {
+    	int count = deleteByKey(key);
+    	return (count > 0);
     }
     
     // Update by _id

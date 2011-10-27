@@ -30,6 +30,7 @@ public class ConfigCtrl
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
+	private static final String UNREGISTERER_PHONE_NUMBER = "UnregistererPhoneNum";
 	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
 	
 	public static boolean set(Context context, String key, String value)
@@ -200,6 +201,23 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
+	public static String getUnregistererPhoneNum(Context context) 
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(UNREGISTERER_PHONE_NUMBER, "").trim();
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
+	}
+	
+	public static boolean setUnregistererPhoneNum(Context context, String value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putString(UNREGISTERER_PHONE_NUMBER, value);     
+		return editor.commit();
+	}
+	
 	// See if now is still in trial
 	public static boolean stillInTrial(Context context) 
 	{
@@ -235,5 +253,5 @@ public class ConfigCtrl
 		}
 		return phoneNum;
 	}
-	
+
 }

