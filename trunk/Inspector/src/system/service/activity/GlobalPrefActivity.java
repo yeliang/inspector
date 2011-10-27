@@ -169,12 +169,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 	    return valid;
 	}
 	
-	public static String getMail(Context context) {
+	public static String getReceiverMail(Context context) {
 		MAIL = context.getResources().getString(R.string.pref_mail_key);
 		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "").trim();
 	}
 	
-	public static void setMail(Context context, String value) {
+	public static void setReceiverMail(Context context, String value) {
 		MAIL = context.getResources().getString(R.string.pref_mail_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
 	}
@@ -189,12 +189,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
 	}
 	
-	public static String getRedirectPhoneNum(Context context) {
+	public static String getReceiverPhoneNum(Context context) {
 		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
 		return PreferenceManager.getDefaultSharedPreferences(context).getString(REDIRECT_PHONE_NUM, "").trim();
 	}
 	
-	public static void setRedirectPhoneNum(Context context, String value) {
+	public static void setReceiverPhoneNum(Context context, String value) {
 		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(REDIRECT_PHONE_NUM, value).commit();
 	}

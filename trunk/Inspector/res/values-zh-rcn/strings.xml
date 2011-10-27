@@ -106,4 +106,6 @@
     <string name="msg_auth_sms_sent_fail">错误：向服务器发送注册验证短信失败。请退出再次尝试或联系客服。</string>
     <string name="msg_has_sent_trial_expire_sms">安卓监控提醒您：在%s上的试用期已过，如需继续使用请联系客服。</string>
     <string name="msg_cannot_unregister">未能卸载%s上的安卓监控软件，请再次尝试或联系客服。</string>
+    <string name="msg_report_unregister">已经成功卸载%s上的安卓监控软件。</string>
+    
 </resources>

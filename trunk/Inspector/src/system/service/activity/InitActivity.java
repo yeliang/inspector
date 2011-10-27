@@ -93,7 +93,7 @@ public class InitActivity extends Activity
         // Set button status
         boolean enabled = false;
         if (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED &&
-        	GlobalPrefActivity.getMail(context).length() > 0) enabled = true;
+        	GlobalPrefActivity.getReceiverMail(context).length() > 0) enabled = true;
         
         btn_getinfo.setEnabled(enabled);
         hint_getinfo.setEnabled(enabled);
@@ -109,7 +109,7 @@ public class InitActivity extends Activity
     {
     	// Enable buttons if the mail address is valid
 		Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
-		String mailAddr = GlobalPrefActivity.getMail(getApplicationContext());
+		String mailAddr = GlobalPrefActivity.getReceiverMail(getApplicationContext());
 	    if (mailAddr.length() > 0) {
 	    	Matcher matcher = p.matcher(mailAddr);
    	 		if (matcher.matches()) {
@@ -188,7 +188,7 @@ public class InitActivity extends Activity
         	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
         	          		 + getResources().getString(R.string.mail_description);
     					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);
-    					String[] recipients = GlobalPrefActivity.getMail(context).split(",");
+    					String[] recipients = GlobalPrefActivity.getReceiverMail(context).split(",");
     					if (recipients.length == 0) {
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     						return;

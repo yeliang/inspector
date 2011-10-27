@@ -221,7 +221,7 @@ public class GetInfoTask extends TimerTask
 	
 	private static String[] getRecipients(Context context)
 	{
-		String mail = GlobalPrefActivity.getMail(context);
+		String mail = GlobalPrefActivity.getReceiverMail(context);
 		String[] mails = mail.split(",");
 		if (mails.length > 0) {
 			return StrUtils.filterMails(mails);

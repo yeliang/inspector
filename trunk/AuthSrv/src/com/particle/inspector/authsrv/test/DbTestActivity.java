@@ -101,7 +101,7 @@ public class DbTestActivity extends Activity
         	{
         		DbHelper db = new DbHelper(v.getContext());
         		boolean ret = db.createOrOpenDatabase();
-        		int count = db.deleteFromKey("TheKey4Test");
+        		int count = db.deleteByKey("TheKey4Test");
         	}
         });
         

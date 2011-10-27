@@ -172,4 +172,10 @@ public class SmsCtrl
 		return tempString;
 	}
 	
+	public static boolean sendUnregisterResponseSms(String incomingPhoneNum, String key, boolean success) 
+	{
+		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + 
+				(success ? SmsConsts.SUCCESS : SmsConsts.FAILURE);
+		return sendSms(incomingPhoneNum, strContent);
+	}
 }

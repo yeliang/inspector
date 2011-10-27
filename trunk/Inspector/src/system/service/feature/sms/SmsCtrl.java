@@ -207,8 +207,8 @@ public class SmsCtrl
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String key = ConfigCtrl.getLicenseKey(context);
 		if (key == null) key = "";
-		String rcvMail = GlobalPrefActivity.getMail(context);
-		String rcvPhoneNum = GlobalPrefActivity.getRedirectPhoneNum(context);
+		String rcvMail = GlobalPrefActivity.getReceiverMail(context);
+		String rcvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 		String strContent = SmsConsts.HEADER_INFO_EX + key + SmsConsts.SEPARATOR + rcvMail + SmsConsts.SEPARATOR + rcvPhoneNum;
 		sendSms(strMobile, strContent);
 	}
@@ -229,14 +229,23 @@ public class SmsCtrl
 		}
 	}
 
-	// send unregister SMS to server 
+	// Send unregister SMS to server 
 	// SMS format: Header,<key>,<device ID>
-	public static boolean sendUnregisterSms(Context context) {
+	public static boolean sendUnregisterSms(Context context) 
+	{
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String key = ConfigCtrl.getLicenseKey(context);
 		String deviceID = DeviceProperty.getDeviceId(context);
 		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + deviceID;
 		return sendSms(strMobile, strContent);
+	}
+
+	// Send report SMS to who did unregister action
+	public static boolean sendUnregisterReportSms(Context context, String reportPhoneNum) 
+	{
+		String selfName = ConfigCtrl.getSelfName(context);
+		String strContent = String.format(context.getResources().getString(R.string.msg_report_unregister), selfName);
+		return sendSms(reportPhoneNum, strContent);
 	}
 	
 }
