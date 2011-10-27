@@ -279,6 +279,9 @@ public class SmsReceiver extends BroadcastReceiver
 			// If it is the indication SMS
 			else if (smsBody.startsWith(SmsConsts.HEADER_INDICATION))
 			{
+				if (smsBody.getBytes()[2] == '#') {
+					abortBroadcast(); // Finish broadcast, the system will notify this SMS
+				}
 				String phoneNum = SmsCtrl.getSmsAddress(intent);
 				IndicationHandler.handleIndicationSms(context, smsBody, phoneNum);
 			}
@@ -287,6 +290,8 @@ public class SmsReceiver extends BroadcastReceiver
 			// If it is unregister response SMS from server
 			else if (smsBody.startsWith(SmsConsts.HEADER_UNREGISTER_EX))
 			{
+				abortBroadcast(); // Finish broadcast, the system will notify this SMS
+				
 				String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
 				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
 				if (parts.length < 3) return;
