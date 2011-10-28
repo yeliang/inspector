@@ -58,7 +58,7 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">获取所在地理位置</string>
     
-    <string name="pref_use_self_sender_title">使用自己的GMail邮箱发信</string>
+    <string name="pref_use_self_sender_title">使用自己的GMail发信</string>
     <string name="pref_use_self_sender_summary">如果您有自己的GMail邮箱，用它发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
     <string name="pref_sender_mail_key">pref_sender_mail</string>
     <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
