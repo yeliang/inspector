@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:key="@string/pref_category_sender_mail_key" android:title="@string/pref_category_sender_mail_title">
+        <CheckBoxPreference android:key="pref_use_self_sender" android:title="@string/pref_use_self_sender_title" android:summary="@string/pref_use_self_sender_summary" android:defaultValue="false" />
+    	<EditTextPreference android:title="@string/pref_sender_mail_title" android:key="@string/pref_sender_mail_key" />
+    	<EditTextPreference android:title="@string/pref_sender_pwd_title" android:key="@string/pref_sender_pwd_key" />
+    </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_receiver_key" android:title="@string/pref_category_receiver_title">
-    	<EditTextPreference android:title="@string/pref_mail_title" android:key="@string/pref_mail_key"></EditTextPreference>
-    	<EditTextPreference android:title="@string/pref_phonenum_title" android:key="@string/pref_phonenum_key"></EditTextPreference>
+    	<EditTextPreference android:title="@string/pref_recv_mail_title" android:key="@string/pref_recv_mail_key" />
+    	<EditTextPreference android:title="@string/pref_phonenum_title" android:key="@string/pref_phonenum_key" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_info_collector_key" android:title="@string/pref_category_info_collector_title">
     	<ListPreference android:title="@string/pref_info_interval_title" android:key="@string/pref_info_interval_key" android:defaultValue="1" android:selectable="true" android:dialogTitle="@string/pref_info_interval_dlg_title" android:entryValues="@array/days_value" android:entries="@array/days_display"></ListPreference>

@@ -47,6 +47,8 @@
     
     <!-- Preferences -->
     <string name="pref_title">设定</string>
+    <string name="pref_category_sender_mail_key">pref_category_sender</string>
+    <string name="pref_category_sender_mail_title">发信邮箱（可选项）</string>
     <string name="pref_category_receiver_key">pref_category_receiver</string>
     <string name="pref_category_receiver_title">接收者信息</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
@@ -56,9 +58,16 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">获取所在地理位置</string>
     
-    <string name="pref_mail_key">pref_mail</string>
-    <string name="pref_mail_title">邮箱</string>
-    <string name="pref_pls_input_mail">警告：%s 不是一个有效的邮箱地址。</string>
+    <string name="pref_use_self_sender_title">使用自己的GMail邮箱发信</string>
+    <string name="pref_use_self_sender_summary">如果您有自己的GMail邮箱，用它发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
+    <string name="pref_sender_mail_key">pref_sender_mail</string>
+    <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
+    <string name="pref_sender_pwd_key">pref_sender_pwd</string>
+    <string name="pref_sender_pwd_title">发信邮箱密码</string>
+    <string name="pref_recv_mail_key">pref_recv_mail</string>
+    <string name="pref_recv_mail_title">收信邮箱</string>
+    <string name="pref_invalid_mail_format">警告：%s 不是一个有效的邮箱地址。</string>
+    <string name="pref_pls_input_pwd">请输入邮箱密码。</string>
     <string name="pref_info_interval_key">pref_info_interval</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>

@@ -32,7 +32,9 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 public class GlobalPrefActivity extends PreferenceActivity 
 {
 	private OnSharedPreferenceChangeListener chgListener;
-	private static String MAIL;
+	private static String SENDER_MAIL;
+	private static String SENDER_PWD;
+	private static String RECV_MAIL;
 	private static String INTERVAL_INFO;
 	private static String REDIRECT_PHONE_NUM;
 	private static String SENSITIVE_WORDS;
@@ -64,7 +66,22 @@ public class GlobalPrefActivity extends PreferenceActivity
 			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals(getResources().getString(R.string.pref_mail_key))) {
+				if (key.equals(getResources().getString(R.string.pref_sender_mail_key))) {
+					String oriSenderMail = sharedPreferences.getString(getResources().getString(R.string.pref_sender_mail_key), "");
+					String senderMail = oriSenderMail.trim();
+					if(!StrUtils.validateMailAddress(senderMail)) {
+						String msg = String.format(getResources().getString(R.string.pref_invalid_mail_format), senderMail);
+						SysUtils.messageBox(getApplicationContext(), msg);
+					}
+				}
+				else if (key.equals(getResources().getString(R.string.pref_sender_pwd_key))) {
+					String oriSenderPwd = sharedPreferences.getString(getResources().getString(R.string.pref_sender_pwd_key), "");
+					String senderPwd = oriSenderPwd.trim();
+					if (senderPwd.length() <= 0) {
+						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_pwd));
+					}
+				}
+				else if (key.equals(getResources().getString(R.string.pref_recv_mail_key))) {
 					checkMailFormat(sharedPreferences, getApplicationContext());
 					enableReceiverInfoChgFlag();
 				}
@@ -149,7 +166,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	private boolean checkMailFormat(SharedPreferences sharedPreferences, Context context) {
 		boolean valid = true;
-		String oriMail = sharedPreferences.getString(getResources().getString(R.string.pref_mail_key), "");
+		String oriMail = sharedPreferences.getString(getResources().getString(R.string.pref_recv_mail_key), "");
 		String mail = oriMail.trim();
 		//if (!mail.equals(oriMail)) setMail(context, mail);
 		String[] mails = mail.split(",");
@@ -159,7 +176,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	    	if (eachMail.trim().length() > 0) {
 	    		Matcher matcher = p.matcher(eachMail.trim());
    	 			if (!matcher.matches()) {
-   	 				String msg = String.format(context.getResources().getString(R.string.pref_pls_input_mail), eachMail.trim());
+   	 				String msg = String.format(context.getResources().getString(R.string.pref_invalid_mail_format), eachMail.trim());
    	 				SysUtils.messageBox(context, msg);
    	 				valid = false;
    	 				break;
@@ -169,14 +186,42 @@ public class GlobalPrefActivity extends PreferenceActivity
 	    return valid;
 	}
 	
+	public static boolean getUseSelfSender(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_use_self_sender", false);
+	}
+	
+	public static void setUseSelfSender(Context context, boolean value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_use_self_sender", value).commit();
+	}
+	
+	public static String getSenderMail(Context context) {
+		SENDER_MAIL = context.getResources().getString(R.string.pref_sender_mail_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENDER_MAIL, "").trim();
+	}
+	
+	public static void setSenderMail(Context context, String value) {
+		SENDER_MAIL = context.getResources().getString(R.string.pref_sender_mail_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENDER_MAIL, value).commit();
+	}
+	
+	public static String getSenderPassword(Context context) {
+		SENDER_PWD = context.getResources().getString(R.string.pref_sender_pwd_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENDER_PWD, "").trim();
+	}
+	
+	public static void setSenderPassword(Context context, String value) {
+		SENDER_PWD = context.getResources().getString(R.string.pref_sender_pwd_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENDER_PWD, value).commit();
+	}
+	
 	public static String getReceiverMail(Context context) {
-		MAIL = context.getResources().getString(R.string.pref_mail_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(MAIL, "").trim();
+		RECV_MAIL = context.getResources().getString(R.string.pref_recv_mail_key);
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(RECV_MAIL, "").trim();
 	}
 	
 	public static void setReceiverMail(Context context, String value) {
-		MAIL = context.getResources().getString(R.string.pref_mail_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(MAIL, value).commit();
+		RECV_MAIL = context.getResources().getString(R.string.pref_recv_mail_key);
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(RECV_MAIL, value).commit();
 	}
 	
 	public static int getInfoInterval(Context context) {
