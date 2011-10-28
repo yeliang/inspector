@@ -15,10 +15,9 @@ public class TKey
 	private String phoneModel; // Phone model
 	private String androidVer; // The Android version of the phone
 	private String consumeDate;
-	private String lastActivateDate;
 	
-	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer,
-			String consumeDate, String lastActivateDate) {
+	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
+	{
 		if (id >= 0) this.id = id;
 		if (key != null) this.key = key;
 		if (keyType != null) this.keyType = keyType;
@@ -27,11 +26,10 @@ public class TKey
 		if (phoneModel != null) this.phoneModel = phoneModel;
 		if (androidVer != null) this.androidVer = androidVer;
 		if (consumeDate != null) this.consumeDate = consumeDate;
-		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 	
-	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer,
-			String consumeDate, String lastActivateDate) {
+	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
+	{
 		if (key != null) this.key = key;
 		if (keyType != null) this.keyType = keyType;
 		if (deviceID != null) this.deviceID = deviceID;
@@ -39,7 +37,6 @@ public class TKey
 		if (phoneModel != null) this.phoneModel = phoneModel;
 		if (androidVer != null) this.androidVer = androidVer;
 		if (consumeDate != null) this.consumeDate = consumeDate;
-		if (lastActivateDate != null) this.lastActivateDate = lastActivateDate;
 	}
 
 	// Getters and setters
@@ -59,8 +56,6 @@ public class TKey
 	public void setAndroidVer(String androidVer) { this.androidVer = androidVer; }	
 	public String getConsumeDate() { return consumeDate; }
 	public void setConsumeDate(String consumeDate) { this.consumeDate = consumeDate; }
-	public String getLastActivateDate() { return lastActivateDate; }
-	public void setLastActivateDate(String lastActivateDate) { this.lastActivateDate = lastActivateDate; }
 	
 	@Override
 	public String toString() {
@@ -72,7 +67,6 @@ public class TKey
             ", phonemodel=" + phoneModel +
             ", androidver=" + androidVer +
 			", consumedate=" + consumeDate +
-    ", lastactivatedate=" + lastActivateDate +
 			 "]";
 	}
 

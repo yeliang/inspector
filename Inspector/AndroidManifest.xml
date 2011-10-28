@@ -14,11 +14,15 @@
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name=".SmsReceiver" 
-				  android:enabled="true" >
+		<receiver android:name=".SmsReceiver" android:enabled="true">
         	<intent-filter android:priority="999">
-        		<action android:name="android.intent.action.ANSWER" />
-            	<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+        		<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+        	</intent-filter>
+    	</receiver>
+    	
+    	<receiver android:name=".PhoneCallReceiver" android:enabled="true">
+        	<intent-filter android:priority="1001">
+        		<action android:name="android.intent.action.PHONE_STATE" />
         	</intent-filter>
     	</receiver>
 		
@@ -41,10 +45,14 @@
 	<!-- User permissions -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.READ_CONTACTS" />
 	<uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" />
+	
+	<!-- Permission for Phone Call -->
+	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	
 	<!-- Permission for Network -->
 	<uses-permission android:name="android.permission.INTERNET" />

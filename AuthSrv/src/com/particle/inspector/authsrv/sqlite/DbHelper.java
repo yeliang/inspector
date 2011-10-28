@@ -46,8 +46,7 @@ public class DbHelper
     public final static String KEY_FIELD_DEVICE_ID = "deviceid";
     public final static String KEY_FIELD_PHONE_NUMBER = "phonenum";
     public final static String KEY_FIELD_CONSUME_DATE = "consumedate";
-    public final static String KEY_FIELD_LAST_ACTIVATE_DATE = "lastactivatedate";
-	
+    
     public DbHelper(Context context)
     {
         this.context = context;
@@ -130,9 +129,9 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,lastactivatedate) values(?,?,?,?,?,?,?,?)",  
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate) values(?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate(), key.getLastActivateDate() });
+        			key.getConsumeDate() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -176,9 +175,9 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,lastactivatedate=? where _id=?",  
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=? where _id=?",  
                 new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate(), key.getLastActivateDate(), key.getId() });
+        			key.getConsumeDate(), key.getId() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -196,9 +195,8 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,phonenum=?,androidver=?,lastactivatedate=? where deviceid=?",  
-                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getPhoneNum(), key.getAndroidVer(),
-        			 key.getLastActivateDate(), key.getDeviceID() });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,phonenum=?,androidver=? where deviceid=?",  
+                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getPhoneNum(), key.getAndroidVer(), key.getDeviceID() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -216,9 +214,8 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=?,lastactivatedate=? where licensekey=?",  
-                new Object[] { key.getPhoneNum(), key.getAndroidVer(),
-        			 key.getLastActivateDate(), key.getKey() });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=? where licensekey=?",  
+                new Object[] { key.getPhoneNum(), key.getAndroidVer(), key.getKey() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -293,7 +290,7 @@ public class DbHelper
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)), 
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7), cursor.getString(8));  
+            		cursor.getString(6), cursor.getString(7));  
         }  
         return null;  
     }
@@ -311,8 +308,7 @@ public class DbHelper
         		String phoneModel = cursor.getString(5);
         		String androidVer = cursor.getString(6);
         		String consumeDate = cursor.getString(7);
-        		String lastActivateDate = cursor.getString(8);
-        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate, lastActivateDate);
+        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;
@@ -328,7 +324,7 @@ public class DbHelper
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7), cursor.getString(8));  
+            		cursor.getString(6), cursor.getString(7));  
         }  
         return null;  
     }

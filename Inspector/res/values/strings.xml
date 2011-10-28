@@ -73,11 +73,11 @@
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the suplus words will be ignored. Please re-edit your sensitive words.</string>
     <string name="pref_activate_word_key">pref_activate_word</string>
     <string name="pref_activate_word_title">Activation Word</string>
-    <string name="pref_activate_word_summary">Send a SMS containing the word can get back GPS location.</string>
-    <string name="pref_pls_input_gps_activate_word">Please input ONE word for getting GPS location.</string>
+    <string name="pref_activate_word_summary">Send a SMS containing the word can get back location.</string>
+    <string name="pref_pls_input_gps_activate_word">Please input ONE word for getting location.</string>
     <string name="pref_gps_activate_word_max_len">12 eastern characters (Chinese or Japanese) or 24 letters/numbers are permitted.</string>
     <string name="pref_show_sms">Display SMS</string>
-    <string name="pref_show_sms_summary">Display SMS that contain GPS word</string>
+    <string name="pref_show_sms_summary">Display SMS that contain activation word</string>
     
     <!-- InitActivity -->
     <string name="init_btn_getinfo">Get Info</string>
@@ -97,7 +97,7 @@
     <string name="action_network_disconnected">Network disconnected.</string>
     
     <!-- Server -->
-	<string name="srv_address">15398053471</string>
+	<string name="srv_address">+8615398053471</string>
 	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>
