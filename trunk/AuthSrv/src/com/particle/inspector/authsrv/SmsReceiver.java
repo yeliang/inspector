@@ -72,14 +72,13 @@ public class SmsReceiver extends BroadcastReceiver
 						String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
 						TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), phoneNum,
 							sms.getPhoneModel(), sms.getAndroidVer(), 
-							DatetimeUtil.format.format(new Date()), 
 							DatetimeUtil.format.format(new Date()));
 						dbHelper.insert(key);
 					} else if (valid == KEY_VALIDATION_RESULT.VALID_BUT_EXIST) {
 						// Insert to database
 						TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), sms.getPhoneNum(),
 							sms.getPhoneModel(), sms.getAndroidVer(), 
-							null, DatetimeUtil.format.format(new Date()));
+							null);
 						dbHelper.updateByKey(key);
 					}
 				}
@@ -167,7 +166,6 @@ public class SmsReceiver extends BroadcastReceiver
 			LICENSE_TYPE keyType = LicenseCtrl.calLicenseType(context, sms.getKey());
 			TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), phoneNum,
 				sms.getPhoneModel(), sms.getAndroidVer(), 
-				DatetimeUtil.format.format(new Date()), 
 				DatetimeUtil.format.format(new Date()));
 			if (dbHelper.findDevice(sms.getDeviceID()) == null) {
 				dbHelper.insert(key);

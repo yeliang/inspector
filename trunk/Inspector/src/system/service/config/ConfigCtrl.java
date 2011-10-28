@@ -21,7 +21,7 @@ public class ConfigCtrl
 {
 	private static final String PREFS_NAME = "system.service";
 	private static final String LICENSE_KEY = "LicenseKey";
-	private static final String LICENSE_TYPE = "LicenseType";
+	private static final String LICENSE_TYPE_STR = "LicenseType";
 	private static final String INTERVAL_TRY_SCREENSHOT_ = "TryScreenshotInterval";
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
@@ -66,14 +66,14 @@ public class ConfigCtrl
 	public static LICENSE_TYPE getLicenseType(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String type = config.getString(LICENSE_TYPE, "");
+		String type = config.getString(LICENSE_TYPE_STR, "");
 		return LicenseCtrl.strToEnum(type);
 	}
 	
 	public static boolean setLicenseType(Context context, LICENSE_TYPE type)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(LICENSE_TYPE, LicenseCtrl.enumToStr(type));     
+		editor.putString(LICENSE_TYPE_STR, LicenseCtrl.enumToStr(type));     
 		return editor.commit();
 	}
 	
@@ -252,6 +252,15 @@ public class ConfigCtrl
 			}
 		}
 		return phoneNum;
+	}
+	
+	public static boolean isLegal(Context context) 
+	{
+		LICENSE_TYPE licType = getLicenseType(context);
+		return (licType == LICENSE_TYPE.FULL_LICENSED ||
+				licType == LICENSE_TYPE.PART_LICENSED ||
+				licType == LICENSE_TYPE.SUPER_LICENSED ||
+				(licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context)));
 	}
 
 }
