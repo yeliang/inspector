@@ -60,13 +60,19 @@ public class GlobalPrefActivity extends PreferenceActivity
 		//String summary = getResources().getString(R.string.pref_word_sensor_summary);
 		//((PreferenceCategory)this.getPreferenceScreen().getPreference(prefCount-1)).getPreference(1).setSummary(summary);
 		
+		// Disable sender mail&password by default
+		setSenderMailState(getPreferenceScreen().getSharedPreferences());
+		
 		// Register	preference change listener
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		chgListener = new OnSharedPreferenceChangeListener(){
 			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals(getResources().getString(R.string.pref_sender_mail_key))) {
+				if (key.equals("pref_use_self_sender")) {
+					setSenderMailState(sharedPreferences);
+				}
+				else if (key.equals(getResources().getString(R.string.pref_sender_mail_key))) {
 					String oriSenderMail = sharedPreferences.getString(getResources().getString(R.string.pref_sender_mail_key), "");
 					String senderMail = oriSenderMail.trim();
 					if(!StrUtils.validateMailAddress(senderMail)) {
@@ -184,6 +190,17 @@ public class GlobalPrefActivity extends PreferenceActivity
 	    	}
 	    }
 	    return valid;
+	}
+	
+	private void setSenderMailState(SharedPreferences sharedPreferences) {
+		boolean useSelfSender = sharedPreferences.getBoolean("pref_use_self_sender", false);
+		if(useSelfSender) {
+			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(true);
+			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(true);
+		} else {
+			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(false);
+			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(false);
+		}
 	}
 	
 	public static boolean getUseSelfSender(Context context) {
