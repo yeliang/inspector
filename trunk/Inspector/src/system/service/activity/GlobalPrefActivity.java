@@ -229,9 +229,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 			if (getRecordAll(context)) {
 				String title = context.getResources().getString(R.string.warning);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				setRecordAll(context, false);
-				this.getListView().scrollTo(0, 800);
-				SysUtils.messageBox(context, title + ": " + msg);
+				SysUtils.warningDlg(context, title, msg);
+				//this.getListView().scrollTo(0, 800);
+				//setRecordAll(context, false);
 			}
 		}
 	}
@@ -246,14 +246,14 @@ public class GlobalPrefActivity extends PreferenceActivity
 			{	
 				String title = context.getResources().getString(R.string.warning);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				setUseSelfSender(context, true);
-				this.getListView().scrollTo(0, 0);// Go to top
-				SysUtils.messageBox(context, title + ": " + msg);
+				SysUtils.warningDlg(context, title, msg);
+				//this.getListView().scrollTo(0, 0);// Go to top
+				//setUseSelfSender(context, true);
 			}
 			
-			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(true);
-		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
+		} else {
+			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(true);
 		}
 	}
 	
