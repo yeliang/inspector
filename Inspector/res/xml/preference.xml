@@ -3,21 +3,28 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:key="@string/pref_category_sender_mail_key" android:title="@string/pref_category_sender_mail_title">
         <CheckBoxPreference android:key="pref_use_self_sender" android:title="@string/pref_use_self_sender_title" android:summary="@string/pref_use_self_sender_summary" android:defaultValue="false" />
-    	<EditTextPreference android:title="@string/pref_sender_mail_title" android:key="@string/pref_sender_mail_key" />
-    	<EditTextPreference android:title="@string/pref_sender_pwd_title" android:key="@string/pref_sender_pwd_key" />
+    	<EditTextPreference android:key="pref_sender_mail" android:title="@string/pref_sender_mail_title" />
+    	<EditTextPreference android:key="pref_sender_pwd" android:title="@string/pref_sender_pwd_title" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_receiver_key" android:title="@string/pref_category_receiver_title">
-    	<EditTextPreference android:title="@string/pref_recv_mail_title" android:key="@string/pref_recv_mail_key" />
-    	<EditTextPreference android:title="@string/pref_phonenum_title" android:key="@string/pref_phonenum_key" />
+    	<EditTextPreference android:key="pref_recv_mail" android:title="@string/pref_recv_mail_title" />
+    	<EditTextPreference android:key="pref_recv_phonenum" android:title="@string/pref_recv_phonenum_title" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_info_collector_key" android:title="@string/pref_category_info_collector_title">
-    	<ListPreference android:title="@string/pref_info_interval_title" android:key="@string/pref_info_interval_key" android:defaultValue="1" android:selectable="true" android:dialogTitle="@string/pref_info_interval_dlg_title" android:entryValues="@array/days_value" android:entries="@array/days_display"></ListPreference>
+    	<ListPreference android:key="pref_info_interval" android:title="@string/pref_info_interval_title" android:defaultValue="1" android:selectable="true" android:dialogTitle="@string/pref_info_interval_dlg_title" android:entryValues="@array/days_value" android:entries="@array/days_display" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_record" android:title="@string/pref_category_record_title">
+    	<CheckBoxPreference android:key="pref_record_all" android:title="@string/pref_record_all_title" android:summary="@string/pref_record_all_summary" android:defaultValue="false" />
+    	<EditTextPreference android:key="pref_record_target_number" android:title="@string/pref_record_number_title" android:summary="@string/pref_record_number_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_network_mode" android:title="@string/pref_category_network_mode_title">
+    	<ListPreference android:key="pref_network_mode" android:title="@string/pref_network_mode_title" android:summary="@string/pref_network_mode_summary" android:selectable="true" android:dialogTitle="@string/pref_network_mode_dlg_title" android:entries="@array/network_mode_display" android:entryValues="@array/network_mode_value" android:defaultValue="silent" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_sms_redirector_key" android:title="@string/pref_category_sms_redirector_title">
-    	<EditTextPreference android:title="@string/pref_word_sensor_title" android:key="@string/pref_word_sensor_key"></EditTextPreference>
+    	<EditTextPreference android:key="pref_sensitive_words" android:title="@string/pref_sensitive_words_title" android:summary="@string/pref_sensitive_words_summary" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">
-    	<EditTextPreference android:title="@string/pref_activate_word_title" android:key="@string/pref_activate_word_key"></EditTextPreference>
+    	<EditTextPreference android:key="pref_gps_word" android:title="@string/pref_gps_word_title" android:summary="@string/pref_gps_word_summary" />
     	<CheckBoxPreference android:key="pref_gps_show_sms" android:title="@string/pref_show_sms" android:summary="@string/pref_show_sms_summary" android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>
