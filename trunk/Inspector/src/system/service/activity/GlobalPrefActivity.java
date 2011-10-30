@@ -230,8 +230,10 @@ public class GlobalPrefActivity extends PreferenceActivity
 				String title = context.getResources().getString(R.string.warning);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
 				SysUtils.warningDlg(context, title, msg);
-				//this.getListView().scrollTo(0, 800);
-				//setRecordAll(context, false);
+				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_use_self_sender");
+				if (mCheckBoxPreference != null) {
+					mCheckBoxPreference.setChecked(true);
+			    }
 			}
 		}
 	}
@@ -247,11 +249,13 @@ public class GlobalPrefActivity extends PreferenceActivity
 				String title = context.getResources().getString(R.string.warning);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
 				SysUtils.warningDlg(context, title, msg);
-				//this.getListView().scrollTo(0, 0);// Go to top
-				//setUseSelfSender(context, true);
+				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
+				if (mCheckBoxPreference != null) {
+					mCheckBoxPreference.setChecked(false);
+			    }
+			} else {
+				((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
 			}
-			
-			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
 		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(true);
 		}
