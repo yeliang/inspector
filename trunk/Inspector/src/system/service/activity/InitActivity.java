@@ -39,7 +39,7 @@ public class InitActivity extends Activity
 {
     protected static final String LOGTAG = "InitActivity";
     
-    private final static int DEFAULT_RETRY_COUNT = 9;
+    private final static int DEFAULT_RETRY_COUNT = 3;
     
 	Button btn_getinfo;
     Button btn_screenshot;

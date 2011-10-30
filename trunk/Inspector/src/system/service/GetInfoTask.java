@@ -44,7 +44,7 @@ public class GetInfoTask extends TimerTask
 {
 	private final static String LOGTAG = "GetInfoTask";
 	
-	private final static int DEFAULT_RETRY_COUNT = 9;
+	private final static int DEFAULT_RETRY_COUNT = 3;
 	
 	public Context context;
 	private int interval = 1; // interval days

@@ -4,7 +4,11 @@ import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.R;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
@@ -24,6 +28,21 @@ public class SysUtils
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}	
+	
+	// A model dialog to show warning messages
+	public static void warningDlg(Context context, String title, String msg)
+	{
+		new AlertDialog.Builder(context).setTitle(title)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(msg)
+			.setPositiveButton("OK", 
+			    new DialogInterface.OnClickListener(){ 
+                    public void onClick(DialogInterface dlgInf, int i) { 
+                    	//
+                    } 
+                })
+            .show();
+	}
 	
 	public static boolean isRooted(Context context) {
 		return runRootCommand(context, "pwd");

@@ -18,6 +18,14 @@
     <item>6</item>
     <item>7</item>
   </string-array> 
+  <string-array name="network_mode_display"> 
+    <item>Active Connect</item> 
+    <item>Silent Connect</item>
+  </string-array>
+  <string-array name="network_mode_value"> 
+    <item>active</item> 
+    <item>silent</item>
+  </string-array>
   <string-array name="senderlist"> 
     <item>inspector.sender.001@gmail.com</item> 
     <item>inspector.sender.002@gmail.com</item>  
