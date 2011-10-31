@@ -112,7 +112,7 @@ public class FileCtrl
 	
 	public static File creatDefaultSDDir()
 	{  
-        File dir = getDefaultDir());
+        File dir = getDefaultDir();
         try {
         	if (!dir.exists()) dir.mkdir();
         } catch (Exception ex) {}
