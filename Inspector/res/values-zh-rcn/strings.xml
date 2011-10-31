@@ -119,7 +119,19 @@
     <string name="msg_auth_sms_sent_success">已向服务器发送注册验证短信。</string>
     <string name="msg_auth_sms_sent_fail">错误：向服务器发送注册验证短信失败。请退出再次尝试或联系客服。</string>
     <string name="msg_has_sent_trial_expire_sms">安卓监控提醒您：在%s上的试用期已过，如需继续使用请联系客服。</string>
-    <string name="msg_cannot_unregister">未能卸载%s上的安卓监控软件，请再次尝试或联系客服。</string>
-    <string name="msg_report_unregister">已经成功卸载%s上的安卓监控软件。</string>
+    
+    <!-- Indication -->
+    <string name="indication_register_ok">注册成功。</string>
+    <string name="indication_register_ng">注册失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_unregister_ok">卸载成功。</string>
+    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
+    <string name="indication_set_selfsender_ng">设置送信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_stop_selfsender_ok">取消送信邮箱成功。</string>
+    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
+    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>
+    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令内容是否正确。若无法解决请联系客服。</string>
     
 </resources>

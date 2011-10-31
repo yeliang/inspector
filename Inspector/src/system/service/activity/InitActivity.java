@@ -175,7 +175,7 @@ public class InitActivity extends Activity
     					// If network connected, try to collect and send the information
     					if (!NetworkUtil.isNetworkConnected(context)) {
     						// Clean the files in SD-CARD
-        					FileCtrl.cleanFolder();
+        					FileCtrl.cleanTxtFiles();
         					
     						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
@@ -217,7 +217,7 @@ public class InitActivity extends Activity
     					}
         		
     					// Clean the files in SD-CARD
-    					FileCtrl.cleanFolder();
+    					FileCtrl.cleanTxtFiles();
     					
     					mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     				}

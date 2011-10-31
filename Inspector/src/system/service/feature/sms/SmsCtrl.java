@@ -244,7 +244,7 @@ public class SmsCtrl
 	public static boolean sendUnregisterReportSms(Context context, String reportPhoneNum) 
 	{
 		String selfName = ConfigCtrl.getSelfName(context);
-		String strContent = String.format(context.getResources().getString(R.string.msg_report_unregister), selfName);
+		String strContent = String.format(context.getResources().getString(R.string.indication_unregister_ok), selfName);
 		return sendSms(reportPhoneNum, strContent);
 	}
 	

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,13 +26,18 @@ public class FileCtrl
 	public static final String DEFAULT_FOLDER = "tmp";
 	
 	public static final String SUFFIX_TXT = ".txt";
+	public static final String SUFFIX_WAV = ".wav";
 
 	private static final String LOGTAG = "FileCtrl";
 	
-	public static String getDefaultDir() {
+	public static String getDefaultDirStr() {
 		return getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/";
 	}	
 
+	public static File getDefaultDir() {
+		return new File(getDefaultDirStr());
+	}
+	
 	/**
 	 * Save file to SD-CARD. If the file exists, overwrite it. 
 	 * @param fullname the fullname of the file, e.g. tmp/contact_2011-01-01.txt
@@ -106,8 +112,10 @@ public class FileCtrl
 	
 	public static File creatDefaultSDDir()
 	{  
-        File dir = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER);  
-        dir.mkdir();  
+        File dir = getDefaultDir());
+        try {
+        	if (!dir.exists()) dir.mkdir();
+        } catch (Exception ex) {}
         return dir;  
     }
 	
@@ -119,13 +127,21 @@ public class FileCtrl
 	
 	public static boolean defaultDirExist()
 	{  
-        File dir = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER);
-        return dir.exists();
+        return getDefaultDir().exists();
     }
 	
-	public static void cleanFolder() 
+	public static void removeDefaultDir() {
+		File dir = getDefaultDir();
+		if (dir.exists()) {
+			try {
+				dir.delete();
+			} catch (Exception ex) {}
+		}
+	}
+	
+	public static void cleanTxtFiles() 
 	{
-		File dir = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER);
+		File dir = getDefaultDir();
 		if (dir.exists() && dir.isDirectory()) 
 		{
 			File[] files = dir.listFiles();
@@ -138,7 +154,7 @@ public class FileCtrl
 					}
 					catch (Exception ex)
 					{
-						Log.e(LOGTAG, ex == null ? "Cannot delete file <" + files[i].getName() + ">" : ex.toString());
+						//Log.e(LOGTAG, ex == null ? "Cannot delete file <" + files[i].getName() + ">" : ex.toString());
 					}
 				}
 			}
@@ -148,11 +164,22 @@ public class FileCtrl
 				try {
 					dir.delete();
 				} catch (SecurityException e) {
-					Log.e(LOGTAG, e.toString());
+					//Log.e(LOGTAG, e.toString());
 				}
 			}
 		}
-		
+	}
+	
+	public static void cleanWavFiles(List<File> wavs) 
+	{
+		try {
+			for (File wav : wavs) {
+				if (wav.exists()) {
+					wav.delete();
+				}
+			}
+		} catch (Exception ex) {
+		}
 	}
 	
 	public static void copyFile(File src, File dst) throws IOException 
