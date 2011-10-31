@@ -15,9 +15,11 @@ public class SmsConsts
 	
 	public final static String HEADER_INDICATION       = "#";
 	public final static String INDICATION_KEY          = "#0#";
-	public final static String INDICATION_MAIL         = "#1#";
-	public final static String INDICATION_INTERVAL     = "#2#";
-	public final static String INDICATION_RECV_PHONE_NUM = "#3#";
+	public final static String INDICATION_SENDER       = "#1#";
+	public final static String INDICATION_RECV_MAIL    = "#2#";
+	public final static String INDICATION_RECV_PHONENUM= "#3#";
+	
+	public final static String INDICATION_INTERVAL     = "#3#";
 	public final static String INDICATION_SENS_WORDS   = "#4#";
 	public final static String INDICATION_LOC_WORD     = "#5#";
 	public final static String INDICATION_SHOW_LOC_SMS = "#6#";

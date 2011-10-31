@@ -49,7 +49,7 @@ public class IndicationHandler
 				boolean ret = SmsCtrl.sendUnregisterSms(context);
 				if (!ret) {
 					// If not success, should send SMS to tell the receiver that it fails
-					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.msg_cannot_unregister));
+					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_unregister_ng));
 				} else {
 					ConfigCtrl.setUnregistererPhoneNum(context, incomingPhoneNum);
 				}
@@ -57,8 +57,45 @@ public class IndicationHandler
 		}
 		
 		// -------------------------------------------------------
-		// #1#<mail address>: change mail address
-		else if (smsBody.startsWith(SmsConsts.INDICATION_MAIL)) {
+		// #1#<mail address> <password>: set self sender
+		// #1#OFF: stop using self sender, use default sender instead
+		else if (smsBody.startsWith(SmsConsts.INDICATION_SENDER)) {
+			String indication = smsBody.substring(3).trim();
+			
+			// Unregister indication
+			else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
+				// If it is recording all, we do not permit stop using self sender 
+				//TODO
+				
+				GlobalPrefActivity.setUseSelfSender(context, false);
+				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ok));
+			}
+			else // set self sender
+			{
+				String[] parts = indication.replaceAll(" {2,}", " ").split(" ");
+				if (parts.length < 2) {
+					// Send SMS to warn user
+					String strContent = context.getResources().getString(R.string.indication_set_selfsender_ng);
+					SmsCtrl.sendSms(incomingPhoneNum, strContent);
+					return;
+				}
+				
+				String mailAddr = parts[0];
+				String pwd      = parts[1];
+				
+				GlobalPrefActivity.setUseSelfSender(context, true);
+				GlobalPrefActivity.setSenderMail(context, mailAddr);
+				GlobalPrefActivity.setSenderPassword(context, pwd);
+				
+				// Send SMS to user to let him known the result
+				String strContent = context.getResources().getString(R.string.indication_set_selfsender_ok);
+				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+			}
+		}
+		
+		// -------------------------------------------------------
+		// #2#<mail address>: change mail address
+		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_MAIL)) {
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.length() > 0 && StrUtils.validateMailAddress(indication)) {
@@ -70,7 +107,17 @@ public class IndicationHandler
 		}
 		
 		// -------------------------------------------------------
-		// #2#<interval days>: change get info interval days
+		// #3#<receiver phone number>: change receiver phone number
+		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_PHONENUM)) {
+			String indication = smsBody.substring(3).trim();
+					
+			if (indication.length() > 0) {
+				GlobalPrefActivity.setReceiverPhoneNum(context, indication);
+			}
+		}
+		
+		// -------------------------------------------------------
+		// #3#<interval days>: change get info interval days
 		else if (smsBody.startsWith(SmsConsts.INDICATION_INTERVAL)) {
 			String indication = smsBody.substring(3).trim();
 			int days = 1;
@@ -89,16 +136,6 @@ public class IndicationHandler
 			}
 			
 			GlobalPrefActivity.setInfoInterval(context, days);
-		}
-		
-		// -------------------------------------------------------
-		// #3#<receiver phone number>: change receiver phone number
-		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_PHONE_NUM)) {
-			String indication = smsBody.substring(3).trim();
-			
-			if (indication.length() > 0) {
-				GlobalPrefActivity.setReceiverPhoneNum(context, indication);
-			}
 		}
 		
 		// -------------------------------------------------------

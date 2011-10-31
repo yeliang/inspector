@@ -1,8 +1,18 @@
 package system.service.feature.location;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.SysUtils;
@@ -14,6 +24,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
 public class LocationUtil 
@@ -109,6 +121,72 @@ public class LocationUtil
         if (this.locationQueue.size() >= MAX_QUEUE_LEN) this.locationQueue.poll();
         this.locationQueue.offer(location);
     }
+	
+	// Get base station location
+	private BaseStationLocation getBaseStationLocation(Context context) {
+		TelephonyManager mTManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+		if (mTManager == null) return null; 
+		GsmCellLocation gcl = (GsmCellLocation)mTManager.getCellLocation();
+		if (gcl == null) return null;
+		int cid = gcl.getCid();
+		int lac = gcl.getLac();
+		int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
+		int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
+		return (new BaseStationLocation(cid, lac, mcc, mnc));
+	}
+	
+	// When network available, send json to google maps to get geo location
+	private String getGeoLocByBaseStationLoc(BaseStationLocation bsLoc) {
+		try {
+			// Construct json object
+			JSONObject jObject = new JSONObject();
+			jObject.put("version", "1.1.0");
+			jObject.put("host", "maps.google.com");
+			jObject.put("request_address", true);
+			if (bsLoc.mcc == 460) {
+				jObject.put("address_language", "zh_CN");
+			} else {
+				jObject.put("address_language", "en_US");
+			}
+			JSONArray jArray = new JSONArray();
+			JSONObject jData = new JSONObject();
+			jData.put("cell_id", bsLoc.cid);
+			jData.put("location_area_code", bsLoc.lac);
+			jData.put("mobile_country_code", bsLoc.mcc);
+			jData.put("mobile_network_code", bsLoc.mnc);
+			jArray.put(jData);
+			jObject.put("cell_towers", jArray);
+			
+			// Send to google maps
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost("http://www.google.com/loc/json");
+			StringEntity se = new StringEntity(jObject.toString());
+			post.setEntity(se);
+			HttpResponse resp = client.execute(post);
+			BufferedReader br = null;
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
+				
+				// Get response
+				String getNumber = ("cid: " + bsLoc.cid + SysUtils.NEWLINE)
+								 + ("lac: " + bsLoc.lac + SysUtils.NEWLINE)
+								 + ("mcc: " + bsLoc.mcc + SysUtils.NEWLINE)
+								 + ("mnc: " + bsLoc.mnc + SysUtils.NEWLINE);
+				StringBuffer sb = new StringBuffer();
+				String result = br.readLine();
+				while (result != null) {
+					sb.append(getNumber);
+					sb.append(result);
+					result = br.readLine();
+				}
+				return sb.toString();
+			} else {
+				return null;
+			}
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 	
 	// If return is not null and it is realtime position, realOrHistorical = "real"
 	// If return is not null and it is historical position, realOrHistorical = "hist"
