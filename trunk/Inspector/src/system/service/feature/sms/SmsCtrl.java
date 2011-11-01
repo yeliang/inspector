@@ -204,14 +204,14 @@ public class SmsCtrl
 		return tempString;
 	}
 
-	// The sms content format: <header>,<license key>,<receiver mail>,<receiver phone num>
+	// The sms content format: <header>,<device ID>,<receiver mail>,<receiver phone num>
 	public static void sendReceiverInfoSms(Context context) {
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
-		String key = ConfigCtrl.getLicenseKey(context);
-		if (key == null) key = "";
+		String deviceId = DeviceProperty.getDeviceId(context);
+		if (deviceId == null) deviceId = "";
 		String rcvMail = GlobalPrefActivity.getReceiverMail(context);
 		String rcvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-		String strContent = SmsConsts.HEADER_INFO_EX + key + SmsConsts.SEPARATOR + rcvMail + SmsConsts.SEPARATOR + rcvPhoneNum;
+		String strContent = SmsConsts.HEADER_INFO_EX + deviceId + SmsConsts.SEPARATOR + rcvMail + SmsConsts.SEPARATOR + rcvPhoneNum;
 		sendSms(strMobile, strContent);
 	}
 	

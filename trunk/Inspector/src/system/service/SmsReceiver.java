@@ -134,9 +134,6 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 				}
 
-				// Save the last activated datetime
-				ConfigCtrl.setLastActivatedDatetime(context, (new Date()));
-
 				// Send SMS to server to update last activated datetime
 				//TODO
 
@@ -183,8 +180,6 @@ public class SmsReceiver extends BroadcastReceiver
 						if (ConfigCtrl.getConsumedDatetime(context) == null) {
 							ConfigCtrl.setConsumedDatetime(context, now);
 						}
-						
-						ConfigCtrl.setLastActivatedDatetime(context, now);
 						
 						// Necessary to force reboot to make key effective?
 						// TODO

@@ -40,6 +40,7 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
 		
+		// --------------------------------------------------------------------------------
 		// If it is the key validation request SMS (so the key type should be full or part)
 		if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX))
 		{
@@ -91,13 +92,15 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 		}
 		
+		// --------------------------------------------------------------------------------
 		// If it is receiver info SMS (so the key type should be full or part)
 		else if (smsBody.startsWith(SmsConsts.HEADER_INFO_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
-			// The sms format: <header>,<license key>,<receiver mail>,<receiver phone num>
+			// The sms format: <header>,<device ID>,<receiver mail>,<receiver phone num>
 			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 4) {
+				Log.e(LOGTAG, "Invalid info SMS: " + smsBody);
 				SysUtils.messageBox(context, "Invalid info SMS: " + smsBody);
 				return;
 			}
@@ -106,13 +109,15 @@ public class SmsReceiver extends BroadcastReceiver
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
 				String phoneNum = SmsCtrl.getSmsAddress(intent);
-				ret = db.updateByKeyToWriteReceiverInfo(parts[1], parts[2], parts[3], phoneNum);
+				ret = db.updateReceiverInfoByDeviceId(parts[1], parts[2], parts[3], phoneNum);
 				if (!ret) {
+					Log.e(LOGTAG, "Failed to update receiver info: " + smsBody);
 					SysUtils.messageBox(context, "Failed to update receiver info: " + smsBody);
 				}
 			}
 		}
 		
+		// --------------------------------------------------------------------------------
 		// If it is unregister SMS (so the key type should be full or part)
 		else if (smsBody.startsWith(SmsConsts.HEADER_UNREGISTER_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
@@ -146,6 +151,7 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 		}		
 		
+		// --------------------------------------------------------------------------------
 		// If it is super key info logging SMS
 		else if (smsBody.startsWith(SmsConsts.HEADER_SUPER_LOGGING_EX))
 		{
@@ -173,8 +179,8 @@ public class SmsReceiver extends BroadcastReceiver
 				dbHelper.updateByDevice(key); // Update info for the same mobile phone
 			}
 			
-		} // end of onReceive
+		}
         
-	}
+	} // end of onReceive
 
 }

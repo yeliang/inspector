@@ -69,7 +69,10 @@ public class IndicationHandler
 			// Unregister indication
 			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
 				// If it is recording all, we do not permit stop using self sender 
-				//TODO
+				if (GlobalPrefActivity.getRecordAll(context)) {
+					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ng));
+					return;
+				}
 				
 				GlobalPrefActivity.setUseSelfSender(context, false);
 				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ok));
@@ -105,8 +108,12 @@ public class IndicationHandler
 			if (indication.length() > 0 && StrUtils.validateMailAddress(indication)) {
 				GlobalPrefActivity.setReceiverMail(context, indication);
 				
+				// Send SMS to tell user the result
 				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				
+				// Send Info SMS to server to update receiver info
+				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
 				// Send SMS to warn the user
 				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ng);
@@ -122,9 +129,14 @@ public class IndicationHandler
 			if (indication.length() > 0) {
 				GlobalPrefActivity.setReceiverPhoneNum(context, indication);
 				
+				// Send SMS to tell user the result
 				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				
+				// Send Info SMS to server to update receiver info
+				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
+				// Send SMS to warn the user
 				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ng);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 			}
