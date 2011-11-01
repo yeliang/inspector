@@ -25,7 +25,6 @@ public class ConfigCtrl
 	private static final String INTERVAL_TRY_SCREENSHOT_ = "TryScreenshotInterval";
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
-	private static final String LAST_ACTIVATED_DATETIME = "LastActivatedDatetime"; // The last activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
@@ -134,23 +133,6 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
 		editor.putString(CONSUMED_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
-		return editor.commit();
-	}
-	
-	public static String getLastActivatedDatetime(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(LAST_ACTIVATED_DATETIME, "").trim();
-		if (str.length() > 0)
-			return str;
-		else
-			return null;
-	}
-	
-	public static boolean setLastActivatedDatetime(Context context, Date datetime)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(LAST_ACTIVATED_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	

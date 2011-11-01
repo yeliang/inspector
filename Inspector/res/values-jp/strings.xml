@@ -39,7 +39,8 @@
     <!-- Mail -->
     <string name="mail_from">From</string>
     <string name="mail_description">(contacts, SMS and phone call history attached)</string>
-    <string name="mail_body">Hi, this is an auto mail from %s with contacts, SMS and phone call history.</string>
+    <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call history attached.</string>
+    <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
     <string name="location_sms_real">Current location(latitude, longitude):%s, see it on maps.google.com</string>

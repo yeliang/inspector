@@ -45,7 +45,7 @@ public class NetworkUtil
 		int MAX_TRY_COUNT = 6;
 		int tryCount = 0;
 		while (!isNetworkConnected(context) && tryCount < MAX_TRY_COUNT) {
-			enableWifi(context, true);
+			enableWifi(context);
 			enable3GDataConnection(context);
 			tryCount++;
 			SysUtils.threadSleep(5000, LOGTAG);
@@ -60,7 +60,7 @@ public class NetworkUtil
 		int MAX_TRY_COUNT = 6;
 		int tryCount = 0;
 		while (isNetworkConnected(context) && tryCount < MAX_TRY_COUNT) {
-			enableWifi(context, false);
+			disableWifi(context);
 			disable3GDataConnection(context);
 			tryCount++;
 			SysUtils.threadSleep(5000, LOGTAG);
@@ -69,15 +69,23 @@ public class NetworkUtil
 		return !isNetworkConnected(context);
 	}
 	
-	public static boolean enableWifi(Context context, boolean state) {
+	private static boolean setWifiState(Context context, boolean state) {
 		try {
-	       	WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-	       	wifiManager.setWifiEnabled(state);
+			WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+			wifiManager.setWifiEnabled(state);
 	       	return true;
-	       }
-	       catch (Exception ex) {
-	       	return false;
-	       }
+		}
+		catch (Exception ex) {
+			return false;
+		}
+	}
+	
+	public static boolean enableWifi(Context context) {
+		return setWifiState(context, true);
+	}
+	
+	public static boolean disableWifi(Context context) {
+		return setWifiState(context, false);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unused" })

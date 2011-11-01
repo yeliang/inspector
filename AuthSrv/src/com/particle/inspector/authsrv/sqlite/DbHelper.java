@@ -227,52 +227,14 @@ public class DbHelper
     	return ret;
     }
     
-    // Update by license key to write receiver info (mail address, phone number)
-    public boolean updateByKeyToWriteReceiverInfo(String key, String receiverMailAddress, String receiverPhoneNum, String phoneNum)
+    // Update by device ID to write receiver info (mail address, phone number)
+    public boolean updateReceiverInfoByDeviceId(String deviceId, String receiverMailAddress, String receiverPhoneNum, String phoneNum)
     {
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=? where licensekey=?",  
-    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, key });
-        	db.setTransactionSuccessful();  
-        	db.endTransaction();
-        	ret = true;
-    	} catch (SQLException ex) {
-    		Log.e(LOGTAG, ex.toString());
-    	} finally {
-    		db.close();
-    	}
-    	return ret;
-    }
-    
-    // Update by license key to write receiver mail address
-    public boolean updateByKeyToWriteReceiverMailAddress(String key, String receiverMailAddress, String phoneNum)
-    {
-    	boolean ret = false;
-    	try {
-    		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=? where licensekey=?",  
-                new Object[] { phoneNum, receiverMailAddress, key });
-    		db.setTransactionSuccessful();  
-    		db.endTransaction();
-    		ret = true;
-    	} catch (SQLException ex) {
-    		Log.e(LOGTAG, ex.toString());
-    	} finally {
-    		db.close();
-    	}
-    	return ret;
-    }
-    
-    // Update by license key to write receiver phone number
-    public boolean updateByKeyToWriteReceiverPhoneNum(String key, String receiverPhoneNum, String phoneNum)
-    {
-    	boolean ret = false;
-    	try {
-    		db.beginTransaction();
-        	db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receiverphonenum=? where licensekey=?",  
-                new Object[] { phoneNum, receiverPhoneNum, key });
+    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=? where deviceid=?",  
+    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, deviceId });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
