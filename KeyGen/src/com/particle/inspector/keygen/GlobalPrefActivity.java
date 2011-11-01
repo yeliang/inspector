@@ -24,6 +24,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.particle.inspector.keygen.R;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -122,7 +123,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	private boolean checkMailFormat(String key, SharedPreferences sharedPreferences, Context context) {
 		String mail = sharedPreferences.getString(key, "").trim();
-		Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
+		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 	    Matcher matcher = p.matcher(mail);
 		if (!matcher.matches()) {
 			String msg = String.format(context.getResources().getString(R.string.pref_not_valid_mail), mail);

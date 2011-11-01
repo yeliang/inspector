@@ -72,7 +72,7 @@
     <string name="pref_record_number_title">Target Number</string>
     <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
     <string name="pref_recv_phonenum_title">転送携帯の番号</string>
-    <string name="pref_pls_input_phonenum">携帯電話番号をご入力ください。</string>
+    <string name="pref_pls_input_valid_recv_phonenum">エラー： %sは有効な携帯電話番号ではない。</string>
     <string name="pref_sensitive_words_title">敏感言葉</string>
     <string name="pref_pls_input_sensitive_words">敏感言葉をご入力ください（ブランクスペース区切）</string>
     <string name="pref_sensitive_words_count_reach_max">最大%d個敏感言葉入力可。その以外は無視。再度編集ください。</string>
@@ -80,8 +80,6 @@
     <string name="pref_gps_word_summary">この言葉を含めるSMSを送信して位置取得できる。</string>
     <string name="pref_pls_input_gps_activate_word">一つの言葉を入力ください。</string>
     <string name="pref_gps_activate_word_max_len">最長12個漢字や24英数字設定可。</string>
-    <string name="pref_show_sms">SMSを見せる</string>
-    <string name="pref_show_sms_summary">アクティベーション言葉を含めるSMSを見せる</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
     
     <!-- InitActivity -->

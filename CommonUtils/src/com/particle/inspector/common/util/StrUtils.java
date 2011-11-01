@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class StrUtils 
 {
-	public static final String REGEXP_MAIL = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+"; // regexp of mail address
 	public static final String COMMA = ": ";
 	public static final String SEPARATELINE = "\r\n----------------------------------------\r\n";
 	
@@ -24,7 +23,7 @@ public class StrUtils
 	
 	public static boolean validateMailAddress(String mailAddr) 
 	{
-		Pattern p = Pattern.compile(REGEXP_MAIL);
+		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 		Matcher matcher = p.matcher(mailAddr);
 		if (matcher.matches()) {
 			return true;
@@ -37,7 +36,7 @@ public class StrUtils
 	public static String[] filterMails(String[] mails)
 	{
 		List<String> list = new ArrayList<String>();
-		Pattern p = Pattern.compile(REGEXP_MAIL);
+		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 	    for (int i = 0; i < mails.length; i++)
 	    {
 	    	 Matcher matcher = p.matcher(mails[i].trim());

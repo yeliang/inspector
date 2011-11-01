@@ -19,6 +19,7 @@ public class LicenseCtrl
 	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
+		key = key.trim();
 		if (key.equals(TRIAL_KEY)) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		int keyLen = key.length();

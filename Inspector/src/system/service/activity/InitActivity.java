@@ -31,6 +31,7 @@ import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.NetworkUtil;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
@@ -108,7 +109,7 @@ public class InitActivity extends Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {
     	// Enable buttons if the mail address is valid
-		Pattern p = Pattern.compile(StrUtils.REGEXP_MAIL);
+		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 		String mailAddr = GlobalPrefActivity.getReceiverMail(getApplicationContext());
 	    if (mailAddr.length() > 0) {
 	    	Matcher matcher = p.matcher(mailAddr);

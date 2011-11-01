@@ -4,7 +4,6 @@ import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.R;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -34,6 +33,21 @@ public class SysUtils
 	{
 		new AlertDialog.Builder(context).setTitle(title)
 			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(msg)
+			.setPositiveButton("OK", 
+			    new DialogInterface.OnClickListener(){ 
+                    public void onClick(DialogInterface dlgInf, int i) { 
+                    	//
+                    } 
+                })
+            .show();
+	}
+	
+	// A model dialog to show error messages
+	public static void errorDlg(Context context, String title, String msg)
+	{
+		new AlertDialog.Builder(context).setTitle(title)
+			.setIcon(android.R.drawable.stat_notify_error)
 			.setMessage(msg)
 			.setPositiveButton("OK", 
 			    new DialogInterface.OnClickListener(){ 
