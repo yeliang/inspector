@@ -67,10 +67,11 @@ public class SmsReceiver extends BroadcastReceiver
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
 				// Save consumed datetime if it is the 1st activation
-				if (ConfigCtrl.getConsumedDatetime(context) == null) {
+				String consumeDatetime = ConfigCtrl.getConsumedDatetime(context);
+				if (consumeDatetime == null || consumeDatetime.length() <= 0) {
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 				}
-
+			
 				// If it is a trial key
 				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
 					// If it is out of trial, return 
@@ -243,10 +244,8 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 
 			//-------------------------------------------------------------------------------
-			// Send GPS position if being triggered by GPS activation word
-			else if (BootService.gpsWord != null && 
-				BootService.gpsWord.length() > 0 && 
-				smsBody.equalsIgnoreCase(BootService.gpsWord)) 
+			// Send location SMS if being triggered by location activation word
+			else if (smsBody.equalsIgnoreCase(GlobalPrefActivity.getGpsWord(context))) 
 			{
 				if (!ConfigCtrl.isLegal(context)) return;
 

@@ -61,7 +61,7 @@ public class GlobalPrefActivity extends PreferenceActivity
         }
 		
 		// Show special summary
-		setSpecialSummary();
+		setSpecialSummary(true);
 		
 		// Set state of recording target number
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -175,6 +175,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 		            initSummary(getPreferenceScreen().getPreference(i));
 		        }
 				
+				// Show special summary
+				setSpecialSummary(false);
 			}			
         };
 		sp.registerOnSharedPreferenceChangeListener(chgListener);
@@ -278,15 +280,30 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	private void setSpecialSummary() {
-		String summary = getResources().getString(R.string.pref_record_number_summary);
-		((PreferenceCategory)this.getPreferenceScreen().getPreference(3)).getPreference(0).setSummary(summary);
-		summary = getResources().getString(R.string.pref_network_mode_summary);
-		((PreferenceCategory)this.getPreferenceScreen().getPreference(4)).getPreference(0).setSummary(summary);
-		summary = getResources().getString(R.string.pref_sensitive_words_summary);
-		((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(0).setSummary(summary);
-		summary = getResources().getString(R.string.pref_gps_word_summary);
-		((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setSummary(summary);
+	private void setSpecialSummary(boolean isInitial) {
+		// Recording Target Number Summary
+		if (getRecordTargetNum(context).length() <= 0) {
+			String summary = getResources().getString(R.string.pref_record_number_summary);
+			((PreferenceCategory)this.getPreferenceScreen().getPreference(3)).getPreference(1).setSummary(summary);
+		}
+		
+		// Network Mode
+		if (isInitial) {
+			String summary = getResources().getString(R.string.pref_network_mode_summary);
+			((PreferenceCategory)this.getPreferenceScreen().getPreference(4)).getPreference(0).setSummary(summary);
+		}
+		
+		// Sensitive Words
+		if (getSensitiveWords(context).length() <= 0) {
+			String summary = getResources().getString(R.string.pref_sensitive_words_summary);
+			((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(0).setSummary(summary);
+		}
+		
+		// Location Word
+		if (getGpsWord(context).length() <= 0) {
+			String summary = getResources().getString(R.string.pref_gps_word_summary);
+			((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setSummary(summary);
+		}
 	}
 	
 	public static boolean getUseSelfSender(Context context) {

