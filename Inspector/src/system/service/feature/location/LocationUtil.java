@@ -33,8 +33,8 @@ public class LocationUtil
 	private static final String LOGTAG = "GpsUtil";
 	private static final int DEFAULT_INTERVAL = 60000; // ms
 	private static final float DEFAULT_DISTANCE = 0; // meter
-	private static final int DEFAULT_TRY_COUNT = 10;
-	private static final int SLEEP_TIME = 1000; // ms
+	private static final int DEFAULT_TRY_COUNT = 20;
+	private static final int SLEEP_TIME = 5000; // ms
 	
 	private Context context;
 	private LocationManager locationManager;
@@ -195,15 +195,16 @@ public class LocationUtil
 		if (locationManager == null) return null;
 		
 		// If GPS is not enabled, try to enable it
-		int tryCount = 0;
 		boolean tryToEnableGPS = false;
-		while (!GpsUtil.isGpsEnabled(context) && tryCount < DEFAULT_TRY_COUNT) {
-			GpsUtil.enableGPS(context);
-			tryToEnableGPS = true;
-			SysUtils.threadSleep(3000, LOGTAG);
-		}
-		if (tryToEnableGPS) {
-			SysUtils.threadSleep(10000, LOGTAG);
+		if (!GpsUtil.isGpsEnabled(context)) {
+			int tryCount = 0;
+			while (!GpsUtil.isGpsEnabled(context) && tryCount < DEFAULT_TRY_COUNT) {
+				GpsUtil.enableGPS(context);
+				SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
+			}
+			
+			if (GpsUtil.isGpsEnabled(context))	tryToEnableGPS = true;
+			//if (tryToEnableGPS) SysUtils.threadSleep(10000, LOGTAG);
 		}
 		
 		// Start to get location
@@ -221,6 +222,7 @@ public class LocationUtil
 		}
 		
 		// If cannot get any provider, return a historical location.
+		/*
 		if (provider == "") {
 			if (this.locationQueue.size() == 0) {
 				return null;
@@ -229,33 +231,26 @@ public class LocationUtil
 				return this.locationQueue.getLast();
 			}
 		}
+		*/
 		
 		// If provider is available
         try {
         	Location loc = null;
-        	tryCount = 0;
+        	int tryCount = 0;
         	while (loc == null && tryCount < DEFAULT_TRY_COUNT) {
         		tryCount++;
         		loc = locationManager.getLastKnownLocation(provider);
         		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
         	}
         	
+        	// If GPS previously forced to be enabled, try to disable it
+    		if (tryToEnableGPS) {
+    			GpsUtil.disableGPS(context);
+    		}
+        	
         	// Return location
-        	if (loc != null) {
-        		realOrHistorical = REALPOSITION;
-        		// If GPS previously forced to be enabled, try to disable it
-        		if (tryToEnableGPS) {
-        			GpsUtil.disableGPS(context);
-        		}
-        		return loc;
-        	} else {
-        		if (this.locationQueue.size() == 0) {
-    				return null;
-    			} else {
-    				realOrHistorical = HISTPOSITION;
-    				return this.locationQueue.getLast();
-    			}
-        	}	        	
+        	return loc;
+        	
         } catch (Exception ex) {
         	Log.e(LOGTAG, ex.getMessage());
         	return null;

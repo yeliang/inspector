@@ -47,7 +47,7 @@
     <!-- Location -->
     <string name="location_sms_real">当前位置（纬度，经度）：%s。去maps.google.com看地图</string>
     <string name="location_sms_hist">无法获得当前位置。最近历史位置（时间，纬度，经度）：%s。去maps.google.com看地图</string>
-    <string name="location_sms_fail">对不起，因用户当前及过去一段时间内未开启GPS或3G网络，故无法定位其所在位置。</string>
+    <string name="location_sms_fail">对不起，因手机当前所处位置无法获取GPS和数据网络信号，故无法获得其所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
     <!-- Preferences -->
     <string name="pref_title">设定</string>
@@ -106,7 +106,7 @@
     <string name="init_hint_setting">设置主控邮箱和手机，敏感词，位置获取词等。</string>
     <string name="init_hint_hide">发送注册码短信到本机，方可再次激活本对话框。</string>
     <string name="init_processing">处理中</string>
-    <string name="init_waiting">请稍候片刻...</string>
+    <string name="init_waiting">请稍候片刻（30秒~2分钟）...</string>
     <string name="init_collecting">正在收集信息...</string>
     <string name="init_sending">正在发邮件...</string>
     
