@@ -265,7 +265,12 @@ public class IndicationHandler
 			// When it is GET or get, we send current location word to user
 			if (indication.equalsIgnoreCase(SmsConsts.GET)) {
 				String locWord = GlobalPrefActivity.getGpsWord(context);
-				String strContent = String.format(context.getResources().getString(R.string.indication_return_loc_word), locWord);
+				String strContent;
+				if (locWord == null || locWord.length() <= 0) {
+					strContent = context.getResources().getString(R.string.indication_no_loc_word);
+				} else {
+					strContent = String.format(context.getResources().getString(R.string.indication_return_loc_word), locWord);
+				}
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 			}
 			// When it is OFF or off, we disable the location function

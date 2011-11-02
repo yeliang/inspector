@@ -151,5 +151,6 @@
     <string name="indication_set_location_word_ok">设置定位短语成功。</string>
     <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     <string name="indication_return_loc_word">Your current location word is: %s</string>
+    <string name="indication_no_loc_word">No location word/sentence set yet. Please send #8# and the word/sentence to set, e.g. #8#where r u</string>
     
 </resources>

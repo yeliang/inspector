@@ -153,5 +153,6 @@
     <string name="indication_set_location_word_ok">设置定位短语成功。</string>
     <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     <string name="indication_return_loc_word">您当前设置的定位短语是：%s</string>
+    <string name="indication_no_loc_word">您当前没有设置定位短语。请发送#8#加短语设置，如：#8#你在哪</string>
     
 </resources>
