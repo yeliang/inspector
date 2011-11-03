@@ -41,7 +41,8 @@ public class LocationUtil
 	private static final int SLEEP_TIME = 5000; // ms
 	
 	private Context context;
-	//private LocationManager locationManager;
+	private LocationManager locationManager = null;
+	private LocationListener locationListener = null;
 	private LinkedList<Location> locationQueue;
 	private static final int MAX_QUEUE_LEN = 100;
 	
@@ -66,11 +67,12 @@ public class LocationUtil
 		//}
 	}
 	
-	/*
+	
 	private void updateLocation(String provider) 
 	{
 		try {
-            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			if (locationManager == null) return;
+            
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
             criteria.setAltitudeRequired(false);
@@ -83,21 +85,34 @@ public class LocationUtil
             {
             	Location location = null;
             	int tryCount = 0;
-            	while (location == null && tryCount < DEFAULT_TRY_COUNT) {
+            	while (location == null && tryCount < DEFAULT_TRY_COUNT*3) {
             		tryCount++;
             		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
             		location = locationManager.getLastKnownLocation(provider);
             	}
             	
             	if (location != null) {
-            		addLocation(location);
+            		//addLocation(location);
+            		
+            		if (sentSMS) return;
+					
+					//if (tryToEnableGPS) { 
+						GpsUtil.disableGPS(context);
+					//}
+					
+		    		locationManager.removeUpdates(locationListener);
+						
+					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+					String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
+					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+					if (ret) sentSMS = true;
             	}
             }
         } catch (Exception e) {
             Log.e(LOGTAG, e.getMessage());
         }
 	}
-	*/
+	
 	
 	private void addLocation(Location location) {
         if (this.locationQueue == null) return;
@@ -109,15 +124,13 @@ public class LocationUtil
 	// If return is not null and it is historical position, realOrHistorical = "hist"
 	public Location getLocation(String realOrHistorical)
     {
-		LocationManager locationManager = null;
-		LocationListener locationListener = null;
 		try {
 			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			locationListener = new LocationListener() {
 				@Override
 				public void onLocationChanged(Location location) {
 					if (location != null) {
-						addLocation(location);
+						//addLocation(location);
 						
 						if (sentSMS) return;
 						
@@ -125,7 +138,8 @@ public class LocationUtil
 							GpsUtil.disableGPS(context);
 						//}
 						
-			    		
+			    		locationManager.removeUpdates(locationListener);
+							
 						String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 						String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
 						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
@@ -140,16 +154,16 @@ public class LocationUtil
 
 				@Override
 				public void onProviderEnabled(String provider) {
-					//updateLocation(provider);
+					updateLocation(provider);
 				}
 
 				@Override
 				public void onStatusChanged(String provider, int status, Bundle extras) {
-					//if (status != LocationProvider.AVAILABLE) return;
-					//updateLocation(provider);
+					if (status != LocationProvider.AVAILABLE) return;
+					updateLocation(provider);
 				};
 			};
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
 		} catch (Exception ex) {
 			
 		}
@@ -200,7 +214,7 @@ public class LocationUtil
         	
         	Location loc = null;
         	int tryCount = 0;
-        	while (loc == null && tryCount < DEFAULT_TRY_COUNT*6) {
+        	while (loc == null && tryCount < DEFAULT_TRY_COUNT*3) {
         		tryCount++;
         		loc = locationManager.getLastKnownLocation(provider);
         		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);

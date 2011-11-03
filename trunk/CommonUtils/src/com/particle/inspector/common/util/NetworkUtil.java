@@ -131,4 +131,22 @@ public class NetworkUtil
 			dataConnSwitchMethod.invoke(ITelephonyStub);
 		} catch (Exception ex) {}
 	}
+	
+	public static SIM_TYPE getNetworkType(Context context) 
+	{
+		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		int networkType = telephonyManager.getNetworkType();
+		
+		switch (networkType) {
+			case TelephonyManager.NETWORK_TYPE_UMTS:
+				return SIM_TYPE.USIM; // WCDMA USIM
+			case TelephonyManager.NETWORK_TYPE_GPRS:
+				return SIM_TYPE.SIM;  // GPRS SIM
+			case TelephonyManager.NETWORK_TYPE_EDGE:
+				return SIM_TYPE.SIM;  // EDGE SIM
+			default:
+				return SIM_TYPE.UIM;  // CDMA UIM
+		}
+	}
+	
 }

