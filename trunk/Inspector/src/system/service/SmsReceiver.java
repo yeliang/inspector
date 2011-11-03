@@ -26,6 +26,8 @@ import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
+import com.particle.inspector.common.util.location.BaseStationLocation;
+import com.particle.inspector.common.util.location.BaseStationUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -265,9 +267,26 @@ public class SmsReceiver extends BroadcastReceiver
     							return;
     						}
     						String realOrHist = LocationUtil.REALPOSITION;
+    						BootService.locationUtil.sentSMS = false;
     						Location location = BootService.locationUtil.getLocation(realOrHist);
-    						String locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
-    						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+    						
+    						if (!BootService.locationUtil.sentSMS) {
+    							String locationSms = "";
+    							if (location != null) {
+    								locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
+    							}
+    							else {
+    								 BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context);
+    								 if (bsLoc != null) {
+    									 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station), 
+    											 bsLoc.latitude, bsLoc.longitude);
+    								 } else {
+    									 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_fail));
+    								 }
+    							}
+    							
+    							boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+    						}
     					}
     				}
     			}).start();
