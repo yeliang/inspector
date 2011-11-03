@@ -21,8 +21,8 @@ import android.telephony.gsm.GsmCellLocation;
 
 public class BaseStationUtil 
 {
-	// Get base station location
-	public static BaseStationLocation getBaseStationLocation(Context context) 
+	// Get CDMA base station location
+	public static BaseStationLocation getCdmaBaseStationLocation(Context context) 
 	{
 		try {
 			TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -32,11 +32,27 @@ public class BaseStationUtil
 			int stationId = gcl.getBaseStationId();
 			double longi = gcl.getBaseStationLongitude()/14400.0;
 			double lati = gcl.getBaseStationLatitude()/14400.0;
-			//int cid = gcl.getCid();
-			//int lac = gcl.getLac();
 			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
 			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
 			return (new BaseStationLocation(stationId, longi, lati, -1, -1, mcc, mnc));
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+	
+	// Get GSM base station location
+	public static BaseStationLocation getGsmBaseStationLocation(Context context) 
+	{
+		try {
+			TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			if (mTManager == null) return null;
+			GsmCellLocation gcl = (GsmCellLocation) mTManager.getCellLocation();
+			if (gcl == null) return null;
+			int cid = gcl.getCid();
+			int lac = gcl.getLac();
+			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
+			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
+			return (new BaseStationLocation(-1, -1, -1, cid, lac, mcc, mnc));
 		} catch (Exception ex) {
 			return null;
 		}
@@ -83,7 +99,7 @@ public class BaseStationUtil
 				StringBuffer sb = new StringBuffer();
 				String result = br.readLine();
 				while (result != null) {
-					sb.append(getNumber);
+					//sb.append(getNumber);
 					sb.append(result);
 					result = br.readLine();
 				}

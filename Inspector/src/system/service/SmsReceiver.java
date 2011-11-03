@@ -16,7 +16,9 @@ import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
+import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.RegExpUtil;
+import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 
@@ -276,10 +278,21 @@ public class SmsReceiver extends BroadcastReceiver
     								locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
     							}
     							else {
-    								 BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context);
+    								 BaseStationLocation bsLoc = null;
+    								 SIM_TYPE simType = NetworkUtil.getNetworkType(SmsReceiver.this.context);
+    								 if (simType == SIM_TYPE.SIM)
+    									 bsLoc = BaseStationUtil.getGsmBaseStationLocation(SmsReceiver.this.context);
+    								 else
+    									 bsLoc = BaseStationUtil.getCdmaBaseStationLocation(SmsReceiver.this.context);
+    								 
     								 if (bsLoc != null) {
-    									 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station), 
-    											 bsLoc.latitude, bsLoc.longitude);
+    									 if (simType == SIM_TYPE.SIM) {
+    										 String response = BaseStationUtil.getGeoLocByBaseStationLoc(bsLoc);
+    										 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station_gsm), response);
+    									 }
+    									 else {
+    										 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station_cdma), bsLoc.latitude + "," + bsLoc.longitude);
+    									 }
     								 } else {
     									 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_fail));
     								 }
