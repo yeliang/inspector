@@ -96,7 +96,7 @@ public class InitActivity extends Activity
         
         // Set button status
         boolean enabled = false;
-        if (ConfigCtrl.getLicenseType(context) != LICENSE_TYPE.NOT_LICENSED &&
+        if (ConfigCtrl.isLegal(context) &&
         	GlobalPrefActivity.getReceiverMail(context).length() > 0) enabled = true;
         
         btn_getinfo.setEnabled(enabled);
@@ -114,7 +114,7 @@ public class InitActivity extends Activity
     	// Enable buttons if the mail address is valid
 		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
 		String mailAddr = GlobalPrefActivity.getReceiverMail(getApplicationContext());
-	    if (mailAddr.length() > 0) {
+	    if (ConfigCtrl.isLegal(context) && mailAddr.length() > 0) {
 	    	Matcher matcher = p.matcher(mailAddr);
    	 		if (matcher.matches()) {
    	 			btn_getinfo.setEnabled(true);
@@ -131,7 +131,7 @@ public class InitActivity extends Activity
     		// Send the receiver info SMS to server to update record in database
 			boolean hasChangedReceiverInfo = data.getExtras().getBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO);
 			if (hasChangedReceiverInfo) {
-				//SmsCtrl.sendReceiverInfoSms(context); TODO temp do not send info to server
+				SmsCtrl.sendReceiverInfoSms(context); //TODO temp do not send info to server
 			}
     	}
     }
@@ -145,8 +145,8 @@ public class InitActivity extends Activity
             	// If neither in trail and nor licensed, return
             	if (!ConfigCtrl.isLegal(context)) {
             		String title = context.getResources().getString(R.string.error);
-            		String msg = context.getResources().getString(R.string.msg_has_sent_trial_expire_sms);
-            		SysUtils.errorDlg(context, title, msg);
+            		String msg = context.getResources().getString(R.string.msg_expired_alert);
+            		SysUtils.errorDlg(InitActivity.this, title, msg);
     				return;
     			}
     			

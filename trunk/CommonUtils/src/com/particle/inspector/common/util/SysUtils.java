@@ -4,6 +4,8 @@ import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.particle.inspector.common.utils.R;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -32,7 +34,7 @@ public class SysUtils
 	public static void warningDlg(Context context, String title, String msg)
 	{
 		new AlertDialog.Builder(context).setTitle(title)
-			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setIcon(R.drawable.warning)
 			.setMessage(msg)
 			.setPositiveButton("OK", 
 			    new DialogInterface.OnClickListener(){ 
@@ -47,7 +49,7 @@ public class SysUtils
 	public static void errorDlg(Context context, String title, String msg)
 	{
 		new AlertDialog.Builder(context).setTitle(title)
-			.setIcon(android.R.drawable.stat_notify_error)
+			.setIcon(R.drawable.error)
 			.setMessage(msg)
 			.setPositiveButton("OK", 
 			    new DialogInterface.OnClickListener(){ 
