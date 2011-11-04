@@ -22,6 +22,7 @@ public class DashboardActivity extends Activity
 	protected static final String LOGTAG = "Dashboard";
 	private Button btnSetting;
 	private Button btnManageDB;
+	private Button btnManageKey;
 		
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,15 @@ public class DashboardActivity extends Activity
         	public void onClick(View v)
         	{
         		Intent intent = new Intent().setClass(getApplicationContext(), ManageDatabaseActivity.class);
+            	startActivity(intent);
+        	}
+        });
+        
+        btnManageKey = (Button)findViewById(R.id.btn_managekey);
+        btnManageKey.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v)
+        	{
+        		Intent intent = new Intent().setClass(getApplicationContext(), ManageKeyActivity.class);
             	startActivity(intent);
         	}
         });
