@@ -37,7 +37,7 @@ public class LocationUtil
 	private static final String LOGTAG = "GpsUtil";
 	private static final int DEFAULT_INTERVAL = 60000; // ms
 	private static final float DEFAULT_DISTANCE = 0; // meter
-	private static final int DEFAULT_TRY_COUNT = 20;
+	private static final int DEFAULT_TRY_COUNT = 10;
 	private static final int SLEEP_TIME = 5000; // ms
 	
 	private Context context;
@@ -59,12 +59,55 @@ public class LocationUtil
 			//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
 			//locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
 		//}
+		try {
+			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+			locationListener = new LocationListener() {
+				@Override
+				public void onLocationChanged(Location location) {
+					if (location != null) {
+						addLocation(location);
+						
+						//if (sentSMS) return;
+						
+						//if (tryToEnableGPS) { 
+						//	GpsUtil.disableGPS(context);
+						//}
+						
+			    		//locationManager.removeUpdates(locationListener);
+							
+						//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+						//String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
+						//boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+						//if (ret) sentSMS = true;
+		            }
+				}
+
+				@Override
+				public void onProviderDisabled(String provider) {
+					
+				}
+
+				@Override
+				public void onProviderEnabled(String provider) {
+					//updateLocation(provider);
+				}
+
+				@Override
+				public void onStatusChanged(String provider, int status, Bundle extras) {
+					//if (status != LocationProvider.AVAILABLE) return;
+					//updateLocation(provider);
+				};
+			};
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, locationListener);
+		} catch (Exception ex) {
+			
+		}
 	}
 	
 	public void destroy() {
-		//if (locationManager != null) {
-		//	locationManager.removeUpdates(locationListener);
-		//}
+		if (locationManager != null) {
+			locationManager.removeUpdates(locationListener);
+		}
 	}
 	
 	
@@ -85,27 +128,27 @@ public class LocationUtil
             {
             	Location location = null;
             	int tryCount = 0;
-            	while (location == null && tryCount < DEFAULT_TRY_COUNT*3) {
+            	while (location == null && tryCount < DEFAULT_TRY_COUNT) {
             		tryCount++;
-            		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
+            		SysUtils.threadSleep(2000, LOGTAG);
             		location = locationManager.getLastKnownLocation(provider);
             	}
             	
             	if (location != null) {
-            		//addLocation(location);
+            		addLocation(location);
             		
-            		if (sentSMS) return;
+            		//if (sentSMS) return;
 					
 					//if (tryToEnableGPS) { 
-						GpsUtil.disableGPS(context);
+					//	GpsUtil.disableGPS(context);
 					//}
 					
-		    		locationManager.removeUpdates(locationListener);
+		    		//locationManager.removeUpdates(locationListener);
 						
-					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-					String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
-					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-					if (ret) sentSMS = true;
+					//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+					//String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
+					//boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+					//if (ret) sentSMS = true;
             	}
             }
         } catch (Exception e) {
@@ -123,51 +166,7 @@ public class LocationUtil
 	// If return is not null and it is realtime position, realOrHistorical = "real"
 	// If return is not null and it is historical position, realOrHistorical = "hist"
 	public Location getLocation(String realOrHistorical)
-    {
-		try {
-			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			locationListener = new LocationListener() {
-				@Override
-				public void onLocationChanged(Location location) {
-					if (location != null) {
-						//addLocation(location);
-						
-						if (sentSMS) return;
-						
-						//if (tryToEnableGPS) { 
-							GpsUtil.disableGPS(context);
-						//}
-						
-			    		locationManager.removeUpdates(locationListener);
-							
-						String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-						String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
-						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-						if (ret) sentSMS = true;
-		            }
-				}
-
-				@Override
-				public void onProviderDisabled(String provider) {
-					
-				}
-
-				@Override
-				public void onProviderEnabled(String provider) {
-					updateLocation(provider);
-				}
-
-				@Override
-				public void onStatusChanged(String provider, int status, Bundle extras) {
-					if (status != LocationProvider.AVAILABLE) return;
-					updateLocation(provider);
-				};
-			};
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
-		} catch (Exception ex) {
-			
-		}
-		
+    {		
 		if (locationManager == null) return null;
 		
 		// If GPS is not enabled, try to enable it
@@ -198,8 +197,7 @@ public class LocationUtil
 		}
 		
 		// If cannot get any provider, return a historical location.
-		/*
-		if (provider == "") {
+		if (provider.length() <= 0) {
 			if (this.locationQueue.size() == 0) {
 				return null;
 			} else {
@@ -207,11 +205,9 @@ public class LocationUtil
 				return this.locationQueue.getLast();
 			}
 		}
-		*/
 		
 		// If provider is available
         try {
-        	
         	Location loc = null;
         	int tryCount = 0;
         	while (loc == null && tryCount < DEFAULT_TRY_COUNT*3) {
@@ -220,17 +216,22 @@ public class LocationUtil
         		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
         	}
         	
-        	if (loc != null) {
-        		locationManager.removeUpdates(locationListener);
-        	}
-        	
         	// If GPS previously forced to be enabled, try to disable it
     		if (tryToEnableGPS) {
     			GpsUtil.disableGPS(context);
     		}
-        	
+
+        	// If cannot get any location, return a historical location.
+        	if (loc == null) {
+    			if (this.locationQueue.size() == 0) {
+    				return null;
+    			} else {
+    				realOrHistorical = HISTPOSITION;
+    				return this.locationQueue.getLast();
+    			}
+        	}
         	// Return location
-        	return loc;
+        	else return loc;
         	
         } catch (Exception ex) {
         	Log.e(LOGTAG, ex.getMessage());

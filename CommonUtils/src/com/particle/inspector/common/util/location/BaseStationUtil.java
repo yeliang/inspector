@@ -59,7 +59,7 @@ public class BaseStationUtil
 	}
 
 	// When network available, send json to google maps to get geo location
-	public static String getGeoLocByBaseStationLoc(BaseStationLocation bsLoc) 
+	public static String getGeoLocByGsmBaseStationLoc(BaseStationLocation bsLoc) 
 	{
 		try {
 			// Construct json object
