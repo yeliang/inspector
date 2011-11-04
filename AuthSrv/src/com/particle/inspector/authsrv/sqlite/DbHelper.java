@@ -135,9 +135,9 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate) values(?,?,?,?,?,?,?)",  
+        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate() });
+        			key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -160,6 +160,13 @@ public class DbHelper
     {
         String where = KEY_FIELD_KEY + "=?";
         String[] whereValue = {key};
+        return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
+    }
+    
+    public int deleteByDeviceId(String deviceId)
+    {
+        String where = KEY_FIELD_DEVICE_ID + "=?";
+        String[] whereValue = {deviceId};
         return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
     }
     
@@ -297,6 +304,17 @@ public class DbHelper
             		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
         }  
         return null;  
+    }
+    
+    public TKey findLastRecord(String key) {
+    	Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where licensekey=? order by _id desc",  
+        		new String[] { key });  
+        if (cursor.moveToNext()) {  
+            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
+            		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
+            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
+        }  
+        return null;
     }
     
     // If the license key exists but the device is the same one, set exists to true

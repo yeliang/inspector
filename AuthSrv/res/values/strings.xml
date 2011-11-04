@@ -17,10 +17,21 @@
     <string name="restoredb">Restore Database</string>
     
     <!-- Manage Key -->
-    <string name="managekey_title">注册码管理</string>
-    <string name="query">查询</string>
-    <string name="query_key">查询注册码</string>
-    <string name="query_deviceid">查询设备ID</string>
+    <string name="managekey_title">Manage Key</string>
+    <string name="query">Query</string>
+    <string name="query_key">Query Key</string>
+    <string name="query_deviceid">Query DevID</string>
+    <string name="query_edit">Edit</string>
+    <string name="query_apply">Apply</string>
+    <string name="query_del">Delete</string>
+    <string name="query_insert">Insert</string>
+    <string name="query_cancel">Cancel</string>
+    <string name="confirm_delete">Make sure to delete this record?</string>
+    <string name="delete_ok">Deleted Successfully</string>
+    <string name="confirm_apply">Make sure to apply?</string>
+    <string name="apply_ok">Applied Successfully</string>
+    <string name="confirm_insert">Make sure to insert this record?</string>
+    <string name="insert_ok">Inserted Successfully</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
