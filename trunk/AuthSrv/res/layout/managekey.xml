@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content" >
+	
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:weightSum="1">
+	android:layout_height="fill_parent" android:weightSum="1" android:scrollbars="vertical">
 	
+	<!--===================== Query Area =====================-->
 	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     	android:layout_width="fill_parent" android:layout_height="wrap_content">  
     
@@ -18,55 +22,69 @@
     
 	</TableLayout>
 	
+	<!-- ===================== Area for displaying key details ===================== -->
 	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     	android:layout_width="fill_parent" android:layout_height="wrap_content">
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow3" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_licensekey" android:text="Key" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" android:layout_marginTop="20dp" />
-			<EditText android:id="@+id/value_licensekey" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginTop="20dp" />
+			<TextView android:id="@+id/title_licensekey" android:text="Key" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+			<EditText android:id="@+id/value_licensekey" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginTop="20dp" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow4" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_keytype" android:text="Type" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_keytype" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_keytype" android:text="Type" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_keytype" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow5" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_deviceid" android:text="Device ID" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_deviceid" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_deviceid" android:text="Device ID" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_deviceid" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow6" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_phonenum" android:text="Phone Num" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_phonenum" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_phonenum" android:text="P. Num" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_phonenum" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow7" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_phonemodel" android:text="Phone Model" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_phonemodel" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_phonemodel" android:text="Model" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_phonemodel" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow8" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_androidver" android:text="Android Ver" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_androidver" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_androidver" android:text="And. Ver" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_androidver" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow9" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_consumedate" android:text="Consume Date" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_consumedate" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_consumedate" android:text="C. Date" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_consumedate" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
        	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow10" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_recvmail" android:text="Recv Mail" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_recvmail" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_recvmail" android:text="Recv Mail" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_recvmail" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
        	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow11" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_recvphonenum" android:text="Recv Num" android:layout_width="180px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="8dp" />
-			<EditText android:id="@+id/value_recvphonenum" android:text="" android:layout_width="250px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_recvphonenum" android:text="Recv Num" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_recvphonenum" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     </TableLayout>
 	
-	
+	<!-- ===================== Action Area ===================== -->
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    	android:layout_width="fill_parent" android:layout_height="wrap_content">  
+    
+    <TableRow android:layout_height="wrap_content" android:id="@+id/tableRow12" android:layout_width="fill_parent">
+        <Button android:id="@+id/editbutton" android:text="@string/query_edit" android:layout_width="65dp" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/applybutton" android:text="@string/query_apply" android:layout_width="65dp" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/delbutton" android:text="@string/query_del" android:layout_width="65dp" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/insertbutton" android:text="@string/query_insert" android:layout_width="65dp" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/cancelbutton" android:text="@string/query_cancel" android:layout_width="65dp" android:layout_height="wrap_content" android:layout_marginLeft="4dp" android:layout_marginTop="20dp" />
+    </TableRow>
+    
+	</TableLayout>
 </LinearLayout>
+</ScrollView>

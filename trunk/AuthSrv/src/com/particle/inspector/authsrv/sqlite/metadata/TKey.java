@@ -20,52 +20,52 @@ public class TKey
 	
 	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
 	{
-		if (id >= 0) this.id = id;
-		if (key != null) this.key = key;
-		if (keyType != null) this.keyType = keyType;
-		if (deviceID != null) this.deviceID = deviceID;
-		if (phoneNum != null) this.phoneNum = phoneNum;
-		if (phoneModel != null) this.phoneModel = phoneModel;
-		if (androidVer != null) this.androidVer = androidVer;
-		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (id >= 0) this.id = id; else this.id = -1;
+		if (key != null) this.key = key; else this.key = "";
+		if (keyType != null) this.keyType = keyType;  else this.keyType = LICENSE_TYPE.NOT_LICENSED;
+		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
+		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
+		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
+		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
+		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
 	}
 	
 	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
 	{
-		if (key != null) this.key = key;
-		if (keyType != null) this.keyType = keyType;
-		if (deviceID != null) this.deviceID = deviceID;
-		if (phoneNum != null) this.phoneNum = phoneNum;
-		if (phoneModel != null) this.phoneModel = phoneModel;
-		if (androidVer != null) this.androidVer = androidVer;
-		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (key != null) this.key = key; else this.key = "";
+		if (keyType != null) this.keyType = keyType;  else this.keyType = LICENSE_TYPE.NOT_LICENSED;
+		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
+		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
+		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
+		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
+		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
 	}
 	
 	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate, String recvMail, String recvPhoneNum) 
 	{
-		if (id >= 0) this.id = id;
-		if (key != null) this.key = key;
-		if (keyType != null) this.keyType = keyType;
-		if (deviceID != null) this.deviceID = deviceID;
-		if (phoneNum != null) this.phoneNum = phoneNum;
-		if (phoneModel != null) this.phoneModel = phoneModel;
-		if (androidVer != null) this.androidVer = androidVer;
-		if (consumeDate != null) this.consumeDate = consumeDate;
-		if (recvMail != null) this.recvMail = recvMail;
-		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum;
+		if (id >= 0) this.id = id; else this.id = -1;
+		if (key != null) this.key = key; else this.key = "";
+		if (keyType != null) this.keyType = keyType;  else this.keyType = LICENSE_TYPE.NOT_LICENSED;
+		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
+		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
+		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
+		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
+		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
+		if (recvMail != null) this.recvMail = recvMail; else this.recvMail = "";
+		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum; else this.recvPhoneNum = "";
 	}
 	
 	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate, String recvMail, String recvPhoneNum) 
 	{
-		if (key != null) this.key = key;
-		if (keyType != null) this.keyType = keyType;
-		if (deviceID != null) this.deviceID = deviceID;
-		if (phoneNum != null) this.phoneNum = phoneNum;
-		if (phoneModel != null) this.phoneModel = phoneModel;
-		if (androidVer != null) this.androidVer = androidVer;
-		if (consumeDate != null) this.consumeDate = consumeDate;
-		if (recvMail != null) this.recvMail = recvMail;
-		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum;
+		if (key != null) this.key = key; else this.key = "";
+		if (keyType != null) this.keyType = keyType;  else this.keyType = LICENSE_TYPE.NOT_LICENSED;
+		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
+		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
+		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
+		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
+		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
+		if (recvMail != null) this.recvMail = recvMail; else this.recvMail = "";
+		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum; else this.recvPhoneNum = "";
 	}
 
 	// Getters and setters

@@ -18,6 +18,11 @@
         	      android:label="@string/managedb_title"
         	      android:excludeFromRecents="true">
 		</activity>
+		
+		<activity android:name=".activity.ManageKeyActivity"
+        	      android:label="@string/managekey_title"
+        	      android:excludeFromRecents="true">
+		</activity>
         
         <service android:name=".BootService" android:enabled="true" android:excludeFromRecents="true" />
 		<receiver android:name=".BootReceiver" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">

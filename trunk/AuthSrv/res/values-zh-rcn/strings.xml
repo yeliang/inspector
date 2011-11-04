@@ -21,6 +21,17 @@
     <string name="query">查询</string>
     <string name="query_key">查询注册码</string>
     <string name="query_deviceid">查询设备ID</string>
+    <string name="query_edit">编辑</string>
+    <string name="query_apply">应用</string>
+    <string name="query_del">删除</string>
+    <string name="query_insert">插入</string>
+    <string name="query_cancel">取消</string>
+    <string name="confirm_delete">确定要从数据库删除本条记录吗？</string>
+    <string name="delete_ok">删除成功</string>
+    <string name="confirm_apply">确定要更改本条记录吗？</string>
+    <string name="apply_ok">更新成功</string>
+    <string name="confirm_insert">确定要插入本条记录吗？</string>
+    <string name="insert_ok">插入成功</string>
     
     <!-- Preferences -->
     <string name="pref_title">设置</string>
