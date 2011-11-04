@@ -94,6 +94,12 @@ public class DbHelper
         		db = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
         	}
         	db.execSQL(sql);
+        	
+        	// Create index
+        	sql = context.getResources().getString(R.string.sql_create_index_on_licensekey);
+        	db.execSQL(sql);
+        	sql = context.getResources().getString(R.string.sql_create_index_on_deviceid);
+        	db.execSQL(sql);
         	return true;
         } catch (SQLException e) {
         	Log.e(LOGTAG, e.getMessage());
@@ -252,7 +258,7 @@ public class DbHelper
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)), 
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7));  
+            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
         }  
         return null;  
     }
@@ -270,7 +276,9 @@ public class DbHelper
         		String phoneModel = cursor.getString(5);
         		String androidVer = cursor.getString(6);
         		String consumeDate = cursor.getString(7);
-        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate);
+        		String recvMail =  cursor.getString(8);
+        		String recvPhoneNum =  cursor.getString(9);
+        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate, recvMail, recvPhoneNum);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;
@@ -286,7 +294,7 @@ public class DbHelper
         if (cursor.moveToNext()) {  
             return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7));  
+            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
         }  
         return null;  
     }

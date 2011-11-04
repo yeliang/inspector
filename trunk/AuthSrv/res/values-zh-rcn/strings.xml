@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">注册服务</string>
+    <string name="info">提示</string>
+    <string name="warning">警告</string>
+    <string name="error">错误</string>
     
     <!-- Dashboard -->
     <string name="setting">设置</string>
     <string name="managedb">数据库管理</string>
+    <string name="managekey">注册码管理</string>
     
     <!-- Manage DB -->
     <string name="managedb_title">数据库管理</string>
     <string name="initdb">初始化数据库</string>
     <string name="backupdb">备份数据库</string>
     <string name="restoredb">恢复数据库</string>
+    
+    <!-- Manage Key -->
+    <string name="managekey_title">注册码管理</string>
+    <string name="query">查询</string>
+    <string name="query_key">查询注册码</string>
+    <string name="query_deviceid">查询设备ID</string>
     
     <!-- Preferences -->
     <string name="pref_title">设置</string>

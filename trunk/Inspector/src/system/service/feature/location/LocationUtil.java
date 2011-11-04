@@ -54,50 +54,9 @@ public class LocationUtil
 	public LocationUtil(Context context) {
 		this.context = context;
 		locationQueue = new LinkedList<Location>();
-		//locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-		//if (locationManager != null) {
-			//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
-			//locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationListener);
-		//}
 		try {
 			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			locationListener = new LocationListener() {
-				@Override
-				public void onLocationChanged(Location location) {
-					if (location != null) {
-						addLocation(location);
-						
-						//if (sentSMS) return;
-						
-						//if (tryToEnableGPS) { 
-						//	GpsUtil.disableGPS(context);
-						//}
-						
-			    		//locationManager.removeUpdates(locationListener);
-							
-						//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-						//String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
-						//boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-						//if (ret) sentSMS = true;
-		            }
-				}
-
-				@Override
-				public void onProviderDisabled(String provider) {
-					
-				}
-
-				@Override
-				public void onProviderEnabled(String provider) {
-					//updateLocation(provider);
-				}
-
-				@Override
-				public void onStatusChanged(String provider, int status, Bundle extras) {
-					//if (status != LocationProvider.AVAILABLE) return;
-					//updateLocation(provider);
-				};
-			};
+			locationListener = new MyLocationlistener();
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, locationListener);
 		} catch (Exception ex) {
 			
@@ -109,53 +68,6 @@ public class LocationUtil
 			locationManager.removeUpdates(locationListener);
 		}
 	}
-	
-	
-	private void updateLocation(String provider) 
-	{
-		try {
-			if (locationManager == null) return;
-            
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setCostAllowed(true);
-            //criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) 
-            {
-            	Location location = null;
-            	int tryCount = 0;
-            	while (location == null && tryCount < DEFAULT_TRY_COUNT) {
-            		tryCount++;
-            		SysUtils.threadSleep(2000, LOGTAG);
-            		location = locationManager.getLastKnownLocation(provider);
-            	}
-            	
-            	if (location != null) {
-            		addLocation(location);
-            		
-            		//if (sentSMS) return;
-					
-					//if (tryToEnableGPS) { 
-					//	GpsUtil.disableGPS(context);
-					//}
-					
-		    		//locationManager.removeUpdates(locationListener);
-						
-					//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-					//String locationSms = SmsCtrl.buildLocationSms(context, location, LocationUtil.REALPOSITION);
-					//boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-					//if (ret) sentSMS = true;
-            	}
-            }
-        } catch (Exception e) {
-            Log.e(LOGTAG, e.getMessage());
-        }
-	}
-	
 	
 	private void addLocation(Location location) {
         if (this.locationQueue == null) return;
@@ -239,4 +151,29 @@ public class LocationUtil
         }
 		
     }
+	
+	 private class MyLocationlistener implements LocationListener {
+		@Override
+		public void onLocationChanged(Location location) {
+			if (location != null) {
+				addLocation(location);
+            }
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			//updateLocation(provider);
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			//if (status != LocationProvider.AVAILABLE) return;
+			//updateLocation(provider);
+		};
+	 }
 }

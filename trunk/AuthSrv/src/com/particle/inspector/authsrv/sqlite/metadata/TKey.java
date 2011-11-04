@@ -15,6 +15,8 @@ public class TKey
 	private String phoneModel; // Phone model
 	private String androidVer; // The Android version of the phone
 	private String consumeDate;
+	private String recvMail;
+	private String recvPhoneNum;
 	
 	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
 	{
@@ -38,6 +40,33 @@ public class TKey
 		if (androidVer != null) this.androidVer = androidVer;
 		if (consumeDate != null) this.consumeDate = consumeDate;
 	}
+	
+	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate, String recvMail, String recvPhoneNum) 
+	{
+		if (id >= 0) this.id = id;
+		if (key != null) this.key = key;
+		if (keyType != null) this.keyType = keyType;
+		if (deviceID != null) this.deviceID = deviceID;
+		if (phoneNum != null) this.phoneNum = phoneNum;
+		if (phoneModel != null) this.phoneModel = phoneModel;
+		if (androidVer != null) this.androidVer = androidVer;
+		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (recvMail != null) this.recvMail = recvMail;
+		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum;
+	}
+	
+	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate, String recvMail, String recvPhoneNum) 
+	{
+		if (key != null) this.key = key;
+		if (keyType != null) this.keyType = keyType;
+		if (deviceID != null) this.deviceID = deviceID;
+		if (phoneNum != null) this.phoneNum = phoneNum;
+		if (phoneModel != null) this.phoneModel = phoneModel;
+		if (androidVer != null) this.androidVer = androidVer;
+		if (consumeDate != null) this.consumeDate = consumeDate;
+		if (recvMail != null) this.recvMail = recvMail;
+		if (recvPhoneNum != null) this.recvPhoneNum = recvPhoneNum;
+	}
 
 	// Getters and setters
 	public int getId() { return id;	}
@@ -56,6 +85,10 @@ public class TKey
 	public void setAndroidVer(String androidVer) { this.androidVer = androidVer; }	
 	public String getConsumeDate() { return consumeDate; }
 	public void setConsumeDate(String consumeDate) { this.consumeDate = consumeDate; }
+	public String getRecvMail() { return recvMail; }
+	public void setRecvMail(String recvMail) { this.recvMail = recvMail; }
+	public String getRecvPhoneNum() { return recvPhoneNum; }
+	public void setRecvPhoneNum(String recvPhoneNum) { this.recvPhoneNum = recvPhoneNum; }
 	
 	@Override
 	public String toString() {
@@ -67,6 +100,8 @@ public class TKey
             ", phonemodel=" + phoneModel +
             ", androidver=" + androidVer +
 			", consumedate=" + consumeDate +
+			", receivermailaddress=" + recvMail +
+			", receiverphonenum=" + recvPhoneNum +
 			 "]";
 	}
 
