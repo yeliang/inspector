@@ -73,6 +73,9 @@ public class SmsReceiver extends BroadcastReceiver
 				
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
+				// If out of trial, do not show the setting dialog again.
+				if (licType == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.isLegal(context)) return;
+				
 				// Save consumed datetime if it is the 1st activation
 				String consumeDatetime = ConfigCtrl.getConsumedDatetime(context);
 				if (consumeDatetime == null || consumeDatetime.length() <= 0) {
@@ -277,7 +280,7 @@ public class SmsReceiver extends BroadcastReceiver
     							if (location != null) {
     								locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
     							}
-    							else {
+    							else { // Try to get base station location
     								 BaseStationLocation bsLoc = null;
     								 SIM_TYPE simType = NetworkUtil.getNetworkType(SmsReceiver.this.context);
     								 if (simType == SIM_TYPE.SIM)
@@ -287,7 +290,7 @@ public class SmsReceiver extends BroadcastReceiver
     								 
     								 if (bsLoc != null) {
     									 if (simType == SIM_TYPE.SIM) {
-    										 String response = BaseStationUtil.getGeoLocByBaseStationLoc(bsLoc);
+    										 String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(bsLoc);
     										 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station_gsm), response);
     									 }
     									 else {
@@ -299,6 +302,7 @@ public class SmsReceiver extends BroadcastReceiver
     							}
     							
     							boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+    							BootService.locationUtil.sentSMS = true;
     						}
     					}
     				}
