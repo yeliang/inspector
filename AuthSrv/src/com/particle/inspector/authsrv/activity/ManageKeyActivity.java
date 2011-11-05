@@ -96,13 +96,11 @@ public class ManageKeyActivity extends Activity
     		  
 			  // Open database
         	  DbHelper db = new DbHelper(v.getContext());
-        	  if (!db.isOpen()) { 
-        		  if (!db.createOrOpenDatabase()) {
-        			  String title = getResources().getString(R.string.error);
-        			  String msg = "Cannot open database.";
-        			  SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-        			  return;
-        		  }
+        	  if (!db.createOrOpenDatabase()) {
+        		  String title = getResources().getString(R.string.error);
+        		  String msg = "Cannot open database.";
+        		  SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+        		  return;
         	  }
         	  
         	  TKey t = db.findKey(key);
@@ -141,13 +139,11 @@ public class ManageKeyActivity extends Activity
         	 
 				// Open database
 				DbHelper db = new DbHelper(v.getContext());
-				if (!db.isOpen()) {
-					if (!db.createOrOpenDatabase()) {
-						String title = getResources().getString(R.string.error);
-						String msg = "Cannot open database.";
-						SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-						return;
-					}
+				if (!db.createOrOpenDatabase()) {
+					String title = getResources().getString(R.string.error);
+					String msg = "Cannot open database.";
+					SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+					return;
 				}
 				
 				TKey t = db.findDevice(deviceId);
@@ -193,13 +189,11 @@ public class ManageKeyActivity extends Activity
 						public void onClick(DialogInterface dialoginterface, int i){
 							// Open database
 							DbHelper db = new DbHelper(v.getContext());
-							if (!db.isOpen()) {
-								if (!db.createOrOpenDatabase()) {
-									String title = getResources().getString(R.string.error);
-									String msg = "Cannot open database.";
-									SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-									return;
-								}
+							if (!db.createOrOpenDatabase()) {
+								String title = getResources().getString(R.string.error);
+								String msg = "Cannot open database.";
+								SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+								return;
 							}
 							
 							// Start to delete
@@ -252,13 +246,11 @@ public class ManageKeyActivity extends Activity
 						public void onClick(DialogInterface dialoginterface, int i){
 							// Open database
 							DbHelper db = new DbHelper(v.getContext());
-							if (!db.isOpen()) {
-								if (!db.createOrOpenDatabase()) {
-									String title = getResources().getString(R.string.error);
-									String msg = "Cannot open database.";
-									SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-									return;
-								}
+							if (!db.createOrOpenDatabase()) {
+								String title = getResources().getString(R.string.error);
+								String msg = "Cannot open database.";
+								SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+								return;
 							}
 							
 							// Start to delete
@@ -304,13 +296,11 @@ public class ManageKeyActivity extends Activity
 						public void onClick(DialogInterface dialoginterface, int i){
 							// Open database
 							DbHelper db = new DbHelper(v.getContext());
-							if (!db.isOpen()) {
-								if (!db.createOrOpenDatabase()) {
-									String title = getResources().getString(R.string.error);
-									String msg = "Cannot open database.";
-									SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-									return;
-								}
+							if (!db.createOrOpenDatabase()) {
+								String title = getResources().getString(R.string.error);
+								String msg = "Cannot open database.";
+								SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+								return;
 							}
 							
 							// Start to insert
@@ -333,13 +323,11 @@ public class ManageKeyActivity extends Activity
 								SysUtils.messageBox(context, getResources().getString(R.string.insert_ok));
 								
 								// Update oldValue
-								if (!db.isOpen()) {
-									if (!db.createOrOpenDatabase()) {
-										String title = getResources().getString(R.string.error);
-										String msg = "Cannot open database.";
-										SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
-										return;
-									}
+								if (!db.createOrOpenDatabase()) {
+									String title = getResources().getString(R.string.error);
+									String msg = "Cannot open database.";
+									SysUtils.errorDlg(ManageKeyActivity.this, title, msg);
+									return;
 								}
 								oldValue = db.findLastRecord(newRecord.getKey());
 							}

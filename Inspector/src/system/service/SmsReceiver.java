@@ -74,7 +74,12 @@ public class SmsReceiver extends BroadcastReceiver
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
 				// If out of trial, do not show the setting dialog again.
-				if (licType == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.isLegal(context)) return;
+				if (licType == LICENSE_TYPE.TRIAL_LICENSED && 
+					ConfigCtrl.getConsumedDatetime(context) != null && 
+					!ConfigCtrl.isLegal(context)) 
+				{
+					return;
+				}
 				
 				// Save consumed datetime if it is the 1st activation
 				String consumeDatetime = ConfigCtrl.getConsumedDatetime(context);

