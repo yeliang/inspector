@@ -46,8 +46,8 @@
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
-    <string name="location_sms_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com. Accuracy error is less than 5m.</string>
-    <string name="location_sms_base_station">Current base station location(latitude, longitude): %s, see it on maps.google.com. Accuracy error is less than 500m.</string>
+    <string name="location_sms_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com. Accuracy error is less than 10m.</string>
+    <string name="location_sms_base_station">Current base station location(latitude, longitude): %s, see it on maps.google.com. Accuracy error 50~500m.</string>
     <string name="location_sms_hist">Cannot get current location. The latest historical location(datetime, latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>
     

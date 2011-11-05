@@ -226,9 +226,10 @@ public class ConfigCtrl
 	public static String getSelfName(Context context) 
 	{
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
-		if (phoneNum == null) {
-			if (ConfigCtrl.getSelfPhoneNum(context) != null) {
-				phoneNum = ConfigCtrl.getSelfPhoneNum(context);
+		if (phoneNum == null || phoneNum.length() <= 0) {
+			String selfNum = ConfigCtrl.getSelfPhoneNum(context);
+			if (selfNum != null && selfNum.length() > 0) {
+				return selfNum;
 			} else {
 				phoneNum = DeviceProperty.getDeviceId(context);
 			}

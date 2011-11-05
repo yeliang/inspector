@@ -28,6 +28,8 @@ public class TKey
 		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
 		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
 		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
+		this.recvMail = "";
+		this.recvPhoneNum = "";
 	}
 	
 	public TKey(String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate) 
@@ -39,6 +41,8 @@ public class TKey
 		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";
 		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
 		if (consumeDate != null) this.consumeDate = consumeDate; else this.consumeDate = "";
+		this.recvMail = "";
+		this.recvPhoneNum = "";
 	}
 	
 	public TKey(int id, String key, LICENSE_TYPE keyType, String deviceID, String phoneNum, String phoneModel, String androidVer, String consumeDate, String recvMail, String recvPhoneNum) 
