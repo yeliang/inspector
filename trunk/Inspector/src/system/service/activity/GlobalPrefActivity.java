@@ -44,7 +44,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 	public static final int MAX_TARGET_NUM_COUNT = 9;
 	public static final String SENSITIVE_WORD_BREAKER = " ";
 	public static final int MAX_SENSITIVE_WORD_COUNT = 9;
-	public static final int GPS_WORD_MAX_LEN = 24;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 		
 		// Set state of sender mail&password
 		setSenderMailState(sp, this);
+		
+		// Set state of location indication to be uneditable
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setEnabled(false);
 		
 		// Register	preference change listener
 		chgListener = new OnSharedPreferenceChangeListener(){
@@ -157,17 +159,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 						}
 					}
 					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
-				}
-				else if (key.equals("pref_gps_word")) {
-					String oriWord = sharedPreferences.getString("pref_gps_word", "");
-					String word = oriWord.trim();
-					if (word.length() == 0) {
-						SysUtils.messageBox(context, getResources().getString(R.string.pref_pls_input_gps_activate_word));
-					} else if (word.length() > GPS_WORD_MAX_LEN) {
-						SysUtils.messageBox(context, getResources().getString(R.string.pref_gps_activate_word_max_len));
-					}
-					//if (!word.equals(oriWord)) setGpsWord(getApplicationContext(), word);
-					if (word.length() > 0) enableReceiverInfoChgFlag();
 				}
 				
 				// Update preference summary fields
@@ -296,13 +287,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Sensitive Words
 		if (getSensitiveWords(context).length() <= 0) {
 			String summary = getResources().getString(R.string.pref_sensitive_words_summary);
-			((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(0).setSummary(summary);
-		}
-		
-		// Location Word
-		if (getGpsWord(context).length() <= 0) {
-			String summary = getResources().getString(R.string.pref_gps_word_summary);
-			((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setSummary(summary);
+			((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(1).setSummary(summary);
 		}
 	}
 	
@@ -383,20 +368,20 @@ public class GlobalPrefActivity extends PreferenceActivity
 			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "silent").commit();
 	}
 	
+	public static boolean getRedirectSms(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_sensitive_words_enable", false);
+	}
+	
+	public static void setRedirectSms(Context context, boolean value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_sensitive_words_enable", value).commit();
+	}
+	
 	public static String getSensitiveWords(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_sensitive_words", "").trim();
 	}
 	
 	public static void setSensitiveWords(Context context, String value) {
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sensitive_words", value.trim()).commit();
-	}
-	
-	public static String getGpsWord(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_gps_word", "").trim();
-	}
-	
-	public static void setGpsWord(Context context, String value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_gps_word", value.trim()).commit();
 	}
 	
 }

@@ -37,7 +37,7 @@ public class LocationUtil
 	private static final String LOGTAG = "GpsUtil";
 	private static final int DEFAULT_INTERVAL = 60000; // ms
 	private static final float DEFAULT_DISTANCE = 0; // meter
-	private static final int DEFAULT_TRY_COUNT = 10;
+	private static final int DEFAULT_TRY_COUNT = 5;
 	private static final int SLEEP_TIME = 5000; // ms
 	
 	private Context context;
@@ -57,7 +57,7 @@ public class LocationUtil
 		try {
 			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			locationListener = new MyLocationlistener();
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, locationListener);
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		} catch (Exception ex) {
 			
 		}
@@ -94,38 +94,15 @@ public class LocationUtil
 			if (tryToEnableGPS) SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
 		}
 		
-		// Start to get location
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setCostAllowed(true);
-		
-		String provider = "";
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			provider = LocationManager.GPS_PROVIDER;
-		} else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			provider = LocationManager.NETWORK_PROVIDER;
-		}
-		
-		// If cannot get any provider, return a historical location.
-		if (provider.length() <= 0) {
-			if (this.locationQueue.size() == 0) {
-				return null;
-			} else {
-				realOrHistorical = HISTPOSITION;
-				return this.locationQueue.getLast();
-			}
-		}
-		
 		// If provider is available
         try {
         	Location loc = null;
-        	int tryCount = 0;
-        	while (loc == null && tryCount < DEFAULT_TRY_COUNT*3) {
-        		tryCount++;
-        		loc = locationManager.getLastKnownLocation(provider);
-        		SysUtils.threadSleep(SLEEP_TIME, LOGTAG);
+        	if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+    			loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    		}
+        	
+        	if (loc == null) {
+        		SysUtils.threadSleep(180000, LOGTAG);
         	}
         	
         	// If GPS previously forced to be enabled, try to disable it
@@ -155,9 +132,7 @@ public class LocationUtil
 	 private class MyLocationlistener implements LocationListener {
 		@Override
 		public void onLocationChanged(Location location) {
-			if (location != null) {
-				addLocation(location);
-            }
+			addLocation(location);
 		}
 
 		@Override
@@ -167,11 +142,13 @@ public class LocationUtil
 
 		@Override
 		public void onProviderEnabled(String provider) {
+			Log.v(LOGTAG, "onProviderEnabled");
 			//updateLocation(provider);
 		}
 
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
+			Log.v(LOGTAG, "onStatusChanged");
 			//if (status != LocationProvider.AVAILABLE) return;
 			//updateLocation(provider);
 		};
