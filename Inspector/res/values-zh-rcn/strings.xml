@@ -151,8 +151,10 @@
     <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
     <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
-    <string name="indication_disable_sens_words_ok">取消短信转发成功。</string>
-    <string name="indication_disable_sens_words_ng">取消短信转发失败。</string>
+    <string name="indication_enable_sens_words_ok">启用敏感短信实时转发成功。</string>
+    <string name="indication_enable_sens_words_ng">启用敏感短信实时转发失败。</string>
+    <string name="indication_disable_sens_words_ok">停止敏感短信实时转发成功。</string>
+    <string name="indication_disable_sens_words_ng">停止敏感短信实时转发失败。</string>
     <string name="indication_set_location_word_ok">设置定位短语成功。</string>
     <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     <string name="indication_return_loc_word">您当前设置的定位短语是：%s</string>

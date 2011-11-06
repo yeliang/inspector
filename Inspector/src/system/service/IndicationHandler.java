@@ -236,8 +236,14 @@ public class IndicationHandler
 			
 			// When it is OFF or off, we disable the location function
 			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-				GlobalPrefActivity.setSensitiveWords(context, "");
+				GlobalPrefActivity.setRedirectSms(context, false);
 				String strContent = context.getResources().getString(R.string.indication_disable_sens_words_ok);
+				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				return;
+			}
+			else if (indication.equalsIgnoreCase(SmsConsts.ON)) {
+				GlobalPrefActivity.setRedirectSms(context, true);
+				String strContent = context.getResources().getString(R.string.indication_enable_sens_words_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 				return;
 			}
@@ -257,32 +263,6 @@ public class IndicationHandler
 			}
 		}
 		
-		// -------------------------------------------------------
-		// #8#<location word>: change location word
-		else if (smsBody.startsWith(SmsConsts.INDICATION_LOC_WORD)) {
-			String indication = smsBody.substring(3).trim();
-			
-			// When it is GET or get, we send current location word to user
-			if (indication.equalsIgnoreCase(SmsConsts.GET)) {
-				String locWord = GlobalPrefActivity.getGpsWord(context);
-				String strContent;
-				if (locWord == null || locWord.length() <= 0) {
-					strContent = context.getResources().getString(R.string.indication_no_loc_word);
-				} else {
-					strContent = String.format(context.getResources().getString(R.string.indication_return_loc_word), locWord);
-				}
-				SmsCtrl.sendSms(incomingPhoneNum, strContent);
-			}
-			// When it is OFF or off, we disable the location function
-			else if (indication.length() > 0) {
-				if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-					GlobalPrefActivity.setGpsWord(context, "");
-				} else {
-					GlobalPrefActivity.setGpsWord(context, indication);
-				}
-			}
-		}
-
 		
 	}
 }
