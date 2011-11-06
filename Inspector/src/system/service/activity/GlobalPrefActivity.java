@@ -26,6 +26,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import system.service.R;
+import system.service.config.ConfigCtrl;
 
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.SysUtils;
@@ -251,6 +252,18 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context) {
 		boolean recordAll = sharedPreferences.getBoolean("pref_record_all", false);
 		if(recordAll) {
+			// Forbidden when it is in trial
+			if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+				String title = getResources().getString(R.string.warning);
+				String msg   = context.getResources().getString(R.string.pref_cannot_record_all_in_trial);
+				SysUtils.warningDlg(context, title, msg);
+				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
+				if (mCheckBoxPreference != null) {
+					mCheckBoxPreference.setChecked(false);
+			    }
+				return;
+			}
+			
 			// Must use self sender if recording all phone calls
 			if (!getUseSelfSender(context)               ||
 				getSenderMail(context).length()     <= 0 ||
