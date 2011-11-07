@@ -12,6 +12,8 @@ import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.location.BaseStationLocation;
+import com.particle.inspector.common.util.location.BaseStationUtil;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 
@@ -215,20 +217,46 @@ public class SmsCtrl
 		sendSms(strMobile, strContent);
 	}
 	
-	public static String buildLocationSms(Context context, Location location, String realOrHist) 
+	public static String buildLocationSms(Context context, Location location, String type, String realOrHist) 
 	{
-		if (location == null) {
-			return String.format(context.getResources().getString(R.string.location_sms_fail));
+		// If got by GPS
+		if (location != null && type.equals(LocationUtil.GPS)) {
+			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
+				return String.format(context.getResources().getString(R.string.location_sms_gps_real), 
+						location.getLatitude() + "," + location.getLongitude());
+			} else {
+				return String.format(context.getResources().getString(R.string.location_sms_gps_hist), 
+						(new Date(location.getTime())).toLocaleString() + ", " 
+								+ location.getLatitude() + "," + location.getLongitude());
+			}
 		}
 		
-		if (realOrHist.equals(LocationUtil.REALPOSITION)) {
-			return String.format(context.getResources().getString(R.string.location_sms_real), 
-				location.getLatitude() + "," + location.getLongitude());
-		} else {
-			return String.format(context.getResources().getString(R.string.location_sms_hist), 
-				(new Date(location.getTime())).toLocaleString() + ", " 
-				+ location.getLatitude() + "," + location.getLongitude());
+		// If got by WIFI network
+		else if (location != null && type.equals(LocationUtil.WIFI)) {
+			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
+				return String.format(context.getResources().getString(R.string.location_sms_network_real), 
+						location.getLatitude() + "," + location.getLongitude());
+			} else {
+				return String.format(context.getResources().getString(R.string.location_sms_network_hist), 
+						(new Date(location.getTime())).toLocaleString() + ", " 
+								+ location.getLatitude() + "," + location.getLongitude());
+			}
 		}
+		
+		else return String.format(context.getResources().getString(R.string.location_sms_fail));
+	}
+	
+	public static String buildBaseStationLocationSms(Context context, BaseStationLocation location, String gsmOrCdma) 
+	{
+		if (location != null && gsmOrCdma.equals(BaseStationUtil.G3)) {
+			return String.format(context.getResources().getString(R.string.location_sms_base_station_cdma),
+					location.latitude + "," + location.longitude);
+		}
+		else if (location != null && gsmOrCdma.equals(BaseStationUtil.GSM)) {
+			String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(location);
+			return String.format(context.getResources().getString(R.string.location_sms_base_station_gsm), response);
+		}
+		else return String.format(context.getResources().getString(R.string.location_sms_fail));
 	}
 	
 	// Send auth SMS (client->server)

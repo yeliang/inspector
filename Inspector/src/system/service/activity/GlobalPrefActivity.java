@@ -70,6 +70,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Set state of sender mail&password
 		setSenderMailState(sp, this);
 		
+		// Set state of sensitive words
+		setSensitiveWordsState(sp, this);
+		
 		// Set state of location indication to be uneditable
 		((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setEnabled(false);
 		
@@ -88,7 +91,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if(!StrUtils.validateMailAddress(senderMail) || !senderMail.toLowerCase().endsWith("gmail.com")) {
 						String title = getResources().getString(R.string.error);
 						String msg = String.format(getResources().getString(R.string.pref_invalid_sender_mail), senderMail);
-						SysUtils.errorDlg(context, title, msg);
+						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
 				}
 				else if (key.equals("pref_sender_pwd")) {
@@ -97,7 +100,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (senderPwd.length() <= 0) {
 						String title = getResources().getString(R.string.error);
 						String msg   = getResources().getString(R.string.pref_pls_input_pwd);
-						SysUtils.errorDlg(context, title, msg);
+						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
 				}
 				else if (key.equals("pref_recv_mail")) {
@@ -112,7 +115,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					if (!matcher.matches()) {
 						String title = getResources().getString(R.string.error);
 						String msg   = getResources().getString(R.string.pref_pls_input_valid_recv_phonenum);
-						SysUtils.errorDlg(context, title, msg);
+						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
 					else enableReceiverInfoChgFlag();
 					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
@@ -131,7 +134,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 						if (numbers.length > MAX_TARGET_NUM_COUNT) {
 							String title = getResources().getString(R.string.error);
 							String msg = String.format(getResources().getString(R.string.pref_target_num_count_reach_max), MAX_TARGET_NUM_COUNT);
-							SysUtils.errorDlg(context, title, msg);
+							SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 						} else {
 							Pattern p = Pattern.compile(RegExpUtil.RECORD_TARGET_NUM);
 							for (int i=0; i < numbers.length; i++) {
@@ -139,12 +142,15 @@ public class GlobalPrefActivity extends PreferenceActivity
 						    	if (!matcher.matches()) {
 						    		String title = getResources().getString(R.string.error);
 						    		String msg = String.format(getResources().getString(R.string.pref_target_num_format_error));
-									SysUtils.errorDlg(context, title, msg);
+									SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 						    		break;
 						    	}
 							}
 						}
 					}
+				}
+				else if (key.equals("pref_sensitive_words_enable")) {
+					setSensitiveWordsState(sharedPreferences, GlobalPrefActivity.this);
 				}
 				else if (key.equals("pref_sensitive_words")) {
 					String oriWords = sharedPreferences.getString("pref_sensitive_words", "");
@@ -156,7 +162,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 						if (words.split(SENSITIVE_WORD_BREAKER).length > MAX_SENSITIVE_WORD_COUNT) {
 							String title = getResources().getString(R.string.error);
 							String msg = String.format(getResources().getString(R.string.pref_sensitive_words_count_reach_max), MAX_SENSITIVE_WORD_COUNT);
-							SysUtils.errorDlg(context, title, msg);
+							SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 						}
 					}
 					//if (!words.equals(oriWords)) setSensitiveWords(getApplicationContext(), words);
@@ -218,13 +224,22 @@ public class GlobalPrefActivity extends PreferenceActivity
    	 			if (!matcher.matches()) {
    	 				String title = getResources().getString(R.string.error);
    	 				String msg = String.format(context.getResources().getString(R.string.pref_invalid_mail_format), eachMail.trim());
-   	 				SysUtils.errorDlg(context, title, msg);
+   	 				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
    	 				valid = false;
    	 				break;
    	 			}
 	    	}
 	    }
 	    return valid;
+	}
+	
+	private void setSensitiveWordsState(SharedPreferences sharedPreferences, Context context) {
+		boolean enabled = sharedPreferences.getBoolean("pref_sensitive_words_enable", false);
+		if(enabled) {
+			((PreferenceCategory)getPreferenceScreen().getPreference(5)).getPreference(1).setEnabled(true);
+		} else {
+			((PreferenceCategory)getPreferenceScreen().getPreference(5)).getPreference(1).setEnabled(false);
+		}
 	}
 	
 	private void setSenderMailState(SharedPreferences sharedPreferences, Context context) {
@@ -240,7 +255,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 			if (getRecordAll(context)) {
 				String title = getResources().getString(R.string.error);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.errorDlg(context, title, msg);
+				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_use_self_sender");
 				if (mCheckBoxPreference != null) {
 					mCheckBoxPreference.setChecked(true);
@@ -271,7 +286,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 			{	
 				String title = getResources().getString(R.string.error);
 				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.errorDlg(context, title, msg);
+				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
 				if (mCheckBoxPreference != null) {
 					mCheckBoxPreference.setChecked(false);

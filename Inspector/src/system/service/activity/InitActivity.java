@@ -45,15 +45,18 @@ public class InitActivity extends Activity
     
     private final static int DEFAULT_RETRY_COUNT = 3;
     
-	Button btn_getinfo;
+	Button btn_testMail;
+	Button btn_testPhone;
     Button btn_screenshot;
     Button btn_setting;
     Button btn_hide;
-    TextView hint_getinfo;
+    TextView hint_testMail;
+    TextView hint_testPhone;
     TextView hint_screenshot;
     TextView hint_setting;
     TextView hint_hide;
-    OnClickListener listener_getinfo = null;
+    OnClickListener listener_testMail = null;
+    OnClickListener listener_testPhone = null;
     OnClickListener listener_screenshot = null;
     OnClickListener listener_setting = null;
     OnClickListener listener_hide = null;
@@ -81,15 +84,18 @@ public class InitActivity extends Activity
     
     private void initUI()
     {
-    	btn_getinfo = (Button)findViewById(R.id.btn_getinfo);
-    	btn_getinfo.setOnClickListener(listener_getinfo);
+    	btn_testMail = (Button)findViewById(R.id.btn_testmail);
+    	btn_testMail.setOnClickListener(listener_testMail);
+    	btn_testPhone = (Button)findViewById(R.id.btn_testphone);
+    	btn_testPhone.setOnClickListener(listener_testPhone);
         btn_screenshot = (Button)findViewById(R.id.btn_screenshot);
         btn_screenshot.setOnClickListener(listener_screenshot);
         btn_setting = (Button)findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(listener_setting);
         btn_hide = (Button)findViewById(R.id.btn_hide);
         btn_hide.setOnClickListener(listener_hide);
-        hint_getinfo = (TextView)findViewById(R.id.hint_getinfo);
+        hint_testMail = (TextView)findViewById(R.id.hint_testmail);
+        hint_testPhone = (TextView)findViewById(R.id.hint_testphone);
         hint_screenshot = (TextView)findViewById(R.id.hint_screenshot);
         hint_setting = (TextView)findViewById(R.id.hint_setting);
         hint_hide = (TextView)findViewById(R.id.hint_hide);
@@ -99,13 +105,21 @@ public class InitActivity extends Activity
         if (ConfigCtrl.isLegal(context) &&
         	GlobalPrefActivity.getReceiverMail(context).length() > 0) enabled = true;
         
-        btn_getinfo.setEnabled(enabled);
-        hint_getinfo.setEnabled(enabled);
+        btn_testMail.setEnabled(enabled);
+        hint_testMail.setEnabled(enabled);
         
         btn_screenshot.setEnabled(enabled);
         hint_screenshot.setEnabled(enabled);
+    	
         btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
         hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
+        
+        enabled = false;
+        if (ConfigCtrl.isLegal(context) &&
+            GlobalPrefActivity.getReceiverPhoneNum(context).length() > 0) enabled = true;
+        
+        btn_testPhone.setEnabled(enabled);
+        hint_testPhone.setEnabled(enabled);
     }
     
     @Override
@@ -117,9 +131,9 @@ public class InitActivity extends Activity
 	    if (ConfigCtrl.isLegal(context) && mailAddr.length() > 0) {
 	    	Matcher matcher = p.matcher(mailAddr);
    	 		if (matcher.matches()) {
-   	 			btn_getinfo.setEnabled(true);
+   	 			btn_testMail.setEnabled(true);
    	 			btn_screenshot.setEnabled(true);
-   	 			hint_getinfo.setEnabled(true);
+   	 			hint_testMail.setEnabled(true);
    	 			hint_screenshot.setEnabled(true);
    	 		}
 	    }
@@ -138,7 +152,7 @@ public class InitActivity extends Activity
     
     private void setListener()
     {
-    	listener_getinfo = new OnClickListener()
+    	listener_testMail = new OnClickListener()
         {
             public void onClick(View v)
             {
@@ -249,11 +263,36 @@ public class InitActivity extends Activity
             
         };
         
+        listener_testMail = new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+            	// If neither in trail and nor licensed, return
+            	if (!ConfigCtrl.isLegal(context)) {
+            		String title = context.getResources().getString(R.string.error);
+            		String msg = context.getResources().getString(R.string.msg_expired_alert);
+            		SysUtils.errorDlg(InitActivity.this, title, msg);
+    				return;
+    			}
+            	
+            	String smsContent = context.getResources().getString(R.string.init_test_sms_content);
+            	boolean ret = SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), smsContent);
+            	if (ret) {
+            		String msg = context.getResources().getString(R.string.init_send_test_sms_ok);
+            		SysUtils.messageBox(InitActivity.this, msg);
+            	} else {
+            		String title = context.getResources().getString(R.string.error);
+            		String msg = context.getResources().getString(R.string.init_send_test_sms_ng);
+            		SysUtils.errorDlg(InitActivity.this, title, msg);
+            	}
+            }
+        };
+        
         listener_screenshot = new OnClickListener()
         {
             public void onClick(View v)
             {
-                //TODO
+                
             }
         };
         
@@ -285,11 +324,11 @@ public class InitActivity extends Activity
         public void handleMessage(Message msg) {
             switch (msg.what) {
                case DISABLE_GETINFO_BTN: {
-              	   btn_getinfo.setEnabled(false);
+              	   btn_testMail.setEnabled(false);
                    break;
                }
                case ENABLE_GETINFO_BTN: {
-             	   btn_getinfo.setEnabled(true);
+             	   btn_testMail.setEnabled(true);
               	   break;
                }
                case NETWORK_DISCONNECTED: {
