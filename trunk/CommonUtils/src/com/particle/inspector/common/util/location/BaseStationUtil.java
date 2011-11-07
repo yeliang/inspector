@@ -11,6 +11,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.particle.inspector.common.util.NetworkUtil;
+import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.SysUtils;
 
 import android.content.Context;
@@ -21,6 +23,9 @@ import android.telephony.gsm.GsmCellLocation;
 
 public class BaseStationUtil 
 {
+	public static final String GSM = "GSM";
+	public static final String G3 = "3G";
+	
 	// Get CDMA base station location
 	public static BaseStationLocation getCdmaBaseStationLocation(Context context) 
 	{
@@ -57,6 +62,28 @@ public class BaseStationUtil
 			return null;
 		}
 	}
+	
+	// type:
+	//   - GSM : got by GSM(2G)
+	//   - G3  : got by 3G(WCDMA/CDMA2000)
+	public static BaseStationLocation getBaseStationLocation(Context context, String type)
+    {
+		BaseStationLocation bsLoc = null;
+		//SIM_TYPE simType = NetworkUtil.getNetworkType(context);
+		try {
+			bsLoc = BaseStationUtil.getCdmaBaseStationLocation(context);
+			type = G3;
+		} catch (Exception ex) {}
+		
+		if (bsLoc == null) {
+			try {
+				bsLoc = BaseStationUtil.getGsmBaseStationLocation(context);
+				type = GSM;
+			} catch (Exception ex) {}
+		}
+		
+		return bsLoc;		
+    }
 
 	// When network available, send json to google maps to get geo location
 	public static String getGeoLocByGsmBaseStationLoc(BaseStationLocation bsLoc) 

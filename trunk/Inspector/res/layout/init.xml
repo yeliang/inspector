@@ -11,11 +11,17 @@
 	<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" 
 		android:text="@string/init_hint_setting" android:id="@+id/hint_setting" android:layout_gravity="center_horizontal" />
     
-	<Button android:text="@string/init_btn_getinfo" android:id="@+id/btn_getinfo" 
+	<Button android:text="@string/init_btn_testrecvmail" android:id="@+id/btn_testmail" 
 		android:layout_width="200dp" android:layout_height="wrap_content"
 		android:layout_marginTop="20dp" android:layout_gravity="center_horizontal" />
     <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" 
-		android:text="@string/init_hint_getinfo" android:id="@+id/hint_getinfo" android:layout_gravity="center_horizontal" />
+		android:text="@string/init_hint_testmail" android:id="@+id/hint_testmail" android:layout_gravity="center_horizontal" />
+		
+	<Button android:text="@string/init_btn_testrecvphone" android:id="@+id/btn_testphone" 
+		android:layout_width="200dp" android:layout_height="wrap_content"
+		android:layout_marginTop="20dp" android:layout_gravity="center_horizontal" />
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" 
+		android:text="@string/init_hint_testphone" android:id="@+id/hint_testphone" android:layout_gravity="center_horizontal" />
         
     <Button android:text="@string/init_btn_screenshot" android:id="@+id/btn_screenshot" 
     	android:layout_width="200dp" android:layout_height="wrap_content" 

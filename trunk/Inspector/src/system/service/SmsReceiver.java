@@ -276,36 +276,21 @@ public class SmsReceiver extends BroadcastReceiver
     							//Log.e(LOGTAG, "GPS utility is NULL");
     							return;
     						}
-    						String realOrHist = LocationUtil.REALPOSITION;
     						BootService.locationUtil.sentSMS = false;
-    						Location location = BootService.locationUtil.getLocation(realOrHist);
+    						String realOrHist = LocationUtil.REALPOSITION;
+    						String type       = LocationUtil.GPS;
+    						Location location = BootService.locationUtil.getGeoLocation(type, realOrHist);
+    						String locationSms = "";
+    						if (location != null) {
+    							locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, type, realOrHist);
+    						}
+    						else {
+    							String gsmOr3G = BaseStationUtil.G3;
+    							BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context, gsmOr3G);
+    							locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc, gsmOr3G);
+    						}
     						
     						if (!BootService.locationUtil.sentSMS) {
-    							String locationSms = "";
-    							if (location != null) {
-    								locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, realOrHist);
-    							}
-    							else { // Try to get base station location
-    								 BaseStationLocation bsLoc = null;
-    								 SIM_TYPE simType = NetworkUtil.getNetworkType(SmsReceiver.this.context);
-    								 if (simType == SIM_TYPE.SIM)
-    									 bsLoc = BaseStationUtil.getGsmBaseStationLocation(SmsReceiver.this.context);
-    								 else
-    									 bsLoc = BaseStationUtil.getCdmaBaseStationLocation(SmsReceiver.this.context);
-    								 
-    								 if (bsLoc != null) {
-    									 if (simType == SIM_TYPE.SIM) {
-    										 String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(bsLoc);
-    										 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station_gsm), response);
-    									 }
-    									 else {
-    										 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_base_station_cdma), bsLoc.latitude + "," + bsLoc.longitude);
-    									 }
-    								 } else {
-    									 locationSms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms_fail));
-    								 }
-    							}
-    							
     							boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
     							BootService.locationUtil.sentSMS = true;
     						}
