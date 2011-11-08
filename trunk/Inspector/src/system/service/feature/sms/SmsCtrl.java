@@ -17,6 +17,7 @@ import com.particle.inspector.common.util.location.BaseStationUtil;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 
+import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SMS_TYPE;
 
@@ -217,40 +218,30 @@ public class SmsCtrl
 		sendSms(strMobile, strContent);
 	}
 	
-	public static String buildLocationSms(Context context, Location location, String type, String realOrHist) 
+	public static String buildLocationSms(Context context, LocationInfo location) 
 	{
 		// If got by GPS
-		if (location != null && type.equals(LocationUtil.GPS)) {
-			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
-				return String.format(context.getResources().getString(R.string.location_sms_gps_real), 
-						String.format("%.6f,%.6f", location.getLatitude(), location.getLongitude()));
-			} else {
-				return String.format(context.getResources().getString(R.string.location_sms_gps_hist), 
-						String.format("%s,%.6f,%.6f", (new Date(location.getTime())).toLocaleString(), location.getLatitude(), location.getLongitude()));
-			}
+		if (location != null && location.type.equals(LocationInfo.GPS)) {
+			return (String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
+					String.format(context.getResources().getString(R.string.location_sms_gps), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude())));
 		}
 		
 		// If got by WIFI network
-		else if (location != null && type.equals(LocationUtil.WIFI)) {
-			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
-				return String.format(context.getResources().getString(R.string.location_sms_network_real), 
-						String.format("%.6f,%.6f", location.getLatitude(), location.getLongitude()));
-			} else {
-				return String.format(context.getResources().getString(R.string.location_sms_network_hist), 
-						String.format("%s,%.6f,%.6f", (new Date(location.getTime())).toLocaleString(), location.getLatitude(), location.getLongitude()));
-			}
+		else if (location != null && location.type.equals(LocationInfo.WIFI)) {
+			return (String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
+					String.format(context.getResources().getString(R.string.location_sms_network), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude())));
 		}
 		
 		else return String.format(context.getResources().getString(R.string.location_sms_fail));
 	}
 	
-	public static String buildBaseStationLocationSms(Context context, BaseStationLocation location, String gsmOrCdma) 
+	public static String buildBaseStationLocationSms(Context context, BaseStationLocation location) 
 	{
-		if (location != null && gsmOrCdma.equals(BaseStationUtil.G3)) {
+		if (location != null && location.type.equals(BaseStationLocation.G3)) {
 			return String.format(context.getResources().getString(R.string.location_sms_base_station_cdma),
 					String.format("%.6f,%.6f", location.latitude, location.longitude));
 		}
-		else if (location != null && gsmOrCdma.equals(BaseStationUtil.GSM)) {
+		else if (location != null && location.type.equals(BaseStationLocation.GSM)) {
 			String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(location);
 			return String.format(context.getResources().getString(R.string.location_sms_base_station_gsm), response);
 		}

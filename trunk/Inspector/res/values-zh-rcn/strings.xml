@@ -45,13 +45,12 @@
     <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
     
     <!-- Location -->
-    <string name="location_sms">当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度50~500米。</string>
-    <string name="location_sms_gps_real">当前GPS位置（纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
-    <string name="location_sms_gps_hist">最近GPS位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10米内。</string>
-    <string name="location_sms_network_real">网络定位当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度10~500米。</string>
-    <string name="location_sms_network_hist">网络定位最近位置（时间，纬度，经度）：%s。去maps.google.com查看地图，精度10~500米。</string>
-    <string name="location_sms_base_station_gsm">基站定位当前位置：%s。去maps.google.com查看地图，精度50~500米。</string>
-    <string name="location_sms_base_station_cdma">基站定位当前位置（纬度，经度）：%s。去maps.google.com查看地图，精度50~500米。</string>
+    <string name="location_sms">当前位置（纬度，经度）：%s。</string>
+    <string name="location_sms_latest">最近（%s）</string>
+    <string name="location_sms_gps">GPS位置（纬度，经度）：%s。</string>
+    <string name="location_sms_network">网络定位位置（纬度，经度）：%s。</string>
+    <string name="location_sms_base_station_gsm">基站定位当前位置：%s。</string>
+    <string name="location_sms_base_station_cdma">基站定位当前位置（纬度，经度）：%s。</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
     <!-- Preferences -->

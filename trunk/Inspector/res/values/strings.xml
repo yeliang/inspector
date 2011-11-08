@@ -47,10 +47,9 @@
     
     <!-- Location -->
     <string name="location_sms">Location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_gps_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_gps_hist">Latest GPS location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_network_real">Current network location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_network_hist">Latest network location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_latest">Latest(%s) </string>
+    <string name="location_sms_gps">GPS location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_network">network location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_base_station_gsm">Current base station location: %s, see it on maps.google.com</string>
     <string name="location_sms_base_station_cdma">Current base station location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>

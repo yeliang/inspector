@@ -23,9 +23,6 @@ import android.telephony.gsm.GsmCellLocation;
 
 public class BaseStationUtil 
 {
-	public static final String GSM = "GSM";
-	public static final String G3 = "3G";
-	
 	// Get CDMA base station location
 	public static BaseStationLocation getCdmaBaseStationLocation(Context context) 
 	{
@@ -39,7 +36,7 @@ public class BaseStationUtil
 			double lati = gcl.getBaseStationLatitude()/14400.0;
 			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
 			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
-			return (new BaseStationLocation(stationId, longi, lati, -1, -1, mcc, mnc));
+			return (new BaseStationLocation(BaseStationLocation.G3, stationId, longi, lati, -1, -1, mcc, mnc));
 		} catch (Exception ex) {
 			return null;
 		}
@@ -57,30 +54,28 @@ public class BaseStationUtil
 			int lac = gcl.getLac();
 			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
 			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
-			return (new BaseStationLocation(-1, -1, -1, cid, lac, mcc, mnc));
+			return (new BaseStationLocation(BaseStationLocation.GSM, -1, -1, -1, cid, lac, mcc, mnc));
 		} catch (Exception ex) {
 			return null;
 		}
 	}
 	
-	// type:
-	//   - GSM : got by GSM(2G)
-	//   - G3  : got by 3G(WCDMA/CDMA2000)
-	public static BaseStationLocation getBaseStationLocation(Context context, String type)
+	public static BaseStationLocation getBaseStationLocation(Context context)
     {
 		BaseStationLocation bsLoc = null;
 		//SIM_TYPE simType = NetworkUtil.getNetworkType(context);
 		try {
 			bsLoc = BaseStationUtil.getCdmaBaseStationLocation(context);
-			type = G3;
 		} catch (Exception ex) {}
 		
+		//temp we do not handle GSM location
+		//TODO
+		/*
 		if (bsLoc == null) {
 			try {
 				bsLoc = BaseStationUtil.getGsmBaseStationLocation(context);
-				type = GSM;
 			} catch (Exception ex) {}
-		}
+		}*/
 		
 		return bsLoc;		
     }

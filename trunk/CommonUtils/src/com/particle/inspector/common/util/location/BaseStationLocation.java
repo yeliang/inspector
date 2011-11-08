@@ -1,6 +1,11 @@
 package com.particle.inspector.common.util.location;
 
-public class BaseStationLocation {
+public class BaseStationLocation 
+{
+	public static final String GSM = "GSM";
+	public static final String G3 = "3G";
+	
+	public String type;
 	public int stationId;
 	public double longitude;
 	public double latitude;
@@ -9,7 +14,8 @@ public class BaseStationLocation {
 	public int mcc;
 	public int mnc;
 	
-	public BaseStationLocation(int stationId, double longi, double lati, int cid, int lac, int mcc, int mnc) {
+	public BaseStationLocation(String type, int stationId, double longi, double lati, int cid, int lac, int mcc, int mnc) {
+		this.type = type;
 		this.stationId = stationId;
 		this.longitude = longi;
 		this.latitude = lati;
