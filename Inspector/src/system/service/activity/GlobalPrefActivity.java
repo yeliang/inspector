@@ -114,7 +114,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					Matcher matcher = p.matcher(phoneNum);
 					if (!matcher.matches()) {
 						String title = getResources().getString(R.string.error);
-						String msg   = getResources().getString(R.string.pref_pls_input_valid_recv_phonenum);
+						String msg   = String.format(getResources().getString(R.string.pref_pls_input_valid_recv_phonenum), phoneNum);
 						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
 					else enableReceiverInfoChgFlag();
@@ -211,26 +211,19 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	private boolean checkRecvMailFormat(SharedPreferences sharedPreferences, Context context) {
-		boolean valid = true;
 		String oriMail = sharedPreferences.getString("pref_recv_mail", "");
 		String mail = oriMail.trim();
 		//if (!mail.equals(oriMail)) setMail(context, mail);
-		String[] mails = mail.split(",");
+		
 	    Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
-	    
-	    for (String eachMail : mails) {
-	    	if (eachMail.trim().length() > 0) {
-	    		Matcher matcher = p.matcher(eachMail.trim());
-   	 			if (!matcher.matches()) {
-   	 				String title = getResources().getString(R.string.error);
-   	 				String msg = String.format(context.getResources().getString(R.string.pref_invalid_mail_format), eachMail.trim());
-   	 				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
-   	 				valid = false;
-   	 				break;
-   	 			}
-	    	}
-	    }
-	    return valid;
+	    Matcher matcher = p.matcher(mail);
+		if (!matcher.matches()) {
+			String title = getResources().getString(R.string.error);
+			String msg = String.format(context.getResources().getString(R.string.pref_invalid_mail_format), mail);
+			SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
+			return false;
+		}
+	    return true;
 	}
 	
 	private void setSensitiveWordsState(SharedPreferences sharedPreferences, Context context) {
