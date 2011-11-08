@@ -284,7 +284,7 @@ public class InitActivity extends Activity
             
         };
         
-        listener_testMail = new OnClickListener()
+        listener_testPhone = new OnClickListener()
         {
             public void onClick(View v)
             {
