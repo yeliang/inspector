@@ -126,16 +126,37 @@ public class InitActivity extends Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {
     	// Enable buttons if the mail address is valid
-		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
-		String mailAddr = GlobalPrefActivity.getReceiverMail(getApplicationContext());
-	    if (ConfigCtrl.isLegal(context) && mailAddr.length() > 0) {
-	    	Matcher matcher = p.matcher(mailAddr);
-   	 		if (matcher.matches()) {
-   	 			btn_testMail.setEnabled(true);
-   	 			btn_screenshot.setEnabled(true);
-   	 			hint_testMail.setEnabled(true);
-   	 			hint_screenshot.setEnabled(true);
-   	 		}
+	    if (ConfigCtrl.isLegal(context)) {
+	    	String mailAddr = GlobalPrefActivity.getReceiverMail(context);
+	    	if (mailAddr.length() > 0) {
+	    		Pattern p = Pattern.compile(RegExpUtil.VALID_MAIL_ADDR);
+	    		Matcher matcher = p.matcher(mailAddr);
+   	 			if (matcher.matches()) {
+   	 				btn_testMail.setEnabled(true);
+   	 				btn_screenshot.setEnabled(true);
+   	 				hint_testMail.setEnabled(true);
+   	 				hint_screenshot.setEnabled(true);
+   	 			} else {
+   	 				btn_testMail.setEnabled(false);
+   	 				btn_screenshot.setEnabled(false);
+   	 				hint_testMail.setEnabled(false);
+   	 				hint_screenshot.setEnabled(false);
+   	 			}
+	    	} else {
+	 			btn_testMail.setEnabled(false);
+	 			btn_screenshot.setEnabled(false);
+	 			hint_testMail.setEnabled(false);
+	 			hint_screenshot.setEnabled(false);
+	    	}
+	    	
+	    	String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+	    	if (phoneNum.length() > 0) {
+	    		btn_testPhone.setEnabled(true);
+	    		hint_testPhone.setEnabled(true);
+	    	} else {
+	    		btn_testPhone.setEnabled(false);
+	    		hint_testPhone.setEnabled(false);
+	    	}
 	    }
 	    
 	    LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);

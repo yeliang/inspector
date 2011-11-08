@@ -33,6 +33,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
@@ -47,8 +48,8 @@ public class LocationUtil
 	
 	private Context context;
 	private LocationManager locationManager = null;
-	private LocationListener locationGpsListener = null;
-	private LocationListener locationWifiListener = null;
+	private MyLocationlistener locationGpsListener = null;
+	private MyLocationlistener locationWifiListener = null;
 	private LinkedList<Location> locationGpsQueue; // queue for GPS locations
 	private LinkedList<Location> locationWifiQueue;// queue for WIFI locations
 	private static final int MAX_QUEUE_LEN = 50;   // MAX length for queue
@@ -67,8 +68,8 @@ public class LocationUtil
 			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			locationGpsListener = new MyLocationlistener(GPS);
 			locationWifiListener = new MyLocationlistener(WIFI);
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationWifiListener);
+			//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
+			//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationWifiListener);
 		} catch (Exception ex) {
 			
 		}
@@ -127,9 +128,15 @@ public class LocationUtil
         } catch (Exception ex) {}
         	
         if (loc == null) {
-        	locationManager.removeUpdates(locationGpsListener);
-        	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationGpsListener);
-        	SysUtils.threadSleep(60000, LOGTAG);
+        	//locationManager.removeUpdates(locationGpsListener);
+        	Looper.prepare();
+        	try {        	
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1f, locationGpsListener, Looper.myLooper());
+        		Looper.loop();
+        	} catch (Exception ex) {
+        		Log.e(LOGTAG, ex.getMessage());
+        	}
+        	SysUtils.threadSleep(100000, LOGTAG);
         }
         	
         // If GPS previously forced to be enabled, try to disable it
@@ -137,13 +144,14 @@ public class LocationUtil
     		GpsUtil.disableGPS(context);
     	}
     	locationManager.removeUpdates(locationGpsListener);
-    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
+    	//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
 
         // If cannot get any location, return a historical location.
     	if (loc != null) {
     		return loc;
     	}
     	else if (locationGpsQueue.size() > 0) {
+    		Looper.loop();
     		realOrHistorical = HISTPOSITION;
     		return locationGpsQueue.getLast();
     	}
@@ -172,9 +180,11 @@ public class LocationUtil
         } catch (Exception ex) {}
              	
         if (loc == null) {
-             locationManager.removeUpdates(locationWifiListener);
-             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationWifiListener);
-             SysUtils.threadSleep(60000, LOGTAG);
+        	//locationManager.removeUpdates(locationWifiListener);
+        	try {
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1f, locationWifiListener);
+        	} catch (Exception ex) {}
+            SysUtils.threadSleep(60000, LOGTAG);
         }
         
         // If network previously forced to be enabled, try to disable it
@@ -182,7 +192,7 @@ public class LocationUtil
     		NetworkUtil.disableWifi(context);
     	}
     	locationManager.removeUpdates(locationWifiListener);
-    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationWifiListener);
+    	//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationWifiListener);
 
         // If cannot get any location, return a historical location.
     	if (loc != null) {

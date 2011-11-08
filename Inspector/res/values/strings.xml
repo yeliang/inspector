@@ -46,6 +46,7 @@
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
+    <string name="location_sms">Location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_gps_real">Current GPS location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_gps_hist">Latest GPS location(latitude, longitude): %s, see it on maps.google.com</string>
     <string name="location_sms_network_real">Current network location(latitude, longitude): %s, see it on maps.google.com</string>
@@ -124,7 +125,7 @@
     <string name="action_goto_network_setting">Network currently disconnected. Do you want to enable wireless network now?</string>
     
     <!-- Server -->
-	<string name="srv_address">+8615398053471</string>
+	<string name="srv_address">15398053471</string>
 	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>

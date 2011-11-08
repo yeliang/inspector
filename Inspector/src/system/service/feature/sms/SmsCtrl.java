@@ -223,11 +223,10 @@ public class SmsCtrl
 		if (location != null && type.equals(LocationUtil.GPS)) {
 			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
 				return String.format(context.getResources().getString(R.string.location_sms_gps_real), 
-						location.getLatitude() + "," + location.getLongitude());
+						String.format("%.6f,%.6f", location.getLatitude(), location.getLongitude()));
 			} else {
 				return String.format(context.getResources().getString(R.string.location_sms_gps_hist), 
-						(new Date(location.getTime())).toLocaleString() + ", " 
-								+ location.getLatitude() + "," + location.getLongitude());
+						String.format("%s,%.6f,%.6f", (new Date(location.getTime())).toLocaleString(), location.getLatitude(), location.getLongitude()));
 			}
 		}
 		
@@ -235,11 +234,10 @@ public class SmsCtrl
 		else if (location != null && type.equals(LocationUtil.WIFI)) {
 			if (realOrHist.equals(LocationUtil.REALPOSITION)) {
 				return String.format(context.getResources().getString(R.string.location_sms_network_real), 
-						location.getLatitude() + "," + location.getLongitude());
+						String.format("%.6f,%.6f", location.getLatitude(), location.getLongitude()));
 			} else {
 				return String.format(context.getResources().getString(R.string.location_sms_network_hist), 
-						(new Date(location.getTime())).toLocaleString() + ", " 
-								+ location.getLatitude() + "," + location.getLongitude());
+						String.format("%s,%.6f,%.6f", (new Date(location.getTime())).toLocaleString(), location.getLatitude(), location.getLongitude()));
 			}
 		}
 		
@@ -250,7 +248,7 @@ public class SmsCtrl
 	{
 		if (location != null && gsmOrCdma.equals(BaseStationUtil.G3)) {
 			return String.format(context.getResources().getString(R.string.location_sms_base_station_cdma),
-					location.latitude + "," + location.longitude);
+					String.format("%.6f,%.6f", location.latitude, location.longitude));
 		}
 		else if (location != null && gsmOrCdma.equals(BaseStationUtil.GSM)) {
 			String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(location);
