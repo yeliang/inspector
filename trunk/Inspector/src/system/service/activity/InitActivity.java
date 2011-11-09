@@ -152,7 +152,7 @@ public class InitActivity extends Activity
 	    	String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 	    	Pattern p = Pattern.compile(RegExpUtil.VALID_PHONE_NUM);
 			Matcher matcher = p.matcher(phoneNum);
-			if (!matcher.matches()) {
+			if (matcher.matches()) {
 	    		btn_testPhone.setEnabled(true);
 	    		hint_testPhone.setEnabled(true);
 	    	} else {
