@@ -36,7 +36,7 @@ class CaptureTask extends TimerTask
 	
 	public void run() 
 	{
-		Log.d(LOGTAG, "start to capture screenshot");
+		//Log.d(LOGTAG, "start to capture screenshot");
 		
 		//TODO
 		String now = (new Date()).toString();
@@ -44,7 +44,7 @@ class CaptureTask extends TimerTask
 		// run shell script to export screenshot
         Process process = null;
         DataOutputStream os = null;
-        //String command = "cat /dev/graphics/fb0 > /sdcard/tmp/frame.raw";
+        //String command = "cat /dev/graphics/fb0 > /sdcard/Android/data/.tmp/frame.raw";
         try {
         	//Tools.messageBox(getApplicationContext(), "enter try");
         	/*
@@ -98,7 +98,7 @@ class CaptureTask extends TimerTask
         String title = "Capture From " + DeviceProperty.getSerialNum() + " - " + now;
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         
-        String fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp/screen.zip";
+        String fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/.tmp/screen.zip";
         sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + fileName));
         //sendIntent.setType("text/plain");
         sendIntent.setType("application/zip");
