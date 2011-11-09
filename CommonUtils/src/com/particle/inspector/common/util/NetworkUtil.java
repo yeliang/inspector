@@ -42,7 +42,7 @@ public class NetworkUtil
 	// It may take 30s at most
 	public static boolean tryToConnectDataNetwork(Context context) 
 	{
-		int MAX_TRY_COUNT = 6;
+		int MAX_TRY_COUNT = 3;
 		int tryCount = 0;
 		while (!isNetworkConnected(context) && tryCount < MAX_TRY_COUNT) {
 			enableWifi(context);
@@ -57,7 +57,7 @@ public class NetworkUtil
 	// It may take 30s at most
 	public static boolean tryToDisconnectDataNetwork(Context context) 
 	{
-		int MAX_TRY_COUNT = 6;
+		int MAX_TRY_COUNT = 3;
 		int tryCount = 0;
 		while (isNetworkConnected(context) && tryCount < MAX_TRY_COUNT) {
 			disableWifi(context);
