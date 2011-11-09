@@ -218,7 +218,7 @@ public class BootService extends Service
     }
 	
 	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
-		if (!FileCtrl.defaultDirExist()) FileCtrl.creatDefaultSDDir();
+		if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
 		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
 		return DEFAULT_PHONE_RECORD_DIR + fileName;
 	}
