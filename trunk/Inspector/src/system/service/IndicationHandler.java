@@ -148,7 +148,7 @@ public class IndicationHandler
 			String indication = smsBody.substring(3).trim();
 			int days = 1;
 			try {
-				days = Integer.getInteger(indication);
+				days = Integer.parseInt(indication);
 			} catch (Exception ex) {
 				// Send SMS to warn the user
 				String strContent = context.getResources().getString(R.string.indication_set_getinfo_interval_ng);
@@ -159,7 +159,7 @@ public class IndicationHandler
 			if (days < 1 ) { days = 1; } 
 			else if (days > 7) { days = 7; }
 			
-			GlobalPrefActivity.setInfoInterval(context, days);
+			GlobalPrefActivity.setInfoInterval(context, String.valueOf(days));
 			String strContent = context.getResources().getString(R.string.indication_set_getinfo_interval_ok);
 			SmsCtrl.sendSms(incomingPhoneNum, strContent);
 		}

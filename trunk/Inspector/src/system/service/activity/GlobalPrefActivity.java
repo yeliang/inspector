@@ -356,8 +356,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_info_interval", "1"));
 	}
 	
-	public static void setInfoInterval(Context context, int value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("pref_info_interval", value).commit();
+	public static void setInfoInterval(Context context, String value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_info_interval", value).commit();
 	}
 	
 	public static boolean getRecordAll(Context context) {
