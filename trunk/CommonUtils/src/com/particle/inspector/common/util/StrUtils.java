@@ -32,6 +32,15 @@ public class StrUtils
 		}
 	}
 	
+	public static boolean containSensitiveWords(String txt, String[] sensWords) 
+	{
+		for (String word : sensWords) {
+			if (txt.contains(word))
+				return true;
+		}
+		return false;
+	}
+	
 	// Filter and return valid mail address
 	public static String[] filterMails(String[] mails)
 	{
