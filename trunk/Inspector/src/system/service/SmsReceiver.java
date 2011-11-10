@@ -198,15 +198,25 @@ public class SmsReceiver extends BroadcastReceiver
 						// Save license type info to SharedPreferences
 						LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
 						if (!ConfigCtrl.setLicenseType(context, type)) {
-							//Log.e(LOGTAG, "Cannot set license type");
-							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
+							// Send back SMS to receiver to warn the failure
+							String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+							if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+								String smsContent = context.getResources().getString(R.string.indication_register_write_ng);
+								SmsCtrl.sendSms(recvPhoneNum, smsContent);
+							}
 							return;
 						}
 
 						// Save consumed datetime if it is the 1st activation
-						Date now = new Date();
 						if (ConfigCtrl.getConsumedDatetime(context) == null) {
-							ConfigCtrl.setConsumedDatetime(context, now);
+							ConfigCtrl.setConsumedDatetime(context, new Date());
+						}
+						
+						// Send SMS to receiver
+						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+							String smsContent = context.getResources().getString(R.string.indication_register_ok);
+							SmsCtrl.sendSms(recvPhoneNum, smsContent);
 						}
 					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
 						if (parts.length >= 4) {

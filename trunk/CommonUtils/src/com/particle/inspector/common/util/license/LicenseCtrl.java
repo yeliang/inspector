@@ -17,6 +17,8 @@ public class LicenseCtrl
 	
 	public static String TRIAL_KEY = "###";
 	
+	private static AesCryptor cryptor = new AesCryptor();
+	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
 		key = key.trim().toUpperCase();
@@ -27,7 +29,7 @@ public class LicenseCtrl
 		String crypText  = key.substring(keyLen/2, keyLen);
 		
 		try {
-			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+			String encryped = cryptor.encrypt(clearText);
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH/2);
 			if (fullKey.compareToIgnoreCase(crypText) == 0) {
 				return LICENSE_TYPE.FULL_LICENSED;

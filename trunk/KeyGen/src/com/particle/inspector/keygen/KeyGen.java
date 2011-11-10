@@ -7,7 +7,6 @@ import java.util.Random;
 import com.particle.inspector.keygen.R;
 import com.particle.inspector.common.util.AesCryptor;
 import com.particle.inspector.common.util.NetworkUtil;
-import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.mail.GMailSenderEx;
 import com.particle.inspector.common.util.SysUtils;
 
@@ -63,6 +62,8 @@ public class KeyGen extends Activity
 	private ProgressDialog progressDialog;
 
 	private TextView textField;
+	
+	private static AesCryptor cryptor = new AesCryptor();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,9 +142,8 @@ public class KeyGen extends Activity
     	        				long seed = Math.abs((new Random()).nextLong());
     	        				String hex = Long.toHexString(seed);
     	        				String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
-    	        				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+    	        				String longKey = cryptor.encrypt(clearText);
     	        				String full = clearText + longKey.substring(0, KEY_LENGTH/2);
-    	        				//String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
     	        				sb.append(String.format("%03d", i+1) + "\t\t" + full + SysUtils.NEWLINE);
     	        			}
     	        			
@@ -206,7 +206,7 @@ public class KeyGen extends Activity
     	        				long seed = Math.abs((new Random()).nextLong());
     	        				String hex = Long.toHexString(seed);
     	        				String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
-    	        				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+    	        				String longKey = cryptor.encrypt(clearText);
     	        				String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
     	        				sb.append(String.format("%03d", i+1) + "\t\t" + part + SysUtils.NEWLINE);
     	        			}
@@ -270,7 +270,7 @@ public class KeyGen extends Activity
     	        				long seed = Math.abs((new Random()).nextLong());
     	        				String hex = Long.toHexString(seed);
     	        				String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
-    	        				String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+    	        				String longKey = cryptor.encrypt(clearText);
     	        				String cuper = clearText + longKey.substring(KEY_LENGTH, (int)(KEY_LENGTH*1.5));
     	        				sb.append(String.format("%03d", i+1) + "\t\t" + cuper + SysUtils.NEWLINE);
     	        			}
@@ -442,7 +442,7 @@ public class KeyGen extends Activity
  			long seed = Math.abs((new Random()).nextLong());
  			String hex = Long.toHexString(seed);
  			String clearText = hex.substring(0, KEY_LENGTH/2).toUpperCase(); 
- 			String longKey = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
+ 			String longKey = cryptor.encrypt(clearText);
  			String full = clearText + longKey.substring(0, KEY_LENGTH/2);
  			String part = clearText + longKey.substring(KEY_LENGTH/2, KEY_LENGTH);
  			String cuper = clearText + longKey.substring(KEY_LENGTH, (int)(KEY_LENGTH*1.5));

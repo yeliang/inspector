@@ -140,6 +140,7 @@
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
     <string name="indication_register_ng">注册失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_register_write_ng">注册信息写入失败。请再次尝试，如若无法解决请联系客服。</string>
     <string name="indication_unregister_ok">卸载成功。</string>
     <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置送信邮箱成功。</string>
