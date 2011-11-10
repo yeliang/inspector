@@ -30,7 +30,10 @@ public class ConfigCtrl
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
 	private static final String UNREGISTERER_PHONE_NUMBER = "UnregistererPhoneNum";
+	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
+	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
 	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
+	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 10; // Recording times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -200,6 +203,46 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
+	public static String getTrialInfoSmsSentDatetime(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(TRIAL_INFO_SMS_SENT_DATETIME, "").trim();
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
+	}
+	
+	public static boolean setTrialInfoSmsSentDatetime(Context context, Date datetime)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putString(TRIAL_INFO_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
+		return editor.commit();
+	}
+	
+	public static boolean setRecordingTimesInTrial(Context context, int times)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putInt(RECORDING_TIMES_IN_TRIAL, times);     
+		return editor.commit();
+	}
+	
+	public static int getRecordingTimesInTrial(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		try {
+			return config.getInt(RECORDING_TIMES_IN_TRIAL, 0);
+		} catch (Exception ex) {
+			return DEFAULT_RECORDING_TIMES_IN_TRIAL;
+		}
+	}
+	
+	public static boolean countRecordingTimesInTrial(Context context) 
+	{
+		int currentCount = getRecordingTimesInTrial(context);
+		return setRecordingTimesInTrial(context, ++currentCount);
+	}
+	
 	// See if now is still in trial
 	public static boolean stillInTrial(Context context) 
 	{
@@ -244,6 +287,11 @@ public class ConfigCtrl
 				licType == LICENSE_TYPE.PART_LICENSED ||
 				licType == LICENSE_TYPE.SUPER_LICENSED ||
 				(licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context)));
+	}
+	
+	public static boolean reachRecordingTimeLimit(Context context) {
+		
+		return (ConfigCtrl.getRecordingTimesInTrial(context) >= DEFAULT_RECORDING_TIMES_IN_TRIAL);
 	}
 
 }

@@ -9,7 +9,7 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_RESULT;
 import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.SuperLoggingSms;
-import com.particle.inspector.authsrv.config.ConfigCtrl;
+import com.particle.inspector.common.util.sms.TrialInfoSms;
 import com.particle.inspector.authsrv.sms.SmsCtrl;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.authsrv.sqlite.KEY_VALIDATION_RESULT;
@@ -20,8 +20,6 @@ import com.particle.inspector.common.util.SysUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.telephony.SmsMessage;
 import android.util.Log;
 
 /**
@@ -41,13 +39,38 @@ public class SmsReceiver extends BroadcastReceiver
 		String smsBody = SmsCtrl.getSmsBody(intent).trim();
 		
 		// --------------------------------------------------------------------------------
+		// If it is receiver info SMS (so the key type should be full or part)
+		if (smsBody.startsWith(SmsConsts.HEADER_TRIAL_EX)) {
+			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
+			
+			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
+			if (parts.length < 4) return; 
+			
+			TrialInfoSms sms = new TrialInfoSms(smsBody);
+			
+			DbHelper dbHelper = new DbHelper(context);
+			boolean ret = dbHelper.createOrOpenDatabase();
+			if (!ret) {
+				Log.e(LOGTAG, "Failed to create or open database");
+				return;
+			}
+			
+			// Insert to database
+			String phoneNum = sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
+			TKey key = new TKey(sms.getKey(), LICENSE_TYPE.TRIAL_LICENSED, sms.getDeviceID(), phoneNum,
+				sms.getPhoneModel(), sms.getAndroidVer(), 
+				DatetimeUtil.format.format(new Date()));
+			dbHelper.insertTrialInfo(key);
+		}
+		
+		// --------------------------------------------------------------------------------
 		// If it is the key validation request SMS (so the key type should be full or part)
-		if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX))
+		else if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX))
 		{
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
-			if (parts.length < 3) return; 
+			if (parts.length < 4) return; 
 			
 			String smsAddress = SmsCtrl.getSmsAddress(intent);
 			AuthSms sms = new AuthSms(smsBody, AUTH_SMS_TYPE.CLIENT);
@@ -70,7 +93,7 @@ public class SmsReceiver extends BroadcastReceiver
 					LICENSE_TYPE keyType = LicenseCtrl.calLicenseType(context, sms.getKey());
 					if (valid == KEY_VALIDATION_RESULT.VALID_AND_NOT_EXIST) {
 						// Insert to database
-						String phoneNum =  sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : SmsCtrl.getSmsAddress(intent);
+						String phoneNum = sms.getPhoneNum().length() > 0 ? sms.getPhoneNum() : smsAddress;
 						TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), phoneNum,
 							sms.getPhoneModel(), sms.getAndroidVer(), 
 							DatetimeUtil.format.format(new Date()));

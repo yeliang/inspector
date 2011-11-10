@@ -45,6 +45,21 @@ public class SysUtils
             .show();
 	}
 	
+	// A model dialog to show info messages
+	public static void infoDlg(Context context, String title, String msg)
+	{
+		new AlertDialog.Builder(context).setTitle(title)
+			.setIcon(android.R.drawable.ic_dialog_info)
+			.setMessage(msg)
+			.setPositiveButton("OK", 
+			    new DialogInterface.OnClickListener(){ 
+                    public void onClick(DialogInterface dlgInf, int i) { 
+                    	//
+                    } 
+                })
+            .show();
+	}
+	
 	// A model dialog to show error messages
 	public static void errorDlg(Context context, String title, String msg)
 	{
