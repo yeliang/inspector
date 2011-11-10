@@ -19,12 +19,12 @@ public class LicenseCtrl
 	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
-		key = key.trim();
+		key = key.trim().toUpperCase();
 		if (key.equals(TRIAL_KEY)) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		int keyLen = key.length();
-		String clearText = key.substring(0, keyLen/2).toUpperCase();
-		String crypText  = key.substring(keyLen/2, keyLen).toUpperCase();
+		String clearText = key.substring(0, keyLen/2);
+		String crypText  = key.substring(keyLen/2, keyLen);
 		
 		try {
 			String encryped = AesCryptor.encrypt(AesCryptor.defaultSeed, clearText);
