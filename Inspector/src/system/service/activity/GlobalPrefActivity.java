@@ -260,18 +260,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context) {
 		boolean recordAll = sharedPreferences.getBoolean("pref_record_all", false);
 		if(recordAll) {
-			// Forbidden when it is in trial
-			if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
-				String title = getResources().getString(R.string.warning);
-				String msg   = context.getResources().getString(R.string.pref_cannot_record_all_in_trial);
-				SysUtils.warningDlg(context, title, msg);
-				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
-				if (mCheckBoxPreference != null) {
-					mCheckBoxPreference.setChecked(false);
-			    }
-				return;
-			}
-			
 			// Must use self sender if recording all phone calls
 			if (!getUseSelfSender(context)               ||
 				getSenderMail(context).length()     <= 0 ||
@@ -286,6 +274,13 @@ public class GlobalPrefActivity extends PreferenceActivity
 			    }
 			} else {
 				((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
+			}
+			
+			// Pop up times limit warning when it is in trial
+			if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+				String title = getResources().getString(R.string.info);
+				String msg   = context.getResources().getString(R.string.pref_record_all_time_limit_in_trial);
+				SysUtils.infoDlg(context, title, msg);
 			}
 		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(true);

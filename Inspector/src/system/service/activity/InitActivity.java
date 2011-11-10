@@ -336,6 +336,10 @@ public class InitActivity extends Activity
         {
             public void onClick(View v)
             {
+            	String title = context.getResources().getString(R.string.info);
+            	String msg   = context.getResources().getString(R.string.init_pls_reset_phone);
+            	SysUtils.infoDlg(InitActivity.this, title, msg);
+            	
                 finish();
             }
         };

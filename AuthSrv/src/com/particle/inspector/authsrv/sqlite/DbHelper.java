@@ -41,6 +41,7 @@ public class DbHelper
     public final static String DEFAULT_DATABASE_PATH = "/data/com.particle.inspector.authsrv/databases/inspector.db";
     
     private final static String DEFAULT_KEY_TABLE_NAME = "inspector_auth_key";
+    private final static String DEFAULT_TRIAL_TABLE_NAME = "inspector_trial";
     public final static String KEY_FIELD_ID = "_id"; 
     public final static String KEY_FIELD_KEY = "licensekey";
     public final static String KEY_FIELD_DEVICE_ID = "deviceid";
@@ -106,6 +107,22 @@ public class DbHelper
         	return false;
         }
     }
+    
+    public boolean createTrialTable() 
+    {
+        String sql = context.getResources().getString(R.string.sql_create_table_trial);
+        try {
+        	if (db == null) return false;
+        	if (!db.isOpen()) {
+        		db = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+        	}
+        	db.execSQL(sql);
+        	return true;
+        } catch (SQLException e) {
+        	Log.e(LOGTAG, e.getMessage());
+        	return false;
+        }
+    }
 
     public boolean DropKeyTable() 
     {
@@ -137,6 +154,25 @@ public class DbHelper
     		db.beginTransaction(); 
         	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
+        			key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
+        	db.setTransactionSuccessful();  
+        	db.endTransaction();
+        	ret = true;
+    	} catch (SQLException e) {
+    		Log.e(LOGTAG, e.getMessage());
+    	} finally {
+    		db.close();
+    	}
+    	return ret;
+    }
+    
+    public boolean insertTrialInfo(TKey key)
+    {
+    	boolean ret = false;
+    	try {
+    		db.beginTransaction(); 
+        	db.execSQL("insert into " + DEFAULT_TRIAL_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?)",  
+            	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
         			key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
@@ -366,6 +402,7 @@ public class DbHelper
     }
     
     public boolean keyTableExist() { return TableExist(DEFAULT_KEY_TABLE_NAME); }
+    public boolean trialTableExist() { return TableExist(DEFAULT_TRIAL_TABLE_NAME); }
     
     public boolean backupDatabase(Context context, String fileName) 
     {

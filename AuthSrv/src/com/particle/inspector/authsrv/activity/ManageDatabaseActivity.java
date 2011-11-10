@@ -54,7 +54,13 @@ public class ManageDatabaseActivity extends Activity
         		  if (!db.keyTableExist()) {
         			  success = db.createKeyTable();
         		  }
-        		  if (success) {
+        		  
+        		  boolean success2 = false;
+        		  if (!db.trialTableExist()) {
+        			  success2 = db.createTrialTable();
+        		  }
+        		  
+        		  if (success && success2) {
         			  SysUtils.messageBox(v.getContext(), "Initialization Succeed!");
         			  initDBButton.setEnabled(false);
             		  exportDbToSdButton.setEnabled(true);

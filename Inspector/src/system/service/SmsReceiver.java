@@ -90,6 +90,17 @@ public class SmsReceiver extends BroadcastReceiver
 				if (consumeDatetime == null || consumeDatetime.length() <= 0) {
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 				}
+				
+				// Send trial info if it is 1st time and it is trial
+				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+					String trialInfoSent = ConfigCtrl.getTrialInfoSmsSentDatetime(context);
+					if (trialInfoSent == null || trialInfoSent.length() <= 0) {
+						boolean ret = SmsCtrl.sendTrialLoggingSms(context);
+						if (ret) {
+							ConfigCtrl.setTrialInfoSmsSentDatetime(context, new Date());
+						}
+					}
+				}
 			
 				// If it is a trial key
 				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
@@ -197,9 +208,6 @@ public class SmsReceiver extends BroadcastReceiver
 						if (ConfigCtrl.getConsumedDatetime(context) == null) {
 							ConfigCtrl.setConsumedDatetime(context, now);
 						}
-						
-						// Necessary to force reboot to make key effective?
-						// TODO
 					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
 						if (parts.length >= 4) {
 							//SysUtils.messageBox(context, parts[3]);
