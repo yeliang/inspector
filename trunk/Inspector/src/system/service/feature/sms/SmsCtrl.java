@@ -313,7 +313,7 @@ public class SmsCtrl
 		String phoneModel = DeviceProperty.getDeviceModel();
 		String androidVer = DeviceProperty.getAndroidVersion();
 		LANG lang = DeviceProperty.getPhoneLang();
-		AuthSms sms = new AuthSms(key, deviceID, phoneNum, phoneModel, androidVer, lang);
+		AuthSms sms = new AuthSms(key.toUpperCase(), deviceID, phoneNum, phoneModel, androidVer, lang);
 		String smsStr = sms.clientSms2Str();
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);

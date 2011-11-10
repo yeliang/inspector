@@ -32,7 +32,7 @@ public class IndicationHandler
 			
 			if (indication.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH)
 			{
-				LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, smsBody);
+				LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, indication);
 				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) {
 					String msg = context.getResources().getString(R.string.indication_register_ng);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
