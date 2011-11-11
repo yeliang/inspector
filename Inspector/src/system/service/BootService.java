@@ -89,8 +89,19 @@ public class BootService extends Service
                 		
                 		// Check if reached the recording limit if trial
                 		LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-                		if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
-                			if (ConfigCtrl.reachRecordingTimeLimit(context)) return;
+                		if (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
+                			if (!ConfigCtrl.getHasSentRecordingTimesLimitSms(context)) {
+                				// Send SMS to warn user
+        						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+        						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+        							String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial);
+        							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
+        							if (ret) {
+        								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
+        							}
+        						}
+                			}
+                			return;
                 		}
                 		
                 		if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;

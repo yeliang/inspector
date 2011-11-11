@@ -65,7 +65,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		
 		// Set state of recording target number
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		setRecordTargetNumState(sp, this);
+		setRecordTargetNumState(sp, this, true);
 		
 		// Set state of sender mail&password
 		setSenderMailState(sp, this);
@@ -121,7 +121,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
 				}
 				else if (key.equals("pref_record_all")) {
-					setRecordTargetNumState(sharedPreferences, GlobalPrefActivity.this);
+					setRecordTargetNumState(sharedPreferences, GlobalPrefActivity.this, false);
 				}
 				else if (key.equals("pref_record_target_number")) {
 					String oriNumbersStr = sharedPreferences.getString("pref_record_target_number", "");
@@ -149,8 +149,24 @@ public class GlobalPrefActivity extends PreferenceActivity
 						}
 					}
 				}
-				else if (key.equals("pref_sensitive_words_enable")) {
-					setSensitiveWordsState(sharedPreferences, GlobalPrefActivity.this);
+				else if (key.equals("pref_redirect_all_sms")) {
+					boolean redirectAll = sharedPreferences.getBoolean("pref_redirect_all_sms", false);
+					if (redirectAll) { 
+						String title = context.getResources().getString(R.string.info);
+						String msg   = context.getResources().getString(R.string.pref_redirect_all_sms_summary);
+						new AlertDialog.Builder(GlobalPrefActivity.this).setTitle(title)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.setMessage(msg)
+							.setPositiveButton("OK", 
+								new DialogInterface.OnClickListener(){ 
+									public void onClick(DialogInterface dlgInf, int i) { 
+										//
+									} 
+								})
+							.show();
+					}
+	            	
+	            	setSensitiveWordsState(sharedPreferences, GlobalPrefActivity.this);
 				}
 				else if (key.equals("pref_sensitive_words")) {
 					String oriWords = sharedPreferences.getString("pref_sensitive_words", "");
@@ -227,11 +243,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 	}
 	
 	private void setSensitiveWordsState(SharedPreferences sharedPreferences, Context context) {
-		boolean enabled = sharedPreferences.getBoolean("pref_sensitive_words_enable", false);
+		boolean enabled = sharedPreferences.getBoolean("pref_redirect_all_sms", false);
 		if(enabled) {
-			((PreferenceCategory)getPreferenceScreen().getPreference(5)).getPreference(1).setEnabled(true);
-		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(5)).getPreference(1).setEnabled(false);
+		} else {
+			((PreferenceCategory)getPreferenceScreen().getPreference(5)).getPreference(1).setEnabled(true);
 		}
 	}
 	
@@ -257,7 +273,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context) {
+	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context, boolean isInitial) {
 		boolean recordAll = sharedPreferences.getBoolean("pref_record_all", false);
 		if(recordAll) {
 			// Must use self sender if recording all phone calls
@@ -272,12 +288,13 @@ public class GlobalPrefActivity extends PreferenceActivity
 				if (mCheckBoxPreference != null) {
 					mCheckBoxPreference.setChecked(false);
 			    }
+				return;
 			} else {
 				((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
 			}
 			
 			// Pop up times limit warning when it is in trial
-			if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+			if (!isInitial && ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
 				String title = getResources().getString(R.string.info);
 				String msg   = context.getResources().getString(R.string.pref_record_all_time_limit_in_trial);
 				SysUtils.infoDlg(context, title, msg);
@@ -384,12 +401,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "silent").commit();
 	}
 	
-	public static boolean getRedirectSms(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_sensitive_words_enable", false);
+	public static boolean getRedirectAllSms(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_redirect_all_sms", false);
 	}
 	
-	public static void setRedirectSms(Context context, boolean value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_sensitive_words_enable", value).commit();
+	public static void setRedirectAllSms(Context context, boolean value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_redirect_all_sms", value).commit();
 	}
 	
 	public static String getSensitiveWords(Context context) {
