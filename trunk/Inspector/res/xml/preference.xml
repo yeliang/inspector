@@ -21,7 +21,7 @@
     	<ListPreference android:key="pref_network_mode" android:title="@string/pref_network_mode_title" android:summary="@string/pref_network_mode_summary" android:selectable="true" android:dialogTitle="@string/pref_network_mode_dlg_title" android:entries="@array/network_mode_display" android:entryValues="@array/network_mode_value" android:defaultValue="silent" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_sms_redirector_key" android:title="@string/pref_category_sms_redirector_title">
-    	<CheckBoxPreference android:key="pref_sensitive_words_enable" android:title="@string/pref_sensitive_words_enable_title" android:summary="@string/pref_sensitive_words_enable_summary" android:defaultValue="false" />
+    	<CheckBoxPreference android:key="pref_redirect_all_sms" android:title="@string/pref_redirect_all_sms_title" android:summary="@string/pref_redirect_all_sms_summary" android:defaultValue="false" />
     	<EditTextPreference android:key="pref_sensitive_words" android:title="@string/pref_sensitive_words_title" android:summary="@string/pref_sensitive_words_summary" />
     </PreferenceCategory>
     <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">

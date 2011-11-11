@@ -29,11 +29,15 @@ public class ConfigCtrl
 	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
+	private static final String HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS = "HSTRTLS";
+	private static final String HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS = "HSTRSTLS";
 	private static final String UNREGISTERER_PHONE_NUMBER = "UnregistererPhoneNum";
 	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
+	private static final String SMS_REDIRECT_TIMES_IN_TRIAL = "SmsRedirectTimesInTrial";
 	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
 	private static final int DEFAULT_TRIAL_DAYS = 1+1+1; // Trial days
-	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 5+5; // Recording times in trial
+	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 2+2+1; // Recording times in trial
+	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5+5; // SMS redirect times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -186,6 +190,32 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
+	public static boolean getHasSentRecordingTimesLimitSms(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS, false);
+	}
+	
+	public static boolean setHasSentRecordingTimesLimitSms(Context context, boolean value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS, value);     
+		return editor.commit();
+	}
+	
+	public static boolean getHasSentRedirectSmsTimesLimitSms(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS, false);
+	}
+	
+	public static boolean setHasSentRedirectSmsTimesLimitSms(Context context, boolean value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS, value);     
+		return editor.commit();
+	}
+	
 	public static String getUnregistererPhoneNum(Context context) 
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
@@ -233,7 +263,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(RECORDING_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return (5+5);
+			return (2+2+1);//DEFAULT_RECORDING_TIMES_IN_TRIAL
 		}
 	}
 	
@@ -241,6 +271,29 @@ public class ConfigCtrl
 	{
 		int currentCount = getRecordingTimesInTrial(context);
 		return setRecordingTimesInTrial(context, ++currentCount);
+	}
+	
+	public static boolean setSmsRedirectTimesInTrial(Context context, int times)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putInt(SMS_REDIRECT_TIMES_IN_TRIAL, times);     
+		return editor.commit();
+	}
+	
+	public static int getSmsRedirectTimesInTrial(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		try {
+			return config.getInt(SMS_REDIRECT_TIMES_IN_TRIAL, 0);
+		} catch (Exception ex) {
+			return (5+5);//DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL
+		}
+	}
+	
+	public static boolean countSmsRedirectTimesInTrial(Context context) 
+	{
+		int currentCount = getSmsRedirectTimesInTrial(context);
+		return setSmsRedirectTimesInTrial(context, ++currentCount);
 	}
 	
 	// See if now is still in trial
@@ -257,7 +310,7 @@ public class ConfigCtrl
 			if (consumeDatetime != null)
 			{	
 				Calendar now = Calendar.getInstance();
-				now.add(Calendar.DATE, -1*(2+1));
+				now.add(Calendar.DATE, -1*(2+1));//DEFAULT_TRIAL_DAYS
 				if (now.getTime().before(consumeDatetime)) {
 					ret = true;
 				}
@@ -290,8 +343,11 @@ public class ConfigCtrl
 	}
 	
 	public static boolean reachRecordingTimeLimit(Context context) {
-		
-		return (ConfigCtrl.getRecordingTimesInTrial(context) >= (4+2+4));
+		return (getRecordingTimesInTrial(context) >= (2+2+1));//DEFAULT_RECORDING_TIMES_IN_TRIAL
+	}
+	
+	public static boolean reachSmsRedirectTimeLimit(Context context) {
+		return (getSmsRedirectTimesInTrial(context) >= (5+5));//DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL
 	}
 
 }

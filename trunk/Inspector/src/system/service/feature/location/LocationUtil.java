@@ -41,7 +41,7 @@ import android.util.Log;
 public class LocationUtil 
 {
 	private static final String LOGTAG = "GpsUtil";
-	private static final int DEFAULT_INTERVAL = 60000; // ms
+	private static final int DEFAULT_INTERVAL = 30000; // ms
 	private static final float DEFAULT_DISTANCE = 100f; // meter
 	private static final int DEFAULT_TRY_COUNT = 5;
 	private static final int SLEEP_TIME = 5000; // ms

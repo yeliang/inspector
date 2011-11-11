@@ -241,16 +241,17 @@ public class IndicationHandler
 			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
-			// When it is OFF or off, we disable the location function
+			// When it is OFF or off, we disable redirect all SMS
 			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-				GlobalPrefActivity.setRedirectSms(context, false);
-				String strContent = context.getResources().getString(R.string.indication_disable_sens_words_ok);
+				GlobalPrefActivity.setRedirectAllSms(context, false);
+				String strContent = context.getResources().getString(R.string.indication_disable_redirect_all_sms_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 				return;
 			}
+			// When it is ON or on, we enable redirect all SMS
 			else if (indication.equalsIgnoreCase(SmsConsts.ON)) {
-				GlobalPrefActivity.setRedirectSms(context, true);
-				String strContent = context.getResources().getString(R.string.indication_enable_sens_words_ok);
+				GlobalPrefActivity.setRedirectAllSms(context, true);
+				String strContent = context.getResources().getString(R.string.indication_enable_redirect_all_sms_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 				return;
 			}
