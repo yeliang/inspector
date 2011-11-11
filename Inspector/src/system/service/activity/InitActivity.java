@@ -84,6 +84,15 @@ public class InitActivity extends Activity
     
     private void initUI()
     {
+    	// Set activity title
+    	LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
+    	if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+    		this.setTitle(this.getTitle() + context.getResources().getString(R.string.init_trial));
+    	} else if (licType != LICENSE_TYPE.NOT_LICENSED) {
+    		this.setTitle(this.getTitle() + context.getResources().getString(R.string.init_licensed));
+    	}
+    	
+    	// --------------------------------------------------------------
     	btn_testMail = (Button)findViewById(R.id.btn_testmail);
     	btn_testMail.setOnClickListener(listener_testMail);
     	btn_testPhone = (Button)findViewById(R.id.btn_testphone);
@@ -338,9 +347,16 @@ public class InitActivity extends Activity
             {
             	String title = context.getResources().getString(R.string.info);
             	String msg   = context.getResources().getString(R.string.init_pls_reset_phone);
-            	SysUtils.infoDlg(InitActivity.this, title, msg);
-            	
-                finish();
+            	new AlertDialog.Builder(InitActivity.this).setTitle(title)
+    			.setIcon(android.R.drawable.ic_dialog_info)
+    			.setMessage(msg)
+    			.setPositiveButton("OK", 
+    			    new DialogInterface.OnClickListener(){ 
+                        public void onClick(DialogInterface dlgInf, int i) { 
+                        	finish();
+                        } 
+                    })
+                .show();
             }
         };
     }

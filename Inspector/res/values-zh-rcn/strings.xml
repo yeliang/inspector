@@ -103,6 +103,9 @@
     <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的GMail作为发信邮箱，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
     
     <!-- InitActivity -->
+    <string name="init_title">安卓监控</string>
+    <string name="init_trial">（试用版）</string>
+    <string name="init_licensed">（已注册）</string>
     <string name="init_btn_testrecvmail">测试邮箱</string>
     <string name="init_btn_testrecvphone">测试主控手机</string>
     <string name="init_btn_screenshot">截图</string>
@@ -120,7 +123,7 @@
     <string name="init_waiting">请稍候（30秒~3分钟）...</string>
     <string name="init_collecting">正在收集信息...</string>
     <string name="init_sending">正在发邮件...</string>
-    <string name="init_pls_reset_phone">请重启手机，之后所有设定及功能生效。</string>
+    <string name="init_pls_reset_phone">重启手机后，所有设定及功能即生效。</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">发信成功。稍后请查阅您的邮箱。</string>

@@ -101,6 +101,9 @@
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
     
     <!-- InitActivity -->
+    <string name="init_title">Android Inspector</string>
+    <string name="init_trial">(Trial)</string>
+    <string name="init_licensed">(Licensed)</string>
     <string name="init_btn_testrecvmail">Test Mail</string>
     <string name="init_btn_testrecvphone">Test Phone</string>
     <string name="init_btn_screenshot">Screenshot</string>

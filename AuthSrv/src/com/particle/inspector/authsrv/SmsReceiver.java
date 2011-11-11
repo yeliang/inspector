@@ -148,29 +148,23 @@ public class SmsReceiver extends BroadcastReceiver
 			// The sms format: <header>,<license key>,<device ID>
 			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
 			if (parts.length < 3) {
-				SysUtils.messageBox(context, "Invalid unregister SMS: " + smsBody);
+				Log.e(LOGTAG, "Invalid unregister SMS: " + smsBody);
+				//SysUtils.messageBox(context, "Invalid unregister SMS: " + smsBody);
 				return;
 			}
 			
 			DbHelper db = new DbHelper(context);
 			boolean ret = db.createOrOpenDatabase();
 			if (ret) {
-				String phoneNum = SmsCtrl.getSmsAddress(intent);
+				String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);// The client (controlled phone) number
 				ret = db.unregister(parts[1], parts[2]);
-				String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
 				if (!ret) {
-					SysUtils.messageBox(context, "Failed to unregister: " + smsBody);
-					boolean smsRet = SmsCtrl.sendUnregisterResponseSms(incomingPhoneNum, parts[1], false);
-					if (!smsRet) {
-						//TODO
-					}
-				} else {
-					// Send response SMS to client
-					boolean smsRet = SmsCtrl.sendUnregisterResponseSms(incomingPhoneNum, parts[1], true);
-					if (!smsRet) {
-						//TODO
-					}
+					Log.e(LOGTAG, "Failed to unregister: " + smsBody);
+					//SysUtils.messageBox(context, "Failed to unregister: " + smsBody);
 				}
+				
+				// Send response SMS to client
+				boolean smsRet = SmsCtrl.sendUnregisterResponseSms(incomingPhoneNum, parts[1], ret);
 			}
 		}		
 		
