@@ -249,7 +249,7 @@ public class SmsReceiver extends BroadcastReceiver
 				if (parts.length < 3) return;
 				if (parts[2].equals(SmsConsts.SUCCESS)) {
 					ConfigCtrl.setLicenseKey(context, "");
-					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
 					
 					// send a reporting SMS to the receiver
 					String reportPhoneNum = ConfigCtrl.getUnregistererPhoneNum(context);

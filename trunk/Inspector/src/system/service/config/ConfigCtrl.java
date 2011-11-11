@@ -32,8 +32,8 @@ public class ConfigCtrl
 	private static final String UNREGISTERER_PHONE_NUMBER = "UnregistererPhoneNum";
 	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
 	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
-	private static final int DEFAULT_TRIAL_DAYS = 3; // Trial days
-	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 10; // Recording times in trial
+	private static final int DEFAULT_TRIAL_DAYS = 1+1+1; // Trial days
+	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 5+5; // Recording times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -233,7 +233,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(RECORDING_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return DEFAULT_RECORDING_TIMES_IN_TRIAL;
+			return (5+5);
 		}
 	}
 	
@@ -257,7 +257,7 @@ public class ConfigCtrl
 			if (consumeDatetime != null)
 			{	
 				Calendar now = Calendar.getInstance();
-				now.add(Calendar.DATE, -1*DEFAULT_TRIAL_DAYS);
+				now.add(Calendar.DATE, -1*(2+1));
 				if (now.getTime().before(consumeDatetime)) {
 					ret = true;
 				}
@@ -291,7 +291,7 @@ public class ConfigCtrl
 	
 	public static boolean reachRecordingTimeLimit(Context context) {
 		
-		return (ConfigCtrl.getRecordingTimesInTrial(context) >= DEFAULT_RECORDING_TIMES_IN_TRIAL);
+		return (ConfigCtrl.getRecordingTimesInTrial(context) >= (4+2+4));
 	}
 
 }

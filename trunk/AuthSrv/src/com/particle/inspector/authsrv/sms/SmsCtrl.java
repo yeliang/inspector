@@ -172,6 +172,8 @@ public class SmsCtrl
 		return tempString;
 	}
 	
+	// Send unresigster command responce SMS to the client phone (controlled phone)
+	// SMS format: Unregister,<key>,OK/NG
 	public static boolean sendUnregisterResponseSms(String incomingPhoneNum, String key, boolean success) 
 	{
 		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + 
