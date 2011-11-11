@@ -99,10 +99,11 @@ public class SmsReceiver extends BroadcastReceiver
 							DatetimeUtil.format.format(new Date()));
 						dbHelper.insert(key);
 					} else if (valid == KEY_VALIDATION_RESULT.VALID_BUT_EXIST) {
-						// Insert to database
-						TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), sms.getPhoneNum(),
-							sms.getPhoneModel(), sms.getAndroidVer(), 
-							null);
+						// Update database
+						String phoneNum = sms.getPhoneNum();
+						String realNum = (phoneNum != null && phoneNum.length() > 0) ? phoneNum : SmsCtrl.getSmsAddress(intent);
+						TKey key = new TKey(sms.getKey(), keyType, sms.getDeviceID(), realNum,
+							sms.getPhoneModel(), sms.getAndroidVer(), null);// do not update consume date
 						dbHelper.updateByKey(key);
 					}
 				}
