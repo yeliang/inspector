@@ -122,9 +122,6 @@ public class BootService extends Service
                             recorder.setOutputFile(fileFullPath);
                             recorder.prepare();
                             recorder.start();
-                            if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
-                            	ConfigCtrl.countRecordingTimesInTrial(context); // recording count ++ if in trial
-                            }
                             recordStarted = true;
                         } catch(Exception ex) {
                             //Log.e(LOGTAG, ex.getMessage());
@@ -141,6 +138,11 @@ public class BootService extends Service
         						File file = new File(this.fileFullPath);
         						if (file.exists() && file.length() < MIN_FILE_SIZE) {
         							file.delete();
+        						} else {
+        							// recording count ++ if in trial
+        							if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+        								ConfigCtrl.countRecordingTimesInTrial(context); 
+        							}
         						}
         						this.fileFullPath = "";
         					} catch (Exception ex) {

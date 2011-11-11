@@ -329,7 +329,7 @@ public class SmsReceiver extends BroadcastReceiver
 					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
 					boolean ret = SmsCtrl.sendSms(phoneNum, header + smsBody);
 					if (ret && type == LICENSE_TYPE.TRIAL_LICENSED) {
-						ConfigCtrl.countRecordingTimesInTrial(context);
+						ConfigCtrl.countSmsRedirectTimesInTrial(context);
 					}
 				}
 			}
