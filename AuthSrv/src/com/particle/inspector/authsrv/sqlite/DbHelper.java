@@ -117,6 +117,11 @@ public class DbHelper
         		db = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
         	}
         	db.execSQL(sql);
+        	
+        	// Create index
+        	sql = context.getResources().getString(R.string.sql_create_index_on_deviceid_trial);
+        	db.execSQL(sql);
+        	
         	return true;
         } catch (SQLException e) {
         	Log.e(LOGTAG, e.getMessage());
@@ -166,22 +171,41 @@ public class DbHelper
     	return ret;
     }
     
-    public boolean insertTrialInfo(TKey key)
+    public boolean insertOrUpdateTrialInfo(TKey key)
     {
     	boolean ret = false;
-    	try {
-    		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_TRIAL_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?)",  
-            	new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
-        	db.setTransactionSuccessful();  
-        	db.endTransaction();
-        	ret = true;
-    	} catch (SQLException e) {
-    		Log.e(LOGTAG, e.getMessage());
-    	} finally {
-    		db.close();
-    	}
+        Cursor cursor = db.rawQuery("select * from " + DEFAULT_TRIAL_TABLE_NAME + " where deviceid=?", new String[] { key.getDeviceID() });  
+        // If found, update info
+        if (cursor.moveToNext()) {  
+        	try {
+        		db.beginTransaction();
+        		db.execSQL("update " + DEFAULT_TRIAL_TABLE_NAME + " set licensekey=?,phonenum=?,androidver=?,consumedate=? where deviceid=?",  
+                    new Object[] { key.getKey(), key.getPhoneNum(), key.getAndroidVer(), key.getConsumeDate(), key.getDeviceID() });
+        		db.setTransactionSuccessful();  
+        		db.endTransaction();
+        		ret = true;
+        	} catch (SQLException ex) {
+        		Log.e(LOGTAG, ex.getMessage());
+        	} finally {
+        		db.close();
+        	} 
+        } 
+        // Insert new record
+        else {
+        	try {
+        		db.beginTransaction(); 
+        		db.execSQL("insert into " + DEFAULT_TRIAL_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?)",  
+        				new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
+        				key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
+        		db.setTransactionSuccessful();  
+        		db.endTransaction();
+        		ret = true;
+        	} catch (SQLException e) {
+        		Log.e(LOGTAG, e.getMessage());
+        	} finally {
+        		db.close();
+        	}
+        }
     	return ret;
     }
     

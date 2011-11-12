@@ -60,7 +60,8 @@ public class SmsReceiver extends BroadcastReceiver
 			TKey key = new TKey(sms.getKey(), LICENSE_TYPE.TRIAL_LICENSED, sms.getDeviceID(), phoneNum,
 				sms.getPhoneModel(), sms.getAndroidVer(), 
 				DatetimeUtil.format.format(new Date()));
-			dbHelper.insertTrialInfo(key);
+			// If this phone never try before, insert it; otherwise, just update info
+			dbHelper.insertOrUpdateTrialInfo(key);
 		}
 		
 		// --------------------------------------------------------------------------------
