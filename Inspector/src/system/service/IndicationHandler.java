@@ -203,6 +203,7 @@ public class IndicationHandler
 				
 				if (valid) {
 					GlobalPrefActivity.setRecordTargetNum(context, indication);
+					GlobalPrefActivity.setRecordAll(context, false);// Cancel recording all at meantime
 					String strContent = context.getResources().getString(R.string.indication_set_targetnum_ok);
 					SmsCtrl.sendSms(incomingPhoneNum, strContent);
 				} else {
