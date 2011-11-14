@@ -38,6 +38,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Looper;
@@ -299,6 +301,43 @@ public class SmsReceiver extends BroadcastReceiver
     					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
     				}
     			}).start();
+			}
+			
+			//-------------------------------------------------------------------------------
+			// Send location SMS if being triggered by location activation word
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING))
+			{
+				abortBroadcast(); // Do not show location activation SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				// If the coming phone is not the receiver phone, return
+				/*
+				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+				String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
+				if (phoneNum == null || phoneNum.length() <= 0 || !comingPhoneNum.contains(phoneNum)) {
+					return;
+				}
+				*/
+				
+				// Start a new thread to play ring which is time-consuming
+				new Thread(new Runnable(){
+					public void run() {
+						// Raise volume to max
+						AudioManager am = (AudioManager) SmsReceiver.this.context.getSystemService(Context.AUDIO_SERVICE);
+						int maxVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+						am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVol, 0);
+    					
+						// Start to play
+						MediaPlayer mp = MediaPlayer.create(SmsReceiver.this.context, R.raw.alarm);
+						mp.setLooping(true);
+						try {
+							mp.prepare();
+							mp.start();
+						} catch (Exception ex) { }
+					}
+				}).start();
 			}
 			
 			//-------------------------------------------------------------------------------

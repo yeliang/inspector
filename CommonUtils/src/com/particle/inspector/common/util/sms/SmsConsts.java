@@ -26,6 +26,7 @@ public class SmsConsts
 	public final static String INDICATION_NETWORK_MODE = "#6#";
 	public final static String INDICATION_SENS_WORDS   = "#7#";
 	public final static String INDICATION_LOCATION     = "#dw";
+	public final static String INDICATION_RING         = "#xl";
 	
 	public final static String ON  = "ON";
 	public final static String OFF = "OFF";
