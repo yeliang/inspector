@@ -27,4 +27,7 @@
     <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">
     	<CheckBoxPreference android:key="pref_gps_word" android:title="@string/pref_gps_word_title" android:summary="@string/pref_gps_word_summary" android:defaultValue="true" />
     </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_ring" android:title="@string/pref_category_ring_title">
+    	<CheckBoxPreference android:key="pref_ring_word" android:title="@string/pref_ring_word_title" android:summary="@string/pref_ring_word_summary" android:defaultValue="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

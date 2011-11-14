@@ -67,6 +67,7 @@
     <string name="pref_category_sms_redirector_title">SMS Redirection</string>
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">Get Location</string>
+    <string name="pref_category_ring_title">Ring</string>
     
     <string name="pref_use_self_sender_title">Use my own GMail</string>
     <string name="pref_use_self_sender_summary">Use your own GMail for better privacy, otherwise will use system mail sender. </string>
@@ -99,6 +100,8 @@
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
+    <string name="pref_ring_word_title">Force Ring</string>
+    <string name="pref_ring_word_summary">Send SMS #xl to force ring</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
