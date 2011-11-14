@@ -46,12 +46,12 @@
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
-    <string name="location_sms">Location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms">Click link to see location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_latest">Latest(%s) </string>
-    <string name="location_sms_gps">GPS location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_network">network location(latitude, longitude): %s, see it on maps.google.com</string>
-    <string name="location_sms_base_station_gsm">Current base station location: %s, see it on maps.google.com</string>
-    <string name="location_sms_base_station_cdma">Current base station location(latitude, longitude): %s, see it on maps.google.com</string>
+    <string name="location_sms_gps">GPS location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_network">network location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_gsm">Current base station location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>
     
     <!-- Preferences -->

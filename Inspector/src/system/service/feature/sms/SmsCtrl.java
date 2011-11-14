@@ -280,14 +280,14 @@ public class SmsCtrl
 	{
 		// If got by GPS
 		if (location != null && location.type.equals(LocationInfo.GPS)) {
-			return (String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
-					String.format(context.getResources().getString(R.string.location_sms_gps), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude())));
+			return //(String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
+					String.format(context.getResources().getString(R.string.location_sms_gps), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude()));
 		}
 		
 		// If got by WIFI network
 		else if (location != null && location.type.equals(LocationInfo.WIFI)) {
-			return (String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
-					String.format(context.getResources().getString(R.string.location_sms_network), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude())));
+			return //(String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
+					String.format(context.getResources().getString(R.string.location_sms_network), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude()));
 		}
 		
 		else return String.format(context.getResources().getString(R.string.location_sms_fail));
