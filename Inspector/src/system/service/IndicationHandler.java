@@ -24,6 +24,12 @@ public class IndicationHandler
 {
 	public static void handleIndicationSms(Context context, String smsBody, String incomingPhoneNum) 
 	{
+		// Make sure the indicaiton is coming from qulified phone
+		if (!isQualifiedIncomingNum(context, incomingPhoneNum)) {
+			// Do not return SMS to the phone about the failure
+			return;
+		}
+		
 		// -------------------------------------------------------
 		// #0#<license key>: activate apk
 		// #0#OFF: deactivate apk, and send SMS to server to clear using record to make it usable in other phone
@@ -273,5 +279,22 @@ public class IndicationHandler
 		}
 		
 		
+	} // End of handleIndicationSms()
+	
+	// Rules:
+	// All remote indications only accept SMS from recv phone
+	private static boolean isQualifiedIncomingNum(Context context, String incomingPhoneNum) 
+	{
+		String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		if (recvPhoneNum == null || recvPhoneNum.length() <= 0) {
+			return true;
+		} 
+		
+		// Indication only accept recv phone
+		else {
+			if (incomingPhoneNum.contains(recvPhoneNum)) return true;
+			else return false;
+		}
 	}
+	
 }
