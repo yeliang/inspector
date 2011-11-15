@@ -37,7 +37,7 @@ public class ConfigCtrl
 	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
 	private static final String SIM_FIRST_RUN = "SimFirstRun";
 	private static final String SIM_SERIAL_NUM = "ICCID";
-	private static final int DEFAULT_TRIAL_DAYS = 1+1+1; // Trial days
+	private static final int DEFAULT_TRIAL_DAYS = 1+1; // Trial days
 	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 2+2+1; // Recording times in trial
 	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5+5; // SMS redirect times in trial
 	
@@ -342,7 +342,7 @@ public class ConfigCtrl
 			if (consumeDatetime != null)
 			{	
 				Calendar now = Calendar.getInstance();
-				now.add(Calendar.DATE, -1*(2+1));//DEFAULT_TRIAL_DAYS
+				now.add(Calendar.DATE, -1*(1+1));//DEFAULT_TRIAL_DAYS
 				if (now.getTime().before(consumeDatetime)) {
 					ret = true;
 				}
