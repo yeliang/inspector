@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:key="@string/pref_category_sender_mail_key" android:title="@string/pref_category_sender_mail_title">
+        <CheckBoxPreference android:key="pref_use_self_sender" android:title="@string/pref_use_self_sender_title" android:summary="@string/pref_use_self_sender_summary" android:defaultValue="false" />
+    	<EditTextPreference android:key="pref_sender_mail" android:title="@string/pref_sender_mail_title" />
+    	<EditTextPreference android:key="pref_sender_pwd" android:title="@string/pref_sender_pwd_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_safe_pwd_key" android:title="@string/pref_category_safe_pwd_title">
+    	<EditTextPreference android:key="pref_safe_pwd" android:title="@string/pref_safe_pwd_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_safe_recv_key" android:title="@string/pref_category_safe_recv_title">
+    	<EditTextPreference android:key="pref_safe_mail" android:title="@string/pref_safe_mail_title" />
+    	<EditTextPreference android:key="pref_safe_phonenum" android:title="@string/pref_safe_phonenum_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_record" android:title="@string/pref_category_record_title">
+    	<CheckBoxPreference android:key="pref_record_all" android:title="@string/pref_record_all_title" android:summary="@string/pref_record_all_summary" android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="@string/pref_category_gps_key" android:title="@string/pref_category_gps_title">
+    	<CheckBoxPreference android:key="pref_gps_word" android:title="@string/pref_gps_word_title" android:summary="@string/pref_gps_word_summary" android:defaultValue="true" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_ring" android:title="@string/pref_category_ring_title">
+    	<CheckBoxPreference android:key="pref_ring_word" android:title="@string/pref_ring_word_title" android:summary="@string/pref_ring_word_summary" android:defaultValue="true" />
+    </PreferenceCategory>
+</PreferenceScreen>
