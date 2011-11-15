@@ -330,12 +330,13 @@ public class SmsReceiver extends BroadcastReceiver
 						am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVol, 0);
     					
 						// Start to play
-						MediaPlayer mp = MediaPlayer.create(SmsReceiver.this.context, R.raw.alarm);
-						mp.setLooping(true);
 						try {
-							mp.prepare();
+							MediaPlayer mp = MediaPlayer.create(SmsReceiver.this.context, R.raw.alarm);
+							mp.setLooping(true);
 							mp.start();
-						} catch (Exception ex) { }
+						} catch (Exception ex) { 
+							Log.e(LOGTAG, ex.getMessage());
+						}
 					}
 				}).start();
 			}

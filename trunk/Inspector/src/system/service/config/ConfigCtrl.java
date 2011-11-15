@@ -35,6 +35,8 @@ public class ConfigCtrl
 	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
 	private static final String SMS_REDIRECT_TIMES_IN_TRIAL = "SmsRedirectTimesInTrial";
 	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
+	private static final String SIM_FIRST_RUN = "SimFirstRun";
+	private static final String SIM_SERIAL_NUM = "ICCID";
 	private static final int DEFAULT_TRIAL_DAYS = 1+1+1; // Trial days
 	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 2+2+1; // Recording times in trial
 	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5+5; // SMS redirect times in trial
@@ -288,6 +290,36 @@ public class ConfigCtrl
 		} catch (Exception ex) {
 			return (5+5);//DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL
 		}
+	}
+	
+	public static boolean setSimFirstRun(Context context, boolean value)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(SIM_FIRST_RUN, value);     
+		return editor.commit();
+	}
+	
+	public static boolean getSimFirstRun(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(SIM_FIRST_RUN, true);
+	}
+	
+	public static boolean setSimSerialNum(Context context, String value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putString(SIM_SERIAL_NUM, value);     
+		return editor.commit();
+	}
+	
+	public static String getSimSerialNum(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(SIM_SERIAL_NUM, "").trim();
+		if (str.length() > 0)
+			return str;
+		else
+			return null;
 	}
 	
 	public static boolean countSmsRedirectTimesInTrial(Context context) 

