@@ -35,14 +35,7 @@ public class IndicationHandler
 		if (smsBody.startsWith(SmsConsts.INDICATION_SENDER)) {
 			String indication = smsBody.substring(3).trim();
 			
-			// Unregister indication
 			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-				// If it is recording all, we do not permit stop using self sender 
-				if (GlobalPrefActivity.getRecordAll(context)) {
-					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ng));
-					return;
-				}
-				
 				GlobalPrefActivity.setUseSelfSender(context, false);
 				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ok));
 			}
@@ -70,7 +63,7 @@ public class IndicationHandler
 		}
 		
 		// -------------------------------------------------------
-		// #2#<mail address>: change receiver mail address
+		// #2#<mail address>: change safe mail address
 		else if (smsBody.startsWith(SmsConsts.INDICATION_RECV_MAIL)) {
 			String indication = smsBody.substring(3).trim();
 			
@@ -78,14 +71,11 @@ public class IndicationHandler
 				GlobalPrefActivity.setSafeMail(context, indication);
 				
 				// Send SMS to tell user the result
-				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ok);
+				String strContent = context.getResources().getString(R.string.indication_set_safe_mail_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				
-				// Send Info SMS to server to update receiver info
-				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
 				// Send SMS to warn the user
-				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ng);
+				String strContent = context.getResources().getString(R.string.indication_set_safe_mail_ng);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 			}
 		}
@@ -99,14 +89,11 @@ public class IndicationHandler
 				GlobalPrefActivity.setSafePhoneNum(context, indication);
 				
 				// Send SMS to tell user the result
-				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ok);
+				String strContent = context.getResources().getString(R.string.indication_set_safe_phonenum_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				
-				// Send Info SMS to server to update receiver info
-				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
 				// Send SMS to warn the user
-				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ng);
+				String strContent = context.getResources().getString(R.string.indication_set_safe_phonenum_ng);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 			}
 		}

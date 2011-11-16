@@ -242,23 +242,4 @@ public class SmsCtrl
 		else return String.format(context.getResources().getString(R.string.location_sms_fail));
 	}
 	
-	// Send unregister SMS to server 
-	// SMS format: Header,<key>,<device ID>
-	public static boolean sendUnregisterSms(Context context) 
-	{
-		String strMobile = context.getResources().getString(R.string.srv_address).trim();
-		String key = ConfigCtrl.getLicenseKey(context);
-		String deviceID = DeviceProperty.getDeviceId(context);
-		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + deviceID;
-		return sendSms(strMobile, strContent);
-	}
-
-	// Send report SMS to who did unregister action
-	public static boolean sendUnregisterReportSms(Context context, String reportPhoneNum) 
-	{
-		String selfName = ConfigCtrl.getSelfName(context);
-		String strContent = String.format(context.getResources().getString(R.string.indication_unregister_ok), selfName);
-		return sendSms(reportPhoneNum, strContent);
-	}
-	
 }

