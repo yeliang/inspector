@@ -55,6 +55,7 @@ public class GlobalPrefActivity extends PreferenceActivity
         }
 		
 		// Set state of sender mail&password
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		setSenderMailState(sp, this);
 				
 		// Set state of location indication to be uneditable
@@ -92,11 +93,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 				}
 				else if (key.equals("pref_safe_pwd")) {
 					checkRecvMailFormat(sharedPreferences, context);
-					enableReceiverInfoChgFlag();
 				}
 				else if (key.equals("pref_safe_mail")) {
 					checkRecvMailFormat(sharedPreferences, context);
-					enableReceiverInfoChgFlag();
 				}
 				else if (key.equals("pref_safe_phonenum")) {
 					String oriPhoneNum = sharedPreferences.getString("pref_safe_phonenum", "");
@@ -105,10 +104,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 					Matcher matcher = p.matcher(phoneNum);
 					if (!matcher.matches()) {
 						String title = getResources().getString(R.string.error);
-						String msg   = String.format(getResources().getString(R.string.pref_pls_input_valid_recv_phonenum), phoneNum);
+						String msg   = String.format(getResources().getString(R.string.pref_pls_input_valid_safe_phonenum), phoneNum);
 						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
-					else enableReceiverInfoChgFlag();
 				}
 				
 				// Update preference summary fields
@@ -116,8 +114,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		            initSummary(getPreferenceScreen().getPreference(i));
 		        }
 				
-				// Show special summary
-				setSpecialSummary(false);
 			}			
         };
 	}
@@ -167,17 +163,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		} else {
 			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(false);
 			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(false);
-			
-			// If not use self sender, cannot record all phone calls
-			if (getRecordAll(context)) {
-				String title = getResources().getString(R.string.error);
-				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
-				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_use_self_sender");
-				if (mCheckBoxPreference != null) {
-					mCheckBoxPreference.setChecked(true);
-			    }
-			}
 		}
 	}
 	

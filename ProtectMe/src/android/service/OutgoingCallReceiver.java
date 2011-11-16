@@ -19,7 +19,6 @@ public class OutgoingCallReceiver extends BroadcastReceiver
 		if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) 
 		{
 			String outgoingNum = intent.getStringExtra("android.intent.extra.PHONE_NUMBER");
-			if (outgoingNum != null && outgoingNum.length() > 0) BootService.otherSidePhoneNum = outgoingNum;
 		}
 		
 	} // end of onReceive()
