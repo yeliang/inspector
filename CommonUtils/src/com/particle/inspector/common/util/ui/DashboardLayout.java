@@ -1,4 +1,4 @@
-package com.particle.inspector.common.ui;
+package com.particle.inspector.common.util.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
