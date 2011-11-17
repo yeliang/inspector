@@ -93,7 +93,7 @@
     <string name="pref_sensitive_words_summary">请用空格隔开每个敏感词，最多支持9个。</string>
     <string name="pref_pls_input_sensitive_words">请输入敏感词，并用空格隔开，最多支持9个。</string>
     <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
-	<string name="pref_gps_word_title">激活词（或短句）</string>
+	<string name="pref_gps_word_title">定位指令</string>
     <string name="pref_gps_word_summary">发送短信#dw到被控手机可获知其位置（仅从主控手机上发送有效）。</string>
     <string name="pref_category_network_mode_title">网络连接</string>
     <string name="pref_network_mode_title">网络连接模式</string>
