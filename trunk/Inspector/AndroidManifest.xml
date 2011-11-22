@@ -28,6 +28,7 @@
     	
 		<activity android:name=".activity.InitActivity"
                   android:label="@string/init_title"
+                  android:screenOrientation="portrait"
                   android:excludeFromRecents="true">
             <intent-filter>
                 <!-- <action android:name="android.intent.action.MAIN" />  -->
