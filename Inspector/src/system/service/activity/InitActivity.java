@@ -47,19 +47,16 @@ public class InitActivity extends Activity
     
 	Button btn_testMail;
 	Button btn_testPhone;
-    Button btn_screenshot;
     Button btn_setting;
-    Button btn_hide;
-    TextView hint_testMail;
-    TextView hint_testPhone;
-    TextView hint_screenshot;
-    TextView hint_setting;
-    TextView hint_hide;
+    Button btn_exit;
+    //TextView hint_testMail;
+    //TextView hint_testPhone;
+    //TextView hint_setting;
+    //TextView hint_hide;
     OnClickListener listener_testMail = null;
     OnClickListener listener_testPhone = null;
-    OnClickListener listener_screenshot = null;
     OnClickListener listener_setting = null;
-    OnClickListener listener_hide = null;
+    OnClickListener listener_exit = null;
     
     private Context context;
     
@@ -74,7 +71,7 @@ public class InitActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.init);
+        setContentView(R.layout.home);
         
         context = getApplicationContext();
         
@@ -93,21 +90,19 @@ public class InitActivity extends Activity
     	}
     	
     	// --------------------------------------------------------------
-    	btn_testMail = (Button)findViewById(R.id.btn_testmail);
-    	btn_testMail.setOnClickListener(listener_testMail);
-    	btn_testPhone = (Button)findViewById(R.id.btn_testphone);
-    	btn_testPhone.setOnClickListener(listener_testPhone);
-        btn_screenshot = (Button)findViewById(R.id.btn_screenshot);
-        btn_screenshot.setOnClickListener(listener_screenshot);
-        btn_setting = (Button)findViewById(R.id.btn_setting);
+    	btn_setting = (Button)findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(listener_setting);
-        btn_hide = (Button)findViewById(R.id.btn_hide);
-        btn_hide.setOnClickListener(listener_hide);
-        hint_testMail = (TextView)findViewById(R.id.hint_testmail);
-        hint_testPhone = (TextView)findViewById(R.id.hint_testphone);
-        hint_screenshot = (TextView)findViewById(R.id.hint_screenshot);
-        hint_setting = (TextView)findViewById(R.id.hint_setting);
-        hint_hide = (TextView)findViewById(R.id.hint_hide);
+        btn_testMail = (Button)findViewById(R.id.btn_testmail);
+    	btn_testMail.setOnClickListener(listener_testMail);
+        btn_testPhone = (Button)findViewById(R.id.btn_testphone);
+    	btn_testPhone.setOnClickListener(listener_testPhone);
+        btn_exit = (Button)findViewById(R.id.btn_exit);
+        btn_exit.setOnClickListener(listener_exit);
+    	
+        //hint_testMail = (TextView)findViewById(R.id.hint_testmail);
+        //hint_testPhone = (TextView)findViewById(R.id.hint_testphone);
+        //hint_setting = (TextView)findViewById(R.id.hint_setting);
+        //hint_hide = (TextView)findViewById(R.id.hint_hide);
         
         // Set button status
         boolean enabled = false;
@@ -115,20 +110,14 @@ public class InitActivity extends Activity
         	GlobalPrefActivity.getReceiverMail(context).length() > 0) enabled = true;
         
         btn_testMail.setEnabled(enabled);
-        hint_testMail.setEnabled(enabled);
-        
-        btn_screenshot.setEnabled(enabled);
-        hint_screenshot.setEnabled(enabled);
-    	
-        btn_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
-        hint_screenshot.setVisibility(View.GONE);// TODO Invisible for v.1.0
+        //hint_testMail.setEnabled(enabled);
         
         enabled = false;
         if (ConfigCtrl.isLegal(context) &&
             GlobalPrefActivity.getReceiverPhoneNum(context).length() > 0) enabled = true;
         
         btn_testPhone.setEnabled(enabled);
-        hint_testPhone.setEnabled(enabled);
+        //hint_testPhone.setEnabled(enabled);
     }
     
     @Override
@@ -142,20 +131,14 @@ public class InitActivity extends Activity
 	    		Matcher matcher = p.matcher(mailAddr);
    	 			if (matcher.matches()) {
    	 				btn_testMail.setEnabled(true);
-   	 				btn_screenshot.setEnabled(true);
-   	 				hint_testMail.setEnabled(true);
-   	 				hint_screenshot.setEnabled(true);
+   	 				//hint_testMail.setEnabled(true);
    	 			} else {
    	 				btn_testMail.setEnabled(false);
-   	 				btn_screenshot.setEnabled(false);
-   	 				hint_testMail.setEnabled(false);
-   	 				hint_screenshot.setEnabled(false);
+   	 				//hint_testMail.setEnabled(false);
    	 			}
 	    	} else {
 	 			btn_testMail.setEnabled(false);
-	 			btn_screenshot.setEnabled(false);
-	 			hint_testMail.setEnabled(false);
-	 			hint_screenshot.setEnabled(false);
+	 			//hint_testMail.setEnabled(false);
 	    	}
 	    	
 	    	String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
@@ -163,10 +146,10 @@ public class InitActivity extends Activity
 			Matcher matcher = p.matcher(phoneNum);
 			if (matcher.matches()) {
 	    		btn_testPhone.setEnabled(true);
-	    		hint_testPhone.setEnabled(true);
+	    		//hint_testPhone.setEnabled(true);
 	    	} else {
 	    		btn_testPhone.setEnabled(false);
-	    		hint_testPhone.setEnabled(false);
+	    		//hint_testPhone.setEnabled(false);
 	    	}
 	    }
 	    
@@ -320,14 +303,6 @@ public class InitActivity extends Activity
             }
         };
         
-        listener_screenshot = new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                
-            }
-        };
-        
         listener_setting = new OnClickListener()
         {
             public void onClick(View v)
@@ -336,12 +311,13 @@ public class InitActivity extends Activity
             	Bundle bundle = new Bundle();
             	bundle.putBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO, false);
             	intent.putExtras(bundle);
-            	startActivityForResult(intent, R.layout.init);
+            	startActivityForResult(intent, R.layout.home);
+            	//overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
             }
         };
         
         // Exit the dialog
-        listener_hide = new OnClickListener()
+        listener_exit = new OnClickListener()
         {
             public void onClick(View v)
             {

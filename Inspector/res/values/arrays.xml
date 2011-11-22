@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <resources> 
   <string-array name="days_display"> 
-    <item>1 day</item> 
-    <item>2 days</item> 
-    <item>3 days</item>
-    <item>4 days</item>
-    <item>5 days</item>
-    <item>6 days</item>
-    <item>7 days</item>
+    <item>1天</item> 
+    <item>2天</item> 
+    <item>3天</item>
+    <item>4天</item>
+    <item>5天</item>
+    <item>6天</item>
+    <item>7天</item>
   </string-array>
   <string-array name="days_value"> 
     <item>1</item> 
@@ -19,8 +19,8 @@
     <item>7</item>
   </string-array> 
   <string-array name="network_mode_display"> 
-    <item>Active Connect</item> 
-    <item>Silent Connect</item>
+    <item>主动连接</item> 
+    <item>静默</item>
   </string-array>
   <string-array name="network_mode_value"> 
     <item>active</item> 
