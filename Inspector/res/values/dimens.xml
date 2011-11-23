@@ -3,9 +3,9 @@
     <!-- UI elements -->
     <dimen name="colorstrip_height">6dp</dimen>
     <dimen name="actionbar_compat_height">48dp</dimen>
-    <dimen name="whats_on_height">70dp</dimen>
-    <dimen name="whats_on_item_padding">10dp</dimen>
-    <dimen name="whats_on_button_right_padding">20dp</dimen>
+    <dimen name="whats_on_height">35dp</dimen>
+    <dimen name="whats_on_item_padding">2dp</dimen>
+    <dimen name="whats_on_button_right_padding">4dp</dimen>
     <dimen name="schedule_header_padding">10dp</dimen>
     <dimen name="schedule_hour_height">60dp</dimen>
     <dimen name="schedule_label_header_width">46dp</dimen>

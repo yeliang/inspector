@@ -94,7 +94,7 @@ public class BootService extends Service
                 				// Send SMS to warn user
         						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
         						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-        							String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial);
+        							String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial) + context.getResources().getString(R.string.support_qq);
         							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
         							if (ret) {
         								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
@@ -238,7 +238,8 @@ public class BootService extends Service
 			// Send a SMS to the receiver that has expired
 			String receiverPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 			if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
-				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context));
+				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context))
+						+ context.getResources().getString(R.string.support_qq);
 				boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
 				if (ret) {
 					ConfigCtrl.setHasSentExpireSms(context, true);

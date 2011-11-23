@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import system.service.activity.GlobalPrefActivity;
-import system.service.activity.InitActivity;
+import system.service.activity.HomeActivity;
 import system.service.config.ConfigCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
@@ -108,7 +108,6 @@ public class SmsReceiver extends BroadcastReceiver
 				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
 					// If it is out of trial, return 
 					if (!ConfigCtrl.stillInTrial(context)) {
-						//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_has_sent_trial_expire_sms));
 						return;
 					}
 
@@ -168,7 +167,7 @@ public class SmsReceiver extends BroadcastReceiver
 				}
 
 				// Start dialog
-				Intent initIntent = new Intent().setClass(context, InitActivity.class);
+				Intent initIntent = new Intent().setClass(context, HomeActivity.class);
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				context.startActivity(initIntent);
@@ -354,7 +353,7 @@ public class SmsReceiver extends BroadcastReceiver
 						// Send SMS to warn user
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-							String msg = context.getResources().getString(R.string.msg_sms_times_over_in_trial);
+							String msg = context.getResources().getString(R.string.msg_sms_times_over_in_trial) + context.getResources().getString(R.string.support_qq);
 							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
 							if (ret) {
 								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
