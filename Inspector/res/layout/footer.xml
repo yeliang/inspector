@@ -1,0 +1,13 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+   	android:layout_height="@dimen/whats_on_height"
+   	android:orientation="horizontal"
+   	android:baselineAligned="false"
+   	android:background="@drawable/whats_on_background">
+   	
+    <ImageView android:src="@drawable/qq" style="@style/WhatsOnImageItem" android:paddingLeft="12dp" />
+    <TextView android:text="@string/support_qq" style="@style/WhatsOnTextItem" />
+    <ImageView style="@style/ActionBarCompatSeparator" />
+    <ImageButton android:id="@+id/actionbar_btn_home" android:src="@drawable/ic_title_home" style="@style/WhatsOnImageItem" />
+   
+</LinearLayout> 
