@@ -137,6 +137,8 @@
     
     <!-- Server -->
 	<string name="srv_address">15398053471</string>
+	<string name="home_page">http://www.jinyongshu.com/anzhuo.htm</string>
+	<string name="support_qq">客服QQ：602592749</string>
 	
     <!-- Message -->
 	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
@@ -145,10 +147,10 @@
     <string name="msg_mobile_net_unvailable">请保证您的手机有信号且不是飞行模式。</string>
     <string name="msg_auth_sms_sent_success">已向服务器发送注册验证短信。</string>
     <string name="msg_auth_sms_sent_fail">错误：向服务器发送注册验证短信失败。请退出再次尝试或联系客服。</string>
-    <string name="msg_has_sent_trial_expire_sms">安卓监控提醒您：在%s上的试用期已过，如需继续使用请联系客服QQ:602592749。</string>
-    <string name="msg_expired_alert">安卓监控提醒您：在本机上的试用期已过，如需继续使用请联系客服QQ:602592749。</string>
-    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系客服QQ:602592749。</string>
-    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系客服QQ:602592749。</string>
+    <string name="msg_has_sent_trial_expire_sms">安卓监控提醒您：在%s上的试用期已过，如需继续使用请联系</string>
+    <string name="msg_expired_alert">安卓监控提醒您：在本机上的试用期已过，如需继续使用请联系</string>
+    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系</string>
+    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系</string>
     <string name="msg_changed_sim">安卓监控提醒您：%s更换了手机SIM卡。</string>
     
     <!-- Indication -->

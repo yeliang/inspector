@@ -9,6 +9,7 @@
   
   <com.particle.inspector.common.util.ui.DashboardLayout
   	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_weight="1"
   	android:layout_width="fill_parent" android:layout_height="fill_parent">
         
 	<Button android:id="@+id/btn_setting" android:text="@string/init_btn_setting" 
@@ -31,5 +32,6 @@
 		
   </com.particle.inspector.common.util.ui.DashboardLayout>
   
+  <include layout="@layout/footer" />
 
 </LinearLayout>
