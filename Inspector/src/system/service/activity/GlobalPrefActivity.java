@@ -1,5 +1,6 @@
 package system.service.activity;  
   
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
+import system.service.BootService;
 import system.service.R;
 import system.service.config.ConfigCtrl;
 
@@ -418,6 +420,19 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	public static void setSensitiveWords(Context context, String value) {
 		PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_sensitive_words", value.trim()).commit();
+	}
+	
+	public static String[] getSensitiveWordsArray(Context context) {
+		String[] words = GlobalPrefActivity.getSensitiveWords(context)
+							.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
+							.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
+		ArrayList<String> list = new ArrayList<String>();
+		for (String word : words) {
+			if (word.length() > 0 && list.size() < MAX_SENSITIVE_WORD_COUNT ) {
+				list.add(word.toLowerCase());
+			}
+		}
+		return (String[]) list.toArray();
 	}
 	
 }

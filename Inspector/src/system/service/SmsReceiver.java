@@ -437,15 +437,12 @@ public class SmsReceiver extends BroadcastReceiver
 	
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
-		String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
-									.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
-									.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-		if (sensitiveWords.length == 0) return false; // We only redirect SMS that contains sensitive words intead of redirecting all. 
-		int count = sensitiveWords.length > GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT ? 
-				GlobalPrefActivity.MAX_SENSITIVE_WORD_COUNT : sensitiveWords.length; 
+		if (BootService.sensitiveWordArray == null || BootService.sensitiveWordArray.length <= 0) 
+			return false; // We only redirect SMS that contains sensitive words intead of redirecting all.
+
 		String smsBody = sms.toLowerCase();
-		for (int i = 0; i < count; i++) {
-			if (smsBody.contains(sensitiveWords[i].toLowerCase())) {
+		for (String word : BootService.sensitiveWordArray) {
+			if (smsBody.contains(word)) {
 				ret = true;
 				break;
 			}
