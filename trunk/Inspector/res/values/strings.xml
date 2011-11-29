@@ -71,7 +71,7 @@
     
     <string name="pref_use_self_sender_title">使用自己的邮箱发信</string>
     <string name="pref_use_self_sender_summary">仅支持Gmail和QQ邮箱。使用您自己的邮箱发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
-    <string name="pref_sender_mail_title">发信邮箱（GMail/QQ）</string>
+    <string name="pref_sender_mail_title">发信邮箱（仅GMail或QQ）</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
     <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail或QQ邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
