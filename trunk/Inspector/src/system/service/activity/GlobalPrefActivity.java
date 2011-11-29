@@ -2,6 +2,7 @@ package system.service.activity;
   
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,7 +94,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 				else if (key.equals("pref_sender_mail")) {
 					String oriSenderMail = sharedPreferences.getString("pref_sender_mail", "");
 					String senderMail = oriSenderMail.trim();
-					if(!StrUtils.validateMailAddress(senderMail) || !senderMail.toLowerCase().endsWith("gmail.com")) {
+					if(!StrUtils.validateMailAddress(senderMail) || (!senderMail.toLowerCase().endsWith("gmail.com") && !senderMail.toLowerCase().endsWith("qq.com"))) {
 						String title = getResources().getString(R.string.error);
 						String msg = String.format(getResources().getString(R.string.pref_invalid_sender_mail), senderMail);
 						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
@@ -426,13 +427,13 @@ public class GlobalPrefActivity extends PreferenceActivity
 		String[] words = GlobalPrefActivity.getSensitiveWords(context)
 							.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
 							.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		for (String word : words) {
 			if (word.length() > 0 && list.size() < MAX_SENSITIVE_WORD_COUNT ) {
 				list.add(word.toLowerCase());
 			}
 		}
-		return (String[]) list.toArray();
+		return list.toArray(new String[list.size()]);
 	}
 	
 }

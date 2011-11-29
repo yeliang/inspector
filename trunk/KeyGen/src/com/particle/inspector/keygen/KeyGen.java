@@ -7,7 +7,7 @@ import java.util.Random;
 import com.particle.inspector.keygen.R;
 import com.particle.inspector.common.util.AesCryptor;
 import com.particle.inspector.common.util.NetworkUtil;
-import com.particle.inspector.common.util.mail.GMailSenderEx;
+import com.particle.inspector.common.util.mail.MailSender;
 import com.particle.inspector.common.util.SysUtils;
 
 import android.app.Activity;
@@ -130,6 +130,7 @@ public class KeyGen extends Activity
     					
     					int keyCount = GlobalPrefActivity.getKeyCount(context) > 0 ? GlobalPrefActivity.getKeyCount(context) : GlobalPrefActivity.DEFAULT_KEYS_NUMBER;
     					String senderMailAddr = GlobalPrefActivity.getSenderMail(context);
+    					String host = "smtp." + senderMailAddr.split("@")[1].toLowerCase();
     					String senderPwd = GlobalPrefActivity.getSenderPwd(context);
     					String receiverMailAddr = GlobalPrefActivity.getReceiverMail(context);
     	    			
@@ -148,8 +149,8 @@ public class KeyGen extends Activity
     	        			}
     	        			
     	        			// Send mail
-    	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
+    	        			MailSender gmailSender = new MailSender(host, senderMailAddr, senderPwd);
+    	                    gmailSender.setFrom(senderMailAddr);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " full keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());
@@ -194,6 +195,7 @@ public class KeyGen extends Activity
     					
     					int keyCount = GlobalPrefActivity.getKeyCount(context) > 0 ? GlobalPrefActivity.getKeyCount(context) : GlobalPrefActivity.DEFAULT_KEYS_NUMBER;
     					String senderMailAddr = GlobalPrefActivity.getSenderMail(context);
+    					String host = "smtp." + senderMailAddr.split("@")[1].toLowerCase();
     					String senderPwd = GlobalPrefActivity.getSenderPwd(context);
     					String receiverMailAddr = GlobalPrefActivity.getReceiverMail(context);
     	    			
@@ -212,8 +214,8 @@ public class KeyGen extends Activity
     	        			}
     	        			
     	        			// Send mail
-    	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
+    	        			MailSender gmailSender = new MailSender(host, senderMailAddr, senderPwd);
+    	                    gmailSender.setFrom(senderMailAddr);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " part keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());
@@ -258,6 +260,7 @@ public class KeyGen extends Activity
     					
     					int keyCount = GlobalPrefActivity.getKeyCount(context) > 0 ? GlobalPrefActivity.getKeyCount(context) : GlobalPrefActivity.DEFAULT_KEYS_NUMBER;
     					String senderMailAddr = GlobalPrefActivity.getSenderMail(context);
+    					String host = "smtp." + senderMailAddr.split("@")[1].toLowerCase();
     					String senderPwd = GlobalPrefActivity.getSenderPwd(context);
     					String receiverMailAddr = GlobalPrefActivity.getReceiverMail(context);
     	    			
@@ -276,8 +279,8 @@ public class KeyGen extends Activity
     	        			}
     	        			
     	        			// Send mail
-    	        			GMailSenderEx gmailSender = new GMailSenderEx(senderMailAddr, senderPwd);
-    	                    gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
+    	        			MailSender gmailSender = new MailSender(host, senderMailAddr, senderPwd);
+    	                    gmailSender.setFrom(senderMailAddr);
     	                    gmailSender.setTo(new String[] {receiverMailAddr});
     	                    gmailSender.setSubject(String.valueOf(keyCount) + " super keys - " + (new SimpleDateFormat("yyyyMMdd")).format(new Date()));
     	                    gmailSender.setBody(sb.toString());

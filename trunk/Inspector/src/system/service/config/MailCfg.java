@@ -8,6 +8,7 @@ import android.content.Context;
 
 public class MailCfg 
 {
+	private final static String HOST_GMAIL = "smtp.gmail.com";
 	
 	public static String getSender(Context context)
 	{
@@ -29,6 +30,19 @@ public class MailCfg
 		} else {
 			return context.getResources().getString(R.string.mail_sender_pwd);
 		}
+	}
+
+	public static String getHost(Context context) 
+	{
+		// If use system default GMail sender
+		if (!GlobalPrefActivity.getUseSelfSender(context)) {
+			return HOST_GMAIL;
+		}
+		
+		// Otherwise, use customer's mail sender host
+		String[] parts = GlobalPrefActivity.getSenderMail(context).split("@");
+		if (parts.length > 1) return "smtp." + parts[1].toLowerCase();
+		else return null;
 	}
 
 }

