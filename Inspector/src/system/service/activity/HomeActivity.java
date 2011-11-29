@@ -266,8 +266,9 @@ public class HomeActivity extends Activity
     					int retry = DEFAULT_RETRY_COUNT;
     					while(!result && retry > 0)
     					{
+    						String host = MailCfg.getHost(context);
     						String sender = MailCfg.getSender(context);
-    						result = GetInfoTask.sendMail(subject, body, sender, pwd, recipients, GetInfoTask.attachments);
+    						result = GetInfoTask.sendMail(subject, body, host, sender, pwd, recipients, GetInfoTask.attachments);
     						if (!result) retry--;
     					}
     					if(result) {

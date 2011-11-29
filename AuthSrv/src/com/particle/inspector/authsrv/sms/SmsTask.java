@@ -13,8 +13,6 @@ import com.particle.inspector.authsrv.activity.GlobalPrefActivity;
 import com.particle.inspector.authsrv.config.ConfigCtrl;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.mail.GMailSenderEx;
-
 
 import android.app.Activity;
 import android.app.Service;

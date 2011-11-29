@@ -1,6 +1,16 @@
 package com.particle.inspector.common.util.mail;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Date; 
 import java.util.Properties; 
 import javax.activation.CommandMap; 
@@ -18,14 +28,17 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage; 
 import javax.mail.internet.MimeMultipart; 
 import javax.mail.internet.MimeUtility;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
  
 /**
- * Gmail sender with capability of adding attachments
+ * Mail sender with capability of adding attachments
  * @see http://www.jondev.net/articles/Sending_Emails_without_User_Intervention_%28no_Intents%29_in_Android
  */
-public class GMailSenderEx extends javax.mail.Authenticator 
+public class MailSender extends javax.mail.Authenticator 
 { 
-  public static final String DEFAULT_SENDER = "androidinspector@gmail.com";
   private String _user; 
   private String _pass; 
  
@@ -46,14 +59,14 @@ public class GMailSenderEx extends javax.mail.Authenticator
  
   private Multipart _multipart; 
  
- 
-  public GMailSenderEx() { 
-    _host = "smtp.gmail.com"; // default smtp server 
+  // SMTP host like "smtp.gmail.com" or "smtp.qq.com"
+  public MailSender(String host, String user, String pwd) { 
+    _host = host; // default smtp server 
     _port = "465"; // default smtp port 
     _sport = "465"; // default socketfactory port 
  
-    _user = ""; // username 
-    _pass = ""; // password 
+    _user = user; // username 
+    _pass = pwd; // password 
     _from = ""; // email sent from 
     _subject = ""; // email subject 
     _body = ""; // email body 
@@ -71,13 +84,6 @@ public class GMailSenderEx extends javax.mail.Authenticator
     mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed"); 
     mc.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822"); 
     CommandMap.setDefaultCommandMap(mc); 
-  } 
- 
-  public GMailSenderEx(String user, String pass) { 
-    this(); 
- 
-    _user = user; 
-    _pass = pass; 
   } 
  
   public boolean send() throws Exception { 
@@ -143,6 +149,9 @@ public class GMailSenderEx extends javax.mail.Authenticator
       props.put("mail.smtp.auth", "true"); 
     } 
  
+    //props.put("mail.transport.protocol", "smtp");
+    //props.put("javax.net.ssl.trustStore", "inspectorkeystore");
+    //props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.smtp.port", _port); 
     props.put("mail.smtp.socketFactory.port", _sport); 
     props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); 
@@ -185,3 +194,5 @@ public class GMailSenderEx extends javax.mail.Authenticator
   } 
   
 }
+
+

