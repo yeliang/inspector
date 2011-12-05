@@ -327,8 +327,9 @@ public class HomeActivity extends Activity
             	Bundle bundle = new Bundle();
             	bundle.putBoolean(GlobalPrefActivity.HAS_CHG_RECEIVER_INFO, false);
             	intent.putExtras(bundle);
+            	intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             	startActivityForResult(intent, R.layout.home);
-            	//overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+            	overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
             }
         };
         
