@@ -103,6 +103,12 @@ public class DeviceProperty
 		 }
 	}
 	
+	// Whether it is up Android 2.2
+	public synchronized static boolean verLargerThan22() 
+	{
+		return (Build.VERSION.SDK_INT > 8);
+	}
+	
 	protected static final String PREFS_FILE = "device_id.xml";
 	protected static final String PREFS_DEVICE_ID = "device_id";
 

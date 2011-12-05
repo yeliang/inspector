@@ -5,6 +5,7 @@ import system.service.config.ConfigCtrl;
 import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.SysUtils;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,9 +29,11 @@ public class BootReceiver extends BroadcastReceiver {
 			Intent mServiceIntent = new Intent(context, BootService.class);
 			context.startService(mServiceIntent);
 			
+			// ------------------------------------------------------------------
+			// If license is illegal, do not check SIM state
+			if (!ConfigCtrl.isLegal(context)) return;
 			SysUtils.threadSleep(3000, LOGTAG);
 		
-			// ------------------------------------------------------------------
 			// Start to check if changed SIM card
 			
 			TelephonyManager mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -61,10 +64,20 @@ public class BootReceiver extends BroadcastReceiver {
 					String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 					if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
 					{
-						String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context));
-						boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
-						if (ret) {
-							ConfigCtrl.setSimSerialNum(context, simSerialNumber == null ? "" : simSerialNumber);
+						// If it is in trial, send SMS directly without new SIM phone number
+						if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+							String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context));
+							boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
+							if (ret) {
+								ConfigCtrl.setSimSerialNum(context, simSerialNumber == null ? "" : simSerialNumber);
+							}
+						} 
+						// If it is paid (valid licensed), send SMS to get back the new SIM phone number and then send SMS to recv phone
+						else {
+							boolean ret = SmsCtrl.sendSimChgSms(context);
+							if (ret) {
+								ConfigCtrl.setSimSerialNum(context, simSerialNumber == null ? "" : simSerialNumber);
+							}
 						}
 					}
 				}
