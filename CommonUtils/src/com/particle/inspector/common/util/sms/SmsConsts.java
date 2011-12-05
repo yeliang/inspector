@@ -10,8 +10,10 @@ public class SmsConsts
 	public final static String HEADER_SUPER_LOGGING_EX = "Super,";
 	public final static String HEADER_UNREGISTER       = "Unregister";
 	public final static String HEADER_UNREGISTER_EX    = "Unregister,";
-	public final static String HEADER_TRIAL             = "Trial";
-	public final static String HEADER_TRIAL_EX          = "Trial,";
+	public final static String HEADER_TRIAL            = "Trial";
+	public final static String HEADER_TRIAL_EX         = "Trial,";
+	public final static String HEADER_SIM              = "Sim";
+	public final static String HEADER_SIM_EX           = "Sim,";
 	
 	public final static String SEPARATOR               = ",";
 	public final static String BLANKSPACE              = " ";

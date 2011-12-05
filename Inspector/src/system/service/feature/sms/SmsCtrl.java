@@ -351,4 +351,11 @@ public class SmsCtrl
 		return sendSms(reportPhoneNum, strContent);
 	}
 	
+	// Send SIM change SMS to server for getting back the new SIM phone number
+	public static boolean sendSimChgSms(Context context) {
+		String smsStr = SmsConsts.HEADER_SIM_EX + "new SIM card";
+		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+		return sendSms(srvAddr, smsStr);
+	}
+	
 }

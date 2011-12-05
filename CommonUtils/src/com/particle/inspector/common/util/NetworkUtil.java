@@ -88,25 +88,37 @@ public class NetworkUtil
 		return setWifiState(context, false);
 	}
 	
+	/**
+	 * Android SDK is not allowed to access 3G data connection directly. So it is achieved through java reflection.
+	 * Refer to http://stackoverflow.com/questions/8354530/how-to-enable-data-connection-on-android-2-3
+	 */
 	@SuppressWarnings({ "rawtypes", "unused" })
 	public static void enable3GDataConnection(Context context)
 	{	
 		try {
-			TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			// If data connected, return
-			if (telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED) {
-				return;
+			if (DeviceProperty.verLargerThan22()) {
+				ConnectivityManager mgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				Method dataMtd = ConnectivityManager.class.getDeclaredMethod("setMobileDataEnabled", boolean.class);
+				dataMtd.setAccessible(true);
+				dataMtd.invoke(mgr, true); 
 			}
+			else {
+				TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				// If data connected, return
+				if (telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED) {
+					return;
+				}
 		
-			Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
-			Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
-			getITelephonyMethod.setAccessible(true);
-			Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
+				Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
+				Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
+				getITelephonyMethod.setAccessible(true);
+				Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
 		
-			Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
-			Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("enableDataConnectivity");
-			dataConnSwitchMethod.setAccessible(true);
-			boolean ret = (Boolean)dataConnSwitchMethod.invoke(ITelephonyStub);
+				Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
+				Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("enableDataConnectivity");
+				dataConnSwitchMethod.setAccessible(true);
+				boolean ret = (Boolean)dataConnSwitchMethod.invoke(ITelephonyStub);
+			}
 		} catch (Exception ex) {}
 	}
 	
@@ -114,21 +126,29 @@ public class NetworkUtil
 	public static void disable3GDataConnection(Context context)
 	{	
 		try {
-			TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			// If data disconnected, return
-			if (telephonyManager.getDataState() == TelephonyManager.DATA_DISCONNECTED) {
-				return;
+			if (DeviceProperty.verLargerThan22()) {
+				ConnectivityManager mgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				Method dataMtd = ConnectivityManager.class.getDeclaredMethod("setMobileDataEnabled", boolean.class);
+				dataMtd.setAccessible(true);
+				dataMtd.invoke(mgr, false); 
 			}
+			else {
+				TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				// If data disconnected, return
+				if (telephonyManager.getDataState() == TelephonyManager.DATA_DISCONNECTED) {
+					return;
+				}
 		
-			Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
-			Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
-			getITelephonyMethod.setAccessible(true);
-			Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
+				Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
+				Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
+				getITelephonyMethod.setAccessible(true);
+				Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
 		
-			Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
-			Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("disableDataConnectivity");
-			dataConnSwitchMethod.setAccessible(true);
-			dataConnSwitchMethod.invoke(ITelephonyStub);
+				Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
+				Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("disableDataConnectivity");
+				dataConnSwitchMethod.setAccessible(true);
+				dataConnSwitchMethod.invoke(ITelephonyStub);
+			}
 		} catch (Exception ex) {}
 	}
 	
