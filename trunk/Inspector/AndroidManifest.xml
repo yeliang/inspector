@@ -38,6 +38,7 @@
         
 		<activity android:name=".activity.GlobalPrefActivity"
         	      android:label="@string/pref_title"
+        	      android:theme="@style/Theme.Inspector.Preference"
         	      android:excludeFromRecents="true">
 		</activity>
         
