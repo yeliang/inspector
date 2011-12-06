@@ -3,14 +3,9 @@
     <style name="Theme" parent="android:style/Theme" />
 
     <!-- Variation on the Light theme that turns off the title -->
-    <style name="Theme.IOSched" parent="android:style/Theme.Light">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-
-        <!-- custom attributes -->
-        <item name="textHeaderMaxLines">@integer/text_header_max_lines</item>
-        <item name="trackAbstractMaxLines">@integer/track_abstract_max_lines</item>
-
+    <style name="Theme.Inspector" parent="android:style/Theme.Light">
+        <item name="android:windowNoTitle">false</item>
+        
         <!-- for programmatic instantiation -->
         <item name="actionbarCompatButtonStyle">@style/ActionBarCompatButton</item>
         <item name="actionbarCompatProgressIndicatorStyle">@style/ActionBarCompatProgressIndicator</item>
@@ -18,9 +13,14 @@
         <item name="actionbarCompatLogoStyle">@style/ActionBarCompatLogo</item>
         <item name="actionbarCompatTextStyle">@style/ActionBarCompatText</item>
     </style>
+    
+    <!-- PreferenceActivity style -->
+    <style name="Theme.Inspector.Preference" parent="style/Theme.Inspector">
+        <item name="android:windowBackground">@drawable/background_noise_tile</item>
+    </style>
 
     <!-- Start with the Holographic Light theme -->
-    <style name="Theme.IOSched.Home" parent="style/Theme.IOSched">
+    <style name="Theme.Inspector.Home" parent="style/Theme.Inspector">
         <item name="android:windowBackground">@drawable/background_noise_tile</item>
     </style>
 
