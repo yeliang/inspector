@@ -265,7 +265,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location activation word
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION))
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION_ALIAS))
 			{
 				abortBroadcast(); // Do not show location activation SMS
 				
@@ -304,7 +304,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location activation word
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING))
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING_ALIAS))
 			{
 				abortBroadcast(); // Do not show location activation SMS
 				
