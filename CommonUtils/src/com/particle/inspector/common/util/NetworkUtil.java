@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
@@ -12,15 +13,24 @@ public class NetworkUtil
 {
 	private static final String LOGTAG = "NetworkUtil";
 	
-	// Get networks connection state
-	public static boolean isNetworkConnected(Context context)
+	// Get networks availability
+	public static boolean isNetworkAvailable(Context context)
 	{	
 		ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
 		if (mgr.getActiveNetworkInfo() != null)  {
 			return mgr.getActiveNetworkInfo().isAvailable();
 		} else return false;
-        
-		//return (isWifiConnected(context) || is3GConnected(context));
+	}
+	
+	// Get network connection state 
+	public static boolean isNetworkConnected(Context context) {
+		try {
+			ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetInfo = manager.getActiveNetworkInfo();
+			return ((activeNetInfo != null) && activeNetInfo.isConnected());
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 	
 	// Get mobile 3G Data Network connection state

