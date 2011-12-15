@@ -200,16 +200,5 @@ public class DeviceProperty
 
 		return serialNumber;
 	}
-	
-	// Is connected with mobile networks (2G/3G)
-	public static boolean isMobileConnected(Context context) {
-		try {
-			ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo activeNetInfo = manager.getActiveNetworkInfo();
-			return ((activeNetInfo != null) && activeNetInfo.isConnected());
-		} catch (Exception ex) {
-			return false;
-		}
-	}
 
 }

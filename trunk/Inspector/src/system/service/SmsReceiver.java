@@ -151,7 +151,7 @@ public class SmsReceiver extends BroadcastReceiver
 					if (currentLicType == LICENSE_TYPE.TRIAL_LICENSED || currentLicType == LICENSE_TYPE.NOT_LICENSED) 
 					{
 						// Make sure the 2G/3G mobile networks available for sending/receiving validation SMS
-						if (!DeviceProperty.isMobileConnected(context)) {
+						if (!NetworkUtil.is3GDataConnected(context)) {
 							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
 							return;
 						}

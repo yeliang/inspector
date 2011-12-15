@@ -5,9 +5,9 @@
    	android:baselineAligned="false"
    	android:background="@drawable/whats_on_background">
    	
-    <ImageView android:src="@drawable/qq" style="@style/WhatsOnImageItem" android:paddingLeft="12dp" />
+    <ImageView android:id="@+id/footer_img_support" android:src="@drawable/qq" style="@style/WhatsOnImageItem" android:paddingLeft="12dp" />
     <TextView android:text="@string/support_qq" style="@style/WhatsOnTextItem" />
     <ImageView style="@style/ActionBarCompatSeparator" />
-    <ImageButton android:id="@+id/actionbar_btn_home" android:src="@drawable/ic_title_home" style="@style/WhatsOnImageItem" />
+    <ImageButton android:id="@+id/footer_btn_home" android:src="@drawable/ic_title_home" style="@style/WhatsOnImageItem" />
    
 </LinearLayout> 
