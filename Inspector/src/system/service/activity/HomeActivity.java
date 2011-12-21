@@ -247,8 +247,8 @@ public class HomeActivity extends Activity
         		
     					// If network connected, try to collect and send the information
     					if (!NetworkUtil.isNetworkConnected(context)) {
-    						// Clean the files in SD-CARD
-        					FileCtrl.cleanTxtFiles();
+    						// Clean info files
+        					FileCtrl.cleanTxtFiles(context);
         					
     						mHandler.sendEmptyMessageDelayed(NETWORK_DISCONNECTED, 0);
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
@@ -290,8 +290,8 @@ public class HomeActivity extends Activity
     						if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
     					}
         		
-    					// Clean the files in SD-CARD
-    					FileCtrl.cleanTxtFiles();
+    					// Clean info files
+    					FileCtrl.cleanTxtFiles(context);
     					
     					mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
     				}
