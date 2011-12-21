@@ -33,19 +33,57 @@ public class FileCtrl
 
 	private static final String LOGTAG = "FileCtrl";
 	
-	public static String getDefaultDirStr() {
+	// ----------------------------------------------------------------------------------
+	// Functions for internal storage
+	// ----------------------------------------------------------------------------------
+	
+	// Get the string of files folder of current app in internal storage
+	public static String getInternalStorageFilesDirStr(Context context) {
+		String path = context.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+		return path;
+	}
+
+	public static File getInternalStorageFilesDir(Context context) {
+		return new File(getInternalStorageFilesDirStr(context));
+	}
+	
+	/**
+	 * Save file to internal storage. If the file exists, overwrite it. 
+	 * @param fullname the fullname of the file, e.g. .info/contact_2011-01-01.txt, .recording/Recording_2011-01-01.wav
+	 */
+	public static File Save2InternalStorage(Context context, String fullname, String content) throws Exception
+	{
+		File file = null;
+		
+		file = new File(getInternalStorageFilesDirStr(context) + "/" + fullname);
+		if (file.exists()) file.delete();
+		file.createNewFile();
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.write(content.getBytes());
+		fos.close();
+		
+		return file;
+	}
+	
+	// ----------------------------------------------------------------------------------
+	// Functions for SD-CARD
+	// ----------------------------------------------------------------------------------
+	
+	public static String getDefaultSDDirStr() {
 		return getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/";
 	}	
 
-	public static File getDefaultDir() {
-		return new File(getDefaultDirStr());
+	public static File getDefaultSDDir() {
+		return new File(getDefaultSDDirStr());
 	}
 	
-	public static File getDefaultDirP1() {
+	// The root dir of the default dir  
+	public static File getDefaultSDDirP1() {
 		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P1 + "/");
 	}
 	
-	public static File getDefaultDirP2() {
+	// The parent dir of the default dir
+	public static File getDefaultSDDirP2() {
 		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P2 + "/");
 	}
 	
@@ -109,11 +147,6 @@ public class FileCtrl
 		return sdCardRoot.getPath();  
 	}
 
-	public static String makeFileName(Context context, String nameBase, String deviceName, String suffix) 
-	{	
-		return nameBase + "-" + deviceName + "-" + DatetimeUtil.format3.format(new Date()) + suffix;
-	}
-	
 	public static File creatSDDir(String dirName)
 	{  
         File dir = new File(getSDCardRootPath() + "/" + dirName);  
@@ -123,9 +156,9 @@ public class FileCtrl
 	
 	public static File createDefaultSDDir()
 	{  
-		File dirP1 = getDefaultDirP1();
-		File dirP2 = getDefaultDirP2();
-        File dir = getDefaultDir();
+		File dirP1 = getDefaultSDDirP1();
+		File dirP2 = getDefaultSDDirP2();
+        File dir = getDefaultSDDir();
         try {
         	if (!dirP1.exists()) dirP1.mkdir();
         	if (!dirP2.exists()) dirP2.mkdir();
@@ -134,19 +167,19 @@ public class FileCtrl
         return dir;  
     }
 	
-	public static boolean dirExist(String dirName)
+	public static boolean doesSDDirExist(String dirName)
 	{  
         File dir = new File(getSDCardRootPath() + "/" + dirName);
         return dir.exists();
     }
 	
-	public static boolean defaultDirExist()
+	public static boolean defaultSDDirExist()
 	{  
-        return getDefaultDir().exists();
+        return getDefaultSDDir().exists();
     }
 	
-	public static void removeDefaultDir() {
-		File dir = getDefaultDir();
+	public static void removeDefaultSDDir() {
+		File dir = getDefaultSDDir();
 		if (dir.exists()) {
 			try {
 				dir.delete();
@@ -154,9 +187,14 @@ public class FileCtrl
 		}
 	}
 	
-	public static void cleanTxtFiles() 
+	// ----------------------------------------------------------------------------------
+	// Functions for operating info files and recording files
+	// ----------------------------------------------------------------------------------
+	
+	public static void cleanTxtFiles(Context context) 
 	{
-		File dir = getDefaultDir();
+		//File dir = getDefaultSDDir();
+		File dir = getInternalStorageFilesDir(context);
 		if (dir.exists() && dir.isDirectory()) 
 		{
 			File[] files = dir.listFiles();
@@ -174,6 +212,7 @@ public class FileCtrl
 				}
 			}
 			
+			/*
 			// Try to remove the directory
 			if (dir.listFiles().length == 0) {
 				try {
@@ -182,6 +221,7 @@ public class FileCtrl
 					//Log.e(LOGTAG, e.toString());
 				}
 			}
+			*/
 		}
 	}
 	
@@ -213,7 +253,4 @@ public class FileCtrl
 	      }
 	}
 	
-	public static boolean isExternalStorageAvail() {
-	      return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-	}
 }
