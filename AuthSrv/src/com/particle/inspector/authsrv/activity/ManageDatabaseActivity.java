@@ -81,7 +81,7 @@ public class ManageDatabaseActivity extends Activity
                      "Are you sure?").setPositiveButton("Yes",
                      new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                           if (FileCtrl.isExternalStorageAvail()) {
+                           if (FileCtrl.isSDCardReady()) {
                               Log.i(LOGTAG, "importing database from external storage, and resetting database");
                               new BackupDatabaseTask().execute();
                               ManageDatabaseActivity.this.startActivity(new Intent(ManageDatabaseActivity.this, DashboardActivity.class));
@@ -106,7 +106,7 @@ public class ManageDatabaseActivity extends Activity
                      "Are you sure (this will overwrite existing current data)?").setPositiveButton("Yes",
                      new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                           if (FileCtrl.isExternalStorageAvail()) {
+                           if (FileCtrl.isSDCardReady()) {
                               Log.i(LOGTAG, "importing database from external storage, and resetting database");
                               new RestoreDatabaseTask().execute();
                               // sleep momentarily so that database reset stuff has time to take place (else Main reloads too fast)

