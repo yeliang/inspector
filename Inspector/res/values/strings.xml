@@ -59,7 +59,7 @@
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
     <string name="pref_category_sender_mail_title">发信邮箱（可选项）</string>
     <string name="pref_category_receiver_key">pref_category_receiver</string>
-    <string name="pref_category_receiver_title">主控者信息</string>
+    <string name="pref_category_receiver_title">主控者</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
     <string name="pref_category_info_collector_title">情报收集</string>
     <string name="pref_category_record_title">通话录音</string>

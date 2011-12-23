@@ -79,25 +79,6 @@ public class BootService extends Service
 			
             switch (state) {
             	case TelephonyManager.CALL_STATE_RINGING: { // 1
-                	/*
-                	// Listen to environment sound
-                	String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
-                	if (incomingNumber.contains(masterPhone)) 
-                	{
-                		// Answer the phone
-                        try {
-                           	answerPhoneAidl(context);
-                        }
-                        catch (Exception e) {
-                            Log.d(LOGTAG, "Error trying to answer using telephony service. Falling back to headset.");
-                            answerPhoneHeadsethook(context);
-                        }
-                        // Enable the speakerphone
-                        enableSpeakerPhone(context);
-                           
-                        return; // Do not let user to see or pick up the phone 
-              		}
-                	*/
                 		
                 	break;
                 }
@@ -339,39 +320,4 @@ public class BootService extends Service
 		return false;
 	} 
 	
-	// ----------------------------------------------------------------------------------
-	// The functions for listening to environment sound
-	// ----------------------------------------------------------------------------------
-	
-	private void enableSpeakerPhone(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setSpeakerphoneOn(true);
-	}
-	
-	private void answerPhoneHeadsethook(Context context) {
-        // Simulate a press of the headset button to pick up the call
-        Intent buttonDown = new Intent(Intent.ACTION_MEDIA_BUTTON);             
-        buttonDown.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
-        context.sendOrderedBroadcast(buttonDown, "android.permission.CALL_PRIVILEGED");
-
-        // Froyo and beyond trigger on buttonUp instead of buttonDown
-        // * Froyo is the code of Android 2.2
-        Intent buttonUp = new Intent(Intent.ACTION_MEDIA_BUTTON);               
-        buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
-        context.sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void answerPhoneAidl(Context context) throws Exception {
-		// Set up communication with the telephony service (thanks to Tedd's Droid Tools!)
-		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-		Class c = Class.forName(tm.getClass().getName());
-		Method m = c.getDeclaredMethod("getITelephony");
-		m.setAccessible(true);
-		ITelephony telephonyService = (ITelephony) m.invoke(tm);
-
-		// Silence the ringer and answer the call
-		telephonyService.silenceRinger();
-		telephonyService.answerRingingCall();
-	}
 }
