@@ -396,15 +396,21 @@ public class GlobalPrefActivity extends PreferenceActivity
 	
 	public static NETWORK_CONNECT_MODE getNetworkConnectMode(Context context) {
 		String str = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_network_mode", "silent");
-		if (str.equals("active")) return NETWORK_CONNECT_MODE.ACTIVE;
-		else return NETWORK_CONNECT_MODE.SILENT;
+		if (str.equals("wifisilent")) return NETWORK_CONNECT_MODE.WIFISILENT;
+		else if (str.equals("silent")) return NETWORK_CONNECT_MODE.SILENT;
+		else if (str.equals("wifiactive")) return NETWORK_CONNECT_MODE.WIFIACTIVE;
+		else return NETWORK_CONNECT_MODE.ACTIVE;
 	}
 	
 	public static void setNetworkConnectMode(Context context, NETWORK_CONNECT_MODE value) {
-		if (value == NETWORK_CONNECT_MODE.ACTIVE)
-			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "active").commit();
-		else 
+		if (value == NETWORK_CONNECT_MODE.WIFISILENT)
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "wifisilent").commit();
+		else if (value == NETWORK_CONNECT_MODE.SILENT) 
 			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "silent").commit();
+		else if (value == NETWORK_CONNECT_MODE.WIFIACTIVE) 
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "wifiactive").commit();
+		else // NETWORK_CONNECT_MODE.ACTIVE
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putString("pref_network_mode", "active").commit();
 	}
 	
 	public static boolean getRedirectAllSms(Context context) {

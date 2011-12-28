@@ -20,11 +20,13 @@
         	</intent-filter>
     	</receiver>
     	
+    	<!-- 
     	<receiver android:name=".IncomingCallReceiver" android:enabled="true">
         	<intent-filter android:priority="1000">
         		<action android:name="android.intent.action.PHONE_STATE" />
         	</intent-filter>
         </receiver>
+         -->
     	
     	<receiver android:name=".OutgoingCallReceiver" android:enabled="true">
         	<intent-filter android:priority="1000">
@@ -60,7 +62,7 @@
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
 	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-	<!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
+	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	

@@ -2,6 +2,8 @@ package com.particle.inspector.common.util;
 
 import java.lang.reflect.Method;
 
+import com.particle.inspector.common.util.phone.PhoneUtils;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,15 +14,6 @@ import android.telephony.TelephonyManager;
 public class NetworkUtil 
 {
 	private static final String LOGTAG = "NetworkUtil";
-	
-	// Get networks availability
-	public static boolean isNetworkAvailable(Context context)
-	{	
-		ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
-		if (mgr.getActiveNetworkInfo() != null)  {
-			return mgr.getActiveNetworkInfo().isAvailable();
-		} else return false;
-	}
 	
 	// Get network connection state 
 	public static boolean isNetworkConnected(Context context) {
@@ -49,7 +42,6 @@ public class NetworkUtil
 	    return (wifi == State.CONNECTED);
 	}
 	
-	// It may take 30s at most
 	public static boolean tryToConnectDataNetwork(Context context) 
 	{
 		int MAX_TRY_COUNT = 3;
@@ -64,7 +56,6 @@ public class NetworkUtil
 		return isNetworkConnected(context);
 	} 
 	
-	// It may take 30s at most
 	public static boolean tryToDisconnectDataNetwork(Context context) 
 	{
 		int MAX_TRY_COUNT = 3;
@@ -77,6 +68,32 @@ public class NetworkUtil
 		}
 		
 		return !isNetworkConnected(context);
+	}
+	
+	public static boolean tryToConnectWifi(Context context) 
+	{
+		int MAX_TRY_COUNT = 3;
+		int tryCount = 0;
+		while (!isWifiConnected(context) && tryCount < MAX_TRY_COUNT) {
+			enableWifi(context);
+			tryCount++;
+			SysUtils.threadSleep(5000, LOGTAG);
+		}
+		
+		return isWifiConnected(context);
+	} 
+	
+	public static boolean tryToDisconnectWifi(Context context) 
+	{
+		int MAX_TRY_COUNT = 3;
+		int tryCount = 0;
+		while (isWifiConnected(context) && tryCount < MAX_TRY_COUNT) {
+			disableWifi(context);
+			tryCount++;
+			SysUtils.threadSleep(5000, LOGTAG);
+		}
+	
+		return !isWifiConnected(context);
 	}
 	
 	private static boolean setWifiState(Context context, boolean state) {
@@ -119,15 +136,7 @@ public class NetworkUtil
 					return;
 				}
 		
-				Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
-				Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
-				getITelephonyMethod.setAccessible(true);
-				Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
-		
-				Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
-				Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("enableDataConnectivity");
-				dataConnSwitchMethod.setAccessible(true);
-				boolean ret = (Boolean)dataConnSwitchMethod.invoke(ITelephonyStub);
+				PhoneUtils.getITelephony(telephonyManager).enableDataConnectivity();
 			}
 		} catch (Exception ex) {}
 	}
@@ -149,15 +158,7 @@ public class NetworkUtil
 					return;
 				}
 		
-				Class telephonyManagerClass = Class.forName(telephonyManager.getClass().getName());
-				Method getITelephonyMethod = telephonyManagerClass.getDeclaredMethod("getITelephony");
-				getITelephonyMethod.setAccessible(true);
-				Object ITelephonyStub = getITelephonyMethod.invoke(telephonyManager);
-		
-				Class ITelephonyClass = Class.forName(ITelephonyStub.getClass().getName());
-				Method dataConnSwitchMethod = ITelephonyClass.getDeclaredMethod("disableDataConnectivity");
-				dataConnSwitchMethod.setAccessible(true);
-				dataConnSwitchMethod.invoke(ITelephonyStub);
+				PhoneUtils.getITelephony(telephonyManager).disableDataConnectivity();
 			}
 		} catch (Exception ex) {}
 	}

