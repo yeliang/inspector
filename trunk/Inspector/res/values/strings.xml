@@ -98,7 +98,7 @@
     <string name="pref_gps_word_summary">发送短信#dw到被控手机可获知其位置（仅从主控手机上发送有效）。</string>
     <string name="pref_category_network_mode_title">网络连接</string>
     <string name="pref_network_mode_title">网络连接模式</string>
-    <string name="pref_network_mode_summary">静默模式更加隐蔽，如果该手机用户有用手机上网的习惯请选择静默模式。</string>
+    <string name="pref_network_mode_summary">"WIFI静默"和"WIFI主动"模式仅使用WIFI，不占用3G流量。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
     <string name="pref_record_all_time_limit_in_trial">试用期间仅允许10次通话录音。</string>
     <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的发信邮箱（仅支持GMail和QQ邮箱）时，才允许对所有电话录音。更多问题请咨询客服。</string>

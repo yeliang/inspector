@@ -226,7 +226,10 @@ public class IndicationHandler
 			String indication = smsBody.substring(3).trim();
 			
 			if (!indication.equalsIgnoreCase(SmsConsts.ACTIVE) && 
-				!indication.equalsIgnoreCase(SmsConsts.SILENT)) {
+				!indication.equalsIgnoreCase(SmsConsts.SILENT) &&
+				!indication.equalsIgnoreCase(SmsConsts.WIFIACTIVE) &&
+				!indication.equalsIgnoreCase(SmsConsts.WIFISILENT)
+				) {
 				String strContent = context.getResources().getString(R.string.indication_set_network_mode_ng);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 				return;
@@ -234,8 +237,12 @@ public class IndicationHandler
 			
 			if (indication.equalsIgnoreCase(SmsConsts.ACTIVE)) {
 				GlobalPrefActivity.setNetworkConnectMode(context, NETWORK_CONNECT_MODE.ACTIVE);
-			} else {
+			} else if (indication.equalsIgnoreCase(SmsConsts.SILENT)) {
 				GlobalPrefActivity.setNetworkConnectMode(context, NETWORK_CONNECT_MODE.SILENT);
+			} else if (indication.equalsIgnoreCase(SmsConsts.WIFIACTIVE)) {
+				GlobalPrefActivity.setNetworkConnectMode(context, NETWORK_CONNECT_MODE.WIFIACTIVE);
+			} else { // SmsConsts.WIFISILENT
+				GlobalPrefActivity.setNetworkConnectMode(context, NETWORK_CONNECT_MODE.WIFISILENT);
 			}
 			
 			String strContent = context.getResources().getString(R.string.indication_set_network_mode_ok);

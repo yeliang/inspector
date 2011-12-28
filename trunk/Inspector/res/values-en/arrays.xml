@@ -19,11 +19,15 @@
     <item>7</item>
   </string-array> 
   <string-array name="network_mode_display"> 
-    <item>Active Connect</item> 
-    <item>Silent Connect</item>
+  	<item>WIFI Active</item> 
+    <item>Active</item>
+    <item>WIFI Silent</item> 
+    <item>Silent</item>
   </string-array>
   <string-array name="network_mode_value"> 
+  	<item>wifiactive</item>
     <item>active</item> 
+    <item>wifisilent</item> 
     <item>silent</item>
   </string-array>
   <string-array name="senderlist"> 

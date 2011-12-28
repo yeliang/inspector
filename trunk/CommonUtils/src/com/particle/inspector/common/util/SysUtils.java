@@ -115,6 +115,5 @@ public class SysUtils
 			Log.e(tag, "Failed to sleep");
 		}
 	}
-	
-	
+
 }
