@@ -70,9 +70,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		setRecordTargetNumState(sp, this, true);
 		
-		// Set state of sender mail&password
-		setSenderMailState(sp, this);
-		
 		// Set state of sensitive words
 		setSensitiveWordsState(sp, this);
 		
@@ -88,10 +85,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 				if (context == null) context = getApplicationContext();
-				if (key.equals("pref_use_self_sender")) {
-					setSenderMailState(sharedPreferences, GlobalPrefActivity.this);
-				}
-				else if (key.equals("pref_sender_mail")) {
+				if (key.equals("pref_sender_mail")) {
 					String oriSenderMail = sharedPreferences.getString("pref_sender_mail", "");
 					String senderMail = oriSenderMail.trim();
 					if(!StrUtils.validateMailAddress(senderMail) || (!senderMail.toLowerCase().endsWith("gmail.com") && !senderMail.toLowerCase().endsWith("qq.com"))) {
@@ -257,47 +251,10 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	private void setSenderMailState(SharedPreferences sharedPreferences, Context context) {
-		boolean useSelfSender = sharedPreferences.getBoolean("pref_use_self_sender", false);
-		if(useSelfSender) {
-			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(true);
-			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(true);
-		} else {
-			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(1).setEnabled(false);
-			((PreferenceCategory)getPreferenceScreen().getPreference(0)).getPreference(2).setEnabled(false);
-			
-			// If not use self sender, cannot record all phone calls
-			if (getRecordAll(context)) {
-				String title = getResources().getString(R.string.error);
-				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
-				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_use_self_sender");
-				if (mCheckBoxPreference != null) {
-					mCheckBoxPreference.setChecked(true);
-			    }
-			}
-		}
-	}
-	
 	private void setRecordTargetNumState(SharedPreferences sharedPreferences, Context context, boolean isInitial) {
 		boolean recordAll = sharedPreferences.getBoolean("pref_record_all", false);
 		if(recordAll) {
-			// Must use self sender if recording all phone calls
-			if (!getUseSelfSender(context)               ||
-				getSenderMail(context).length()     <= 0 ||
-				getSenderPassword(context).length() <= 0) 
-			{	
-				String title = getResources().getString(R.string.error);
-				String msg   = context.getResources().getString(R.string.pref_must_use_self_sender);
-				SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
-				CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference("pref_record_all");
-				if (mCheckBoxPreference != null) {
-					mCheckBoxPreference.setChecked(false);
-			    }
-				return;
-			} else {
-				((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
-			}
+			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
 			
 			// Pop up times limit warning when it is in trial
 			if (!isInitial && ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
@@ -328,14 +285,6 @@ public class GlobalPrefActivity extends PreferenceActivity
 			String summary = getResources().getString(R.string.pref_sensitive_words_summary);
 			((PreferenceCategory)this.getPreferenceScreen().getPreference(5)).getPreference(1).setSummary(summary);
 		}
-	}
-	
-	public static boolean getUseSelfSender(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_use_self_sender", false);
-	}
-	
-	public static void setUseSelfSender(Context context, boolean value) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_use_self_sender", value).commit();
 	}
 	
 	public static String getSenderMail(Context context) {
