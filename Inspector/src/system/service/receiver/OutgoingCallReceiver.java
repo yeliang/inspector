@@ -1,5 +1,6 @@
-package system.service;
+package system.service.receiver;
 
+import system.service.BootService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

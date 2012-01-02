@@ -15,9 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import system.service.R;
-import system.service.SmsReceiver;
 import system.service.activity.GlobalPrefActivity;
 import system.service.feature.sms.SmsCtrl;
+import system.service.receiver.SmsReceiver;
 
 import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.NetworkUtil;

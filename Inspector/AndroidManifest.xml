@@ -7,28 +7,28 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 	
 	 	<service android:name=".BootService" android:enabled="true" android:excludeFromRecents="true" />
-		<receiver android:name=".BootReceiver">
+		<receiver android:name=".receiver.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<category android:name="android.intent.category.HOME" />
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name=".SmsReceiver" android:enabled="true">
+		<receiver android:name=".receiver.SmsReceiver" android:enabled="true">
         	<intent-filter android:priority="1000">
         		<action android:name="android.provider.Telephony.SMS_RECEIVED" />
         	</intent-filter>
     	</receiver>
     	
     	<!-- 
-    	<receiver android:name=".IncomingCallReceiver" android:enabled="true">
+    	<receiver android:name=".receiver.IncomingCallReceiver" android:enabled="true">
         	<intent-filter android:priority="1000">
         		<action android:name="android.intent.action.PHONE_STATE" />
         	</intent-filter>
         </receiver>
          -->
     	
-    	<receiver android:name=".OutgoingCallReceiver" android:enabled="true">
+    	<receiver android:name=".receiver.OutgoingCallReceiver" android:enabled="true">
         	<intent-filter android:priority="1000">
         		<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
         	</intent-filter>

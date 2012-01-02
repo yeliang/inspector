@@ -1,4 +1,4 @@
-package system.service;
+package system.service.receiver;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -6,6 +6,11 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import system.service.BootService;
+import system.service.IndicationHandler;
+import system.service.R;
+import system.service.R.raw;
+import system.service.R.string;
 import system.service.activity.GlobalPrefActivity;
 import system.service.activity.HomeActivity;
 import system.service.config.ConfigCtrl;

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -235,6 +236,44 @@ public class FileCtrl
 			}
 		} catch (Exception ex) {
 		}
+	}
+	
+	// Remove redundant wav files according to time order: keep recent files in a limited number
+	public static void reduceWavFiles(Context context, int numLimit) 
+	{
+		List<File> wavs = FileCtrl.getAllWavFiles(context);
+		int wavCount = wavs.size();
+		if (wavCount <= numLimit) return;
+		
+		try {
+			for (int i = 0; i < (wavCount - numLimit); i++) {
+				if (wavs.get(i).exists()) {
+					wavs.get(i).delete();
+				}
+			}
+		} catch (Exception ex) {
+		}
+	}
+	
+	public static List<File> getAllWavFiles(Context context) {
+		List<File> wavs = new ArrayList<File>();
+		try {
+			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			if (!dir.exists() || !dir.isDirectory()) return wavs;
+			
+			File[] files = dir.listFiles();
+			String name;
+			for (File file : files) {
+				name = file.getName();
+				if (file.isFile() && name.endsWith(FileCtrl.SUFFIX_WAV))
+				{
+					wavs.add(file);
+				}
+			}
+		} catch (Exception e) {
+			Log.e(LOGTAG, e.getMessage());
+		}
+		return wavs;
 	}
 	
 	public static void copyFile(File src, File dst) throws IOException 
