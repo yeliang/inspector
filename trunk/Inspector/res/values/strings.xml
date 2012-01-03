@@ -13,8 +13,8 @@
     <string name="sms_redirect_header">[From %s]</string>
     <string name="sms_date">Date</string>
     <string name="sms_type">Type</string>
-    <string name="sms_sendername">Sender</string>
-    <string name="sms_sendernumber">Sender Number</string>
+    <string name="sms_sendername">Name</string>
+    <string name="sms_sendernumber">Phone Number</string>
     <string name="sms_content">Message</string>
     
     <!-- Contact -->

