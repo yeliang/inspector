@@ -92,7 +92,7 @@ public class BootService extends Service
         						String msg = context.getResources().getString(R.string.msg_recording_times_over_in_trial) + context.getResources().getString(R.string.support_qq);
         						boolean ret = SmsCtrl.sendSms(recvPhoneNum, msg);
         						if (ret) {
-        							ConfigCtrl.setHasSentRedirectSmsTimesLimitSms(context, true);
+        							ConfigCtrl.setHasSentRecordingTimesLimitSms(context, true);
         						}
         					}
                 		}
