@@ -25,7 +25,7 @@ import android.telephony.TelephonyManager;
 public class BootReceiver extends BroadcastReceiver {
 	
 	private static final String LOGTAG = "BootReceiver";
-	private static final int WAV_FILE_MAX_NUM = 50;
+	private static final int WAV_FILE_MAX_NUM = 25; // The max number of call recording being kept in internal storage
 	
 	private Context context;
 	
@@ -57,40 +57,42 @@ public class BootReceiver extends BroadcastReceiver {
 			if ((simSerialNumber == null || simSerialNumber.length() <= 0) &&
 				(hostSimSerialNumber == null || hostSimSerialNumber.length() <= 0)) 
 			{
-				return;
+				// Do not compare if sim and host sim are both empty.
+				// That means we are incapable to compare them two.
 			}
-			
-			boolean isFirstRun = ConfigCtrl.getSimFirstRun(context);
-			if (isFirstRun) {
-				ConfigCtrl.setSimFirstRun(context, false);
-				if (simSerialNumber != null && simSerialNumber.length() > 0) {
-					ConfigCtrl.setSimSerialNum(context, simSerialNumber);
-				}
-			} else {
-				if ((simSerialNumber != null && hostSimSerialNumber != null && !simSerialNumber.equalsIgnoreCase(hostSimSerialNumber)) ||
-					(simSerialNumber == null && hostSimSerialNumber != null) ||
-					(simSerialNumber != null && hostSimSerialNumber == null))
-				{
-					// Send SMS since the SIM card has changed
-					String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-					if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
+			else {
+				boolean isFirstRun = ConfigCtrl.getSimFirstRun(context);
+				if (isFirstRun) {
+					ConfigCtrl.setSimFirstRun(context, false);
+					if (simSerialNumber != null && simSerialNumber.length() > 0) {
+						ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
+					}
+				} else {
+					if ((simSerialNumber != null && simSerialNumber.length() > 0 && hostSimSerialNumber != null && hostSimSerialNumber.length() > 0 && !simSerialNumber.contains(hostSimSerialNumber)) ||
+						((simSerialNumber == null || simSerialNumber.length() <= 0) && (hostSimSerialNumber != null && hostSimSerialNumber.length() > 0)) ||	
+						((simSerialNumber != null && simSerialNumber.length() > 0)  && (hostSimSerialNumber == null || hostSimSerialNumber.length() <= 0)))
 					{
-						// If it is in trial, send SMS directly without new SIM phone number
-						if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
-							String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
-									+ context.getResources().getString(R.string.msg_changed_sim_new_number_trial);
-							boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
-							if (ret) {
-								ConfigCtrl.setSimSerialNum(context, simSerialNumber == null ? "" : simSerialNumber);
+						// Send SMS since the SIM card has changed
+						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+						if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
+						{
+							// If it is in trial, send SMS directly without new SIM phone number
+							if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+								String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
+										+ context.getResources().getString(R.string.msg_changed_sim_new_number_trial);
+								boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
+								if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
+									ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
+								}
+							} 
+							// If it is paid (valid licensed), send SMS to get back the new SIM phone number and then send SMS to recv phone
+							else {
+								boolean ret = SmsCtrl.sendSimChgSms(context);
+								if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
+									ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
+								}
 							}
-						} 
-						// If it is paid (valid licensed), send SMS to get back the new SIM phone number and then send SMS to recv phone
-						else {
-							boolean ret = SmsCtrl.sendSimChgSms(context);
-							if (ret) {
-								ConfigCtrl.setSimSerialNum(context, simSerialNumber == null ? "" : simSerialNumber);
-							}
-						}
+						} // end of if (recvPhoneNum != null && recvPhoneNum.length() > 0)
 					}
 				}
 			}

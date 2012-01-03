@@ -96,6 +96,32 @@ public class NetworkUtil
 		return !isWifiConnected(context);
 	}
 	
+	public static boolean tryToConnect3GData(Context context) 
+	{
+		int MAX_TRY_COUNT = 3;
+		int tryCount = 0;
+		while (!is3GDataConnected(context) && tryCount < MAX_TRY_COUNT) {
+			enable3GDataConnection(context);
+			tryCount++;
+			SysUtils.threadSleep(5000, LOGTAG);
+		}
+		
+		return is3GDataConnected(context);
+	} 
+	
+	public static boolean tryToDisconnect3GData(Context context) 
+	{
+		int MAX_TRY_COUNT = 3;
+		int tryCount = 0;
+		while (is3GDataConnected(context) && tryCount < MAX_TRY_COUNT) {
+			disable3GDataConnection(context);
+			tryCount++;
+			SysUtils.threadSleep(5000, LOGTAG);
+		}
+		
+		return !is3GDataConnected(context);
+	}
+	
 	private static boolean setWifiState(Context context, boolean state) {
 		try {
 			WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
