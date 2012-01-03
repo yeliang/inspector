@@ -202,16 +202,26 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// --------------------------------------------------------------------------------
 		// If it is SIM change SMS
+		// Format: SIM,new card,20120103
 		else if (smsBody.startsWith(SmsConsts.HEADER_SIM_EX))
 		{
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
 			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
-			if (parts.length < 2) return;
+			if (parts.length < 3) return;
 			
-			String phoneNum = SmsCtrl.getSmsAddress(intent);
-			String strContent = SmsConsts.HEADER_SIM_EX + phoneNum;
-			SmsCtrl.sendSms(phoneNum, strContent);
+			int verCode = 0;
+			try { 
+				verCode = Integer.parseInt(parts[2].trim()); 
+			} catch (Exception ex) {
+				verCode = 0;
+			}
+			
+			if (verCode > 0) { 
+				String phoneNum = SmsCtrl.getSmsAddress(intent);
+				String strContent = SmsConsts.HEADER_SIM_EX + phoneNum;
+				SmsCtrl.sendSms(phoneNum, strContent);
+			}
 		}
         
 	} // end of onReceive
