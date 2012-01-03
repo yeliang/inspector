@@ -19,9 +19,9 @@
     <item>7</item>
   </string-array> 
   <string-array name="network_mode_display"> 
-  	<item>WIFI主动</item> 
+  	<item>Wi-Fi主动</item> 
     <item>主动</item>
-    <item>WIFI静默</item>
+    <item>Wi-Fi静默</item>
     <item>静默</item>
   </string-array>
   <string-array name="network_mode_value"> 
