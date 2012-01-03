@@ -19,9 +19,9 @@
     <item>7</item>
   </string-array> 
   <string-array name="network_mode_display"> 
-  	<item>WIFI Active</item> 
+  	<item>Wi-Fi Active</item> 
     <item>Active</item>
-    <item>WIFI Silent</item> 
+    <item>Wi-Fi Silent</item> 
     <item>Silent</item>
   </string-array>
   <string-array name="network_mode_value"> 

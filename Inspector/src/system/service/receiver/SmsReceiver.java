@@ -357,14 +357,15 @@ public class SmsReceiver extends BroadcastReceiver
 				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
 				if (parts.length < 2) return;
 				
+				String newPhoneNum = parts[1].trim();
+				ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
+				
 				String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 				if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
-				{
-					String newPhoneNum = parts[1].trim();
+				{	
 					String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
 							+ String.format(context.getResources().getString(R.string.msg_changed_sim_new_number), newPhoneNum);
-					boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
-					ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
+					SmsCtrl.sendSms(recvPhoneNum, strContent);
 				}
 			}
 			
