@@ -376,8 +376,8 @@ public class SmsReceiver extends BroadcastReceiver
 				
 				// Count ++ if in trial
 				LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-				if (type == LICENSE_TYPE.TRIAL_LICENSED) {
-					if (ConfigCtrl.reachSmsRedirectTimeLimit(context) && !ConfigCtrl.getHasSentRedirectSmsTimesLimitSms(context)) {
+				if (type == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachSmsRedirectTimeLimit(context)) {
+					if (!ConfigCtrl.getHasSentRedirectSmsTimesLimitSms(context)) {
 						// Send SMS to warn user
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
@@ -388,6 +388,7 @@ public class SmsReceiver extends BroadcastReceiver
 							}
 						}
 					}
+					return;
 				}
 
 				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
