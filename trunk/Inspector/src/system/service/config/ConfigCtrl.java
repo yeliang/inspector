@@ -369,9 +369,9 @@ public class ConfigCtrl
 	{
 		LICENSE_TYPE licType = getLicenseType(context);
 		return (licType == LICENSE_TYPE.FULL_LICENSED ||
+			   (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context)) ||
 				licType == LICENSE_TYPE.PART_LICENSED ||
-				licType == LICENSE_TYPE.SUPER_LICENSED ||
-				(licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context)));
+				licType == LICENSE_TYPE.SUPER_LICENSED);
 	}
 	
 	public static boolean reachRecordingTimeLimit(Context context) {

