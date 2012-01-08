@@ -182,6 +182,7 @@ public class GetInfoTask extends TimerTask
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
 		int wavCount = wavs.size();
 		if (wavCount > 0) {
+			wavs = FileCtrl.sortFileByTimeOrder(wavs);
 			boolean allowToSend = false;
 			
 			TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
