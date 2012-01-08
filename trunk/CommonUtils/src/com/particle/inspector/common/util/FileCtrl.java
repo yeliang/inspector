@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -245,11 +247,11 @@ public class FileCtrl
 		int wavCount = wavs.size();
 		if (wavCount <= numLimit) return;
 		
+		// Remove old redundant files by time order
+		wavs = FileCtrl.sortFileByTimeOrder(wavs);
 		try {
 			for (int i = 0; i < (wavCount - numLimit); i++) {
-				if (wavs.get(i).exists()) {
-					wavs.get(i).delete();
-				}
+				wavs.get(i).delete();
 			}
 		} catch (Exception ex) {
 		}
@@ -276,6 +278,13 @@ public class FileCtrl
 		return wavs;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<File> sortFileByTimeOrder(List<File> files) 
+	{
+		 Collections.sort(files, new FileCompareUtil.CompratorByLastModified());
+		 return files;
+	}
+	
 	public static void copyFile(File src, File dst) throws IOException 
 	{
 	      FileChannel inChannel = new FileInputStream(src).getChannel();
@@ -291,5 +300,5 @@ public class FileCtrl
 	         }
 	      }
 	}
-	
+
 }
