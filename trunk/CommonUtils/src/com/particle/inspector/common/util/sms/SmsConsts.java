@@ -31,6 +31,8 @@ public class SmsConsts
 	public final static String INDICATION_LOCATION_ALIAS = "#location";
 	public final static String INDICATION_RING         = "#xl";
 	public final static String INDICATION_RING_ALIAS   = "#bell";
+	public final static String INDICATION_ENV          = "#hj";
+	public final static String INDICATION_ENV_ALIAS    = "#env";
 	
 	public final static String ON  = "ON";
 	public final static String OFF = "OFF";

