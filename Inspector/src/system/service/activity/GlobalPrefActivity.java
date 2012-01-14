@@ -43,7 +43,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 	private Context context;
 	private OnSharedPreferenceChangeListener chgListener;
 	
-	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info"; // mail, phone number, GPS word
+	public static final String HAS_CHG_RECEIVER_INFO = "has_changed_receiver_info"; // flag for master phone or mail changed
 	public static final String TARGET_NUMBER_BREAKER = " ";
 	public static final int MAX_TARGET_NUM_COUNT = 9;
 	public static final String SENSITIVE_WORD_BREAKER = " ";

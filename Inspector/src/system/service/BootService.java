@@ -9,6 +9,7 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
+import system.service.receiver.SmsReceiver;
 
 import com.android.internal.telephony.ITelephony;
 import com.particle.inspector.common.util.DatetimeUtil;
@@ -144,6 +145,23 @@ public class BootService extends Service
         					//
         				}
         			}
+                	
+                	// ------------------------------------------------------------------------------------------------
+    				// Reset IS_ENV_LISTENING flag
+    				if (SmsReceiver.IS_ENV_LISTENING) {
+    					SmsReceiver.IS_ENV_LISTENING = false;
+    					
+    					// Restore ringer mode and volumn
+    					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    					audioManager.setRingerMode(SmsReceiver.ORIGINAL_RING_MODE);
+    					if (SmsReceiver.ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
+    						audioManager.setStreamVolume(AudioManager.STREAM_RING, SmsReceiver.ORIGINAL_RING_VOL, 0);						
+    					}
+    					
+    					// Restore voice call volumn
+    					audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, SmsReceiver.ORIGINAL_VOICE_CALL_VOL, 0);
+    				}
+                	
                 	break;
                 }
                 default: { }

