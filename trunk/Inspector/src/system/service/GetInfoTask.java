@@ -188,7 +188,9 @@ public class GetInfoTask extends TimerTask
 			TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
 			try {
 				allowToSend = ! PhoneUtils.getITelephony(tm).isOffhook();
-			} catch (Exception e) {	}
+			} catch (Exception e) {	
+				allowToSend = true;
+			}
 			
 			if (allowToSend) {
 				if (!NetworkUtil.isNetworkConnected(context)) {
