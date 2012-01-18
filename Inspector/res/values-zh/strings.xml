@@ -158,10 +158,13 @@
     <string name="msg_changed_sim">安卓监控提醒：%s更换了手机卡。</string>
     <string name="msg_changed_sim_new_number_trial">本短信手机号码即为新号码。</string>
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>
+    <string name="msg_trial_expire_or_not_licensed">安卓监控提醒您：试用期已过或未注册，无法打开设置界面。</string>
     
     <!-- Indication -->
     <string name="indication_register_ok">注册成功。</string>
     <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
+    <string name="indication_register_ng_cannot_write">注册失败。请尝试再次发送注册短信。若无法解决请联系客服。</string>
+    <string name="indication_register_ng_duplicate_key">目标手机已经用该注册码（%s）注册，无需重复注册。</string>
     <string name="indication_register_write_ng">注册信息写入失败。请再次尝试，如若无法解决请联系客服。</string>
     <string name="indication_unregister_ok">卸载成功。</string>
     <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
