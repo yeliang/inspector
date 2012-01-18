@@ -156,10 +156,13 @@
     <string name="msg_changed_sim">%s changed phone card.</string>
     <string name="msg_changed_sim_new_number_trial"> The phone number of this SMS is the new number.</string>
     <string name="msg_changed_sim_new_number"> New phone number: %s</string>
+    <string name="msg_trial_expire_or_not_licensed">Out of trial or not licensed, setting dialog cannot be triggered.</string>
     
     <!-- Indication -->
     <string name="indication_register_ok">Register successfully.</string>
     <string name="indication_register_ng">Register failed. Please check your license or contact support.</string>
+    <string name="indication_register_ng_cannot_write">Register failed. Please send indication SMS again or contact support.</string>
+    <string name="indication_register_ng_duplicate_key">Target phone had been registerred with this key (%s) before. Unnecessary to register with the same key again.</string>
     <string name="indication_register_write_ng">Failed to write register info. Try again or contact support.</string>
     <string name="indication_unregister_ok">Uninstall successfully.</string>
     <string name="indication_unregister_ng">Uninstall failed. Please check the SMS you sent or contact support.</string>
