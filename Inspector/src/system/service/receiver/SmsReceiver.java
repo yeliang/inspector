@@ -275,7 +275,11 @@ public class SmsReceiver extends BroadcastReceiver
 						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
 						return;
 					}
-				} catch (Exception e) {	}
+				} catch (Exception e) {	
+					String msg = context.getResources().getString(R.string.env_fail_exception);
+					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
+					return;
+				}
 				
 				// Start a new thread to call master phone
 				new Thread(new Runnable(){

@@ -54,6 +54,7 @@
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact support if necessary.</string>
     
     <!-- Environment Listening -->
+    <string name="env_fail_exception">Exception occurred in the target phone, so environment listening failed.</string>
     <string name="env_fail_offhook">The target phone is now in a call, so you cannot listen to its environment.</string>
     <string name="env_fail_screen_on">The target phone is being viewed or operated now, so you cannot listen to its environment.</string>
     
