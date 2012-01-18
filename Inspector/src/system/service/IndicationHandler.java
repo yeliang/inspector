@@ -27,9 +27,21 @@ public class IndicationHandler
 	{
 		// When comes here, that means the phone has received the SMS, so now it must be capable to send SMS.
 		
-		// Make sure the indicaiton is coming from qulified phone
+		// Forward message from system/server to the master phone
+		if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_MSG)) {
+			String msg = smsBody.substring(3).trim();
+			String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+			if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
+				SmsCtrl.sendSms(recvPhoneNum, msg);
+			}
+		}
+		
+		// Make sure the indication is coming from qualified phone
 		if (!isQualifiedIncomingNum(context, incomingPhoneNum)) {
-			// Do not return SMS to the phone about the failure
+			String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
+			String msg = String.format(context.getResources().getString(R.string.indication_not_come_from_master_phone), 
+					masterPhone == null ? "" : masterPhone);
+			SmsCtrl.sendSms(incomingPhoneNum, msg);
 			return;
 		}
 		
@@ -58,7 +70,7 @@ public class IndicationHandler
 							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
 						}
 					} else {
-						String msg = context.getResources().getString(R.string.indication_register_ng_duplicate_key);
+						String msg = String.format(context.getResources().getString(R.string.indication_register_ng_duplicate_key), currentKey);
 						SmsCtrl.sendSms(incomingPhoneNum, msg);
 					}
 				}
