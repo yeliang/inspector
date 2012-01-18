@@ -19,6 +19,7 @@ public class SmsConsts
 	public final static String BLANKSPACE              = " ";
 	
 	public final static String HEADER_INDICATION       = "#";
+	public final static String INDICATION_SYSTEM_MSG   = "#M#"; // System message indication
 	public final static String INDICATION_KEY          = "#0#";
 	public final static String INDICATION_SENDER       = "#1#";
 	public final static String INDICATION_RECV_MAIL    = "#2#";
