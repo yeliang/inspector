@@ -267,6 +267,7 @@ public class SmsCtrl
 	}
 
 	// The sms content format: <header>,<device ID>,<receiver mail>,<receiver phone num>
+	/*
 	public static void sendReceiverInfoSms(Context context) {
 		String strMobile = context.getResources().getString(R.string.srv_address).trim();
 		String deviceId = DeviceProperty.getDeviceId(context);
@@ -276,6 +277,7 @@ public class SmsCtrl
 		String strContent = SmsConsts.HEADER_INFO_EX + deviceId + SmsConsts.SEPARATOR + rcvMail + SmsConsts.SEPARATOR + rcvPhoneNum;
 		sendSms(strMobile, strContent);
 	}
+	*/
 	
 	public static String buildLocationSms(Context context, LocationInfo location) 
 	{

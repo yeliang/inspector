@@ -34,6 +34,7 @@ public class IndicationHandler
 			if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
 				SmsCtrl.sendSms(recvPhoneNum, msg);
 			}
+			return;
 		}
 		
 		// Make sure the indication is coming from qualified phone
@@ -151,9 +152,6 @@ public class IndicationHandler
 				// Send SMS to tell user the result
 				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				
-				// Send Info SMS to server to update receiver info
-				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
 				// Send SMS to warn the user
 				String strContent = context.getResources().getString(R.string.indication_set_recv_mail_ng);
@@ -173,9 +171,6 @@ public class IndicationHandler
 				// Send SMS to tell user the result
 				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ok);
 				SmsCtrl.sendSms(incomingPhoneNum, strContent);
-				
-				// Send Info SMS to server to update receiver info
-				SmsCtrl.sendReceiverInfoSms(context);
 			} else {
 				// Send SMS to warn the user
 				String strContent = context.getResources().getString(R.string.indication_set_recv_phonenum_ng);
