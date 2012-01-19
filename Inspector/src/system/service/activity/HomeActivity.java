@@ -54,10 +54,6 @@ public class HomeActivity extends Activity
 	Button btn_testPhone;
     Button btn_setting;
     Button btn_exit;
-    //TextView hint_testMail;
-    //TextView hint_testPhone;
-    //TextView hint_setting;
-    //TextView hint_hide;
     
     OnClickListener listener_home = null;
     OnClickListener listener_testMail = null;
@@ -111,18 +107,12 @@ public class HomeActivity extends Activity
         btn_exit = (Button)findViewById(R.id.btn_exit);
         btn_exit.setOnClickListener(listener_exit);
         
-        //hint_testMail = (TextView)findViewById(R.id.hint_testmail);
-        //hint_testPhone = (TextView)findViewById(R.id.hint_testphone);
-        //hint_setting = (TextView)findViewById(R.id.hint_setting);
-        //hint_hide = (TextView)findViewById(R.id.hint_hide);
-        
         // Set button status
         boolean enabled = false;
         if (ConfigCtrl.isLegal(context) &&
         	GlobalPrefActivity.getReceiverMail(context).length() > 0) enabled = true;
         
         btn_testMail.setEnabled(enabled);
-        //hint_testMail.setEnabled(enabled);
         if (enabled) {
         	btn_testMail.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mail_default), null, null);
         } else {
@@ -134,7 +124,6 @@ public class HomeActivity extends Activity
             GlobalPrefActivity.getReceiverPhoneNum(context).length() > 0) enabled = true;
         
         btn_testPhone.setEnabled(enabled);
-        //hint_testPhone.setEnabled(enabled);
         if (enabled) {
         	btn_testPhone.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mobile_default), null, null);
         } else {
@@ -153,11 +142,9 @@ public class HomeActivity extends Activity
 	    	if (matcher.matches()) {
    	 			btn_testMail.setEnabled(true);
    	 			btn_testMail.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mail_default), null, null);
-   	 			//hint_testMail.setEnabled(true);
    	 		} else {
    	 			btn_testMail.setEnabled(false);
    	 			btn_testMail.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mail_pressed), null, null);
-   	 			//hint_testMail.setEnabled(false);
    	 		}
 	    	
 	    	String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
@@ -166,14 +153,13 @@ public class HomeActivity extends Activity
 			if (matcher.matches()) {
 	    		btn_testPhone.setEnabled(true);
 	    		btn_testPhone.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mobile_default), null, null);
-	    		//hint_testPhone.setEnabled(true);
 	    	} else {
 	    		btn_testPhone.setEnabled(false);
 	    		btn_testPhone.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.home_btn_mobile_pressed), null, null);
-	    		//hint_testPhone.setEnabled(false);
 	    	}
 	    }
 	    
+	    /* DO NOT send INFO SMS anymore from now (2012/01/19)
 	    LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
 		boolean hasPaid = (licType != LICENSE_TYPE.NOT_LICENSED && licType != LICENSE_TYPE.TRIAL_LICENSED);
     	if (resultCode == RESULT_OK && hasPaid) 
@@ -184,6 +170,7 @@ public class HomeActivity extends Activity
 				SmsCtrl.sendReceiverInfoSms(context); //TODO temp do not send info to server
 			}
     	}
+    	*/
     }
     
     private void setListener()

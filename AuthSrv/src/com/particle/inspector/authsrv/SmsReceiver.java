@@ -119,6 +119,7 @@ public class SmsReceiver extends BroadcastReceiver
 		
 		// --------------------------------------------------------------------------------
 		// If it is receiver info SMS (so the key type should be full or part)
+		/*
 		else if (smsBody.startsWith(SmsConsts.HEADER_INFO_EX)) {
 			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
 			
@@ -141,6 +142,7 @@ public class SmsReceiver extends BroadcastReceiver
 				}
 			}
 		}
+		*/
 		
 		// --------------------------------------------------------------------------------
 		// If it is unregister SMS (so the key type should be full or part)

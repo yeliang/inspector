@@ -105,7 +105,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 				}
 				else if (key.equals("pref_recv_mail")) {
 					checkRecvMailFormat(sharedPreferences, context);
-					enableReceiverInfoChgFlag();
+					//enableReceiverInfoChgFlag();
 				}
 				else if (key.equals("pref_recv_phonenum")) {
 					String oriPhoneNum = sharedPreferences.getString("pref_recv_phonenum", "");
@@ -117,7 +117,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 						String msg   = String.format(getResources().getString(R.string.pref_pls_input_valid_recv_phonenum), phoneNum);
 						SysUtils.errorDlg(GlobalPrefActivity.this, title, msg);
 					}
-					else enableReceiverInfoChgFlag();
+					//else enableReceiverInfoChgFlag();
 					//if (!phoneNum.equals(oriPhoneNum)) setRedirectPhoneNum(getApplicationContext(), phoneNum);
 				}
 				else if (key.equals("pref_record_all")) {
@@ -196,6 +196,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		sp.registerOnSharedPreferenceChangeListener(chgListener);
 	}
 	
+	/*
 	private void enableReceiverInfoChgFlag() {
 		Intent intent = this.getIntent();
 		Bundle bn = intent.getExtras();
@@ -203,6 +204,7 @@ public class GlobalPrefActivity extends PreferenceActivity
 		intent.putExtras(bn);
 		setResult(RESULT_OK, intent);
 	}
+	*/
 	
 	private void initSummary(Preference p) {
 		if (p instanceof PreferenceCategory) {
