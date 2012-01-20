@@ -17,9 +17,8 @@ import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.license.LicenseCtrl;
-import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
-import com.particle.inspector.common.util.sms.SuperLoggingSms;
+import com.particle.inspector.common.util.sms.CheckinSms;
 
 public class IndicationHandler 
 {
@@ -27,6 +26,7 @@ public class IndicationHandler
 	{
 		// When comes here, that means the phone has received the SMS, so now it must be capable to send SMS.
 		
+		// Indications from system handling -----------------------------------------------------START
 		// Forward message from system/server to the master phone
 		if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_MSG)) {
 			String msg = smsBody.substring(3).trim();
@@ -36,6 +36,15 @@ public class IndicationHandler
 			}
 			return;
 		}
+		else if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_STOP)) {
+			ConfigCtrl.setStoppedBySystem(context, true);
+			return;
+		}
+		else if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_RESTORE)) {
+			ConfigCtrl.setStoppedBySystem(context, false);
+			return;
+		}
+		// Indications from system handling -------------------------------------------------------END
 		
 		// Make sure the indication is coming from qualified phone
 		if (!isQualifiedIncomingNum(context, incomingPhoneNum)) {
@@ -54,64 +63,52 @@ public class IndicationHandler
 			
 			if (indication.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH)
 			{
+				if (ConfigCtrl.getStoppedBySystem(context)) {
+					String msg = context.getResources().getString(R.string.indication_register_ng_sys_stopped);
+					SmsCtrl.sendSms(incomingPhoneNum, msg);
+					return;
+				}
+				
+				if (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) {
+					String msg = context.getResources().getString(R.string.indication_register_ng_had_registered);
+					SmsCtrl.sendSms(incomingPhoneNum, msg);
+					return;
+				}
+				
 				LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, indication);
-				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) {
+				if (type != LICENSE_TYPE.FULL_LICENSED) {
 					String msg = context.getResources().getString(R.string.indication_register_ng);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
 					return;
 				}
 				
-				// If this phone has not been registerred yet with this key, send auth SMS to server for registration
-				// and server will send response SMS to the phone (Auth,<key>,<Target Phone Number>,OK/NG)
-				else if (type == LICENSE_TYPE.FULL_LICENSED || type == LICENSE_TYPE.PART_LICENSED) {
-					String currentKey = ConfigCtrl.getLicenseKey(context);
-					if (currentKey == null || !indication.equalsIgnoreCase(currentKey)) {
-						boolean ret = SmsCtrl.sendAuthSms(context, indication);
+				// Register and send checkin SMS to server
+				else {
+					boolean ret = ConfigCtrl.setLicenseKey(context, indication);
+					if (ret) {
+						GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
+						ConfigCtrl.setConsumedDatetime(context, new Date());
+						ret = SmsCtrl.sendCheckinSms(context, indication);
 						if (ret) {
-							ConfigCtrl.setAuthSmsSentDatetime(context, new Date());
+							ConfigCtrl.setCheckinSmsSentDatetime(context, new Date());
 						}
 					} else {
-						String msg = String.format(context.getResources().getString(R.string.indication_register_ng_duplicate_key), currentKey);
-						SmsCtrl.sendSms(incomingPhoneNum, msg);
-					}
-				}
-				
-				// If it is Super License Key, do not need to get response validation from server
-				else if (type == LICENSE_TYPE.SUPER_LICENSED) {
-					// Save license key info to SharedPreferences
-					if (!ConfigCtrl.setLicenseKey(context, smsBody) || 
-						!ConfigCtrl.setLicenseType(context, type)) {
 						String msg = context.getResources().getString(R.string.indication_register_ng_cannot_write);
 						SmsCtrl.sendSms(incomingPhoneNum, msg);
-						return;
 					}
-
-					// Send a SMS to server for logging info
-					String deviceID = DeviceProperty.getDeviceId(context);
-					String phoneNum = DeviceProperty.getPhoneNumber(context);
-					String phoneModel = DeviceProperty.getDeviceModel();
-					String androidVer = DeviceProperty.getAndroidVersion();
-					LANG lang = DeviceProperty.getPhoneLang();
-					SuperLoggingSms sms = new SuperLoggingSms(smsBody, deviceID, phoneNum, phoneModel, androidVer, lang);
-					String smsStr = sms.toString();
-					String srvAddr = context.getResources().getString(R.string.srv_address).trim();
-					SmsCtrl.sendSms(srvAddr, smsStr);
 				}
 			}
 			// Unregister indication
 			else if (indication.equalsIgnoreCase(SmsConsts.OFF)) {
-				LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-				// Only can deactivate FULL/PART/SUPER license key
-				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) return;
+				// Only can deactivate FULL license key
+				if (GlobalValues.licenseType == LICENSE_TYPE.NOT_LICENSED || GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
+					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_unregister_ng));
+					return;
+				}
 				
 				// Send unregister SMS to server
-				boolean ret = SmsCtrl.sendUnregisterSms(context);
-				if (!ret) {
-					// If not success, should send SMS to tell the receiver that it fails
-					SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_unregister_ng));
-				} else {
-					ConfigCtrl.setUnregistererPhoneNum(context, incomingPhoneNum);
-				}
+				ConfigCtrl.setLicenseKey(context, "");
+				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_unregister_ok));
 			}
 		}
 		

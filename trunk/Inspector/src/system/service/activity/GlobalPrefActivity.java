@@ -28,6 +28,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import system.service.BootService;
+import system.service.GlobalValues;
 import system.service.R;
 import system.service.config.ConfigCtrl;
 
@@ -258,8 +259,8 @@ public class GlobalPrefActivity extends PreferenceActivity
 		if(recordAll) {
 			((PreferenceCategory)getPreferenceScreen().getPreference(3)).getPreference(1).setEnabled(false);
 			
-			// Pop up times limit warning when it is in trial
-			if (!isInitial && ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+			// Pop up to tell user recording times limit for trial
+			if (!isInitial && GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
 				String title = getResources().getString(R.string.info);
 				String msg   = context.getResources().getString(R.string.pref_record_all_time_limit_in_trial);
 				SysUtils.infoDlg(context, title, msg);

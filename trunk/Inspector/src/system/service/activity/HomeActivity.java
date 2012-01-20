@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import system.service.GetInfoTask;
+import system.service.GlobalValues;
 import system.service.R;
 import system.service.config.ConfigCtrl;
 import system.service.config.MailCfg;
@@ -85,10 +86,9 @@ public class HomeActivity extends Activity
     private void initUI()
     {
     	// Set activity title
-    	LICENSE_TYPE licType = ConfigCtrl.getLicenseType(context);
-    	if (licType == LICENSE_TYPE.TRIAL_LICENSED) {
+    	if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
     		this.setTitle(this.getTitle() + context.getResources().getString(R.string.init_trial));
-    	} else if (licType != LICENSE_TYPE.NOT_LICENSED) {
+    	} else if (GlobalValues.licenseType != LICENSE_TYPE.NOT_LICENSED) {
     		this.setTitle(this.getTitle() + context.getResources().getString(R.string.init_licensed));
     	}
     	

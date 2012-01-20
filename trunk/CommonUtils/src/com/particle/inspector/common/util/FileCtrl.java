@@ -257,6 +257,21 @@ public class FileCtrl
 		}
 	}
 	
+	// Remove all files in inspector internal storage
+	public static void removeAllFiles(Context context) 
+	{
+		try {
+			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			if (!dir.exists() || !dir.isDirectory()) return;
+			
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				file.delete();
+			}
+		} catch (Exception e) {
+		}
+	}
+	
 	public static List<File> getAllWavFiles(Context context) {
 		List<File> wavs = new ArrayList<File>();
 		try {

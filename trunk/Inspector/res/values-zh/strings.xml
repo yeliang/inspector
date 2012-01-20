@@ -166,10 +166,11 @@
     <string name="indication_register_ok">注册成功。</string>
     <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
     <string name="indication_register_ng_cannot_write">注册失败。请尝试再次发送注册短信。若无法解决请联系客服。</string>
-    <string name="indication_register_ng_duplicate_key">目标手机已经用该注册码（%s）注册，无需重复注册。</string>
+    <string name="indication_register_ng_sys_stopped">目标手机已被管理员停用，无法再注册。详细情况请联系客服。</string>
+    <string name="indication_register_ng_had_registered">目标手机已注册，无需重复注册。</string>
     <string name="indication_register_write_ng">注册信息写入失败。请再次尝试，如若无法解决请联系客服。</string>
     <string name="indication_unregister_ok">卸载成功。</string>
-    <string name="indication_unregister_ng">卸载失败。请检查您发送的指令格式是否正确。若无法解决请联系客服。</string>
+    <string name="indication_unregister_ng">卸载失败。该手机当前并未注册。若无法解决请联系客服。</string>
     <string name="indication_set_selfsender_ok">设置发信邮箱成功。</string>
     <string name="indication_set_selfsender_ng">设置发信邮箱失败。请检查您发送的指令格式是否正确（仅支持GMail和QQ邮箱）。若无法解决请联系客服。</string>
     <string name="indication_stop_selfsender_ok">取消发信邮箱成功。</string>

