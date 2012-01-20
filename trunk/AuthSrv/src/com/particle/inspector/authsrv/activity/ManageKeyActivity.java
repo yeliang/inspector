@@ -46,8 +46,7 @@ public class ManageKeyActivity extends Activity
 	private EditText value_phoneModel;
 	private EditText value_androidVer;
 	private EditText value_consumeDate;
-	private EditText value_recvMail;
-	private EditText value_recvPhoneNum;
+	private EditText value_verCode;
 	
 	private Button editButton;
 	private Button applyButton;
@@ -76,8 +75,7 @@ public class ManageKeyActivity extends Activity
 	  value_phoneModel  = (EditText) findViewById(R.id.value_phonemodel);
 	  value_androidVer  = (EditText) findViewById(R.id.value_androidver);
 	  value_consumeDate = (EditText) findViewById(R.id.value_consumedate);
-	  value_recvMail    = (EditText) findViewById(R.id.value_recvmail);
-	  value_recvPhoneNum= (EditText) findViewById(R.id.value_recvphonenum);
+	  value_verCode     = (EditText) findViewById(R.id.value_vercode);
 	  
 	  // Initially these are not editable
 	  setEditTextStatus(false);
@@ -113,8 +111,7 @@ public class ManageKeyActivity extends Activity
     			  value_phoneModel.setText(t.getPhoneModel());
     			  value_androidVer.setText(t.getAndroidVer());
     			  value_consumeDate.setText(t.getConsumeDate());
-    			  value_recvMail.setText(t.getRecvMail());
-    			  value_recvPhoneNum.setText(t.getRecvPhoneNum());
+    			  value_verCode.setText(String.valueOf(t.getVerCode()));
     		  }
     		  else {
     			  String title = getResources().getString(R.string.warning);
@@ -156,8 +153,7 @@ public class ManageKeyActivity extends Activity
 					value_phoneModel.setText(t.getPhoneModel());
 					value_androidVer.setText(t.getAndroidVer());
 					value_consumeDate.setText(t.getConsumeDate());
-					value_recvMail.setText(t.getRecvMail());
-					value_recvPhoneNum.setText(t.getRecvPhoneNum());
+					value_verCode.setText(String.valueOf(t.getVerCode()));
 				} else {
 					String title = getResources().getString(R.string.warning);
 					String msg = "Cannot find result.";
@@ -198,7 +194,7 @@ public class ManageKeyActivity extends Activity
 							
 							// Start to delete
 							int id = oldValue.getId();
-							TKey newRecord = new TKey(id, 
+							TKey newRecord = new TKey(
 									value_licenseKey.getText().toString().trim().toUpperCase(),
 									LicenseCtrl.strToEnum(value_keyType.getText().toString().trim()),
 									value_deviceId.getText().toString().trim(),
@@ -206,8 +202,7 @@ public class ManageKeyActivity extends Activity
 									value_phoneModel.getText().toString().trim(),
 									value_androidVer.getText().toString().trim(),
 									value_consumeDate.getText().toString().trim(),
-									value_recvMail.getText().toString().trim(),
-									value_recvPhoneNum.getText().toString().trim());
+									Integer.parseInt(value_verCode.getText().toString().trim()));
 							boolean ret = db.updateById(newRecord);
 							if (!ret) {
 								String title = getResources().getString(R.string.error);
@@ -312,8 +307,7 @@ public class ManageKeyActivity extends Activity
 									value_phoneModel.getText().toString().trim(),
 									value_androidVer.getText().toString().trim(),
 									value_consumeDate.getText().toString().trim(),
-									value_recvMail.getText().toString().trim(),
-									value_recvPhoneNum.getText().toString().trim());
+									Integer.parseInt(value_verCode.getText().toString().trim()));
 							boolean ret = db.insert(newRecord);
 							if (!ret) {
 								String title = getResources().getString(R.string.error);
@@ -362,8 +356,7 @@ public class ManageKeyActivity extends Activity
         	  value_phoneModel.setText(oldValue.getPhoneModel());
         	  value_androidVer.setText(oldValue.getAndroidVer());
         	  value_consumeDate.setText(oldValue.getConsumeDate());
-        	  value_recvMail.setText(oldValue.getRecvMail());
-        	  value_recvPhoneNum.setText(oldValue.getRecvPhoneNum());
+        	  value_verCode.setText(String.valueOf(oldValue.getVerCode()));
         	  
         	  setEditTextStatus(false);
               editButton.setEnabled(true);
@@ -388,8 +381,7 @@ public class ManageKeyActivity extends Activity
 	   value_phoneModel.setEnabled(enabled);
 	   value_androidVer.setEnabled(enabled);
 	   value_consumeDate.setEnabled(enabled);
-	   value_recvMail.setEnabled(enabled);
-	   value_recvPhoneNum.setEnabled(enabled);
+	   value_verCode.setEnabled(enabled);
    }
    
    private void cleanEditTextValue() {
@@ -400,8 +392,7 @@ public class ManageKeyActivity extends Activity
 	   value_phoneModel.setText("");
 	   value_androidVer.setText("");
 	   value_consumeDate.setText("");
-	   value_recvMail.setText("");
-	   value_recvPhoneNum.setText("");
+	   value_verCode.setText("");
    }
 
    

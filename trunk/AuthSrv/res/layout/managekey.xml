@@ -62,13 +62,8 @@
     	</TableRow>
     	
        	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow10" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_recvmail" android:text="Recv Mail" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
-			<EditText android:id="@+id/value_recvmail" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
-    	</TableRow>
-    	
-       	<TableRow android:layout_height="wrap_content" android:id="@+id/tableRow11" android:layout_width="fill_parent">
-			<TextView android:id="@+id/title_recvphonenum" android:text="Recv Num" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
-			<EditText android:id="@+id/value_recvphonenum" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/title_vercode" android:text="Ver Code" android:layout_width="100px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_marginLeft="4dp" />
+			<EditText android:id="@+id/value_vercode" android:text="" android:layout_width="200px" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" />
     	</TableRow>
     	
     </TableLayout>
