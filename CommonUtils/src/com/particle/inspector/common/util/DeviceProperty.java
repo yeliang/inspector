@@ -135,6 +135,7 @@ public class DeviceProperty
      *
      * @return a UUID that may be used to uniquely identify your device for most purposes.
      */
+	/*
 	public synchronized static String getDeviceUuid(Context context) 
 	{
 		UUID uuid = null;
@@ -166,6 +167,7 @@ public class DeviceProperty
 
 		return (uuid == null ? "" : uuid.toString());
 	}
+	*/
 
 	/** Return the MDN or MEID of the device depending on which radio the phone uses (GSM or CDMA).
 	 * It doesn't work on Android devices which aren't phones such as tablets, 

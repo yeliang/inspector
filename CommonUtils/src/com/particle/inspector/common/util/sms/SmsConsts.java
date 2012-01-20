@@ -2,14 +2,8 @@ package com.particle.inspector.common.util.sms;
 
 public class SmsConsts 
 {
-	public final static String HEADER_AUTH             = "Auth";
-	public final static String HEADER_AUTH_EX          = "Auth,";
-	public final static String HEADER_INFO             = "Info";
-	public final static String HEADER_INFO_EX          = "Info,";
-	public final static String HEADER_SUPER_LOGGING    = "Super";
-	public final static String HEADER_SUPER_LOGGING_EX = "Super,";
-	public final static String HEADER_UNREGISTER       = "Unregister";
-	public final static String HEADER_UNREGISTER_EX    = "Unregister,";
+	public final static String HEADER_CHECKIN          = "Checkin";
+	public final static String HEADER_CHECKIN_EX       = "Checkin,";
 	public final static String HEADER_TRIAL            = "Trial";
 	public final static String HEADER_TRIAL_EX         = "Trial,";
 	public final static String HEADER_SIM              = "Sim";
@@ -20,6 +14,9 @@ public class SmsConsts
 	
 	public final static String HEADER_INDICATION       = "#";
 	public final static String INDICATION_SYSTEM_MSG   = "#M#"; // System message indication
+	public final static String INDICATION_SYSTEM_STOP  = "#S#"; // System stop indication
+	public final static String INDICATION_SYSTEM_RESTORE = "#R#"; // System restore indication : release system STOP
+	
 	public final static String INDICATION_KEY          = "#0#";
 	public final static String INDICATION_SENDER       = "#1#";
 	public final static String INDICATION_RECV_MAIL    = "#2#";

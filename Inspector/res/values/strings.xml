@@ -164,10 +164,11 @@
     <string name="indication_register_ok">Register successfully.</string>
     <string name="indication_register_ng">Register failed. Please check your license or contact support.</string>
     <string name="indication_register_ng_cannot_write">Register failed. Please send indication SMS again or contact support.</string>
-    <string name="indication_register_ng_duplicate_key">Target phone had been registerred with this key (%s) before. Unnecessary to register with the same key again.</string>
+    <string name="indication_register_ng_sys_stopped">Cannot register because target phone had been stopped by administrator. Please contact support for details.</string>
+    <string name="indication_register_ng_had_registered">Target phone had been registerred. Unnecessary to register again.</string>
     <string name="indication_register_write_ng">Failed to write register info. Try again or contact support.</string>
     <string name="indication_unregister_ok">Uninstall successfully.</string>
-    <string name="indication_unregister_ng">Uninstall failed. Please check the SMS you sent or contact support.</string>
+    <string name="indication_unregister_ng">Uninstall failed. This phone is currently not registered.</string>
     <string name="indication_set_selfsender_ok">Set mail sender successfully.</string>
     <string name="indication_set_selfsender_ng">Failed to set mail sender. Please check SMS you sent (Only GMail and QQ permitted) or contact support.</string>
     <string name="indication_stop_selfsender_ok">Cancel mail sender successfully.</string>
