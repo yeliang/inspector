@@ -12,32 +12,45 @@ public class LicenseCtrl
 	private final static String STR_TRIAL_LICENSED = "trial";
 	private final static String STR_FULL_LICENSED = "full";
 	private final static String STR_NOT_LICENSED = "none";
+	private final static String STR_ERROR = "error happened, cannot generate key";
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
 	public static String TRIAL_KEY = "###";
 	
 	private static AesCryptor cryptor = new AesCryptor();
 	
+	// Calculate key according to MEID string
+	public static String generateFullKey(Context context, String meid)
+	{
+		if (meid == null || meid.length() <= 0) return STR_ERROR;
+		
+		try {
+			String encryped = cryptor.encrypt(meid.toUpperCase());
+			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH);
+			return fullKey.toUpperCase().trim();
+		} 
+		catch (Exception ex) {
+			return STR_ERROR;
+		}
+	}
+	
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
-		if (key == null) return LICENSE_TYPE.NOT_LICENSED;
+		if (key == null || key.trim().length() <= 0) return LICENSE_TYPE.NOT_LICENSED;
 		else if (key.equals(TRIAL_KEY)) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		key = key.trim().toUpperCase();		
-		String clearText = DeviceProperty.getDeviceId(context);
+		String meid = DeviceProperty.getDeviceId(context);
 		
 		try {
-			String encryped = cryptor.encrypt(clearText);
-			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH);
-			if (fullKey.equalsIgnoreCase(key)) {
+			String fullKey = generateFullKey(context, meid);
+			if (fullKey != null && fullKey.equalsIgnoreCase(key)) {
 				return LICENSE_TYPE.FULL_LICENSED;
 			}
 			else {
 				return LICENSE_TYPE.NOT_LICENSED;
 			}
-		} catch (Exception ex)
-		{
-			//Log.e(LOGTAG, ex.getMessage());
+		} catch (Exception ex) {
 			return LICENSE_TYPE.NOT_LICENSED;
 		}
 	}
