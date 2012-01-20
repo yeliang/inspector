@@ -40,8 +40,7 @@ public class DbHelper
     
     public final static String DEFAULT_DATABASE_PATH = "/data/com.particle.inspector.authsrv/databases/inspector.db";
     
-    private final static String DEFAULT_KEY_TABLE_NAME = "inspector_auth_key";
-    private final static String DEFAULT_TRIAL_TABLE_NAME = "inspector_trial";
+    private final static String DEFAULT_CHECKIN_TABLE_NAME = "inspector_checkin";
     public final static String KEY_FIELD_ID = "_id"; 
     public final static String KEY_FIELD_KEY = "licensekey";
     public final static String KEY_FIELD_DEVICE_ID = "deviceid";
@@ -75,7 +74,7 @@ public class DbHelper
     }
     
     public void resetDbConnection() {
-        Log.i(LOGTAG, "resetting database connection (close and re-open).");
+        //Log.i(LOGTAG, "resetting database connection (close and re-open).");
         cleanup();
         db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
      }
@@ -108,31 +107,10 @@ public class DbHelper
         }
     }
     
-    public boolean createTrialTable() 
-    {
-        String sql = context.getResources().getString(R.string.sql_create_table_trial);
-        try {
-        	if (db == null) return false;
-        	if (!db.isOpen()) {
-        		db = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE);
-        	}
-        	db.execSQL(sql);
-        	
-        	// Create index
-        	sql = context.getResources().getString(R.string.sql_create_index_on_deviceid_trial);
-        	db.execSQL(sql);
-        	
-        	return true;
-        } catch (SQLException e) {
-        	Log.e(LOGTAG, e.getMessage());
-        	return false;
-        }
-    }
-
     public boolean DropKeyTable() 
     {
     	boolean ret = false;
-        String sql = String.format(context.getResources().getString(R.string.sql_drop_table), DEFAULT_KEY_TABLE_NAME);
+        String sql = String.format(context.getResources().getString(R.string.sql_drop_table), DEFAULT_CHECKIN_TABLE_NAME);
         try {
         	if (db == null) return false;
         	if (!db.isOpen()) {
@@ -148,7 +126,7 @@ public class DbHelper
 
     public Cursor selectAll()
     {
-        Cursor cursor = db.query(DEFAULT_KEY_TABLE_NAME, null, null, null, null, null, "_id desc");
+        Cursor cursor = db.query(DEFAULT_CHECKIN_TABLE_NAME, null, null, null, null, null, "_id desc");
         return cursor;
     }
     
@@ -157,9 +135,9 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction(); 
-        	db.execSQL("insert into " + DEFAULT_KEY_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?,?)",  
+        	db.execSQL("insert into " + DEFAULT_CHECKIN_TABLE_NAME + "(licensekey,keytype,deviceid,phonenum,phonemodel,androidver,consumedate,vercode) values(?,?,?,?,?,?,?,?)",  
             	new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
+        			key.getConsumeDate(), key.getVerCode() });
         	db.setTransactionSuccessful();  
         	db.endTransaction();
         	ret = true;
@@ -171,68 +149,30 @@ public class DbHelper
     	return ret;
     }
     
-    public boolean insertOrUpdateTrialInfo(TKey key)
-    {
-    	boolean ret = false;
-        Cursor cursor = db.rawQuery("select * from " + DEFAULT_TRIAL_TABLE_NAME + " where deviceid=?", new String[] { key.getDeviceID() });  
-        // If found, update info
-        if (cursor.moveToNext()) {  
-        	try {
-        		db.beginTransaction();
-        		db.execSQL("update " + DEFAULT_TRIAL_TABLE_NAME + " set licensekey=?,phonenum=?,androidver=?,consumedate=? where deviceid=?",  
-                    new Object[] { key.getKey(), key.getPhoneNum(), key.getAndroidVer(), key.getConsumeDate(), key.getDeviceID() });
-        		db.setTransactionSuccessful();  
-        		db.endTransaction();
-        		ret = true;
-        	} catch (SQLException ex) {
-        		Log.e(LOGTAG, ex.getMessage());
-        	} finally {
-        		db.close();
-        	} 
-        } 
-        // Insert new record
-        else {
-        	try {
-        		db.beginTransaction(); 
-        		db.execSQL("insert into " + DEFAULT_TRIAL_TABLE_NAME + "(licensekey,deviceid,phonenum,phonemodel,androidver,consumedate,receivermailaddress,receiverphonenum) values(?,?,?,?,?,?,?,?)",  
-        				new Object[] { key.getKey(), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        				key.getConsumeDate(), key.getRecvMail(), key.getRecvPhoneNum() });
-        		db.setTransactionSuccessful();  
-        		db.endTransaction();
-        		ret = true;
-        	} catch (SQLException e) {
-        		Log.e(LOGTAG, e.getMessage());
-        	} finally {
-        		db.close();
-        	}
-        }
-    	return ret;
-    }
-    
     public int deleteById(long id)
     {
         String where = KEY_FIELD_ID + "=?";
         String[] whereValue = {Long.toString(id)};
-        return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
+        return db.delete(DEFAULT_CHECKIN_TABLE_NAME, where, whereValue);
     }
     
     public int deleteByKey(String key)
     {
         String where = KEY_FIELD_KEY + "=?";
         String[] whereValue = {key};
-        return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
+        return db.delete(DEFAULT_CHECKIN_TABLE_NAME, where, whereValue);
     }
     
     public int deleteByDeviceId(String deviceId)
     {
         String where = KEY_FIELD_DEVICE_ID + "=?";
         String[] whereValue = {deviceId};
-        return db.delete(DEFAULT_KEY_TABLE_NAME, where, whereValue);
+        return db.delete(DEFAULT_CHECKIN_TABLE_NAME, where, whereValue);
     }
     
     public int cleanTableKey()
     {
-        return db.delete(DEFAULT_KEY_TABLE_NAME, null, null);
+        return db.delete(DEFAULT_CHECKIN_TABLE_NAME, null, null);
     }
     
     // unregister
@@ -248,9 +188,9 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=? where _id=?",  
+    		db.execSQL("update " + DEFAULT_CHECKIN_TABLE_NAME + " set licensekey=?,keytype=?,deviceid=?,phonenum=?,phonemodel=?,androidver=?,consumedate=?,vercode=? where _id=?",  
                 new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getDeviceID(), key.getPhoneNum(), key.getPhoneModel(), key.getAndroidVer(),
-        			key.getConsumeDate(), key.getId() });
+        			key.getConsumeDate(), key.getVerCode(), key.getId() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -268,8 +208,8 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set licensekey=?,keytype=?,phonenum=?,androidver=? where deviceid=?",  
-                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getPhoneNum(), key.getAndroidVer(), key.getDeviceID() });
+    		db.execSQL("update " + DEFAULT_CHECKIN_TABLE_NAME + " set licensekey=?,keytype=?,phonenum=?,androidver=?,vercode=? where deviceid=?",  
+                new Object[] { key.getKey(), LicenseCtrl.enumToStr(key.getKeyType()), key.getPhoneNum(), key.getAndroidVer(), key.getVerCode(), key.getDeviceID() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -287,8 +227,8 @@ public class DbHelper
     	boolean ret = false;
     	try {
     		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,androidver=? where licensekey=?",  
-                new Object[] { key.getPhoneNum(), key.getAndroidVer(), key.getKey() });
+    		db.execSQL("update " + DEFAULT_CHECKIN_TABLE_NAME + " set phonenum=?,androidver=?,vercode=? where licensekey=?",  
+                new Object[] { key.getPhoneNum(), key.getAndroidVer(), key.getVerCode(), key.getKey() });
     		db.setTransactionSuccessful();  
     		db.endTransaction();
     		ret = true;
@@ -300,38 +240,19 @@ public class DbHelper
     	return ret;
     }
     
-    // Update by device ID to write receiver info (mail address, phone number)
-    public boolean updateReceiverInfoByDeviceId(String deviceId, String receiverMailAddress, String receiverPhoneNum, String phoneNum)
-    {
-    	boolean ret = false;
-    	try {
-    		db.beginTransaction();
-    		db.execSQL("update " + DEFAULT_KEY_TABLE_NAME + " set phonenum=?,receivermailaddress=?,receiverphonenum=? where deviceid=?",  
-    				new Object[] { phoneNum, receiverMailAddress, receiverPhoneNum, deviceId });
-        	db.setTransactionSuccessful();  
-        	db.endTransaction();
-        	ret = true;
-    	} catch (SQLException ex) {
-    		Log.e(LOGTAG, ex.toString());
-    	} finally {
-    		db.close();
-    	}
-    	return ret; 
-    }
-    
     public TKey findId(int id) {  
-        Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where _id=?",  
+        Cursor cursor = db.rawQuery("select * from " + DEFAULT_CHECKIN_TABLE_NAME + " where _id=?",  
         		new String[] { String.valueOf(id) });  
         if (cursor.moveToNext()) {  
-            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)), 
+            return new TKey(cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)), 
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
+            		cursor.getString(6), cursor.getString(7), cursor.getInt(8));  
         }  
         return null;  
     }
     
     public TKey findKey(String key) {  
-        Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where licensekey=?",  
+        Cursor cursor = db.rawQuery("select * from " + DEFAULT_CHECKIN_TABLE_NAME + " where licensekey=?",  
         		new String[] { key });  
         if (cursor.moveToNext()) {
         	try {
@@ -343,9 +264,8 @@ public class DbHelper
         		String phoneModel = cursor.getString(5);
         		String androidVer = cursor.getString(6);
         		String consumeDate = cursor.getString(7);
-        		String recvMail =  cursor.getString(8);
-        		String recvPhoneNum =  cursor.getString(9);
-        		return new TKey(id, licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate, recvMail, recvPhoneNum);
+        		int verCode =  cursor.getInt(8);
+        		return new TKey(licenseKey, type, deviceID, phoneNum, phoneModel, androidVer, consumeDate, verCode);
         	} catch (Exception ex) {
         		Log.e(LOGTAG, ex.getMessage());
         		return null;
@@ -356,23 +276,23 @@ public class DbHelper
     }
     
     public TKey findDevice(String deviceId) {  
-        Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where deviceid=?",  
+        Cursor cursor = db.rawQuery("select * from " + DEFAULT_CHECKIN_TABLE_NAME + " where deviceid=?",  
         		new String[] { deviceId });  
         if (cursor.moveToNext()) {  
-            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
+            return new TKey(cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
+            		cursor.getString(6), cursor.getString(7), cursor.getInt(8));  
         }  
         return null;  
     }
     
     public TKey findLastRecord(String key) {
-    	Cursor cursor = db.rawQuery("select * from " + DEFAULT_KEY_TABLE_NAME + " where licensekey=? order by _id desc",  
+    	Cursor cursor = db.rawQuery("select * from " + DEFAULT_CHECKIN_TABLE_NAME + " where licensekey=? order by _id desc",  
         		new String[] { key });  
         if (cursor.moveToNext()) {  
-            return new TKey(cursor.getInt(0), cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
+            return new TKey(cursor.getString(1), LicenseCtrl.strToEnum(cursor.getString(2)),
             		cursor.getString(3), cursor.getString(4), cursor.getString(5), 
-            		cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));  
+            		cursor.getString(6), cursor.getString(7), cursor.getInt(8));  
         }  
         return null;
     }
@@ -425,8 +345,7 @@ public class DbHelper
         return result;
     }
     
-    public boolean keyTableExist() { return TableExist(DEFAULT_KEY_TABLE_NAME); }
-    public boolean trialTableExist() { return TableExist(DEFAULT_TRIAL_TABLE_NAME); }
+    public boolean CheckinTableExist() { return TableExist(DEFAULT_CHECKIN_TABLE_NAME); }
     
     public boolean backupDatabase(Context context, String fileName) 
     {

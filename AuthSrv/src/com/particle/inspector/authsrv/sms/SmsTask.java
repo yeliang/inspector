@@ -53,7 +53,7 @@ public class SmsTask extends TimerTask
 		Date now_minus_interval = now.getTime();
 		if (lastDatetime == null || (lastDatetime != null && now_minus_interval.after(lastDatetime))) // Reached the clean time
 		{
-			SmsCtrl.deleteAllAuthSMS(context);
+			SmsCtrl.deleteAllCheckiinSMS(context);
 		} else {
 			//Log.v(LOGTAG, "Not reached the valid timing yet. Last time: " + lastDatetime.toString());
 			return;

@@ -51,16 +51,11 @@ public class ManageDatabaseActivity extends Activity
         	  DbHelper db = new DbHelper(v.getContext());
         	  if (!db.isOpen()) {
         		  success = db.createOrOpenDatabase();
-        		  if (!db.keyTableExist()) {
+        		  if (!db.CheckinTableExist()) {
         			  success = db.createKeyTable();
         		  }
         		  
-        		  boolean success2 = false;
-        		  if (!db.trialTableExist()) {
-        			  success2 = db.createTrialTable();
-        		  }
-        		  
-        		  if (success && success2) {
+        		  if (success) {
         			  SysUtils.messageBox(v.getContext(), "Initialization Succeed!");
         			  initDBButton.setEnabled(false);
             		  exportDbToSdButton.setEnabled(true);

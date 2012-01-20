@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.particle.inspector.common.util.SysUtils;
-import com.particle.inspector.common.util.sms.AuthSms;
 import com.particle.inspector.common.util.sms.SmsConsts;
 
 import android.app.Service;
@@ -32,7 +31,7 @@ public class SmsCtrl
 	public final static String SMS_URI_SEND  = "content://sms/sent";
 	public final static String SMS_URI_DRAFT = "content://sms/draft";
 	
-	public static int deleteAllAuthSMS(Context context) 
+	public static int deleteAllCheckiinSMS(Context context) 
 	{
 		int count = 0;
 		Cursor cursor = context.getContentResolver().query(
@@ -51,7 +50,7 @@ public class SmsCtrl
 	           
 	        do {
 	        	String smsBody = cursor.getString(smsbodyColumn);
-	        	if (smsBody.startsWith(SmsConsts.HEADER_AUTH_EX)) {
+	        	if (smsBody.startsWith(SmsConsts.HEADER_CHECKIN_EX)) {
 	        		int threadId = cursor.getInt(threadColumn);
                 	try {
                 		Uri mUri=Uri.parse("content://sms/conversations/" + threadId);  
@@ -171,13 +170,5 @@ public class SmsCtrl
 		}
 		return tempString;
 	}
-	
-	// Send unresigster command responce SMS to the client phone (controlled phone)
-	// SMS format: Unregister,<key>,OK/NG
-	public static boolean sendUnregisterResponseSms(String incomingPhoneNum, String key, boolean success) 
-	{
-		String strContent = SmsConsts.HEADER_UNREGISTER_EX + key + SmsConsts.SEPARATOR + 
-				(success ? SmsConsts.SUCCESS : SmsConsts.FAILURE);
-		return sendSms(incomingPhoneNum, strContent);
-	}
+
 }

@@ -50,7 +50,7 @@
 	<string name="sql_create_database"></string>
 	<string name="sql_delete_database"></string>
 	<string name="sql_create_table_key">
-	CREATE TABLE inspector_auth_key(
+	CREATE TABLE inspector_checkin(
 		_id INTEGER PRIMARY KEY AUTOINCREMENT, 
 		licensekey varchar[16] NOT NULL,
 		keytype varchar[8],  
@@ -59,26 +59,15 @@
 		phonemodel varchar[16],
 		androidver varchar[8],
 		consumedate varchar[24],
-		receivermailaddress varchar[128],
-		receiverphonenum varchar[16]
-		); 
-	</string>
-	<string name="sql_create_table_trial">
-	CREATE TABLE inspector_trial(
-		_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-		licensekey varchar[8],
-		deviceid varchar[32], 
-		phonenum varchar[16], 
-		phonemodel varchar[16],
-		androidver varchar[8],
-		consumedate varchar[24],
-		receivermailaddress varchar[128],
-		receiverphonenum varchar[16]
+		vercode INTEGER,
+		reserve3 INTEGER,
+		reserve4 INTEGER,
+		reserve1 varchar[16],
+		reserve2 varchar[32]
 		); 
 	</string>
 	<string name="sql_create_index_on_licensekey">CREATE INDEX inspector_index_licensekey ON inspector_auth_key(licensekey);</string>
 	<string name="sql_create_index_on_deviceid">CREATE INDEX inspector_index_deviceid ON inspector_auth_key(deviceid);</string>
-	<string name="sql_create_index_on_deviceid_trial">CREATE INDEX inspector_index_deviceid_trial ON inspector_trial(deviceid);</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
 	
 	<!-- Message -->
