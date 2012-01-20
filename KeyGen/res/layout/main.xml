@@ -4,67 +4,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    
-    <TableLayout android:id="@+id/tableLayout1" xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:stretchColumns="1" android:shrinkColumns ="1"> 
-             
-	<TextView  
-    	android:layout_width="fill_parent" 
-    	android:layout_height="wrap_content" 
-    	android:text="@string/lbl_fulllicense"
+
+    <EditText
+        android:id="@+id/editMeid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        
     />
     
-    <TableRow>
     <TextView  
     	android:id="@+id/txtFullLicense" 
-    	android:layout_width="180dp" 
+    	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:textColor="#FF0000"
     	android:textSize="24dp"
     />
-    <Button android:id="@+id/btn_sendfull" android:text="@string/sendsms" android:layout_height="wrap_content" android:layout_width="60dp" android:padding="4dip"/>
-    </TableRow>
+        
+    <Button android:id="@+id/btn_generate" android:text="@string/generate" android:layout_height="wrap_content" android:layout_width="140dp" />
+    <Button android:id="@+id/btn_sendfull" android:text="@string/sendsms" android:layout_height="wrap_content" android:layout_width="140dp" />
     
-    <TextView  
-    	android:layout_width="fill_parent" 
-    	android:layout_height="wrap_content" 
-    	android:text="@string/lbl_partlicense"
-    />
-    
-    <TableRow>
-    <TextView  
-    	android:id="@+id/txtPartLicense" 
-    	android:layout_width="180dp" 
-    	android:layout_height="wrap_content"
-    	android:textColor="#FF0000"
-    	android:textSize="24dp"
-    />
-    <Button android:id="@+id/btn_sendpart" android:text="@string/sendsms" android:layout_height="wrap_content" android:layout_width="60dp" android:padding="4dip"/>
-    </TableRow>
-    
-    <TextView  
-    	android:layout_width="fill_parent" 
-    	android:layout_height="wrap_content" 
-    	android:text="@string/lbl_superlicense"
-    />
-    
-    <TableRow>
-    <TextView  
-    	android:id="@+id/txtSuperLicense" 
-    	android:layout_width="180dp" 
-    	android:layout_height="wrap_content"
-    	android:textColor="#FF0000"
-    	android:textSize="24dp"
-    />
-    <Button android:id="@+id/btn_sendsuper" android:text="@string/sendsms" android:layout_height="wrap_content" android:layout_width="60dp" android:padding="4dip"/>
-    </TableRow>
-    
-    </TableLayout>
-    
-    <Button android:id="@+id/btn_generate" android:text="@string/generate" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
-    <Button android:id="@+id/btn_generate100full" android:text="@string/generate100full" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
-    <Button android:id="@+id/btn_generate100part" android:text="@string/generate100part" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
-    <Button android:id="@+id/btn_generate100super" android:text="@string/generate100super" android:layout_height="wrap_content" android:layout_width="250dp"></Button>
-    <Button android:id="@+id/btn_setting" android:text="@string/setting" android:layout_height="wrap_content" android:layout_width="140dp"></Button>
 </LinearLayout>
