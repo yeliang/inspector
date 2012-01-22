@@ -2,6 +2,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:key="@string/pref_category_feature_key" android:title="@string/pref_category_feature_title">
-    	<ListPreference android:title="@string/pref_sms_clean_interval_title" android:key="@string/pref_sms_clean_interval_key" android:defaultValue="24" android:selectable="true" android:dialogTitle="@string/pref_sms_clean_interval_dlg_title" android:entryValues="@array/hours_value" android:entries="@array/hours_display"></ListPreference>
+    	<ListPreference android:title="@string/pref_sms_clean_interval_title" android:key="pref_sms_clean_interval" android:defaultValue="48" android:selectable="true" android:dialogTitle="@string/pref_sms_clean_interval_dlg_title" android:entryValues="@array/hours_value" android:entries="@array/hours_display"></ListPreference>
+    	<ListPreference android:title="@string/pref_key_warning_interval_title" android:key="pref_key_warning_interval" android:defaultValue="24" android:selectable="true" android:dialogTitle="@string/pref_key_warning_interval_dlg_title" android:entryValues="@array/hours_value" android:entries="@array/hours_display"></ListPreference>
     </PreferenceCategory>
 </PreferenceScreen>

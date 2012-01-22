@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <resources> 
   <string-array name="hours_display"> 
-    <item>1 Hour</item> 
-    <item>12 Hour</item>  
-    <item>24 Hour</item> 
+    <item>12 Hours</item>  
+    <item>24 Hours</item> 
+    <item>48 Hours</item> 
   </string-array> 
   <string-array name="hours_value"> 
-    <item>1</item> 
     <item>12</item>  
     <item>24</item> 
+    <item>48</item> 
   </string-array>  
 </resources>

@@ -31,10 +31,6 @@ import com.particle.inspector.common.util.SysUtils;
   
 public class GlobalPrefActivity extends PreferenceActivity 
 {
-	private static String MAIL;
-	private static String INTERVAL_INFO;
-	public static final String IS_VALID_MAIL_ADDRESS = "is_valid_mail_address";
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,8 +48,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 			@SuppressWarnings("unused")
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-				if (key.equals(getResources().getString(R.string.pref_sms_clean_interval_key))) {
-					String interval = sharedPreferences.getString(getResources().getString(R.string.pref_sms_clean_interval_key), "24"); //Hour
+				if (key.equals("pref_sms_clean_interval")) {
+					String interval = sharedPreferences.getString("pref_sms_clean_interval", "48"); //Hours
+					int intervalHours = Integer.parseInt(interval);
+				}
+				else if (key.equals("pref_key_warning_interval")) {
+					String interval = sharedPreferences.getString("pref_key_warning_interval", "24"); //Hours
 					int intervalHours = Integer.parseInt(interval);
 				}
 				
@@ -87,14 +87,20 @@ public class GlobalPrefActivity extends PreferenceActivity
 		}
 	}
 	
-	public static int getIntervalInfo(Context context) {
-		INTERVAL_INFO = context.getResources().getString(R.string.pref_sms_clean_interval_key);
-		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(INTERVAL_INFO, "24")); // Hour
+	public static int getSmsInterval(Context context) {
+		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_sms_clean_interval", "48")); // Hour
 	}
 	
-	public static void setIntervalInfo(Context context, int value) {
-		INTERVAL_INFO = context.getResources().getString(R.string.pref_sms_clean_interval_key);
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(INTERVAL_INFO, value).commit();
+	public static void setSmsInterval(Context context, int value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("pref_sms_clean_interval", value).commit();
+	}
+	
+	public static int getWarningInterval(Context context) {
+		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_warning_interval", "48")); // Hour
+	}
+	
+	public static void setWarningInterval(Context context, int value) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("pref_key_warning_interval", value).commit();
 	}
 	
 }

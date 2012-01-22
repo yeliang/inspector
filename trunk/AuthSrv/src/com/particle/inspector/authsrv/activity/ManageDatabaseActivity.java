@@ -62,6 +62,9 @@ public class ManageDatabaseActivity extends Activity
             		  importDbFromSdButton.setEnabled(true);
         		  } else {
         			  SysUtils.messageBox(v.getContext(), "ERROR: initialization failed!");
+        			  initDBButton.setEnabled(true);
+            		  exportDbToSdButton.setEnabled(false);
+            		  importDbFromSdButton.setEnabled(false);
         		  }
         	  }
           }
