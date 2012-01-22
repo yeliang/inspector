@@ -5,6 +5,10 @@
     <string name="warning">警告</string>
     <string name="error">错误</string>
     
+    <!-- Key Generation -->
+    <string name="msg_invalid_deviceid">%s不是一个有效的设备号，合法长度应为14或15位。如无法解决请联系客服。</string>
+    <string name="msg_the_calculated_key_is">设备号%s对应的注册码是：</string>
+        
     <!-- Dashboard -->
     <string name="setting">设置</string>
     <string name="managedb">数据库管理</string>
@@ -37,9 +41,10 @@
     <string name="pref_title">设置</string>
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">功能</string>
-    <string name="pref_sms_clean_interval_title">清理短信周期</string>
-    <string name="pref_sms_clean_interval_key">pref_sms_clean_interval</string>
+    <string name="pref_sms_clean_interval_title">清理注册短信周期</string>
     <string name="pref_sms_clean_interval_dlg_title">设置周期</string>
+    <string name="pref_key_warning_interval_title">可疑注册码检测周期</string>
+    <string name="pref_key_warning_interval_dlg_title">设置周期</string>
     
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>

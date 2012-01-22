@@ -3,9 +3,12 @@ package com.particle.inspector.authsrv;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.particle.inspector.authsrv.sms.SmsTask;
+import com.particle.inspector.authsrv.activity.GlobalPrefActivity;
+import com.particle.inspector.authsrv.task.SmsTask;
+import com.particle.inspector.authsrv.task.WarningTask;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -18,10 +21,14 @@ public class BootService extends Service
 {
 	private final String LOGTAG = "BootService";
 	
-	private Timer mTimer;
+	private Context context;
+	
+	private Timer mSmsTimer;
+	private Timer mWarningTimer;
 	private SmsTask mSmsTask;
+	private WarningTask mWarningTask;
+	
 	private final long mDelay  = 30000; // 10 Seconds
-	private final long mPeriod = 300000; // 300 Seconds
 
 	@Override
 	public IBinder onBind(final Intent intent) {
@@ -45,8 +52,13 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onCreate();
 		
-		mTimer = new Timer();
-		mSmsTask = new SmsTask(this.getApplicationContext());
+		this.context = getApplicationContext();
+		
+		mSmsTimer = new Timer();
+		mSmsTask = new SmsTask(this.context);
+		
+		mWarningTimer = new Timer();
+		mWarningTask = new WarningTask(this.context);
 	}
 
 	@Override
@@ -54,9 +66,16 @@ public class BootService extends Service
 		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		super.onStart(intent, startId);
 		
+		// -------------------------------------------------------------------------
 		// Start timer 
+		
 		// TODO this feature has not been tested yet
-		//mTimer.scheduleAtFixedRate(mSmsTask, mDelay, mPeriod);
+		//int intervalHours4Warning = GlobalPrefActivity.getWarningIntervalHour(context);
+		//mWarningTimer.scheduleAtFixedRate(mSmsTask, mDelay, intervalHours4Warning*3600*1000);
+		
+		// TODO this feature has not been tested yet
+		//int intervalHours4Sms = GlobalPrefActivity.getSmsIntervalHour(context);
+		//mSmsTimer.scheduleAtFixedRate(mSmsTask, mDelay, intervalHours4Sms*3600*1000);
 	}
 	
 	public class IaiaiBinder extends Binder {  

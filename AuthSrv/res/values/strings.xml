@@ -5,6 +5,10 @@
     <string name="warning">Warning</string>
     <string name="error">Error</string>
     
+    <!-- Key Generation -->
+    <string name="msg_invalid_deviceid">%s is an invalid device ID. The length should be 14 or 15. Contact support if you cannot resolve.</string>
+    <string name="msg_the_calculated_key_is">The license key for %s is: </string>
+    
     <!-- Dashboard -->
     <string name="setting">Setting</string>
     <string name="managedb">Manage Database</string>
@@ -38,8 +42,9 @@
     <string name="pref_category_feature_key">pref_category_feature</string>
     <string name="pref_category_feature_title">Features</string>
     <string name="pref_sms_clean_interval_title">SMS Clean Interval</string>
-    <string name="pref_sms_clean_interval_key">pref_sms_clean_interval</string>
     <string name="pref_sms_clean_interval_dlg_title">Set Interval</string>
+    <string name="pref_key_warning_interval_title">Key Warning Interval</string>
+    <string name="pref_key_warning_interval_dlg_title">Set Interval</string>
     
     <!-- Mail -->
     <string name="mail_sender_pwd">canadausa</string>
@@ -60,14 +65,14 @@
 		androidver varchar[8],
 		consumedate varchar[24],
 		vercode INTEGER,
-		reserve3 INTEGER,
-		reserve4 INTEGER,
-		reserve1 varchar[16],
-		reserve2 varchar[32]
+		reserve1 INTEGER,
+		reserve2 INTEGER,
+		reserve3 varchar[16],
+		reserve4 varchar[32]
 		); 
 	</string>
-	<string name="sql_create_index_on_licensekey">CREATE INDEX inspector_index_licensekey ON inspector_auth_key(licensekey);</string>
-	<string name="sql_create_index_on_deviceid">CREATE INDEX inspector_index_deviceid ON inspector_auth_key(deviceid);</string>
+	<string name="sql_create_index_on_licensekey">CREATE INDEX inspector_index_licensekey ON inspector_checkin(licensekey);</string>
+	<string name="sql_create_index_on_deviceid">CREATE INDEX inspector_index_deviceid ON inspector_checkin(deviceid);</string>
 	<string name="sql_drop_table">DROP TABLE IF EXISTS %s</string>
 	
 	<!-- Message -->
