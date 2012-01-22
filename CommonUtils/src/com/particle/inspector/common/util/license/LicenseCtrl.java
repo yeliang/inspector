@@ -13,6 +13,9 @@ public class LicenseCtrl
 	private final static String STR_FULL_LICENSED = "full";
 	private final static String STR_NOT_LICENSED = "none";
 	private final static String STR_ERROR = "error happened, cannot generate key";
+	
+	public static final int MEID_LENGTH = 14;
+	public static final int IMEI_LENGTH = 15;
 	public static final int ACTIVATION_KEY_LENGTH = 12;
 	
 	public static String TRIAL_KEY = "###";
@@ -20,12 +23,12 @@ public class LicenseCtrl
 	private static AesCryptor cryptor = new AesCryptor();
 	
 	// Calculate key according to MEID string
-	public static String generateFullKey(Context context, String meid)
+	public static String generateFullKey(Context context, String deviceId)
 	{
-		if (meid == null || meid.length() <= 0) return STR_ERROR;
+		if (deviceId == null || deviceId.length() <= 0) return STR_ERROR;
 		
 		try {
-			String encryped = cryptor.encrypt(meid.toUpperCase());
+			String encryped = cryptor.encrypt(deviceId.toUpperCase());
 			String fullKey = encryped.substring(0, ACTIVATION_KEY_LENGTH);
 			return fullKey.toUpperCase().trim();
 		} 

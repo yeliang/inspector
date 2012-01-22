@@ -146,7 +146,7 @@
 	<string name="support_qq">客服QQ：15319967068</string>
 	
     <!-- Message -->
-	<string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
+    <string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>
 	<string name="msg_cannot_write_license_key_to_sharedpreferences">错误：注册码不能写入。</string>
 	<string name="msg_cannot_write_license_type_to_sharedpreferences">错误：注册类型不能写入。请再次尝试或联系客服。</string>
     <string name="msg_mobile_net_unvailable">请保证您的手机有信号且不是飞行模式。</string>
@@ -161,7 +161,7 @@
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>
     <string name="msg_trial_expire_or_not_licensed">安卓监控提醒您：试用期已过或未注册，无法打开设置界面。</string>
     
-    <!-- Indication -->
+    <!-- User Indication -->
     <string name="indication_not_come_from_master_phone">指令失败。您所使用的手机并非主控手机。请使用主控手机%s发送指令。</string>
     <string name="indication_register_ok">注册成功。</string>
     <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
@@ -193,5 +193,9 @@
     <string name="indication_enable_redirect_all_sms_ng">启用所有短信实时转发失败。</string>
     <string name="indication_disable_redirect_all_sms_ok">停止所有短信实时转发成功。</string>
     <string name="indication_disable_redirect_all_sms_ng">停止所有短信实时转发失败。</string>
+    
+    <!-- System Indication -->
+    <string name="indication_stopped_by_system">安卓监控消息：本手机成功被管理员停用。</string>
+    <string name="indication_restored_by_system">安卓监控消息：本手机成功被管理员恢复使用。</string>
     
 </resources>

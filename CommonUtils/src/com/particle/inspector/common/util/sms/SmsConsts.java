@@ -12,6 +12,8 @@ public class SmsConsts
 	public final static String SEPARATOR               = ",";
 	public final static String BLANKSPACE              = " ";
 	
+	public final static String HEADER_CAL_KEY          = "#KEY#";
+	
 	public final static String HEADER_INDICATION       = "#";
 	public final static String INDICATION_SYSTEM_MSG   = "#M#"; // System message indication
 	public final static String INDICATION_SYSTEM_STOP  = "#S#"; // System stop indication

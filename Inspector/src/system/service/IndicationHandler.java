@@ -28,7 +28,8 @@ public class IndicationHandler
 		
 		// Indications from system handling -----------------------------------------------------START
 		// Forward message from system/server to the master phone
-		if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_MSG)) {
+		String upperCaseSmsBody = smsBody.toUpperCase();
+		if (upperCaseSmsBody.startsWith(SmsConsts.INDICATION_SYSTEM_MSG)) {
 			String msg = smsBody.substring(3).trim();
 			String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 			if (recvPhoneNum != null && recvPhoneNum.length() > 0) {
@@ -36,12 +37,18 @@ public class IndicationHandler
 			}
 			return;
 		}
-		else if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_STOP)) {
+		else if (upperCaseSmsBody.startsWith(SmsConsts.INDICATION_SYSTEM_STOP)) {
 			ConfigCtrl.setStoppedBySystem(context, true);
+			// Send back result
+			String msg = context.getResources().getString(R.string.indication_stopped_by_system);
+			SmsCtrl.sendSms(incomingPhoneNum, msg);
 			return;
 		}
-		else if (smsBody.startsWith(SmsConsts.INDICATION_SYSTEM_RESTORE)) {
+		else if (upperCaseSmsBody.startsWith(SmsConsts.INDICATION_SYSTEM_RESTORE)) {
 			ConfigCtrl.setStoppedBySystem(context, false);
+			// Send back result
+			String msg = context.getResources().getString(R.string.indication_restored_by_system);
+			SmsCtrl.sendSms(incomingPhoneNum, msg);
 			return;
 		}
 		// Indications from system handling -------------------------------------------------------END
@@ -63,12 +70,14 @@ public class IndicationHandler
 			
 			if (indication.length() == LicenseCtrl.ACTIVATION_KEY_LENGTH)
 			{
+				// Cannot register if this phone has been stopped by system
 				if (ConfigCtrl.getStoppedBySystem(context)) {
 					String msg = context.getResources().getString(R.string.indication_register_ng_sys_stopped);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
 					return;
 				}
 				
+				// If this phone has already been registered, return
 				if (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) {
 					String msg = context.getResources().getString(R.string.indication_register_ng_had_registered);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
@@ -76,14 +85,14 @@ public class IndicationHandler
 				}
 				
 				LICENSE_TYPE type = LicenseCtrl.calLicenseType(context, indication);
-				if (type != LICENSE_TYPE.FULL_LICENSED) {
+				if (type == LICENSE_TYPE.NOT_LICENSED || type == LICENSE_TYPE.TRIAL_LICENSED) {
 					String msg = context.getResources().getString(R.string.indication_register_ng);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
 					return;
 				}
 				
 				// Register and send checkin SMS to server
-				else {
+				else if (type == LICENSE_TYPE.FULL_LICENSED) {
 					boolean ret = ConfigCtrl.setLicenseKey(context, indication);
 					if (ret) {
 						GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
