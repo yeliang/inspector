@@ -106,7 +106,9 @@ public class BootReceiver extends BroadcastReceiver {
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
 						{
 							// If it is in trial, send SMS directly without new SIM phone number
-							if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED) {
+							if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED ||
+								ConfigCtrl.getSimChangeSmsSentCount(context) >= ConfigCtrl.MAX_SIM_CHG_SMS_SENT_COUNT) 
+							{
 								String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
 										+ context.getResources().getString(R.string.msg_changed_sim_new_number_trial);
 								boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
@@ -118,6 +120,8 @@ public class BootReceiver extends BroadcastReceiver {
 							else {
 								boolean ret = SmsCtrl.sendSimChgSms(context);
 								if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
+									int count = ConfigCtrl.getSimChangeSmsSentCount(context);
+									ConfigCtrl.setSimChangeSmsSentCount(context, ++count);
 									ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
 								}
 							}
