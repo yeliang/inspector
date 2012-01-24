@@ -119,7 +119,7 @@
     <string name="init_btn_testrecvphone">Test Phone</string>
     <string name="init_btn_setting">Setting</string>
     <string name="init_btn_exit">Exit</string>
-    <string name="init_hint_testmail">Get all phonecalls, SMS, contacts and send to receiver mailbox.</string>
+    <string name="init_hint_testmail">Get all phone calls, SMS, contacts and send to receiver mailbox.</string>
     <string name="init_hint_testphone">Send a SMS to receiver phone.</string>
     <string name="init_test_sms_content">A test SMS from Android Inspector.</string>
 	<string name="init_send_test_sms_ok">Sent Successfully</string>
@@ -153,7 +153,7 @@
     <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact </string>
     <string name="msg_expired_alert">Notice: Android Inspector trial expired, please contact </string>
     <string name="msg_sms_times_over_in_trial">Notice: transferred SMS reached 10 limitation. For getting license, please contact </string>
-    <string name="msg_recording_times_over_in_trial">Notice: phonecall recording reached 5 limitation. For getting license, please contact </string>
+    <string name="msg_recording_times_over_in_trial">Notice: phone call recording reached 5 limitation. For getting license, please contact </string>
     <string name="msg_changed_sim">%s changed phone card.</string>
     <string name="msg_changed_sim_new_number_workaround"> The phone number of this SMS is the new number. Please send #9#+the new number to target phone to confirm (will not display there).</string>
     <string name="msg_changed_sim_new_number"> New phone number: %s</string>
@@ -165,7 +165,7 @@
     <string name="indication_register_ng">Register failed. Please check your license or contact support.</string>
     <string name="indication_register_ng_cannot_write">Register failed. Please send indication SMS again or contact support.</string>
     <string name="indication_register_ng_sys_stopped">Cannot register because target phone had been stopped by administrator. Please contact support for details.</string>
-    <string name="indication_register_ng_had_registered">Target phone had been registerred. Unnecessary to register again.</string>
+    <string name="indication_register_ng_had_registered">Target phone had been registered. Unnecessary to register again.</string>
     <string name="indication_register_write_ng">Failed to write register info. Try again or contact support.</string>
     <string name="indication_unregister_ok">Uninstall successfully.</string>
     <string name="indication_unregister_ng">Uninstall failed. This phone is currently not registered.</string>
