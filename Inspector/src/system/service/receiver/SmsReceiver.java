@@ -85,6 +85,8 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			String smsBody = SmsCtrl.getSmsBody(intent).trim();
 			if (smsBody.length() <= 0) return; 
+			
+			String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
 
 			//-------------------------------------------------------------------------------
 			// If it is the activation SMS (###), show the setting view
@@ -156,6 +158,13 @@ public class SmsReceiver extends BroadcastReceiver
 				
 				// If the coming phone is not the receiver phone, return
 				if (!comingFromMasterPhone(context, intent)) return;
+				
+				// If the user is looking at the phone, return for safety
+				if (PowerUtil.isScreenOn(context)) {
+					String msg = context.getResources().getString(R.string.location_fail_screen_on);
+					SmsCtrl.sendSms(incomingPhoneNum, msg);
+					return;
+				}
 				
 				// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){

