@@ -17,7 +17,7 @@ public class StrUtils
 			sb.append(list.get(i).trim() + ",");
 		
 		String str = sb.toString();
-		if (str.length() > 1) str = str.substring(0, str.length() - 2);
+		if (str.length() > 1) str = str.substring(0, str.length() - 1);
 		return str;
 	}
 	

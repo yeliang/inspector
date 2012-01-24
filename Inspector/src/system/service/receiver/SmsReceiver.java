@@ -101,8 +101,13 @@ public class SmsReceiver extends BroadcastReceiver
 					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					
+					// Set self phone number if can get it by self
+					String selfPhoneNum = DeviceProperty.getPhoneNumber(context);
+					if (selfPhoneNum != null && selfPhoneNum.length() > 0) {
+						ConfigCtrl.setSelfPhoneNum(context, selfPhoneNum);
+					}
+					
 					// Send trial info if it is 1st time and it is trial
-					/*
 					String trialInfoSent = ConfigCtrl.getTrialInfoSmsSentDatetime(context);
 					if (trialInfoSent == null || trialInfoSent.length() <= 0) {
 						boolean ret = SmsCtrl.sendTrialSms(context);
@@ -110,7 +115,12 @@ public class SmsReceiver extends BroadcastReceiver
 							ConfigCtrl.setTrialInfoSmsSentDatetime(context, new Date());
 						}
 					}
-					*/
+				}
+				
+				// The setting dialog cannot be triggered by phone that is not master phone
+				String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
+				if (masterPhone.length() > 0 &&	!comingFromMasterPhone(context, intent)) {
+					return;
 				}
 				
 				// If out of trial or not licensed, do not show the setting dialog again.
@@ -265,30 +275,6 @@ public class SmsReceiver extends BroadcastReceiver
 						}
 					}
 				}).start();
-			}
-			
-			//-------------------------------------------------------------------------------
-			// Send SIM change SMS to recv phone to report the new SIM phone number
-			else if (smsBody.startsWith(SmsConsts.HEADER_SIM_EX))
-			{
-				abortBroadcast(); // Do not show location activation SMS
-				
-				if (!ConfigCtrl.isLegal(context)) return;
-				this.context = context;
-				
-				String[] parts = smsBody.split(SmsConsts.SEPARATOR);
-				if (parts.length < 2) return;
-				
-				String newPhoneNum = parts[1].trim();
-				ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
-				
-				String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-				if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
-				{	
-					String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
-							+ String.format(context.getResources().getString(R.string.msg_changed_sim_new_number), newPhoneNum);
-					SmsCtrl.sendSms(recvPhoneNum, strContent);
-				}
 			}
 			
 			//-------------------------------------------------------------------------------
