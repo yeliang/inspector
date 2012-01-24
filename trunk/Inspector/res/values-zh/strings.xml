@@ -140,10 +140,10 @@
     
     <!-- Server -->
 	<string name="srv_address">15398053471</string>
-	<!-- <string name="home_page">http://www.jinyongshu.com/anzhuo.htm</string> -->
-	<string name="home_page">http://www.androidinspector.com</string>
-	<!-- <string name="support_qq">客服QQ：602592749</string> -->
-	<string name="support_qq">客服QQ：15319967068</string>
+	<string name="home_page">http://www.jinyongshu.com/anzhuo.htm</string>
+	<!-- <string name="home_page">http://www.androidinspector.com</string> -->
+	<string name="support_qq">客服QQ：602592749</string>
+	<!-- <string name="support_qq">客服QQ：15319967068</string> -->
 	
     <!-- Message -->
     <string name="msg_invalid_key">无效的注册码。可能已被使用。请联系您的软件提供商。</string>

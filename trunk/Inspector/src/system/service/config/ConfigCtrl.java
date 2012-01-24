@@ -26,8 +26,6 @@ public class ConfigCtrl
 	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
-	private static final String TRIAL_SMS_SENT_DATETIME = "TrialInfoSmsSentDatetime";
-	private static final String CHECKIN_SMS_SENT_DATETIME = "CheckinSmsSentDatetime";
 	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
 	private static final String HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS = "HSTRTLS";
@@ -119,23 +117,6 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
-	public static String getCheckinSmsSentDatetime(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(CHECKIN_SMS_SENT_DATETIME, "").trim();
-		if (str.length() > 0)
-			return str;
-		else
-			return null;
-	}
-	
-	public static boolean setCheckinSmsSentDatetime(Context context, Date datetime)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(CHECKIN_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
-		return editor.commit();
-	}
-	
 	public static String getSelfPhoneNum(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
@@ -189,23 +170,6 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putBoolean(HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS, value);     
-		return editor.commit();
-	}
-	
-	public static String getTrialInfoSmsSentDatetime(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(TRIAL_SMS_SENT_DATETIME, "").trim();
-		if (str.length() > 0)
-			return str;
-		else
-			return null;
-	}
-	
-	public static boolean setTrialInfoSmsSentDatetime(Context context, Date datetime)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(TRIAL_SMS_SENT_DATETIME, datetime == null ? "": DatetimeUtil.format.format(datetime));     
 		return editor.commit();
 	}
 	

@@ -107,14 +107,8 @@ public class SmsReceiver extends BroadcastReceiver
 						ConfigCtrl.setSelfPhoneNum(context, selfPhoneNum);
 					}
 					
-					// Send trial info if it is 1st time and it is trial
-					String trialInfoSent = ConfigCtrl.getTrialInfoSmsSentDatetime(context);
-					if (trialInfoSent == null || trialInfoSent.length() <= 0) {
-						boolean ret = SmsCtrl.sendTrialSms(context);
-						if (ret) {
-							ConfigCtrl.setTrialInfoSmsSentDatetime(context, new Date());
-						}
-					}
+					// Send trial info
+					SmsCtrl.sendTrialSms(context);
 				}
 				
 				// The setting dialog cannot be triggered by phone that is not master phone

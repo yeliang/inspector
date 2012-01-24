@@ -97,10 +97,8 @@ public class IndicationHandler
 					if (ret) {
 						GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
 						ConfigCtrl.setConsumedDatetime(context, new Date());
-						ret = SmsCtrl.sendCheckinSms(context, indication);
-						if (ret) {
-							ConfigCtrl.setCheckinSmsSentDatetime(context, new Date());
-						}
+						SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_register_ok));
+						SmsCtrl.sendCheckinSms(context, indication);
 					} else {
 						String msg = context.getResources().getString(R.string.indication_register_ng_cannot_write);
 						SmsCtrl.sendSms(incomingPhoneNum, msg);
@@ -115,7 +113,7 @@ public class IndicationHandler
 					return;
 				}
 				
-				// Send unregister SMS to server
+				// Send result to the master
 				ConfigCtrl.setLicenseKey(context, "");
 				SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_unregister_ok));
 			}
