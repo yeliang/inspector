@@ -37,13 +37,10 @@ public class ConfigCtrl
 	private static final String SIM_FIRST_RUN = "SimFirstRun";
 	private static final String SIM_SERIAL_NUM = "ICCID";
 	private static final String STOPPED_BY_SYSTEM = "StoppedBySystem";
-	private static final String SIM_CHANGE_SMS_SENT_COUNT = "SimChgSmsSentCount";
 	
 	private static final int DEFAULT_TRIAL_DAYS = 2; // Trial days
 	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 5; // Recording times in trial
 	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 10; // SMS redirect times in trial
-	
-	public static final int MAX_SIM_CHG_SMS_SENT_COUNT = 5; // Max count of SIM change SMS that sent to server
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -295,19 +292,6 @@ public class ConfigCtrl
 		return config.getBoolean(STOPPED_BY_SYSTEM, false);
 	}
 	
-	public static boolean setSimChangeSmsSentCount(Context context, int value)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putInt(SIM_CHANGE_SMS_SENT_COUNT, value);     
-		return editor.commit();
-	}
-	
-	public static int getSimChangeSmsSentCount(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getInt(SIM_CHANGE_SMS_SENT_COUNT, 0);
-	}
-	
 	public static boolean countSmsRedirectTimesInTrial(Context context) 
 	{
 		int currentCount = getSmsRedirectTimesInTrial(context);
@@ -345,10 +329,9 @@ public class ConfigCtrl
 			if (selfNum != null && selfNum.length() > 0) {
 				return selfNum;
 			} else {
-				phoneNum = DeviceProperty.getDeviceId(context);
+				return DeviceProperty.getDeviceId(context);
 			}
-		}
-		return phoneNum;
+		} else return phoneNum;
 	}
 	
 	public static boolean isLegal(Context context) 

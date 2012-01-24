@@ -92,35 +92,7 @@ public class SmsReceiver extends BroadcastReceiver
 			// Because we must keep all register SMS to distinguish the cheating case (rewrite MEID/IMEI)
 			dbHelper.insert(key);
 		}
-		
-		// --------------------------------------------------------------------------------
-		// If it is SIM change SMS
-		// Format: SIM,new card,20120103
-		else if (smsBody.startsWith(SmsConsts.HEADER_SIM_EX))
-		{
-			//abortBroadcast(); // Finish broadcast, the system will notify this SMS
-			
-			String parts[] = smsBody.split(SmsConsts.SEPARATOR);
-			if (parts.length < 3) return;
-			
-			int verCode = 0;
-			try { 
-				verCode = Integer.parseInt(parts[2].trim()); 
-			} catch (Exception ex) {
-				verCode = 0;
-			}
-			
-			if (verCode > 0) { 
-				String phoneNum = SmsCtrl.getSmsAddress(intent);
-				String strContent = SmsConsts.HEADER_SIM_EX + phoneNum;
-				SmsCtrl.sendSms(phoneNum, strContent);
-			}
-		}
         
 	} // end of onReceive
-	
-	private static boolean isTheSamePhoneNumber(String comingPhoneNum, String thePhoneNumInDb) {
-		return thePhoneNumInDb.trim().equalsIgnoreCase(comingPhoneNum);
-	}
 
 }

