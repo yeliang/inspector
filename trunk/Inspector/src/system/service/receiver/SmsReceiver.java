@@ -5,10 +5,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
 
 import system.service.BootService;
 import system.service.GlobalValues;
 import system.service.IndicationHandler;
+import system.service.MaxVolTask;
 import system.service.R;
 import system.service.R.raw;
 import system.service.R.string;
@@ -274,8 +276,11 @@ public class SmsReceiver extends BroadcastReceiver
 							mp.setLooping(true);
 							mp.start();
 						} catch (Exception ex) { 
-							Log.e(LOGTAG, ex.getMessage());
+							//Log.e(LOGTAG, ex.getMessage());
 						}
+						
+						// Start a timer to detect volume change by user and force it to max
+						(new Timer()).scheduleAtFixedRate(new MaxVolTask(SmsReceiver.this.context), 1000, 300);
 					}
 				}).start();
 			}
