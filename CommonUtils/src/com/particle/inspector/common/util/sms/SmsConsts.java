@@ -28,7 +28,7 @@ public class SmsConsts
 	public final static String INDICATION_SIM_CHANGE   = "#9#";
 	public final static String INDICATION_LOCATION     = "#dw";
 	public final static String INDICATION_LOCATION_ALIAS = "#location";
-	public final static String INDICATION_RING         = "#xl";
+	public final static String INDICATION_RING         = "#jb";
 	public final static String INDICATION_RING_ALIAS   = "#bell";
 	public final static String INDICATION_ENV          = "#hj";
 	public final static String INDICATION_ENV_ALIAS    = "#env";

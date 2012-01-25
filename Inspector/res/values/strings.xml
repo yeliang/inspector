@@ -105,7 +105,7 @@
     <string name="pref_network_mode_title">Network Connection Mode</string>
     <string name="pref_network_mode_summary">Recommend to use "Silent" or "Wi-Fi Silent" mode for secret and imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
-    <string name="pref_record_all_time_limit_in_trial">Only 10 times recording permitted in trial.</string>
+    <string name="pref_record_all_time_limit_in_trial">Only 5 times recording permitted in trial.</string>
     <string name="pref_ring_word_title">Force Belling</string>
     <string name="pref_ring_word_summary">Send SMS #bell to force belling.</string>
     <string name="pref_env_word_title">Environment Listening</string>
