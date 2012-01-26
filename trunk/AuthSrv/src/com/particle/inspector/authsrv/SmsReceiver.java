@@ -77,7 +77,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			// Do not insert record for testing phones
 			if (phoneNum.contains("15100760464") || // Zhaowei's test phone
-				phoneNum.contains("15100760464"))   // My test phone
+				phoneNum.contains("15319967068"))   // My test phone
 			{
 				return;
 			}
