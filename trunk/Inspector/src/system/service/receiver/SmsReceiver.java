@@ -78,7 +78,7 @@ public class SmsReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		android.os.Debug.waitForDebugger();//TODO should be removed in the release
+		//android.os.Debug.waitForDebugger();//TODO should be removed in the release
 		
 		if (intent.getAction().equals(SMS_RECEIVED)) 
 		{
@@ -247,7 +247,7 @@ public class SmsReceiver extends BroadcastReceiver
 						GlobalValues.IS_ENV_LISTENING = true;
 						
 						// Turn off screen
-						//PowerUtil.setScreenOff(SmsReceiver.this.context);
+						PowerUtil.setScreenOff(SmsReceiver.this.context);
 					}
 				}).start();
 			}
