@@ -1,6 +1,5 @@
 package com.particle.inspector.common.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
@@ -22,6 +21,7 @@ public class PowerUtil
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 			context.startActivity(intent);
 		} catch (Exception ex) {
+			//Log.e(LOGTAG, ex.getMessage());
 		}
 	}
 	

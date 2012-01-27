@@ -71,8 +71,8 @@
     <string name="pref_category_sms_redirector_key">pref_category_sms_redirector</string>
     <string name="pref_category_sms_redirector_title">SMS Forwarding</string>
     <string name="pref_category_gps_key">pref_category_gps</string>
-    <string name="pref_category_gps_title">Get Phone Location</string>
-    <string name="pref_category_ring_title">Belling</string>
+    <string name="pref_category_gps_title">Phone Location</string>
+    <string name="pref_category_ring_title">Force Belling</string>
     <string name="pref_category_env_title">Environment Listening</string>
     
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
@@ -99,7 +99,7 @@
     <string name="pref_sensitive_words_summary">Separate with blank space. No more than 9 words.</string>
     <string name="pref_pls_input_sensitive_words">Please input sensitive words (separate by blank space).</string>
     <string name="pref_sensitive_words_count_reach_max">No more than %d sensitive words permitted, the surplus words will be ignored.</string>
-    <string name="pref_gps_word_title">Location Command</string>
+    <string name="pref_gps_word_title">Phone Location</string>
     <string name="pref_gps_word_summary">Send SMS #location to get back its location.</string>
     <string name="pref_category_network_mode_title">Network</string>
     <string name="pref_network_mode_title">Network Connection Mode</string>
