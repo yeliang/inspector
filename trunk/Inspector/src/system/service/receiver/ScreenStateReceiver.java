@@ -41,9 +41,9 @@ public class ScreenStateReceiver extends BroadcastReceiver
 			
 			// Broadcast intent to let DummyActivity to exit
 			Intent exitIntent = new Intent(DummyActivity.BROADCAST_ACTION_DUMMY_ACTIVITY_EXIT);
-			Bundle bundle = new Bundle();
-			bundle.putBoolean("exit", true);
-			intent.putExtras(bundle);
+			//Bundle bundle = new Bundle();
+			//bundle.putBoolean("exit", true);
+			//intent.putExtras(bundle);
 			context.sendBroadcast(exitIntent);
             
 			// Sleep seconds

@@ -11,4 +11,7 @@ public class GlobalValues
 	
 	// The state flag for env listening feature
 	public static boolean IS_ENV_LISTENING = false;
+	
+	// The state flag for phone location feature
+	public static boolean IS_GETTING_LOCATION = false;
 }
