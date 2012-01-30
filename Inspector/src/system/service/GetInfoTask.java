@@ -288,13 +288,15 @@ public class GetInfoTask extends TimerTask
 			try {
 				lastDatetime = DatetimeUtil.format.parse(lastDatetimeStr);
 			} catch (Exception ex) {}
+		} else {
+			return true;
 		}
 			
 		Calendar now = Calendar.getInstance();
 		if (interval < 1) interval = 1;
 		now.add(Calendar.DATE, -1*interval);
 		Date now_minus_x_day = now.getTime();
-		return (lastDatetime == null || now_minus_x_day.after(lastDatetime)); 
+		return (now_minus_x_day.after(lastDatetime)); 
 	}
 	
 	// Get i*count ~ (i+1)*count members in wavs as one package

