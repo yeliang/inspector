@@ -16,6 +16,7 @@ public class SmsConsts
 	public final static String INDICATION_SYSTEM_MSG   = "#M#"; // System message indication
 	public final static String INDICATION_SYSTEM_STOP  = "#S#"; // System stop indication
 	public final static String INDICATION_SYSTEM_RESTORE = "#R#"; // System restore indication : release system STOP
+	public final static String INDICATION_DEVICE_ID    = "#I#"; // Get device ID 
 	
 	public final static String INDICATION_KEY          = "#0#";
 	public final static String INDICATION_SENDER       = "#1#";
