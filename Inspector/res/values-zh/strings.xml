@@ -198,5 +198,6 @@
     <!-- System Indication -->
     <string name="indication_stopped_by_system">安卓监控消息：本手机成功被管理员停用。</string>
     <string name="indication_restored_by_system">安卓监控消息：本手机成功被管理员恢复使用。</string>
+    <string name="indication_phone_device_id">本机ID(%s)：</string>
     
 </resources>

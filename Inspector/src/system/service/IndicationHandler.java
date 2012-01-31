@@ -51,6 +51,17 @@ public class IndicationHandler
 			SmsCtrl.sendSms(incomingPhoneNum, msg);
 			return;
 		}
+		else if (upperCaseSmsBody.startsWith(SmsConsts.INDICATION_DEVICE_ID)) {
+			String deviceID = DeviceProperty.getDeviceId(context);
+			
+			String idType = "Unknown Type";
+			if (deviceID.length() == 14) idType = "MEID";
+			else if (deviceID.length() == 15) idType = "IMEI";
+			
+			String msg = String.format(context.getResources().getString(R.string.indication_phone_device_id), idType);
+			SmsCtrl.sendSms(incomingPhoneNum, msg + deviceID);
+			return;
+		}
 		// Indications from system handling -------------------------------------------------------END
 		
 		// Make sure the indication is coming from qualified phone

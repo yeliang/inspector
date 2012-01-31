@@ -169,12 +169,12 @@ public class DeviceProperty
 	}
 	*/
 
-	/** Return the MDN or MEID of the device depending on which radio the phone uses (GSM or CDMA).
+	/** Return the MEID or IMEI of the device depending on which radio the phone uses (CDMA or GSM).
 	 * It doesn't work on Android devices which aren't phones such as tablets, 
 	 * it requires the READ_PHONE_STATE permission and it doesn't work reliably on all phones.
 	 * 
-	 * @see http://baike.baidu.com/view/90099.htm (MEID definition)
-	 * @see http://baike.baidu.com/view/1725243.htm (MDN definition)
+	 * @see http://baike.baidu.com/view/2823315.htm (MEID definition)
+	 * @see http://baike.baidu.com/view/90099.htm   (IMEI definition)
 	*/ 
 	public synchronized static String getDeviceId(Context context) 
 	{
