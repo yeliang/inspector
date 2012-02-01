@@ -2,6 +2,7 @@ package com.particle.inspector.common.util.license;
 
 import com.particle.inspector.common.util.AesCryptor;
 import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.sms.SmsConsts;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,8 +18,6 @@ public class LicenseCtrl
 	public static final int MEID_LENGTH = 14;
 	public static final int IMEI_LENGTH = 15;
 	public static final int ACTIVATION_KEY_LENGTH = 12;
-	
-	public static String TRIAL_KEY = "###";
 	
 	private static AesCryptor cryptor = new AesCryptor();
 	
@@ -40,7 +39,7 @@ public class LicenseCtrl
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
 		if (key == null || key.trim().length() <= 0) return LICENSE_TYPE.NOT_LICENSED;
-		else if (key.equals(TRIAL_KEY)) return LICENSE_TYPE.TRIAL_LICENSED;
+		else if (key.equals(SmsConsts.TRIAL_KEY) || key.equals(SmsConsts.TRIAL_KEY_ALIAS)) return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		key = key.trim().toUpperCase();		
 		String meid = DeviceProperty.getDeviceId(context);

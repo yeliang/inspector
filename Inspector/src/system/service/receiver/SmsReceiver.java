@@ -91,7 +91,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// If it is the activation SMS (###), show the setting view
-			if (smsBody.equals(LicenseCtrl.TRIAL_KEY)) 
+			if (smsBody.equals(SmsConsts.TRIAL_KEY) || smsBody.equals(SmsConsts.TRIAL_KEY_ALIAS)) 
 			{
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
@@ -100,7 +100,7 @@ public class SmsReceiver extends BroadcastReceiver
 					&& ConfigCtrl.getConsumedDatetime(context) == null) 
 				{
 					GlobalValues.licenseType = LICENSE_TYPE.TRIAL_LICENSED;
-					ConfigCtrl.setLicenseKey(context, LicenseCtrl.TRIAL_KEY);
+					ConfigCtrl.setLicenseKey(context, SmsConsts.TRIAL_KEY);
 					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					
