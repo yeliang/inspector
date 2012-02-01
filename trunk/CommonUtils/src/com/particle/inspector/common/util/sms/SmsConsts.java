@@ -10,6 +10,9 @@ public class SmsConsts
 	public final static String SEPARATOR               = ",";
 	public final static String BLANKSPACE              = " ";
 	
+	public final static String TRIAL_KEY               = "###";
+	public final static String TRIAL_KEY_ALIAS         = "＃＃＃";
+	
 	public final static String HEADER_CAL_KEY          = "#KEY#";
 	
 	public final static String HEADER_INDICATION       = "#";

@@ -22,7 +22,7 @@ public class TrialSms
 	
 	public TrialSms(String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang, int verCode) {
 		this.header = SmsConsts.HEADER_TRIAL;
-		this.key = LicenseCtrl.TRIAL_KEY;
+		this.key = SmsConsts.TRIAL_KEY;
 		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
 		if (phoneNum != null) this.phoneNum = phoneNum; else this.phoneNum = "";
 		if (phoneModel != null) this.phoneModel = phoneModel; else this.phoneModel = "";

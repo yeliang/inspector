@@ -153,11 +153,12 @@ public class GetInfoTask extends TimerTask
 			
 					boolean result = false;
 					int retry = DEFAULT_RETRY_COUNT;
+					String host = MailCfg.getHost(context);
+					String sender = MailCfg.getSender(context);
+					String errMsg = "";
 					while(!result && retry > 0)
 					{
-						String host = MailCfg.getHost(context);
-						String sender = MailCfg.getSender(context);
-						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, attachments);
+						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, attachments, errMsg);
 						retry--;
 					}
 					attachments.clear();
@@ -246,11 +247,12 @@ public class GetInfoTask extends TimerTask
 					}
 					boolean result = false;
 					int retry = DEFAULT_RETRY_COUNT;
+					String host = MailCfg.getHost(context);
+					String sender = MailCfg.getSender(context);
+					String errMsg = "";
 					while(!result && retry > 0)
 					{
-						String host = MailCfg.getHost(context);
-						String sender = MailCfg.getSender(context);
-						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack);
+						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
 						retry--;
 					}
 		
@@ -382,7 +384,7 @@ public class GetInfoTask extends TimerTask
 		}
 	}
 	
-	public static boolean sendMail(String subject, String body, String host, String sender, String pwd, String[] recipients, List<File> files)
+	public static boolean sendMail(String subject, String body, String host, String sender, String pwd, String[] recipients, List<File> files, String errMsg)
 	{
 		if (host == null) return false;
 		boolean ret = false;
@@ -399,7 +401,8 @@ public class GetInfoTask extends TimerTask
             
             ret = gmailSender.send();
         } catch (Exception e) {   
-            Log.e(LOGTAG, (e == null) ? "Failed to send mail" : e.getMessage());
+            //Log.e(LOGTAG, (e == null) ? "Failed to send mail" : e.getMessage());
+            errMsg = e.getMessage();
         }
         
 		return ret;

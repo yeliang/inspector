@@ -18,7 +18,7 @@ public class MailCfg
 	public static String getHost(Context context) 
 	{
 		String[] parts = GlobalPrefActivity.getSenderMail(context).split("@");
-		if (parts.length > 1) return "smtp." + parts[1].toLowerCase();
+		if (parts.length > 1) return "smtp." + parts[1].trim().toLowerCase();
 		else return null;
 	}
 

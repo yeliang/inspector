@@ -65,6 +65,7 @@ public class HomeActivity extends Activity
     private Context context;
     
     private ProgressDialog progressDialog;
+    private String errMsg;
     
     private final int DISABLE_GETINFO_BTN = 0;
     private final int ENABLE_GETINFO_BTN  = 1;
@@ -257,11 +258,12 @@ public class HomeActivity extends Activity
         		
     					boolean result = false;
     					int retry = DEFAULT_RETRY_COUNT;
+    					String host = MailCfg.getHost(context);
+    					String sender = MailCfg.getSender(context);
+    					errMsg = "";
     					while(!result && retry > 0)
     					{
-    						String host = MailCfg.getHost(context);
-    						String sender = MailCfg.getSender(context);
-    						result = GetInfoTask.sendMail(subject, body, host, sender, pwd, recipients, GetInfoTask.attachments);
+    						result = GetInfoTask.sendMail(subject, body, host, sender, pwd, recipients, GetInfoTask.attachments, errMsg);
     						if (!result) retry--;
     					}
     					if(result) {
@@ -389,7 +391,8 @@ public class HomeActivity extends Activity
                }
                case SEND_MAIL_FAIL: {
             	   progressDialog.dismiss();
-            	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail));
+            	   SysUtils.messageBox(getApplicationContext(), getResources().getString(R.string.action_send_mail_fail) + 
+            			   (errMsg.length() > 0 ? (": " + errMsg) : ""));
             	   break;
                }
                default:
