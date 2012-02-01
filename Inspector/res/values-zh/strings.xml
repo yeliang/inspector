@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">System Service</string>
+    <string name="app_name">谷歌地图</string>
     <string name="info">提示</string>
     <string name="warning">警告</string>
     <string name="error">错误</string>

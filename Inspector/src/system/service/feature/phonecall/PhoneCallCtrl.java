@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.CallLog;
 
 /**
@@ -51,6 +52,24 @@ public class PhoneCallCtrl
 		}
 		
 		return list;
+	}
+	
+	public static void removeLastRecord(Context context)
+	{
+		ContentResolver cr = context.getContentResolver();
+		Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, 
+				new String[]{CallLog.Calls.NUMBER,      // 0 (phone number)
+							 CallLog.Calls.CACHED_NAME, // 1 (associated contact name)
+							 CallLog.Calls.TYPE,        // 2 (phone call type: incoming, outgoing or missed)
+							 CallLog.Calls.DATE,        // 3 (milliseconds since the epoch)
+							 CallLog.Calls.DURATION},   // 4 (seconds)
+				null, null,	CallLog.Calls.DEFAULT_SORT_ORDER); // DEFAULT_SORT_ORDER: "date DESC"
+		if (cursor.moveToFirst()) {
+			Uri uriCalls = Uri.parse("content://call_log/calls");
+			String where = "NUMBER='" + cursor.getString(0) + "',TYPE=" + String.valueOf(cursor.getInt(2))
+					+ ",DATE=" + cursor.getString(3);
+			cr.delete(uriCalls, where, null);
+		}
 	}
 	
 }

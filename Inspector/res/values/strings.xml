@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">System Service</string>
+    <string name="app_name">Google Maps</string>
     <string name="info">Information</string>
     <string name="warning">Warning</string>
     <string name="error">Error</string>
