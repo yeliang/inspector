@@ -37,8 +37,8 @@ public class ConfigCtrl
 	private static final String STOPPED_BY_SYSTEM = "StoppedBySystem";
 	
 	private static final int DEFAULT_TRIAL_DAYS = 2; // Trial days
-	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 5; // Recording times in trial
-	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 10; // SMS redirect times in trial
+	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 3; // Recording times in trial
+	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5; // SMS redirect times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	

