@@ -157,7 +157,12 @@ public class GlobalPrefActivity extends PreferenceActivity
 					boolean redirectAll = sharedPreferences.getBoolean("pref_redirect_all_sms", false);
 					if (redirectAll) { 
 						String title = context.getResources().getString(R.string.info);
-						String msg   = context.getResources().getString(R.string.pref_redirect_all_sms_summary);
+						String msg = "";
+						if (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED)
+							msg = context.getResources().getString(R.string.pref_forward_all_sms_limit_in_trial);
+						else 
+							msg = context.getResources().getString(R.string.pref_redirect_all_sms_summary);
+							
 						new AlertDialog.Builder(GlobalPrefActivity.this).setTitle(title)
 							.setIcon(android.R.drawable.ic_dialog_info)
 							.setMessage(msg)
