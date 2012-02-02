@@ -153,15 +153,12 @@ public class BootService extends Service
     				if (GlobalValues.IS_ENV_LISTENING) {
     					GlobalValues.IS_ENV_LISTENING = false;
     					
-    					// Restore ringer mode and volume
+    					// Restore ringer mode
     					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-    					audioManager.setRingerMode(SmsReceiver.ORIGINAL_RING_MODE);
-    					if (SmsReceiver.ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
-    						audioManager.setStreamVolume(AudioManager.STREAM_RING, SmsReceiver.ORIGINAL_RING_VOL, 0);						
-    					}
+    					audioManager.setRingerMode(GlobalValues.ORIGINAL_RING_MODE);
     					
-    					// Restore voice call volume
-    					audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, SmsReceiver.ORIGINAL_VOICE_CALL_VOL, 0);
+    					// Restore speaker
+    					audioManager.setSpeakerphoneOn(true);
     					
     					// Broadcast intent to let DummyActivity to exit
     					Intent exitIntent = new Intent(DummyActivity.BROADCAST_ACTION_DUMMY_ACTIVITY_EXIT);
