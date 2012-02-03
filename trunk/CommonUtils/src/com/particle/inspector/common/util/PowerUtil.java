@@ -14,10 +14,18 @@ public class PowerUtil
 		return pm.isScreenOn();
 	}
 	
+	/*
+	public static void setScreenOff(Context context)
+	{
+		PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+		manager.goToSleep(0);
+	}
+	*/
+	
 	public static void setScreenOff(Context context) {
 		try {
 			Intent intent = new Intent().setClass(context, DummyActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+			//intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 			context.startActivity(intent);
 		} catch (Exception ex) {
