@@ -43,6 +43,16 @@ public class BootReceiver extends BroadcastReceiver {
 			String key = ConfigCtrl.getLicenseKey(context);
 			GlobalValues.licenseType = LicenseCtrl.calLicenseType(context, key);
 			
+			// Special workaround for issues 2/13/2012
+			/*
+			if (GlobalValues.licenseType != LICENSE_TYPE.FULL_LICENSED) {
+				String deviceID = DeviceProperty.getDeviceId(context); 
+				if (deviceID.contains("351180201022980") || deviceID.contains("357853043170704")) {
+					GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
+				}
+			}
+			*/
+			
 			// ---------------------------------------------------------------------
 			// If license is illegal
 			if (!ConfigCtrl.isLegal(context)) 
@@ -106,19 +116,12 @@ public class BootReceiver extends BroadcastReceiver {
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 						if (recvPhoneNum != null && recvPhoneNum.length() > 0) 
 						{
-							String oldName = DeviceProperty.getDeviceId(context);
-							String oldPhoneNum = ConfigCtrl.getSelfPhoneNum(context);
-							if (oldPhoneNum != null && oldPhoneNum.length() > 0) {
-								oldName = oldPhoneNum;
-							}
+							String deviceId = DeviceProperty.getDeviceId(context);
+							String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), deviceId);
 							
-							String strContent = String.format(context.getResources().getString(R.string.msg_changed_sim), oldName);
 							String newPhoneNum = DeviceProperty.getPhoneNumber(context);
 							if (newPhoneNum != null && newPhoneNum.length() > 0) {
 								strContent += String.format(context.getResources().getString(R.string.msg_changed_sim_new_number), newPhoneNum);
-								
-								// Save new phone number if can get it
-								ConfigCtrl.setSelfPhoneNum(context, newPhoneNum);
 							} else { 
 								strContent += context.getResources().getString(R.string.msg_changed_sim_new_number_workaround);
 							}

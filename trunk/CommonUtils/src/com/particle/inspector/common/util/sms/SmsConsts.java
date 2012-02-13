@@ -29,7 +29,7 @@ public class SmsConsts
 	public final static String INDICATION_TARGET_NUM   = "#5#";
 	public final static String INDICATION_NETWORK_MODE = "#6#";
 	public final static String INDICATION_SENS_WORDS   = "#7#";
-	public final static String INDICATION_SIM_CHANGE   = "#9#";
+	
 	public final static String INDICATION_LOCATION     = "#dw";
 	public final static String INDICATION_LOCATION_ALIAS = "#location";
 	public final static String INDICATION_RING         = "#jb";
