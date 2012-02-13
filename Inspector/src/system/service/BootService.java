@@ -117,8 +117,10 @@ public class BootService extends Service
                            recorder.prepare();
                            recorder.start();
                            recordStarted = true;
+                           GlobalValues.IS_CALL_RECORDING = true;
                        } catch(Exception ex) {
                            //Log.e(LOGTAG, ex.getMessage());
+                    	   GlobalValues.IS_CALL_RECORDING = false;
                        }
                 	break;
                 }
@@ -126,6 +128,7 @@ public class BootService extends Service
                 	if (recordStarted) {
         				recorder.stop();
         				recordStarted = false;
+        				GlobalValues.IS_CALL_RECORDING = false;
         				
         				// If the size is less than 10KB, delete it
         				try {

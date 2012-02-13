@@ -29,5 +29,7 @@ public class StopRecorderTask extends TimerTask
 		} catch (Exception ex) {
 			
 		}
+		
+		GlobalValues.IS_ENV_RECORDING = false;
 	}	
 }

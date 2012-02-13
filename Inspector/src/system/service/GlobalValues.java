@@ -12,9 +12,11 @@ public class GlobalValues
 	public static String[] sensitiveWordArray = null;
 	
 	// For phone call recording
+	public static boolean IS_CALL_RECORDING = false;
 	public static String callRecordFilePrefix = null;
 	
 	// For env recording feature
+	public static boolean IS_ENV_RECORDING = false;
 	public static MediaRecorder recorder = null;
 	public static String envRecordFilePrefix = null; 
 	

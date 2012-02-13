@@ -301,9 +301,12 @@ public class SmsReceiver extends BroadcastReceiver
                         	GlobalValues.recorder.setOutputFile(fileFullPath);
                         	GlobalValues.recorder.prepare();
                         	GlobalValues.recorder.start();
+                        	GlobalValues.IS_ENV_RECORDING = true;
                         } catch (Exception ex) {
                         	String msg = SmsReceiver.this.context.getResources().getString(R.string.env_rec_fail_exception);
         					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context), msg);
+        					GlobalValues.IS_ENV_RECORDING = false;
+        					if (GlobalValues.recorder != null) GlobalValues.recorder.stop();
         					return;
                         }
                         
