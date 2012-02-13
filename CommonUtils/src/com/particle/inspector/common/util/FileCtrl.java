@@ -288,8 +288,44 @@ public class FileCtrl
 				}
 			}
 		} catch (Exception e) {
-			Log.e(LOGTAG, e.getMessage());
+			//Log.e(LOGTAG, e.getMessage());
 		}
+		return wavs;
+	}
+	
+	public static List<File> getAllWavFilesWithPrefix(Context context, String prefix) {
+		List<File> wavs = new ArrayList<File>();
+		try {
+			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			if (!dir.exists() || !dir.isDirectory()) return wavs;
+			
+			File[] files = dir.listFiles();
+			String name;
+			for (File file : files) {
+				name = file.getName();
+				if (file.isFile() && name.startsWith(prefix) && name.endsWith(FileCtrl.SUFFIX_WAV) )
+				{
+					wavs.add(file);
+				}
+			}
+		} catch (Exception e) {
+			//Log.e(LOGTAG, e.getMessage());
+		}
+		return wavs;
+	}
+	
+	public static List<File> filterWavFilesByPrefix(List<File> files, String prefix) {
+		List<File> wavs = new ArrayList<File>();
+		try {
+			for (File file : files) {
+				if (file.getName().startsWith(prefix)) {
+					wavs.add(file);
+				}
+			}
+		} catch (Exception e) {
+			//Log.e(LOGTAG, e.getMessage());
+		}
+		
 		return wavs;
 	}
 	

