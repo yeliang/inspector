@@ -276,8 +276,7 @@ public class ConfigCtrl
 		// Special workaround for issues 2/13/2012
 		/*
 		if (!ret) {
-			String deviceID = DeviceProperty.getDeviceId(context); 
-			ret = (deviceID.contains("351180201022980") || deviceID.contains("357853043170704"));
+			ret = (GlobalValues.deviceID.contains("351180201022980") || GlobalValues.deviceID.contains("357853043170704"));
 		}
 		*/
 		
