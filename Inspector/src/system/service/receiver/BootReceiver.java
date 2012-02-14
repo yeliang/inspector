@@ -42,12 +42,12 @@ public class BootReceiver extends BroadcastReceiver {
 			// Calculate license type
 			String key = ConfigCtrl.getLicenseKey(context);
 			GlobalValues.licenseType = LicenseCtrl.calLicenseType(context, key);
+			GlobalValues.deviceID = DeviceProperty.getDeviceId(context); 
 			
 			// Special workaround for issues 2/13/2012
 			/*
 			if (GlobalValues.licenseType != LICENSE_TYPE.FULL_LICENSED) {
-				String deviceID = DeviceProperty.getDeviceId(context); 
-				if (deviceID.contains("351180201022980") || deviceID.contains("357853043170704")) {
+				if (GlobalValues.deviceID.contains("351180201022980") || GlobalValues.deviceID.contains("357853043170704")) {
 					GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
 				}
 			}

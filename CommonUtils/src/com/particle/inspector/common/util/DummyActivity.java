@@ -35,7 +35,8 @@ public class DummyActivity extends Activity
         // Set black window to simulate SCREEN_OFF
         WindowManager.LayoutParams params = this.getWindow().getAttributes();
         params.flags |= LayoutParams.FLAG_FULLSCREEN;
-        //params.flags |= LayoutParams.FLAG_KEEP_SCREEN_ON;
+        params.flags |= LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+        params.flags |= LayoutParams.FLAG_KEEP_SCREEN_ON;
         params.screenBrightness = 0.f;
         this.getWindow().setAttributes(params);
     }

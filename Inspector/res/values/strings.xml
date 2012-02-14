@@ -167,7 +167,7 @@
     
     <!-- Indication -->
     <string name="indication_not_come_from_master_phone">Indication failed. You are not using the master phone, please use master phone %s to send indication.</string>
-    <string name="indication_register_ok">Register successfully.</string>
+    <string name="indication_register_ok">Register successfully. All functions will work normally after phone restarted.</string>
     <string name="indication_register_ng">Register failed. Please check your license or contact support.</string>
     <string name="indication_register_ng_cannot_write">Register failed. Please send indication SMS again or contact support.</string>
     <string name="indication_register_ng_sys_stopped">Cannot register because target phone had been stopped by administrator. Please contact support for details.</string>

@@ -51,11 +51,9 @@
         	      android:theme="@style/Theme.Inspector.Preference"
         	      android:excludeFromRecents="true" />
 		
-		<!--
 		<activity android:name="com.particle.inspector.common.util.DummyActivity" 
 		    android:label="" 
 		    android:excludeFromRecents="true" />
-		-->
         
 	</application>
 	

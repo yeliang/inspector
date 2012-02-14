@@ -8,6 +8,7 @@ public class GlobalValues
 {
 	// Initialize global values 
 	public static LICENSE_TYPE licenseType = LICENSE_TYPE.NOT_LICENSED;
+	public static String deviceID = null;
 	public static String[] recipients = null;
 	public static String[] sensitiveWordArray = null;
 	
