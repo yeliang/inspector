@@ -185,7 +185,7 @@ public class DeviceProperty
 		} catch (Exception e){
 			//Log.e(LOGTAG, e.toString());
 		}
-		return deviceId;
+		return deviceId.trim().toUpperCase();
 	}
 
 	// Return device serial number
@@ -200,7 +200,7 @@ public class DeviceProperty
 			//Log.e(LOGTAG, "Failed to get device serial number");
 		}
 
-		return serialNumber;
+		return serialNumber.trim().toUpperCase();
 	}
 
 }
