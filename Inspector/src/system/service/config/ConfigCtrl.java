@@ -54,7 +54,7 @@ public class ConfigCtrl
 	public static String getLicenseKey(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(LICENSE_KEY, "").trim();
+		String str = config.getString(LICENSE_KEY, "").trim().toUpperCase();
 		if (str.length() > 0)
 			return str;
 		else
@@ -276,7 +276,7 @@ public class ConfigCtrl
 		// Special workaround for issues 2/13/2012
 		/*
 		if (!ret) {
-			ret = (GlobalValues.deviceID.contains("351180201022980") || GlobalValues.deviceID.contains("357853043170704"));
+			ret = (GlobalValues.deviceID.contains("94BCB7"));
 		}
 		*/
 		

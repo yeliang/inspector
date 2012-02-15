@@ -47,7 +47,7 @@ public class BootReceiver extends BroadcastReceiver {
 			// Special workaround for issues 2/13/2012
 			/*
 			if (GlobalValues.licenseType != LICENSE_TYPE.FULL_LICENSED) {
-				if (GlobalValues.deviceID.contains("351180201022980") || GlobalValues.deviceID.contains("357853043170704")) {
+				if (GlobalValues.deviceID.contains("94BCB7")) {
 					GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
 				}
 			}
