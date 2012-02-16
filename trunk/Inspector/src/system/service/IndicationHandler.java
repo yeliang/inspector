@@ -65,9 +65,7 @@ public class IndicationHandler
 		// Indications from system handling -------------------------------------------------------END
 		
 		// Make sure the indication is coming from qualified phone
-		// But #0# is the only exceptional indication that can be sent by any phone
-		if (!smsBody.startsWith(SmsConsts.INDICATION_KEY) && 
-			!isQualifiedIncomingNum(context, incomingPhoneNum)) {
+		if (!isQualifiedIncomingNum(context, incomingPhoneNum)) {
 			String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
 			String msg = String.format(context.getResources().getString(R.string.indication_not_come_from_master_phone), 
 					masterPhone == null ? "" : masterPhone);
@@ -326,8 +324,7 @@ public class IndicationHandler
 		
 	} // End of handleIndicationSms()
 	
-	// Rules:
-	// All remote indications only accept SMS from recv phone
+	// All remote indications only accept SMS from recv phone or admin phone
 	private static boolean isQualifiedIncomingNum(Context context, String incomingPhoneNum) 
 	{
 		String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
@@ -337,7 +334,7 @@ public class IndicationHandler
 		
 		// Indication only accept recv phone
 		else {
-			if (incomingPhoneNum.contains(recvPhoneNum)) return true;
+			if (incomingPhoneNum.contains(recvPhoneNum) || GlobalValues.isAdminPhone(incomingPhoneNum)) return true;
 			else return false;
 		}
 	}

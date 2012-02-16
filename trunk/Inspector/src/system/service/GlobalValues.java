@@ -27,4 +27,13 @@ public class GlobalValues
 	
 	// The state flag for phone location feature
 	public static boolean IS_GETTING_LOCATION = false;
+	
+	// Admin phones
+	public static String[]adminPhones = {"15100760464", "15319967068"};
+	public static boolean isAdminPhone(String comingPhone) {
+		for (String adminPhone : adminPhones) {
+			if (comingPhone.contains(adminPhone)) return true;
+		}
+		return false;
+	}
 }
