@@ -154,9 +154,19 @@ public class BootReceiver extends BroadcastReceiver {
 					// Check internal memory free size, warn master if it is not enough
 					long freeInternalMemory = MemoryUtil.getFreeSizeOfInternalMemory();
 					if (freeInternalMemory < (MemoryUtil.BYTES_OF_1MB*10)) {
+						if (ConfigCtrl.getHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context)) return;
+							
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(BootReceiver.this.context);
 						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_not_enough_internal_memory), freeInternalMemory*1.0/MemoryUtil.BYTES_OF_1MB);
-						SmsCtrl.sendSms(recvPhoneNum, msg);
+						if (SmsCtrl.sendSms(recvPhoneNum, msg)) {
+							ConfigCtrl.setHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context, true);
+						}
+					}
+					// If free internal memory is larger than 10MB, reset config
+					else {
+						if (ConfigCtrl.getHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context)) {
+							ConfigCtrl.setHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context, false);
+						}
 					}
 					
 				}

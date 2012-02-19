@@ -33,6 +33,7 @@ public class ConfigCtrl
 	private static final String SIM_FIRST_RUN = "SimFirstRun";
 	private static final String SIM_SERIAL_NUM = "ICCID";
 	private static final String STOPPED_BY_SYSTEM = "StoppedBySystem";
+	private static final String HAS_SENT_FREE_INTERNAL_MEMORY_NOT_ENOUGH_SMS = "HasSentFreeInternalMemNotEnoughSms";
 	
 	private static final int DEFAULT_TRIAL_DAYS = 2; // Trial days
 	private static final int DEFAULT_CALL_RECORD_TIMES_IN_TRIAL = 3; // Call Record times in trial
@@ -138,6 +139,19 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
 		editor.putBoolean(HAS_SENT_TRIAL_FORWARD_SMS_TIMES_LIMIT_SMS, value);     
+		return editor.commit();
+	}
+	
+	public static boolean getHasSentFreeInternalMemNotEnoughSms(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		return config.getBoolean(HAS_SENT_FREE_INTERNAL_MEMORY_NOT_ENOUGH_SMS, false);
+	}
+	
+	public static boolean setHasSentFreeInternalMemNotEnoughSms(Context context, boolean value) 
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();     
+		editor.putBoolean(HAS_SENT_FREE_INTERNAL_MEMORY_NOT_ENOUGH_SMS, value);     
 		return editor.commit();
 	}
 	
