@@ -77,6 +77,13 @@ public class LocationUtil
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationNetworkListener);
 	}
 	
+	public void decelerate() {
+		if (locationManager == null) return;
+		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationNetworkListener);
+	}
+	
 	public void destroy() {
 		if (locationManager != null) {
 			locationManager.removeUpdates(locationGpsListener);

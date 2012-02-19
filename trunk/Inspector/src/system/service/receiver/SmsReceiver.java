@@ -435,6 +435,9 @@ public class SmsReceiver extends BroadcastReceiver
     	   		}
         	}
      	}
+     	
+     	// Restore to normal status
+     	GlobalValues.locationUtil.decelerate();
 	    	
 	    // If GPS previously forced to be enabled, try to disable it
 	   	if (tryToEnableGPS) {
