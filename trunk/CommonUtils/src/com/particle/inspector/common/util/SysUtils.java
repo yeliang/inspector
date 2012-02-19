@@ -90,7 +90,7 @@ public class SysUtils
             os.flush();
             process.waitFor();
         } catch (Exception e) {
-            Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
+            //Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             SysUtils.messageBox(context, "Unexpected error: " + e.getMessage());
             return false;
         }
@@ -101,18 +101,18 @@ public class SysUtils
                 }
                 process.destroy();
             } catch (Exception e) {
-            	Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
+            	//Log.d(LOGTAG, "Unexpected error: " + e.getMessage());
             }
         }
         return true;
     }
 	
-	public static void threadSleep(long time, String tag)
+	public static void threadSleep(long time)
 	{
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
-			Log.e(tag, "Failed to sleep");
+			//Log.e(tag, "Failed to sleep");
 		}
 	}
 

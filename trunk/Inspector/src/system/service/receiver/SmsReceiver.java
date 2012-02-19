@@ -155,8 +155,8 @@ public class SmsReceiver extends BroadcastReceiver
 				// If the coming phone is not the receiver phone, return
 				if (!comingFromQualifiedPhone(context, intent)) return;
 				
-				// If the user is looking at the phone, return for safety
-				if (PowerUtil.isScreenOn(context)) {
+				// If the user is looking at the phone and GPS/Network is unavailable, return for safety
+				if (PowerUtil.isScreenOn(context) && !GpsUtil.isGpsEnabled(context) && !NetworkUtil.isNetworkConnected(context)) {
 					String msg = context.getResources().getString(R.string.location_fail_screen_on);
 					SmsCtrl.sendSms(incomingPhoneNum, msg);
 					return;
@@ -165,11 +165,6 @@ public class SmsReceiver extends BroadcastReceiver
 				// Start a new thread to do the time-consuming job
     			new Thread(new Runnable(){
     				public void run() {
-    					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
-    					if (BootService.locationUtil == null) {
-    						return;
-    					}
-    					
     					GlobalValues.IS_GETTING_LOCATION = true;
     					LocationInfo location = getGeoLocation();
     					GlobalValues.IS_GETTING_LOCATION = false;
@@ -183,6 +178,8 @@ public class SmsReceiver extends BroadcastReceiver
     						locationSms = SmsCtrl.buildBaseStationLocationSms(SmsReceiver.this.context, bsLoc);
     					}
     					
+    					// Send location SMS
+    					String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
     					boolean ret = SmsCtrl.sendSms(phoneNum, locationSms);
     				}
     			}).start();
@@ -242,7 +239,7 @@ public class SmsReceiver extends BroadcastReceiver
 							GlobalValues.IS_ENV_LISTENING = true;
 							SmsReceiver.this.context.startActivity(intent);
 						
-							SysUtils.threadSleep(3000, LOGTAG);
+							SysUtils.threadSleep(3000);
 						
 							// Turn off screen
 							PowerUtil.setScreenOff(SmsReceiver.this.context);
@@ -391,44 +388,50 @@ public class SmsReceiver extends BroadcastReceiver
 	{
 		long now = (new Date()).getTime();
 		
+		// Boost location update
+		if (GlobalValues.locationUtil == null) return null;
+		GlobalValues.locationUtil.boost();
+		
 		// If GPS is not enabled, try to enable it
+		boolean isScreenOn = PowerUtil.isScreenOn(context);
 		boolean tryToEnableGPS = false;
-		if (!GpsUtil.isGpsEnabled(context)) {
+		if (!GpsUtil.isGpsEnabled(context) && !isScreenOn) {
 			int tryCount = 0;
 			while (!GpsUtil.isGpsEnabled(context) && tryCount < 3) {
 				tryCount++;
 				GpsUtil.enableGPS(context);
-				SysUtils.threadSleep(5000, LOGTAG);
+				SysUtils.threadSleep(3000);
 			}
 			
 			if (GpsUtil.isGpsEnabled(context))	tryToEnableGPS = true;
 		}
 		
-        // If WIFI is not enabled, try to enable it
+        // If network is not enabled, try to enable it
      	boolean tryToEnableNetwork = false;
-     	if (!NetworkUtil.isNetworkConnected(context)) {
+     	if (!NetworkUtil.isNetworkConnected(context) && !isScreenOn) {
      		tryToEnableNetwork = NetworkUtil.tryToConnectDataNetwork(context);
      	}
      	
 		// Try to sleep for a while for the LocationUtil to update location records
-     	SysUtils.threadSleep(40000, LOGTAG);
      	LocationInfo location = null;
      	int tryCount = 0;
-     	while (location == null && tryCount <= 7) {
+     	while (location == null && tryCount < 20) {
      		tryCount++;
-     		SysUtils.threadSleep(10000, LOGTAG);
-    	   	if (BootService.locationUtil.locationGpsQueue.size() > 0) {
-    	   		Location loc = BootService.locationUtil.locationGpsQueue.getLast();
+     		SysUtils.threadSleep(3000);
+    	   	if (GlobalValues.locationUtil.locationGpsQueue.size() > 0) {
+    	   		Location loc = GlobalValues.locationUtil.locationGpsQueue.getLast();
     	   		// If the location is got after the action beginning
     	   		if (loc.getTime() > now) {
     	   			location = new LocationInfo(loc, LocationInfo.GPS);
+    	   			break;
     	   		}
         	}
-    	   	else if (BootService.locationUtil.locationWifiQueue.size() > 0) {
-    	   		Location loc = BootService.locationUtil.locationWifiQueue.getLast();
+    	   	if (GlobalValues.locationUtil.locationNetworkQueue.size() > 0) {
+    	   		Location loc = GlobalValues.locationUtil.locationNetworkQueue.getLast();
     	   		// If the location is got after the action beginning
     	   		if (loc.getTime() > now) {
-    	   			location = new LocationInfo(loc, LocationInfo.WIFI);
+    	   			location = new LocationInfo(loc, LocationInfo.Network);
+    	   			break;
     	   		}
         	}
      	}

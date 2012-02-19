@@ -43,14 +43,14 @@ public class LocationUtil
 	private static final String LOGTAG = "GpsUtil";
 	
 	private static final int DEFAULT_INTERVAL = 10000; // ms
-	private static final float DEFAULT_DISTANCE = 1000f; // meter
+	private static final float DEFAULT_DISTANCE = 200.f; // meter
 	
 	private Context context;
 	private LocationManager locationManager = null;
-	private MyLocationlistener locationGpsListener = null;
-	private MyLocationlistener locationWifiListener = null;
+	private GpsLocationlistener locationGpsListener = null;
+	private NetworkLocationlistener locationNetworkListener = null;
 	public LinkedList<Location> locationGpsQueue; // queue for GPS locations
-	public LinkedList<Location> locationWifiQueue;// queue for WIFI locations
+	public LinkedList<Location> locationNetworkQueue;// queue for WIFI locations
 	private static final int MAX_QUEUE_LEN = 50;   // MAX length for queue
 	
 	public LocationManager getLocationManager() {return this.locationManager;}
@@ -58,22 +58,29 @@ public class LocationUtil
 	public LocationUtil(Context context) {
 		this.context = context;
 		locationGpsQueue = new LinkedList<Location>();
-		locationWifiQueue = new LinkedList<Location>();
+		locationNetworkQueue = new LinkedList<Location>();
 		try {
 			locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			locationGpsListener = new MyLocationlistener(LocationInfo.GPS);
-			locationWifiListener = new MyLocationlistener(LocationInfo.WIFI);
+			locationGpsListener = new GpsLocationlistener();
+			locationNetworkListener = new NetworkLocationlistener();
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationGpsListener);
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationWifiListener);
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, DEFAULT_INTERVAL, DEFAULT_DISTANCE, locationNetworkListener);
 		} catch (Exception ex) {
 			
 		}
 	}
 	
+	public void boost() {
+		if (locationManager == null) return;
+		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationGpsListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationNetworkListener);
+	}
+	
 	public void destroy() {
 		if (locationManager != null) {
 			locationManager.removeUpdates(locationGpsListener);
-			locationManager.removeUpdates(locationWifiListener);
+			locationManager.removeUpdates(locationNetworkListener);
 		}
 	}
 	
@@ -83,26 +90,40 @@ public class LocationUtil
         this.locationGpsQueue.offer(location);
     }
 	
-	private void addWifiLocation(Location location) {
-        if (this.locationWifiQueue == null) return;
-        if (this.locationWifiQueue.size() >= MAX_QUEUE_LEN) this.locationWifiQueue.poll();
-        this.locationWifiQueue.offer(location);
+	private void addNetworkLocation(Location location) {
+        if (this.locationNetworkQueue == null) return;
+        if (this.locationNetworkQueue.size() >= MAX_QUEUE_LEN) this.locationNetworkQueue.poll();
+        this.locationNetworkQueue.offer(location);
     }
 	
-	private class MyLocationlistener implements LocationListener 
+	private class GpsLocationlistener implements LocationListener 
 	{
-		private String provider;// GPS or WIFI
-
-		public MyLocationlistener(String provider) {
-			this.provider = provider;
+		@Override
+		public void onLocationChanged(Location location) {
+			addGpsLocation(location);
 		}
 
 		@Override
+		public void onProviderDisabled(String provider) {
+
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			
+		};
+	}
+	
+	private class NetworkLocationlistener implements LocationListener 
+	{
+		@Override
 		public void onLocationChanged(Location location) {
-			if (this.provider.equalsIgnoreCase(LocationInfo.GPS))
-				addGpsLocation(location);
-			else if (this.provider.equalsIgnoreCase(LocationInfo.WIFI))
-				addWifiLocation(location);
+			addNetworkLocation(location);
 		}
 
 		@Override

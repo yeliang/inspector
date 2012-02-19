@@ -85,7 +85,7 @@ public class BootReceiver extends BroadcastReceiver {
 			
 			//===========================================================================
 			// Start to check if changed SIM card
-			SysUtils.threadSleep(2000, LOGTAG);
+			SysUtils.threadSleep(2000);
 			
 			TelephonyManager mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			//int simState = mTelephonyMgr.getSimState();
