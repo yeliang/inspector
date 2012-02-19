@@ -19,6 +19,7 @@ import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.ExternalMemUtil;
 import com.particle.inspector.common.util.SysUtils;
 
 import java.io.File;
@@ -79,7 +80,7 @@ public class ManageDatabaseActivity extends Activity
                      "Are you sure?").setPositiveButton("Yes",
                      new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                           if (FileCtrl.isSDCardReady()) {
+                           if (ExternalMemUtil.isReady()) {
                               Log.i(LOGTAG, "importing database from external storage, and resetting database");
                               new BackupDatabaseTask().execute();
                               ManageDatabaseActivity.this.startActivity(new Intent(ManageDatabaseActivity.this, DashboardActivity.class));
@@ -104,7 +105,7 @@ public class ManageDatabaseActivity extends Activity
                      "Are you sure (this will overwrite existing current data)?").setPositiveButton("Yes",
                      new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                           if (FileCtrl.isSDCardReady()) {
+                           if (ExternalMemUtil.isReady()) {
                               Log.i(LOGTAG, "importing database from external storage, and resetting database");
                               new RestoreDatabaseTask().execute();
                               // sleep momentarily so that database reset stuff has time to take place (else Main reloads too fast)
@@ -157,7 +158,7 @@ public class ManageDatabaseActivity extends Activity
 
          try {
             file.createNewFile();
-            FileCtrl.copyFile(dbFile, file);
+            ExternalMemUtil.copyFile(dbFile, file);
             return null;
          } catch (IOException e) {
             Log.e(LOGTAG, e.getMessage(), e);
@@ -209,7 +210,7 @@ public class ManageDatabaseActivity extends Activity
 
          try {
             dbFile.createNewFile();
-            FileCtrl.copyFile(dbBackupFile, dbFile);
+            ExternalMemUtil.copyFile(dbBackupFile, dbFile);
             //ManageDatabaseActivity.this.application.getDataHelper().resetDbConnection();
             return null;
          } catch (IOException e) {

@@ -18,6 +18,7 @@ import com.android.internal.telephony.ITelephony;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.DummyActivity;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
@@ -297,7 +298,7 @@ public class BootService extends Service
 	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
 		//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir(); // Now recording files will be saved to internal storage 
 		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
-		return FileCtrl.getInternalStorageFilesDirStr(context) + fileName;
+		return InternalMemUtil.getFilesDirStr(context) + fileName;
 	}
 	
 	/*

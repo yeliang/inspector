@@ -26,178 +26,15 @@ import com.particle.inspector.common.util.DeviceProperty;
 */
 public class FileCtrl 
 {
-	// In Android, a folder with name starts with '.' is hidden.
-	public static final String DEFAULT_FOLDER_P1 = "Android";
-	public static final String DEFAULT_FOLDER_P2 = "Android/data";
-	public static final String DEFAULT_FOLDER = "Android/data/.tmp";
-	
 	public static final String SUFFIX_TXT = ".txt";
 	public static final String SUFFIX_WAV = ".wav";
 
 	private static final String LOGTAG = "FileCtrl";
 	
-	// ----------------------------------------------------------------------------------
-	// Functions for internal storage
-	// ----------------------------------------------------------------------------------
-	
-	// Get the string of files folder of current app in internal storage
-	public static String getInternalStorageFilesDirStr(Context context) {
-		String path = context.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-		return path;
-	}
-
-	public static File getInternalStorageFilesDir(Context context) {
-		return new File(getInternalStorageFilesDirStr(context));
-	}
-	
-	/**
-	 * Save file to internal storage. If the file exists, overwrite it. 
-	 * @param fullname the fullname of the file, e.g. .info/contact_2011-01-01.txt, .recording/Recording_2011-01-01.wav
-	 */
-	public static File Save2InternalStorage(Context context, String fullname, String content) throws Exception
-	{
-		File file = null;
-		
-		file = new File(getInternalStorageFilesDirStr(context) + "/" + fullname);
-		if (file.exists()) file.delete();
-		file.createNewFile();
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.write(content.getBytes());
-		fos.close();
-		
-		return file;
-	}
-	
-	// ----------------------------------------------------------------------------------
-	// Functions for SD-CARD
-	// ----------------------------------------------------------------------------------
-	
-	public static String getDefaultSDDirStr() {
-		return getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/";
-	}	
-
-	public static File getDefaultSDDir() {
-		return new File(getDefaultSDDirStr());
-	}
-	
-	// The root dir of the default dir  
-	public static File getDefaultSDDirP1() {
-		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P1 + "/");
-	}
-	
-	// The parent dir of the default dir
-	public static File getDefaultSDDirP2() {
-		return new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER_P2 + "/");
-	}
-	
-	/**
-	 * Save file to SD-CARD. If the file exists, overwrite it. 
-	 * @param fullname the fullname of the file, e.g. /sdcard/Android/data/.tmp/contact_2011-01-01.txt
-	 */
-	public static File Save2SDCard(String fullname, String content) throws Exception
-	{
-		File file = null;
-		
-		if (isSDCardReady())
-		{
-			file = new File(getSDCardRootPath() + "/" + fullname);
-			if (file.exists()) file.delete();
-			file.createNewFile();
-			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(content.getBytes());
-			fos.close();
-		}
-		
-		return file;
-	}
-	
-	public static File Save2DefaultDirInSDCard(String name, String content) throws Exception
-	{
-		File file = null;
-		
-		if (isSDCardReady())
-		{
-			file = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/" + name);
-			if (file.exists()) file.delete();
-			file.createNewFile();
-			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(content.getBytes());
-			fos.close();
-		}
-		
-		return file;
-	}
-	
-	public static void copy2DefaultDirInSDCard(File file) throws Exception
-	{
-		if (file == null) return;
-		
-		if (isSDCardReady())
-		{
-			File dstFile = new File(getSDCardRootPath() + "/" + DEFAULT_FOLDER + "/" + file.getName());
-			copyFile(file, dstFile);
-		}
-	}
-	
-	public static boolean isSDCardReady()
-	{
-		return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); 
-	}
-	
-	public static String getSDCardRootPath()
-	{
-		File sdCardRoot = Environment.getExternalStorageDirectory();
-		return sdCardRoot.getPath();  
-	}
-
-	public static File creatSDDir(String dirName)
-	{  
-        File dir = new File(getSDCardRootPath() + "/" + dirName);  
-        dir.mkdir();  
-        return dir;  
-    }
-	
-	public static File createDefaultSDDir()
-	{  
-		File dirP1 = getDefaultSDDirP1();
-		File dirP2 = getDefaultSDDirP2();
-        File dir = getDefaultSDDir();
-        try {
-        	if (!dirP1.exists()) dirP1.mkdir();
-        	if (!dirP2.exists()) dirP2.mkdir();
-        	if (!dir.exists()) dir.mkdir();
-        } catch (Exception ex) {}
-        return dir;  
-    }
-	
-	public static boolean doesSDDirExist(String dirName)
-	{  
-        File dir = new File(getSDCardRootPath() + "/" + dirName);
-        return dir.exists();
-    }
-	
-	public static boolean defaultSDDirExist()
-	{  
-        return getDefaultSDDir().exists();
-    }
-	
-	public static void removeDefaultSDDir() {
-		File dir = getDefaultSDDir();
-		if (dir.exists()) {
-			try {
-				dir.delete();
-			} catch (Exception ex) {}
-		}
-	}
-	
-	// ----------------------------------------------------------------------------------
-	// Functions for operating info files and recording files
-	// ----------------------------------------------------------------------------------
-	
 	public static void cleanTxtFiles(Context context) 
 	{
 		//File dir = getDefaultSDDir();
-		File dir = getInternalStorageFilesDir(context);
+		File dir = InternalMemUtil.getFilesDir(context);
 		if (dir.exists() && dir.isDirectory()) 
 		{
 			File[] files = dir.listFiles();
@@ -265,7 +102,7 @@ public class FileCtrl
 	public static void removeAllFiles(Context context) 
 	{
 		try {
-			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			File dir = InternalMemUtil.getFilesDir(context);
 			if (!dir.exists() || !dir.isDirectory()) return;
 			
 			File[] files = dir.listFiles();
@@ -279,7 +116,7 @@ public class FileCtrl
 	public static List<File> getAllWavFiles(Context context) {
 		List<File> wavs = new ArrayList<File>();
 		try {
-			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			File dir = InternalMemUtil.getFilesDir(context);
 			if (!dir.exists() || !dir.isDirectory()) return wavs;
 			
 			File[] files = dir.listFiles();
@@ -300,7 +137,7 @@ public class FileCtrl
 	public static List<File> getAllWavFilesWithPrefix(Context context, String prefix) {
 		List<File> wavs = new ArrayList<File>();
 		try {
-			File dir = FileCtrl.getInternalStorageFilesDir(context);
+			File dir = InternalMemUtil.getFilesDir(context);
 			if (!dir.exists() || !dir.isDirectory()) return wavs;
 			
 			File[] files = dir.listFiles();
@@ -338,22 +175,6 @@ public class FileCtrl
 	{
 		 Collections.sort(files, new FileCompareUtil.CompratorByLastModified());
 		 return files;
-	}
-	
-	public static void copyFile(File src, File dst) throws IOException 
-	{
-	      FileChannel inChannel = new FileInputStream(src).getChannel();
-	      FileChannel outChannel = new FileOutputStream(dst).getChannel();
-	      try {
-	         inChannel.transferTo(0, inChannel.size(), outChannel);
-	      } finally {
-	         if (inChannel != null) {
-	            inChannel.close();
-	         }
-	         if (outChannel != null) {
-	            outChannel.close();
-	         }
-	      }
 	}
 
 }

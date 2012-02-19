@@ -24,6 +24,7 @@ import system.service.feature.sms.SmsCtrl;
 import system.service.feature.sms.SmsInfo;
 
 import com.particle.inspector.common.util.DatetimeUtil;
+import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
@@ -373,7 +374,7 @@ public class GetInfoTask extends TimerTask
 		try {
 			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
+			File file = InternalMemUtil.Save(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
@@ -394,7 +395,7 @@ public class GetInfoTask extends TimerTask
 		try {
 			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
+			File file = InternalMemUtil.Save(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
@@ -415,7 +416,7 @@ public class GetInfoTask extends TimerTask
 		try {
 			//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir();// Now info files will be saved to internal storage 
 				
-			File file = FileCtrl.Save2InternalStorage(context, fileName, sb.toString());
+			File file = InternalMemUtil.Save(context, fileName, sb.toString());
 			if (file != null) attachments.add(file);
 		} catch (Exception e) {
 			Log.e(LOGTAG, e.getMessage());
