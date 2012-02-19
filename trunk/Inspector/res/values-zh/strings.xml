@@ -167,6 +167,10 @@
     <string name="msg_changed_sim_new_number">新卡号码为：%s</string>
     <string name="msg_trial_expire_or_not_licensed">安卓监控提醒您：试用期已过或未注册，无法打开设置界面。</string>
     
+	<!-- Memory -->
+	<string name="memory_some_old_wav_deleted">安卓监控：手机上%s个未发送的旧录音文件被删除（最近的录音文件被保留），以保证不占用过多内存卡容量。</string>
+    <string name="memory_not_enough_internal_memory">安卓监控：手机内存卡剩余容量仅有%.2f MB，可能导致录音文件无法保存。</string>
+    
     <!-- User Indication -->
     <string name="indication_not_come_from_master_phone">指令失败。您所使用的手机并非主控手机。请使用主控手机%s发送指令。</string>
     <string name="indication_register_ok">注册成功。部分功能在手机重启后方才有效。</string>

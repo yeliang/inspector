@@ -165,6 +165,10 @@
     <string name="msg_changed_sim_new_number"> New phone number: %s</string>
     <string name="msg_trial_expire_or_not_licensed">Out of trial or not licensed, setting dialog cannot be triggered.</string>
     
+    <!-- Memory -->
+	<string name="memory_some_old_wav_deleted">AndroidInspector: %s unsent old reording files were deleted but the latest ones are kept in order to not occupy too much internal memory.</string>
+    <string name="memory_not_enough_internal_memory">AndroidInspector: free internal memory is only %.2f MB which may make no space for recording.</string>
+    
     <!-- Indication -->
     <string name="indication_not_come_from_master_phone">Indication failed. You are not using the master phone, please use master phone %s to send indication.</string>
     <string name="indication_register_ok">Register successfully. All functions will work normally after phone restarted.</string>

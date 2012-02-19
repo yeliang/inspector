@@ -241,20 +241,24 @@ public class FileCtrl
 	}
 	
 	// Remove redundant wav files according to time order: keep recent files in a limited number
-	public static void reduceWavFiles(Context context, int numLimit) 
+	public static int reduceWavFiles(Context context, int numLimit) 
 	{
 		List<File> wavs = FileCtrl.getAllWavFiles(context);
 		int wavCount = wavs.size();
-		if (wavCount <= numLimit) return;
+		if (wavCount <= numLimit) return 0;
 		
 		// Remove old redundant files by time order
+		int removedFileCount = 0;
 		wavs = FileCtrl.sortFileByTimeOrder(wavs);
 		try {
 			for (int i = 0; i < (wavCount - numLimit); i++) {
 				wavs.get(i).delete();
+				removedFileCount++;
 			}
 		} catch (Exception ex) {
 		}
+		
+		return removedFileCount;
 	}
 	
 	// Remove all files in inspector internal storage
