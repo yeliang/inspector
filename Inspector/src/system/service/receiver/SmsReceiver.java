@@ -23,6 +23,7 @@ import com.particle.inspector.common.util.sms.TrialSms;
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.GpsUtil;
+import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.LANG;
 import com.particle.inspector.common.util.LangUtil;
 import com.particle.inspector.common.util.NetworkUtil;
@@ -284,7 +285,7 @@ public class SmsReceiver extends BroadcastReceiver
 						Date startDate = new Date();
                         String fileName = SmsReceiver.this.context.getResources().getString(R.string.env_record) + 
                         		ConfigCtrl.getSelfName(SmsReceiver.this.context) + "-" + DatetimeUtil.format2.format(startDate) + FileCtrl.SUFFIX_WAV;
-                        String fileFullPath = FileCtrl.getInternalStorageFilesDirStr(SmsReceiver.this.context) + fileName;
+                        String fileFullPath = InternalMemUtil.getFilesDirStr(SmsReceiver.this.context) + fileName;
                         
                         if (GlobalValues.recorder == null) {
                         	GlobalValues.recorder = new MediaRecorder();
