@@ -23,12 +23,13 @@ public class DeviceProperty
 {
 	private static final String LOGTAG = "DeviceProperty";
 
-	// Get device model
+	// Get device model, e.g. "HTC Wildfire", "GT-S5570"
 	public synchronized static String getDeviceModel()
 	{
 		return Build.MODEL;
 	}
 	
+	// Return: CN, JP, EN 
 	public synchronized static LANG getPhoneLang() 
 	{
 		String lang = Locale.getDefault().getLanguage();
@@ -44,6 +45,7 @@ public class DeviceProperty
 	}
 	
 	// Get phone number
+	// Notice: not all SIM contains phone card.
 	public synchronized static String getPhoneNumber(Context context)
 	{
 		try {
@@ -109,8 +111,8 @@ public class DeviceProperty
 		return (Build.VERSION.SDK_INT > 8);
 	}
 	
-	protected static final String PREFS_FILE = "device_id.xml";
-	protected static final String PREFS_DEVICE_ID = "device_id";
+	// protected static final String PREFS_FILE = "device_id.xml";
+	// protected static final String PREFS_DEVICE_ID = "device_id";
 
 	/**
      * Returns a unique UUID for the current android device. As with all UUIDs, this unique ID is "very highly likely"
@@ -201,6 +203,21 @@ public class DeviceProperty
 		}
 
 		return serialNumber.trim().toUpperCase();
+	}
+	
+	// 0: TelephonyManager.PHONE_TYPE_NONE
+	// 1: TelephonyManager.PHONE_TYPE_GSM
+	// 2: TelephonyManager.PHONE_TYPE_CDMA
+	public static int getPhoneType(Context context) 
+	{
+		int phoneType = TelephonyManager.PHONE_TYPE_NONE;
+		try {
+			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			phoneType = tManager.getPhoneType();
+		} catch (Exception e){
+			//Log.e(LOGTAG, e.toString());
+		}
+		return phoneType;
 	}
 
 }
