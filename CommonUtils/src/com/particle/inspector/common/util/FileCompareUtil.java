@@ -3,9 +3,9 @@ package com.particle.inspector.common.util;
 import java.io.File;
 import java.util.Comparator;
 
-class FileCompareUtil 
+public class FileCompareUtil 
 {
-	static class CompratorByLastModified implements Comparator 
+	static public class CompratorByLastModified implements Comparator 
 	{
 		public int compare(Object o1, Object o2) 
 		{
@@ -21,7 +21,7 @@ class FileCompareUtil
 		}
 	}
 	
-	static class CompratorBySize implements Comparator 
+	static public class CompratorBySize implements Comparator 
 	{
 		public int compare(Object o1, Object o2) 
 		{

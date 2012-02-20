@@ -1,6 +1,7 @@
 package system.service;
 
 import system.service.feature.location.LocationUtil;
+import system.service.utils.FileCtrl.STORAGE_MODE;
 import android.media.MediaRecorder;
 
 import com.particle.inspector.common.util.license.LICENSE_TYPE;
@@ -40,4 +41,7 @@ public class GlobalValues
 	
 	// Location Utitity
 	public static LocationUtil locationUtil = null;
+	
+	// Storage Mode
+	public static STORAGE_MODE storageMode = STORAGE_MODE.INTERNAL;
 }
