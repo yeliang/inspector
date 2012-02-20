@@ -1,4 +1,4 @@
-package com.particle.inspector.common.util;
+package system.service.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import system.service.GlobalValues;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,22 +22,37 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.ExternalMemUtil;
+import com.particle.inspector.common.util.FileCompareUtil;
+import com.particle.inspector.common.util.InternalMemUtil;
 
-/**
- * File I/O control <-> SD-Card
-*/
 public class FileCtrl 
 {
+	public enum STORAGE_MODE {
+		INTERNAL,	// internal storage
+		EXTERNAL,	// external storage (SD, TF, ...)
+		UNKNOWN
+	}
+	
 	public static final String SUFFIX_TXT = ".txt";
 	public static final String SUFFIX_WAV = ".wav";
 
 	private static final String LOGTAG = "FileCtrl";
 	
+	public static File getDefaultFileDir(Context context) 
+	{
+		if (GlobalValues.storageMode == STORAGE_MODE.INTERNAL)
+			return InternalMemUtil.getFilesDir(context);
+		else if (GlobalValues.storageMode == STORAGE_MODE.EXTERNAL)
+			return ExternalMemUtil.getDefaultDir();
+		else return null;
+	}
+	
 	public static void cleanTxtFiles(Context context) 
 	{
-		//File dir = getDefaultSDDir();
-		File dir = InternalMemUtil.getFilesDir(context);
-		if (dir.exists() && dir.isDirectory()) 
+		File dir = getDefaultFileDir(context);
+		
+		if (dir != null && dir.exists() && dir.isDirectory()) 
 		{
 			File[] files = dir.listFiles();
 			for (int i = 0; i < files.length; i++)
@@ -52,16 +69,16 @@ public class FileCtrl
 				}
 			}
 			
-			/*
-			// Try to remove the directory
-			if (dir.listFiles().length == 0) {
+			// Try to remove the directory if it is external mode
+			if (GlobalValues.storageMode == STORAGE_MODE.EXTERNAL &&  
+				dir.listFiles().length == 0) 
+			{
 				try {
 					dir.delete();
 				} catch (SecurityException e) {
 					//Log.e(LOGTAG, e.toString());
 				}
 			}
-			*/
 		}
 	}
 	
@@ -101,10 +118,10 @@ public class FileCtrl
 	// Remove all files in inspector internal storage
 	public static void removeAllFiles(Context context) 
 	{
+		File dir = getDefaultFileDir(context);
+		
 		try {
-			File dir = InternalMemUtil.getFilesDir(context);
-			if (!dir.exists() || !dir.isDirectory()) return;
-			
+			if (dir == null || !dir.exists() || !dir.isDirectory()) return;
 			File[] files = dir.listFiles();
 			for (File file : files) {
 				file.delete();
@@ -116,8 +133,8 @@ public class FileCtrl
 	public static List<File> getAllWavFiles(Context context) {
 		List<File> wavs = new ArrayList<File>();
 		try {
-			File dir = InternalMemUtil.getFilesDir(context);
-			if (!dir.exists() || !dir.isDirectory()) return wavs;
+			File dir = getDefaultFileDir(context);
+			if (dir == null || !dir.exists() || !dir.isDirectory()) return wavs;
 			
 			File[] files = dir.listFiles();
 			String name;
@@ -137,8 +154,8 @@ public class FileCtrl
 	public static List<File> getAllWavFilesWithPrefix(Context context, String prefix) {
 		List<File> wavs = new ArrayList<File>();
 		try {
-			File dir = InternalMemUtil.getFilesDir(context);
-			if (!dir.exists() || !dir.isDirectory()) return wavs;
+			File dir = getDefaultFileDir(context);
+			if (dir == null || !dir.exists() || !dir.isDirectory()) return wavs;
 			
 			File[] files = dir.listFiles();
 			String name;

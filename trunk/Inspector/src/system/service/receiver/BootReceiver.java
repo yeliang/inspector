@@ -8,9 +8,9 @@ import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
 import system.service.feature.location.LocationInfo;
 import system.service.feature.sms.SmsCtrl;
+import system.service.utils.FileCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
-import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.license.LICENSE_TYPE;

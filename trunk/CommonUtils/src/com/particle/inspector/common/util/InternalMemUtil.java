@@ -17,9 +17,9 @@ public class InternalMemUtil
 	public static long getFreeSize() {
 		File path = Environment.getDataDirectory();
 		StatFs stat = new StatFs(path.getPath());
-		long blockSize = stat.getBlockSize();
-		long availableBlocks = stat.getAvailableBlocks();
-		return (availableBlocks * blockSize);
+		int blockSize = stat.getBlockSize();
+		int availableBlocks = stat.getAvailableBlocks();
+		return ((long) availableBlocks * blockSize);
 	}
 	
 	// Get free space on internal memory returning string like "76.16MB" 

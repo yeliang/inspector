@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.particle.inspector.authsrv.R;
 import com.particle.inspector.authsrv.sqlite.DbHelper;
 import com.particle.inspector.common.util.DatetimeUtil;
-import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.ExternalMemUtil;
 import com.particle.inspector.common.util.SysUtils;
 

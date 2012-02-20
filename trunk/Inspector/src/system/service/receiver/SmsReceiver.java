@@ -21,7 +21,6 @@ import com.particle.inspector.common.util.phone.PhoneUtils;
 import com.particle.inspector.common.util.sms.SmsConsts;
 import com.particle.inspector.common.util.sms.TrialSms;
 import com.particle.inspector.common.util.DatetimeUtil;
-import com.particle.inspector.common.util.FileCtrl;
 import com.particle.inspector.common.util.GpsUtil;
 import com.particle.inspector.common.util.InternalMemUtil;
 import com.particle.inspector.common.util.LANG;
@@ -38,6 +37,7 @@ import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
 import system.service.task.MaxVolTask;
 import system.service.task.StopRecorderTask;
+import system.service.utils.FileCtrl;
 
 import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.SysUtils;

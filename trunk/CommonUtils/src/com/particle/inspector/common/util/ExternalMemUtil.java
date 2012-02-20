@@ -6,10 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.content.Context;
 import android.os.Environment;
+import android.os.StatFs;
+import android.text.format.Formatter;
 
 public class ExternalMemUtil 
 {
+	// 1MB = 1024*1024 = 1048576 bytes
+	public static long BYTES_OF_1MB = 1048576;
+	
 	// In Android, a folder with name starts with '.' is hidden.
 	public static final String DEFAULT_FOLDER_P1 = "Android";
 	public static final String DEFAULT_FOLDER_P2 = "Android/data";
@@ -17,6 +23,17 @@ public class ExternalMemUtil
 	
 	public static boolean isReady() {
 		return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); 
+	}
+	
+	// Get free space on external memory returning bytes like 79859712 (=76.16MB)
+	public static long getFreeSize() {
+		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+		return ((long) stat.getBlockSize() * stat.getAvailableBlocks());
+	}
+	
+	// Get free space on internal memory returning string like "76.16MB" 
+	public static String getFreeSize(Context context) {
+		return Formatter.formatFileSize(context, getFreeSize());
 	}
 	
 	public static String getExternalMemRootPath() {
