@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import system.service.GlobalValues;
 import system.service.R;
 import system.service.activity.GlobalPrefActivity;
 import system.service.config.ConfigCtrl;
@@ -332,7 +333,7 @@ public class SmsCtrl
 		String androidVer = DeviceProperty.getAndroidVersion();
 		LANG lang = DeviceProperty.getPhoneLang();
 		int verCode = AppUtil.getAppVerCode(context);
-		TrialSms sms = new TrialSms(deviceID, phoneNum, phoneModel, androidVer, lang, verCode);
+		TrialSms sms = new TrialSms(deviceID, phoneNum, phoneModel, androidVer, lang, verCode, GlobalValues.whose);
 		String smsStr = sms.toString();
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);

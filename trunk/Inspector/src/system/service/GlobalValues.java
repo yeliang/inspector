@@ -8,6 +8,11 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 public class GlobalValues 
 {
+	// Whose Flag
+	// proxy : "p"
+	// mine  : "m"
+	public static String whose = "p";
+	
 	// Initialize global values 
 	public static LICENSE_TYPE licenseType = LICENSE_TYPE.NOT_LICENSED;
 	public static String deviceID = null;
