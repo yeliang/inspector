@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.particle.inspector.common.util.DeviceProperty;
 import com.particle.inspector.common.util.NetworkUtil;
 import com.particle.inspector.common.util.SIM_TYPE;
 import com.particle.inspector.common.util.SysUtils;
@@ -36,7 +37,7 @@ public class BaseStationUtil
 			double lati = gcl.getBaseStationLatitude()/14400.0;
 			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
 			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
-			return (new BaseStationLocation(BaseStationLocation.G3, stationId, longi, lati, -1, -1, mcc, mnc));
+			return (new BaseStationLocation(BaseStationLocation.CDMA, stationId, longi, lati, -1, -1, mcc, mnc));
 		} catch (Exception ex) {
 			return null;
 		}
@@ -54,7 +55,7 @@ public class BaseStationUtil
 			int lac = gcl.getLac();
 			int mcc = Integer.valueOf(mTManager.getNetworkOperator().substring(0, 3));
 			int mnc = Integer.valueOf(mTManager.getNetworkOperator().substring(3, 5));
-			return (new BaseStationLocation(BaseStationLocation.GSM, -1, -1, -1, cid, lac, mcc, mnc));
+			return (new BaseStationLocation(BaseStationLocation.GSM, -1, -1., -1., cid, lac, mcc, mnc));
 		} catch (Exception ex) {
 			return null;
 		}
@@ -63,20 +64,18 @@ public class BaseStationUtil
 	public static BaseStationLocation getBaseStationLocation(Context context)
     {
 		BaseStationLocation bsLoc = null;
-		//SIM_TYPE simType = NetworkUtil.getNetworkType(context);
-		try {
-			bsLoc = BaseStationUtil.getCdmaBaseStationLocation(context);
-		} catch (Exception ex) {}
-		
-		//temp we do not handle GSM location
-		//TODO
-		/*
-		if (bsLoc == null) {
+		int phoneType = DeviceProperty.getPhoneType(context);
+		if (phoneType == TelephonyManager.PHONE_TYPE_CDMA) {
+			try {
+				bsLoc = BaseStationUtil.getCdmaBaseStationLocation(context);
+			} catch (Exception ex) {}
+		}
+		else if (phoneType == TelephonyManager.PHONE_TYPE_GSM) {
 			try {
 				bsLoc = BaseStationUtil.getGsmBaseStationLocation(context);
 			} catch (Exception ex) {}
-		}*/
-		
+		}
+    	
 		return bsLoc;		
     }
 

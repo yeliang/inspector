@@ -52,6 +52,7 @@
     <string name="location_sms_gps">点击链接查看手机GPS位置：http://maps.google.com/?q=%s</string>
     <string name="location_sms_network">点击链接查看手机网络定位：http://maps.google.com/?q=%s</string>
     <string name="location_sms_base_station_gsm">点击链接查看手机基站定位：http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_gsm_lac_cid">GSM基站定位结果：LAC=%1$d, CID=%2$d。请在http://cellphonetrackers.org/gsm/gsm-tracker.php中查看地图</string>
     <string name="location_sms_base_station_cdma">点击链接查看手机基站定位：http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">抱歉，当前无法获得所在位置，请稍后再试。若一直无法解决请联系客服。</string>
     

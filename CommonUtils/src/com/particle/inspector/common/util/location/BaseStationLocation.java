@@ -3,7 +3,8 @@ package com.particle.inspector.common.util.location;
 public class BaseStationLocation 
 {
 	public static final String GSM = "GSM";
-	public static final String G3 = "3G";
+	public static final String CDMA = "CDMA";
+	public static final String LTE  = "LTE";
 	
 	public String type;
 	public int stationId;
