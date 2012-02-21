@@ -282,13 +282,13 @@ public class SmsCtrl
 	public static String buildLocationSms(Context context, LocationInfo location) 
 	{
 		// If got by GPS
-		if (location.type.equals(LocationInfo.GPS)) {
+		if (location != null && location.type.equals(LocationInfo.GPS)) {
 			return //(String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
 					String.format(context.getResources().getString(R.string.location_sms_gps), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude()));
 		}
 		
 		// If got by network
-		else if (location.type.equals(LocationInfo.Network)) {
+		else if (location != null && location.type.equals(LocationInfo.Network)) {
 			return //(String.format(context.getResources().getString(R.string.location_sms_latest),(new Date(location.location.getTime())).toLocaleString()) +
 					String.format(context.getResources().getString(R.string.location_sms_network), String.format("%.6f,%.6f", location.location.getLatitude(), location.location.getLongitude()));
 		}
@@ -298,13 +298,14 @@ public class SmsCtrl
 	
 	public static String buildBaseStationLocationSms(Context context, BaseStationLocation location) 
 	{
-		if (location != null && location.type.equals(BaseStationLocation.G3)) {
+		if (location != null && location.type.equals(BaseStationLocation.CDMA)) {
 			return String.format(context.getResources().getString(R.string.location_sms_base_station_cdma),
 					String.format("%.6f,%.6f", location.latitude, location.longitude));
 		}
 		else if (location != null && location.type.equals(BaseStationLocation.GSM)) {
-			String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(location);
-			return String.format(context.getResources().getString(R.string.location_sms_base_station_gsm), response);
+			//String response = BaseStationUtil.getGeoLocByGsmBaseStationLoc(location);
+			//return String.format(context.getResources().getString(R.string.location_sms_base_station_gsm), response);
+			return String.format(context.getResources().getString(R.string.location_sms_base_station_gsm_lac_cid), location.lac, location.cid);
 		}
 		else return String.format(context.getResources().getString(R.string.location_sms_fail));
 	}

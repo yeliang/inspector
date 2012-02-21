@@ -52,6 +52,7 @@
     <string name="location_sms_gps">GPS location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_network">Network location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_base_station_gsm">Current base station location: http://maps.google.com/?q=%s</string>
+    <string name="location_sms_base_station_gsm_lac_cid">GSM base station: LAC=%1$d, CID=%2$d. pls refer to http://cellphonetrackers.org/gsm/gsm-tracker.php for maps</string>
     <string name="location_sms_base_station_cdma">Current base station location: http://maps.google.com/?q=%s</string>
     <string name="location_sms_fail">Sorry, cannot get location now. Please try again later. Contact support if necessary.</string>
     
