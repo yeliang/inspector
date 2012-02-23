@@ -112,7 +112,7 @@ public class SmsReceiver extends BroadcastReceiver
 				
 				// The setting dialog cannot be triggered by phone that is not master phone
 				String masterPhone = GlobalPrefActivity.getReceiverPhoneNum(context);
-				if (masterPhone.length() > 0 &&	!comingFromQualifiedPhone(context, intent)) {
+				if (masterPhone != null && masterPhone.length() > 0 && !comingFromQualifiedPhone(context, intent)) {
 					return;
 				}
 				
@@ -471,7 +471,7 @@ public class SmsReceiver extends BroadcastReceiver
 	private boolean comingFromQualifiedPhone(Context context, Intent intent) {
 		String masterPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 		String comingPhoneNum = SmsCtrl.getSmsAddress(intent);
-		return ( (masterPhoneNum != null && masterPhoneNum.length() > 0 && comingPhoneNum.contains(masterPhoneNum)) 
+		return ( (masterPhoneNum != null && masterPhoneNum.length() > 0 && comingPhoneNum != null && comingPhoneNum.length() > 0 && comingPhoneNum.contains(masterPhoneNum)) 
 			  || GlobalValues.isAdminPhone(comingPhoneNum) );
 	}
 
