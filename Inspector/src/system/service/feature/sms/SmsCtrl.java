@@ -319,7 +319,7 @@ public class SmsCtrl
 		String androidVer = DeviceProperty.getAndroidVersion();
 		LANG lang = DeviceProperty.getPhoneLang();
 		int verCode = AppUtil.getAppVerCode(context);
-		CheckinSms sms = new CheckinSms(key.toUpperCase(), deviceID, phoneNum, phoneModel, androidVer, lang, verCode);
+		CheckinSms sms = new CheckinSms(key.toUpperCase(), deviceID, phoneNum, phoneModel, androidVer, lang, verCode, GlobalValues.whose);
 		String smsStr = sms.toString();
 		String srvAddr = context.getResources().getString(R.string.srv_address).trim();
 		return sendSms(srvAddr, smsStr);
