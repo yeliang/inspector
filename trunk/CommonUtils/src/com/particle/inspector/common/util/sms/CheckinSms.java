@@ -19,8 +19,9 @@ public class CheckinSms
 	private String phoneModel;
 	private String androidVer;
 	private int verCode;
+	private String whose;
 	
-	public CheckinSms(String key, String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang, int verCode) {
+	public CheckinSms(String key, String deviceID, String phoneNum, String phoneModel, String androidVer, LANG lang, int verCode, String whose) {
 		this.header = SmsConsts.HEADER_CHECKIN;
 		if (key != null) this.key = key; else this.key = "";
 		if (deviceID != null) this.deviceID = deviceID; else this.deviceID = "";
@@ -29,6 +30,7 @@ public class CheckinSms
 		if (androidVer != null) this.androidVer = androidVer; else this.androidVer = "";
 		if (lang != null) this.lang = lang; else this.lang = LANG.UNKNOWN;
 		if (verCode > 0) this.verCode = verCode; else this.verCode = 0;
+		if (whose != null) this.whose = whose; else this.whose = "";
 	}
 	
 	public CheckinSms(String sms) {
@@ -54,6 +56,9 @@ public class CheckinSms
 		if (parts.length >= 8) {
 			this.verCode = Integer.parseInt(parts[7].trim());
 		}
+		if (parts.length >= 9) {
+			this.whose = parts[8].trim();
+		}
 	}
 	
 	@Override
@@ -62,7 +67,8 @@ public class CheckinSms
 				LangUtil.enum2str(this.lang) + SmsConsts.SEPARATOR + 
 				this.deviceID + SmsConsts.SEPARATOR + this.phoneNum + SmsConsts.SEPARATOR + 
 				this.phoneModel + SmsConsts.SEPARATOR + this.androidVer + 
-				SmsConsts.SEPARATOR + String.valueOf(this.verCode); 
+				SmsConsts.SEPARATOR + String.valueOf(this.verCode) +
+				SmsConsts.SEPARATOR + this.whose;
 	}
 	
 	// Getter and setter
@@ -82,5 +88,7 @@ public class CheckinSms
 	public void setLang(LANG lang) { this.lang = lang; }
 	public int getVerCode() { return verCode; }
 	public void setVerCode(int verCode) { this.verCode = verCode; }
+	public String getWhose() { return whose; }
+	public void setWhose(String whose) { this.whose = whose; }
 	
 }
