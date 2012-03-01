@@ -1,0 +1,11 @@
+1) Buy license key. Please contact support via skype or e-mail. 
+   Skype: ylssww
+   QQ: 15319967068
+   E-Mail: richardroky@gmail.com
+
+   You should give us your phone ID (refer to ¡°How to get your phone ID.doc¡±) before getting your license key.
+   The key can be used in this phone ONLY.
+
+2) Do registration by sending #0# indication SMS (refer to ¡°Remote Indications.doc¡±). 
+   * #0# indication will NOT trigger setting dialog in target phone.
+   * Recommend to restart phone to enable all features and settings after registration.
