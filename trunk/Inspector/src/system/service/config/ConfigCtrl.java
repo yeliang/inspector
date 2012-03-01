@@ -73,7 +73,7 @@ public class ConfigCtrl
 	public static LICENSE_TYPE getLicenseType(Context context)
 	{
 		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
-		String str = config.getString(LICENSE_KIND, "").trim().toUpperCase();
+		String str = config.getString(LICENSE_KIND, "").trim();
 		return LicenseCtrl.strToEnum(str);
 	}
 	

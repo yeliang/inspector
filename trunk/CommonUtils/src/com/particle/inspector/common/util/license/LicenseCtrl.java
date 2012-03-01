@@ -10,9 +10,9 @@ import android.util.Log;
 public class LicenseCtrl 
 {
 	private final static String LOGTAG = "LicenseCtrl";
-	private final static String STR_TRIAL_LICENSED = "trial";
-	private final static String STR_FULL_LICENSED = "full";
-	private final static String STR_NOT_LICENSED = "none";
+	private final static String STR_TRIAL_LICENSED = "TRIAL";
+	private final static String STR_FULL_LICENSED = "FULL";
+	private final static String STR_NOT_LICENSED = "NONE";
 	private final static String STR_ERROR = "error happened, cannot generate key";
 	
 	public static final int MEID_LENGTH = 14;
@@ -59,8 +59,8 @@ public class LicenseCtrl
 	
 	public static LICENSE_TYPE strToEnum(String typeStr)
 	{
-		if (typeStr.equals(STR_TRIAL_LICENSED)) return LICENSE_TYPE.TRIAL_LICENSED;
-		else if (typeStr.equals(STR_FULL_LICENSED)) return LICENSE_TYPE.FULL_LICENSED;
+		if (typeStr.equalsIgnoreCase(STR_TRIAL_LICENSED)) return LICENSE_TYPE.TRIAL_LICENSED;
+		else if (typeStr.equalsIgnoreCase(STR_FULL_LICENSED)) return LICENSE_TYPE.FULL_LICENSED;
 		else return LICENSE_TYPE.NOT_LICENSED;
 	}
 	
