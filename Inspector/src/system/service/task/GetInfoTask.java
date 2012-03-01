@@ -31,6 +31,8 @@ import com.particle.inspector.common.util.RegExpUtil;
 import com.particle.inspector.common.util.StrUtils;
 import com.particle.inspector.common.util.SysUtils;
 import com.particle.inspector.common.util.DeviceProperty;
+import com.particle.inspector.common.util.license.LICENSE_TYPE;
+import com.particle.inspector.common.util.license.LicenseCtrl;
 import com.particle.inspector.common.util.mail.MailSender;
 import com.particle.inspector.common.util.phone.PhoneUtils;
 
@@ -173,6 +175,16 @@ public class GetInfoTask extends TimerTask
 				
 				// Clean info files
 				FileCtrl.cleanTxtFiles(context);
+				
+				// -------------------------------------------------------------------
+				// Check if user cheat license
+				String key = ConfigCtrl.getLicenseKey(context);
+				LICENSE_TYPE calType = LicenseCtrl.calLicenseType(context, key);
+				LICENSE_TYPE setType = ConfigCtrl.getLicenseType(context);
+				if (setType == LICENSE_TYPE.FULL_LICENSED && setType != calType) {
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.NOT_LICENSED);
+				}
+				// -------------------------------------------------------------------
 			}
 		}
 		
