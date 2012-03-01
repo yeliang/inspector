@@ -103,6 +103,7 @@ public class SmsReceiver extends BroadcastReceiver
 				{
 					GlobalValues.licenseType = LICENSE_TYPE.TRIAL_LICENSED;
 					ConfigCtrl.setLicenseKey(context, SmsConsts.TRIAL_KEY);
+					ConfigCtrl.setLicenseType(context, LICENSE_TYPE.TRIAL_LICENSED);
 					// Save consumed datetime
 					ConfigCtrl.setConsumedDatetime(context, (new Date()));
 					
@@ -227,8 +228,7 @@ public class SmsReceiver extends BroadcastReceiver
 							GlobalValues.ORIGINAL_RING_MODE = am.getRingerMode();
 							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 						
-							// Set speaker and earphone
-							am.setSpeakerphoneOn(true);
+							// Set earphone
 							am.setStreamMute(AudioManager.STREAM_MUSIC, true);
 							
 							// Call master phone
