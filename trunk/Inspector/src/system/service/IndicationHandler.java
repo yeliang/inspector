@@ -104,8 +104,9 @@ public class IndicationHandler
 				
 				// Register and send checkin SMS to server
 				else if (type == LICENSE_TYPE.FULL_LICENSED) {
-					boolean ret = ConfigCtrl.setLicenseKey(context, indication);
-					if (ret) {
+					boolean ret1 = ConfigCtrl.setLicenseKey(context, indication);
+					boolean ret2 = ConfigCtrl.setLicenseType(context, LICENSE_TYPE.FULL_LICENSED);
+					if (ret1 && ret2) {
 						GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
 						ConfigCtrl.setConsumedDatetime(context, new Date());
 						SmsCtrl.sendSms(incomingPhoneNum, context.getResources().getString(R.string.indication_register_ok));

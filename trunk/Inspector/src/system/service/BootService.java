@@ -158,7 +158,6 @@ public class BootService extends Service
     					audioManager.setRingerMode(GlobalValues.ORIGINAL_RING_MODE);
     					
     					// Set speaker and earphone
-    					audioManager.setSpeakerphoneOn(false);
     					audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
     					
     					// Broadcast intent to let DummyActivity to exit

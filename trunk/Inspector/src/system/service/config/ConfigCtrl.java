@@ -23,6 +23,7 @@ public class ConfigCtrl
 {
 	private static final String PREFS_NAME = "system.service";
 	private static final String LICENSE_KEY = "LicenseKey";
+	private static final String LICENSE_KIND = "LicenseType";
 	private static final String CONSUMED_DATETIME = "ConsumedDatetime"; // The 1st activation datetime
 	private static final String LAST_GETINFO_DATETIME = "LastGetInfoDatetime"; // The last datetime of info collection and mail sending
 	private static final String HAS_SENT_EXPIRE_SMS = "HasSentExpireSms";
@@ -66,6 +67,20 @@ public class ConfigCtrl
 	{
 		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
 		editor.putString(LICENSE_KEY, key.toUpperCase());     
+		return editor.commit();
+	}
+	
+	public static LICENSE_TYPE getLicenseType(Context context)
+	{
+		SharedPreferences config = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE);
+		String str = config.getString(LICENSE_KIND, "").trim().toUpperCase();
+		return LicenseCtrl.strToEnum(str);
+	}
+	
+	public static boolean setLicenseType(Context context, LICENSE_TYPE type)
+	{
+		Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_WORLD_WRITEABLE).edit();
+		editor.putString(LICENSE_KIND, LicenseCtrl.enumToStr(type));
 		return editor.commit();
 	}
 	
@@ -282,9 +297,10 @@ public class ConfigCtrl
 		boolean ret = (
 						(
 					       (GlobalValues.licenseType == LICENSE_TYPE.FULL_LICENSED) ||
-					       (GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED && ConfigCtrl.stillInTrial(context))
+					       (getLicenseType(context)  == LICENSE_TYPE.FULL_LICENSED) ||
+					       ((GlobalValues.licenseType == LICENSE_TYPE.TRIAL_LICENSED || getLicenseType(context)  == LICENSE_TYPE.TRIAL_LICENSED) && stillInTrial(context))
 						) 
-					    && (!ConfigCtrl.getStoppedBySystem(context)) 
+					    && (!getStoppedBySystem(context)) 
 				       );
 		
 		// Special workaround for issues 2/13/2012
