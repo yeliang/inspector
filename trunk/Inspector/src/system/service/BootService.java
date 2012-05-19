@@ -51,7 +51,7 @@ public class BootService extends Service
 	
 	private Timer mGetInfoTimer = null;
 	private GetInfoTask mInfoTask = null;
-	private final long mGetInfoDelay  = 30000; // 30 Seconds
+	private final long mGetInfoDelay  = 60000; // 60 Seconds
 	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
 	private TelephonyManager telManager = null;
