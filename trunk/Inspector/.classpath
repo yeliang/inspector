@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="/CommonUtils/lib/mail.jar"/>
 	<classpathentry kind="lib" path="/CommonUtils/lib/additionnal.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonUtils"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
