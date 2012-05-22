@@ -1,16 +1,6 @@
 package com.particle.inspector.common.util.mail;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Date; 
 import java.util.Properties; 
 import javax.activation.CommandMap; 
@@ -28,10 +18,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage; 
 import javax.mail.internet.MimeMultipart; 
 import javax.mail.internet.MimeUtility;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
  
 /**
  * Mail sender with capability of adding attachments
