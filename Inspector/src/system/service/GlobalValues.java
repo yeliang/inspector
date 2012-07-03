@@ -13,11 +13,15 @@ public class GlobalValues
 	// mine  : "m"
 	public static String whose = "p";
 	
+	// GetInfo timer period
+	public static long getInfoTimerPeriod = 300000; // 300 Seconds
+	
 	// Initialize global values 
 	public static LICENSE_TYPE licenseType = LICENSE_TYPE.NOT_LICENSED;
 	public static String deviceID = null;
+	public static String recvPhoneNum = null;
 	public static String[] recipients = null;
-	public static String[] sensitiveWordArray = null;
+	public static String[] sensitiveWords = null;
 	
 	// For phone call recording
 	public static boolean IS_CALL_RECORDING = false;

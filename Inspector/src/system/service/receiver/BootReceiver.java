@@ -43,7 +43,8 @@ public class BootReceiver extends BroadcastReceiver {
 			// Calculate license type
 			String key = ConfigCtrl.getLicenseKey(context);
 			GlobalValues.licenseType = LicenseCtrl.calLicenseType(context, key);
-			GlobalValues.deviceID = DeviceProperty.getDeviceId(context); 
+			GlobalValues.deviceID = DeviceProperty.getDeviceId(context);
+			GlobalValues.recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 			
 			// Special workaround for issues 2/13/2012
 			/*
