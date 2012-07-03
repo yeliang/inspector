@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="system.service" 
-	android:versionCode="20120519"	
-	android:versionName="3.2.5">
+	android:versionCode="20120612"	
+	android:versionName="3.3.0">
 	
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 	

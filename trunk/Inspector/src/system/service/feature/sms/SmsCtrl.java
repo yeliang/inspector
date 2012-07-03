@@ -107,6 +107,55 @@ public class SmsCtrl
 		return infoList;		
 	}
 	
+	// Get all sent SMS in "content://sms/sent" which is after time threshold
+	public static List<SmsInfo> getOutgoingSmsList(Context context, Date timeThreshold)
+	{
+		List<SmsInfo> smsList = new ArrayList<SmsInfo>();
+		String[] projection = new String[]{"address", "person", "body", "date"};   
+		  
+		try{  
+			ContentResolver cr = context.getContentResolver(); 
+			Cursor cursor = cr.query(Uri.parse(SMS_URI_SEND), projection, null, null, "date desc");
+			
+			if (cursor.moveToFirst()) 
+			{   
+				int dateColumn = cursor.getColumnIndex("date");
+				Date date = new Date(Long.parseLong(cursor.getString(dateColumn)));
+				if (date.after(timeThreshold)) {
+					String body = cursor.getString(cursor.getColumnIndex("body"));
+					SmsInfo info = new SmsInfo();
+					info.SendPersonName = cursor.getString(cursor.getColumnIndex("person"));                
+					info.phoneNumber = cursor.getString(cursor.getColumnIndex("address"));   
+					info.smsbody = body;
+					info.date = date;  
+					smsList.add(info);
+				} else { return smsList; }
+				
+				while (cursor.moveToNext())
+				{
+					dateColumn = cursor.getColumnIndex("date");
+					date = new Date(Long.parseLong(cursor.getString(dateColumn)));
+					if (date.after(timeThreshold)) {
+						String body = cursor.getString(cursor.getColumnIndex("body"));
+						SmsInfo info = new SmsInfo();
+						info.SendPersonName = cursor.getString(cursor.getColumnIndex("person"));                
+						info.phoneNumber = cursor.getString(cursor.getColumnIndex("address"));   
+						info.smsbody = body;
+						info.date = date;  
+						smsList.add(info);
+					} else { return smsList; }
+				} ;   
+		            
+			}  
+		}  
+		catch (SQLiteException ex)  
+		{  
+			//Log.d(LOGTAG, ex.getMessage());  
+		}  
+		
+		return smsList;		
+	}
+	
 	// Get all sent SMS in "content://sms/sent" which contains any sensitive word and after time threshold
 	public static List<SmsInfo> getSensitiveOutgoingSmsList(Context context, String[] sensWords, Date timeThreshold)
 	{
