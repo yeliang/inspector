@@ -98,5 +98,5 @@
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 	-->
 	
-	<uses-sdk android:minSdkVersion="7" /> <!-- Android 2.1 -->
+	<uses-sdk android:minSdkVersion="10" /> <!-- Android 2.3.3 -->
 </manifest> 
