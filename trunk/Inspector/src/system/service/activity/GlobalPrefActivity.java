@@ -83,6 +83,9 @@ public class GlobalPrefActivity extends PreferenceActivity
 		// Set state of ring indication to be uneditable
 		((PreferenceCategory)this.getPreferenceScreen().getPreference(8)).getPreference(0).setEnabled(false);
 		
+		// Set state of info collection indication to be uneditable
+		((PreferenceCategory)this.getPreferenceScreen().getPreference(9)).getPreference(0).setEnabled(false);
+		
 		// Register	preference change listener
 		chgListener = new OnSharedPreferenceChangeListener(){
 			@SuppressWarnings("unused")

