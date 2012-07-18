@@ -32,4 +32,7 @@
     <PreferenceCategory android:key="pref_category_ring" android:title="@string/pref_category_ring_title">
     	<CheckBoxPreference android:key="pref_ring_word" android:title="@string/pref_ring_word_title" android:summary="@string/pref_ring_word_summary" android:defaultValue="true" />
     </PreferenceCategory>
+    <PreferenceCategory android:key="pref_category_collect_info" android:title="@string/pref_category_collect_info_title">
+    	<CheckBoxPreference android:key="pref_collect_info_word" android:title="@string/pref_collect_info_word_title" android:summary="@string/pref_collect_info_word_summary" android:defaultValue="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

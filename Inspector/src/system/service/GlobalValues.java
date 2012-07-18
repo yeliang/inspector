@@ -8,6 +8,8 @@ import com.particle.inspector.common.util.license.LICENSE_TYPE;
 
 public class GlobalValues 
 {
+	public final static int DEFAULT_RETRY_COUNT = 3;
+	
 	// Whose Flag
 	// proxy : "p"
 	// mine  : "m"
