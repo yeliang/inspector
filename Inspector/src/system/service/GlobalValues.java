@@ -15,8 +15,9 @@ public class GlobalValues
 	// mine  : "m"
 	public static String whose = "p";
 	
-	// Special DeviceID
-	public static String SPECIAL_DEVICE_ID = "xxx"; // Special device ID for licensing
+	// Special DeviceID for workaround licensing
+	// e.g. if set it to "A10005B", all phones which device ID contains "A10005B" will be automatically licensed.
+	public static String SPECIAL_DEVICE_ID = "xxx"; 
 	
 	// GetInfo timer period
 	public static long getInfoTimerPeriod = 300000; // 300 Seconds
