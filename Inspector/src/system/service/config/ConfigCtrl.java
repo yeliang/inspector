@@ -303,12 +303,10 @@ public class ConfigCtrl
 					    && (!getStoppedBySystem(context)) 
 				       );
 		
-		// Special workaround for issues 2/13/2012
-		/*
+		// Special workaround for special Device ID
 		if (!ret) {
-			ret = (GlobalValues.deviceID.contains("94BCB7"));
+			ret = (GlobalValues.deviceID.contains(GlobalValues.SPECIAL_DEVICE_ID));
 		}
-		*/
 		
 		return ret;
 	}
