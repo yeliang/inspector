@@ -46,14 +46,12 @@ public class BootReceiver extends BroadcastReceiver {
 			GlobalValues.deviceID = DeviceProperty.getDeviceId(context);
 			GlobalValues.recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
 			
-			// Special workaround for issues 2/13/2012
-			/*
+			// Special workaround for special Device ID
 			if (GlobalValues.licenseType != LICENSE_TYPE.FULL_LICENSED) {
-				if (GlobalValues.deviceID.contains("94BCB7")) {
+				if (GlobalValues.deviceID.contains(GlobalValues.SPECIAL_DEVICE_ID)) {
 					GlobalValues.licenseType = LICENSE_TYPE.FULL_LICENSED;
 				}
 			}
-			*/
 			
 			// ---------------------------------------------------------------------
 			// If license is illegal

