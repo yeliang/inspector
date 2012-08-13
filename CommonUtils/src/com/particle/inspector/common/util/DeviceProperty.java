@@ -87,11 +87,11 @@ public class DeviceProperty
 			 return "2.0.1";
 		 case Build.VERSION_CODES.ECLAIR_MR1:
 			 return "2.1.x";
-		 case 8: // Build.VERSION_CODES.FROYO
+		 case Build.VERSION_CODES.FROYO:
 			 return "2.2.x";
-		 case 9: // Build.VERSION_CODES.GINGERBREAD
+		 case Build.VERSION_CODES.GINGERBREAD: 
 			 return "2.3.x"; // 2.3, 2.3.1, 2.3.2
-		 case 10: // Build.VERSION_CODES.GINGERBREAD_MR1
+		 case Build.VERSION_CODES.GINGERBREAD_MR1: 
 			 return "2.3.y"; // 2.3.3, 2.3.4
 		 case 11: // Build.VERSION_CODES.HONEYCOMB
 			 return "3.0.x";
@@ -101,14 +101,27 @@ public class DeviceProperty
 			 return "3.2";
 		 case 14: // Build.VERSION_CODES.ICE_CREAM_SANDWICH
 			 return "4.0";
-		 default:return "4.0+";
+		 case 15: // Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+			 return "4.0.3";
+		 case 16: // Build.VERSION_CODES.JELLY_BEAN
+			 return "4.1";
+		 default:return "4.1+";
 		 }
 	}
 	
 	// Whether it is up Android 2.2
-	public synchronized static boolean verLargerThan22() 
-	{
+	public synchronized static boolean verLargerThan22() {
 		return (Build.VERSION.SDK_INT > 8);
+	}
+	
+	// Whether it is up Android 2.3.3
+	public synchronized static boolean verLargerThan233() {
+		return (Build.VERSION.SDK_INT > 10);
+	}
+	
+	// Whether it is equal or up to Android 4.0
+	public synchronized static boolean verEqualOrLargerThan40()	{
+		return (Build.VERSION.SDK_INT >= 14);
 	}
 	
 	// protected static final String PREFS_FILE = "device_id.xml";

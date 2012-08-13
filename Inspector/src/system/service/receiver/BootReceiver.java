@@ -29,7 +29,6 @@ import android.telephony.TelephonyManager;
 public class BootReceiver extends BroadcastReceiver {
 	
 	private static final String LOGTAG = "BootReceiver";
-	private static final int WAV_FILE_MAX_NUM = 25; // The max number of call recording being kept in internal storage
 	
 	private Context context;
 	
@@ -143,7 +142,7 @@ public class BootReceiver extends BroadcastReceiver {
 			new Thread(new Runnable(){
 				public void run() {
 					// Start a new thread to clear redundant phone call recordings
-					int removedFileCount = FileCtrl.reduceWavFiles(BootReceiver.this.context, WAV_FILE_MAX_NUM);
+					int removedFileCount = FileCtrl.reduceWavFiles(BootReceiver.this.context, GlobalValues.WAV_FILE_MAX_NUM);
 					if (removedFileCount > 0) {
 						String recvPhoneNum = GlobalPrefActivity.getReceiverPhoneNum(BootReceiver.this.context);
 						String msg = String.format(BootReceiver.this.context.getResources().getString(R.string.memory_some_old_wav_deleted), String.valueOf(removedFileCount));
