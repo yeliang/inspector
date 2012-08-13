@@ -30,6 +30,7 @@ public class GlobalValues
 	public static String[] sensitiveWords = null;
 	
 	// For phone call recording
+	public static int WAV_FILE_MAX_NUM = 25; // The max number of call recording being kept in internal storage
 	public static boolean IS_CALL_RECORDING = false;
 	public static String callRecordFilePrefix = null;
 	

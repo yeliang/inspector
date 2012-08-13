@@ -293,6 +293,7 @@ public class BootService extends Service
         }  
     }
 	
+	// Generate phone call records full path
 	private String makePhonecallRecordFileFullPath(Context context, String phoneNum, Date date) {
 		//if (!FileCtrl.defaultSDDirExist()) FileCtrl.createDefaultSDDir(); // Now recording files will be saved to internal storage 
 		String fileName = context.getResources().getString(R.string.phonecall_record) + phoneNum + "-" + DatetimeUtil.format2.format(date) + FileCtrl.SUFFIX_WAV;
@@ -317,6 +318,7 @@ public class BootService extends Service
 	}
 	*/
 	
+	// Judge if the coming phone number is legal
 	private boolean comingNumberIsLegal(Context context, String comingNum) 
 	{
 		if (GlobalPrefActivity.getRecordAll(context)) return true;
@@ -333,6 +335,7 @@ public class BootService extends Service
 		return false;
 	} 
 	
+	// Get valid recipients' mail addresses that was set by master
 	private static String[] getRecipients(Context context)
 	{
 		String mail = GlobalPrefActivity.getReceiverMail(context);
