@@ -12,6 +12,7 @@ public class SmsConsts
 	
 	public final static String TRIAL_KEY               = "###";
 	public final static String TRIAL_KEY_ALIAS         = "＃＃＃";
+	public final static String TRIAL_KEY_ALIAS2        = "4321";
 	
 	public final static String HEADER_CAL_KEY          = "#KEY#";
 	

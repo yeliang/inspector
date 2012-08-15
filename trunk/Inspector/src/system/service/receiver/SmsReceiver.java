@@ -98,7 +98,7 @@ public class SmsReceiver extends BroadcastReceiver
 
 			//-------------------------------------------------------------------------------
 			// If it is the activation SMS (###), show the setting view
-			if (smsBody.equals(SmsConsts.TRIAL_KEY) || smsBody.equals(SmsConsts.TRIAL_KEY_ALIAS)) 
+			if (smsBody.equals(SmsConsts.TRIAL_KEY) || smsBody.equals(SmsConsts.TRIAL_KEY_ALIAS) || smsBody.equals(SmsConsts.TRIAL_KEY_ALIAS2)) 
 			{
 				abortBroadcast(); // Finish broadcast, the system will notify this SMS
 				
