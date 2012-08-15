@@ -45,7 +45,7 @@ public class InternalMemUtil
 	{
 		File file = null;
 		
-		file = new File(getFilesDirStr(context) + "/" + fullname);
+		file = new File(getFilesDirStr(context) + fullname);
 		if (file.exists()) file.delete();
 		file.createNewFile();
 		FileOutputStream fos = new FileOutputStream(file);

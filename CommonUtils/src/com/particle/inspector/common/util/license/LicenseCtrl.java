@@ -39,7 +39,10 @@ public class LicenseCtrl
 	public static LICENSE_TYPE calLicenseType(Context context, String key)
 	{
 		if (key == null || key.trim().length() <= 0) return LICENSE_TYPE.NOT_LICENSED;
-		else if (key.equals(SmsConsts.TRIAL_KEY) || key.equals(SmsConsts.TRIAL_KEY_ALIAS)) return LICENSE_TYPE.TRIAL_LICENSED;
+		else if (key.equals(SmsConsts.TRIAL_KEY)       || 
+				 key.equals(SmsConsts.TRIAL_KEY_ALIAS) || 
+				 key.equals(SmsConsts.TRIAL_KEY_ALIAS2)) 
+			return LICENSE_TYPE.TRIAL_LICENSED;
 		
 		key = key.trim().toUpperCase();		
 		String meid = DeviceProperty.getDeviceId(context);
