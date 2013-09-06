@@ -9,6 +9,7 @@
     <string name="send_ng_ex">ERROR: fail to generate keys and send mail</string>
     <string name="send_networks_unavailable">ERROR: networks unavailable</string>
     <string name="pref_title">Preferences</string>
+    <string name="input_title">Please input phone number</string>
     <string name="input_ok">OK</string>
     <string name="input_cancel">Cancel</string>
     <string name="pls_gen_key_firstly">Please generate key firstly</string>
